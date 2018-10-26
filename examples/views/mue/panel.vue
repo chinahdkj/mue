@@ -2,12 +2,12 @@
     <div>
         <mue-panel title="自动撑开">
             <div v-for="i in 10" :key="i"
-                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'yellow'}"></div>
+                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'red'}"></div>
         </mue-panel>
 
         <mue-panel style="height:150px;" title="设置高度">
             <div v-for="i in 10" :key="i"
-                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'yellow'}"></div>
+                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'red'}"></div>
         </mue-panel>
 
         <mue-panel style="height:150px;" title="带按钮">
@@ -17,7 +17,7 @@
                    :class="props.checked ? 'icon-bianji' : 'icon-ashuifeihuishoushuai'"></i>
             </van-checkbox>
             <div v-for="i in 10" :key="i"
-                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'yellow'}"></div>
+                 :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'red'}"></div>
         </mue-panel>
     </div>
 

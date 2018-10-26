@@ -33,7 +33,7 @@
 
 <style lang="less">
     html {
-        background: #f3f3f3;
+        background: #f0f0f0;
     }
     header {
         height: 46px;
