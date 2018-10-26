@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router/index';
-import Vant from 'vant';
-import 'vant/lib/vant-css/index.css';
+import Mue from '../src/index';
+import '../themes/index.less';
 
-Vue.use(Vant);
+Vue.use(Mue);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({

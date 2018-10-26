@@ -1,9 +1,10 @@
 import Chart from '../packages/Chart/index.js';
+import Panel from '../packages/Panel/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
 
-const components = [Chart];
+const components = [Chart, Panel];
 
 const install = function(Vue){
     // 加载Vant

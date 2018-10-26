@@ -4,6 +4,7 @@
 
 <script>
     import ECharts from "echarts";
+    import {addResizeListener, removeResizeListener} from "../../../src/utils/resize-event";
 
     const ACTION_EVENTS = [
         "legendselectchanged",
@@ -106,13 +107,13 @@
 
                 }
 
-                ACTION_EVENTS.forEach((event) =>{
-                    chart.on(event, (params) =>{
+                ACTION_EVENTS.forEach((event) => {
+                    chart.on(event, (params) => {
                         this.$emit(event, params);
                     });
                 });
-                MOUSE_EVENTS.forEach((event) =>{
-                    chart.on(event, (params) =>{
+                MOUSE_EVENTS.forEach((event) => {
+                    chart.on(event, (params) => {
                         this.$emit(event, params);
                     });
                 });

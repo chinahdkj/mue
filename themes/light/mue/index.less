@@ -1,0 +1,60 @@
+@import "../../var.light.less";
+.color-primary {
+    color: @light-primary
+}
+// panel
+.mue-panel {
+    display: block;
+    box-sizing: border-box;
+    background: @panel-background;
+    width: 100%;
+
+    .mue-panel-header {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+        color: @light-common;
+        overflow: hidden;
+        position: relative;
+    }
+    .mue-panel-title {
+        margin: 10px;
+    }
+
+    .mue-panel-tools {
+        height: 20px;
+        display: block;
+        position: absolute;
+        z-index: 10;
+        top: 10px;
+        right: 10px;
+        overflow: hidden;
+        line-height: 20px;
+    }
+
+    .mue-panel-body {
+        height: calc(~"100% - 40px");
+        overflow: auto;
+        width: 100%;
+
+    }
+}
+.mue-panel-title {
+    font-size: 16px;
+    display: block;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 5px;
+    border-left: 2px solid @light-primary;
+    font-weight: normal;
+    margin: 0;
+}
+// chart
+.mue-chart {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}

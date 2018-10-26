@@ -1,0 +1,83 @@
+@import '../../var.light.less';
+.van-button {
+    font-size: @light-button-font-size;
+    height: @light-button-height;
+    line-height: calc(@light-button-height - 2px);
+    border-radius: 0;
+    padding: 0 15px;
+
+    &:active:before {
+        opacity: @light-button-active-mask;
+    }
+
+    &.van-button--unclickable:before {
+        display: none;
+    }
+
+    &.van-button--default {
+        color: @light-primary;
+        background-color: @light-button-background;
+        border: 1px solid @light-button-background;
+    }
+
+    &.van-button--primary {
+        color: #fff;
+        background-color: @light-primary;
+        border: 1px solid @light-primary;
+    }
+
+    &.van-button--plain {
+        background-color: #fff;
+        color: @light-common;
+
+        &.van-button--primary {
+            color: @light-primary;
+            &:active:before {
+                background: @light-primary;
+            }
+        }
+        &.van-button--disabled {
+            background: @light-button-disable-background;
+            color: @light-button-disable-color;
+            border-color: @light-button-disable-background;
+        }
+    }
+
+    &.van-button--large {
+        width: 143px;
+        height: @light-button-height;
+        line-height: calc(@light-button-height - 2px);
+    }
+
+    &.van-button--normal {
+        height: @light-button-height;
+        line-height: calc(@light-button-height - 2px);
+        padding: 0 15px;
+    }
+
+    &.van-button--small {
+        height: @light-button-height;
+        line-height: calc(@light-button-height - 2px);
+        padding: 0 10px;
+    }
+
+    &.van-button--loading {
+        .van-loading {
+            display: inline-block;
+        }
+    }
+
+    &.van-button--disabled {
+        background: @light-button-disable-background;
+        color: @light-button-disable-color;
+        border-color: @light-button-disable-background;
+    }
+
+    &.van-button--round {
+        border-radius: 10em;
+    }
+
+    &.van-button--square {
+        border-radius: 0;
+    }
+}
