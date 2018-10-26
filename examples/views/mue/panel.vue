@@ -10,7 +10,7 @@
                  :style="{height: '20px', background: i % 2 == 0 ? 'blue': 'yellow'}"></div>
         </mue-panel>
 
-        <mue-panel style="height:150px;" title="设置高度">
+        <mue-panel style="height:150px;" title="带按钮">
             <van-checkbox v-model="ischart" slot="tools">
                 <i slot="icon" slot-scope="props" class="iconfont color-primary"
                    style="font-size: 16px;"
