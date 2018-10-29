@@ -1,7 +1,7 @@
-import MuePanel from './src/index';
+import Panel from './src/index';
 
-MuePanel.install = function(Vue){
-    Vue.component(MuePanel.name, MuePanel);
+Panel.install = function(Vue){
+    Vue.component(Panel.name, Panel);
 };
 
-export default MuePanel;
+export default Panel;

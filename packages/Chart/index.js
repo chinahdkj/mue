@@ -1,7 +1,7 @@
-import MueChart from './src/index';
+import Chart from './src/index';
 
-MueChart.install = function(Vue){
-    Vue.component(MueChart.name, MueChart);
+Chart.install = function(Vue){
+    Vue.component(Chart.name, Chart);
 };
 
-export default MueChart;
+export default Chart;
