@@ -30,22 +30,3 @@
         components: {vmenu}
     }
 </script>
-
-<style lang="less">
-    html {
-        background: #f0f0f0;
-    }
-    header {
-        height: 46px;
-    }
-    section {
-        height: calc(~"100% - 46px");
-    }
-    .menubox {
-        height: 100%;
-        width: 80%;
-    }
-    .mue-panel {
-        margin-bottom: 10px;
-    }
-</style>
