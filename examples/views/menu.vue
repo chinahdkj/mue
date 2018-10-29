@@ -9,6 +9,7 @@
         <van-cell-group border>
             <van-cell value="CHART" @click="open('CHART', '/mue/chart')"/>
             <van-cell value="PANEL" @click="open('PANEL', '/mue/panel')"/>
+            <van-cell value="ROLL-DATA" @click="open('ROLL-DATA', '/mue/rolldata')"/>
         </van-cell-group>
     </div>
 </template>

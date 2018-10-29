@@ -1,0 +1,110 @@
+@import "../../var.light.less";
+
+// roll-data
+
+.mue-roll-data {
+    display: block;
+    float: left;
+    height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    > .mue-roll-data--value {
+        float: left;
+        display: block;
+        height: 40px;
+        line-height: 40px;
+        color: @light-black;
+        font-size: 30px;
+        width: 100%;
+        text-align: center;
+        margin: 15px 0 0 0;
+        font-weight: 500;
+        overflow: visible;
+    }
+    > .mue-roll-data--title {
+        float: left;
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        color: @light-black;
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+    }
+
+    //.value-toggle-enter-active, .value-toggle-leave-active {
+    //    transition: opacity .5s;
+    //}
+    //.value-toggle-enter, .value-toggle-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    //    opacity: 0;
+    //}
+
+    .value-toggle-enter-active {
+        transition: all .5s;
+
+    }
+    .value-toggle-leave-active {
+        transition: all .5s;
+    }
+    .value-toggle-enter, .value-toggle-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */ {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+}
+.mue-roll-data-group {
+    width: 100%;
+    float: left;
+    &.has-split {
+        border-top: solid 1px @light-border-color-base;
+    }
+
+    &.is-normal {
+        .mue-roll-data {
+            height: 60px;
+            width: 50%;
+            > .mue-roll-data--title {
+                color: @light-gray;
+                font-size: 14px;
+                height: 20px;
+                line-height: 20px;
+            }
+            > .mue-roll-data--value {
+                margin-top: 5px;
+                font-size: 20px;
+                height: 30px;
+                line-height: 30px;
+            }
+        }
+    }
+    &.is-small {
+        .mue-roll-data {
+            height: 46px;
+            width: calc(~"100% / 3");
+            > .mue-roll-data--title {
+                color: @light-gray;
+                font-size: 14px;
+                height: 20px;
+                line-height: 20px;
+            }
+            > .mue-roll-data--value {
+                margin-top: 4px;
+                font-size: 16px;
+                height: 20px;
+                line-height: 20px;
+            }
+        }
+    }
+    & > .mue-roll-data:not(:first-child):before {
+        display: block;
+        width: 1px;
+        height: calc(~"100% - 10px");
+        position: absolute;
+        left: 0;
+        top: 5px;
+        background: @light-border-color-base;
+        content: "";
+    }
+
+}

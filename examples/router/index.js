@@ -4,8 +4,9 @@ import vbutton from "../views/vant/button";
 
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
+import rolldata from "../views/mue/rolldata";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
@@ -26,6 +27,10 @@ export default new Router({
             name: 'mue_panel',
             component: panel
         },
-
+        {
+            path: '/mue/rolldata',
+            name: 'mue_roll-data',
+            component: rolldata
+        },
     ]
 })
