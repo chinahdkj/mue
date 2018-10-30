@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header>
-            <van-nav-bar :title="title" left-text="菜单" @click-left="pop=true"/>
+            <van-nav-bar :title="title" left-text="菜单" @click-left="pop=true" fixed/>
         </header>
         <section>
             <router-view/>
