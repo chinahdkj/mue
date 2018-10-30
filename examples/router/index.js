@@ -5,6 +5,7 @@ import vbutton from "../views/vant/button";
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
 import rolldata from "../views/mue/rolldata";
+import daterangepicker from "../views/mue/daterangepicker";
 
 Vue.use(Router);
 
@@ -31,6 +32,11 @@ export default new Router({
             path: '/mue/rolldata',
             name: 'mue_roll-data',
             component: rolldata
+        },
+        {
+            path: '/mue/daterangepicker',
+            name: 'mue_date-range-picker',
+            component: daterangepicker
         },
     ]
 })

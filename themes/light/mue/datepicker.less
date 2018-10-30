@@ -1,0 +1,27 @@
+@import "../../var.light.less";
+.mue-date-range-picker {
+    .pick-bar {
+        height: 40px;
+        line-height: 40px;
+        font-size: @font-size;
+        background:@light-background-common;
+        border-bottom: 1px solid @light-border-color-base;
+        text-align: center;
+        .pick-bar-content{
+            padding: 0 20px;
+            box-sizing: border-box;
+            position: relative;
+            .van-icon{
+                position: absolute;
+                color: @light-gray;
+                top: 3px;
+                &.van-icon-arrow-left{
+                    left: 0;
+                }
+                &.van-icon-arrow{
+                    right: 0;
+                }
+            }
+        }
+    }
+}

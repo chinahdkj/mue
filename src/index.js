@@ -1,11 +1,12 @@
 import Chart from '../packages/Chart/index.js';
 import Panel from '../packages/Panel/index.js';
 import {RollData, RollDataGroup} from '../packages/RollData/index.js';
+import DateRangePicker from '../packages/DateRangePicker/index.js'
 //direcives
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
 
-const components = [Chart, Panel, RollData, RollDataGroup];
+const components = [Chart, Panel, RollData, RollDataGroup, DateRangePicker];
 
 const install = function(Vue){
     // 加载Vant
