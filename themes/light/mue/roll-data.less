@@ -20,7 +20,8 @@
         text-align: center;
         margin: 15px 0 0 0;
         font-weight: 500;
-        overflow: visible;
+        overflow: hidden;
+        perspective: 800px;
     }
     > .mue-roll-data--title {
         float: left;
@@ -33,23 +34,25 @@
         text-align: center;
     }
 
-    //.value-toggle-enter-active, .value-toggle-leave-active {
-    //    transition: opacity .5s;
-    //}
-    //.value-toggle-enter, .value-toggle-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    //    opacity: 0;
-    //}
-
-    .value-toggle-enter-active {
+    .value-toggle-enter-active, .value-toggle-leave-active {
         transition: all .5s;
-
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
     }
-    .value-toggle-leave-active {
-        transition: all .5s;
+    .value-toggle-enter {
+        transform: rotateX(180deg);
+        opacity: 0;
     }
-    .value-toggle-enter, .value-toggle-leave-to
-        /* .slide-fade-leave-active for below version 2.1.8 */ {
-        transform: translateY(20px);
+    .value-toggle-enter-to {
+        transform: rotateX(0);
+        opacity: 1;
+    }
+    .value-toggle-leave {
+        transform: rotateX(0);
+        opacity: 1;
+    }
+    .value-toggle-leave-to {
+        transform: rotateX(180deg);
         opacity: 0;
     }
 }

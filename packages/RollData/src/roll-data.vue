@@ -2,7 +2,7 @@
     <div class="mue-roll-data">
         <h6 class="mue-roll-data--value" :class="valueClass" :style="valueStyle">
             <transition name="value-toggle" appear @after-leave="onHided">
-                <span style="display: block;" v-show="visible">{{value}}</span>
+                <span style="display: block;" v-show="visible">{{prev}}</span>
             </transition>
         </h6>
         <span class="mue-roll-data--title" :class="titleClass" :style="titleStyle">{{title}}</span>
@@ -23,17 +23,23 @@
         },
         data(){
             return {
+                prev: this.value, next: "",
                 visible: true
             };
         },
         methods: {
             onHided(){
+                debugger
+                this.prev = this.next;
+                this.next = "";
                 this.visible = true;
             }
         },
         watch: {
             value: {
-                handler(){
+                handler(v, ov){
+                    this.prev = ov;
+                    this.next = v;
                     this.visible = false;
                 }
             }
