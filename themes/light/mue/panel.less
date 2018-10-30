@@ -10,15 +10,15 @@
         display: block;
         box-sizing: border-box;
         width: 100%;
-        height: 50px;
-        font-size: 16px;
+        height: 40px;
+        font-size: 14px;
         color: @light-common;
         overflow: hidden;
         position: relative;
     }
     .mue-panel-title {
         margin-left: 10px;
-        margin-top: 15px;
+        margin-top: 10px;
     }
 
     .mue-panel-tools {
@@ -26,14 +26,14 @@
         display: block;
         position: absolute;
         z-index: 10;
-        top: 15px;
+        top: 10px;
         right: 10px;
         overflow: hidden;
         line-height: 20px;
     }
 
     .mue-panel-body {
-        height: calc(~"100% - 50px");
+        height: calc(~"100% - 40px");
         overflow: auto;
         width: 100%;
         padding: 0;
@@ -42,13 +42,22 @@
     }
 }
 .mue-panel-title {
-    font-size: 16px;
+    font-size: 14px;
     display: block;
     float: left;
     height: 20px;
     line-height: 20px;
-    padding-left: 5px;
-    border-left: 2px solid @light-primary;
     font-weight: normal;
     margin: 0;
+    &:before{
+        content: "";
+        margin-right: 5px;
+        width: 2px;
+        height: 14px;
+        border-radius: 1px;
+        display: block;
+        float: left;
+        margin-top: 3px;
+        background: @light-primary;
+    }
 }
