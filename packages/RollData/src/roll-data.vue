@@ -29,7 +29,6 @@
         },
         methods: {
             onHided(){
-                debugger
                 this.prev = this.next;
                 this.next = "";
                 this.visible = true;
