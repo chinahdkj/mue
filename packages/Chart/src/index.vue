@@ -5,6 +5,9 @@
 <script>
     import ECharts from "echarts";
     import {addResizeListener, removeResizeListener} from "../../../src/utils/resize-event";
+    import {registerTheme} from './echart-themes';
+
+    registerTheme(ECharts);
 
     const ACTION_EVENTS = [
         "legendselectchanged",
@@ -94,7 +97,7 @@
                 if(this.chart){
                     return;
                 }
-                let chart = ECharts.init(this.$el, this.theme || "default");
+                let chart = ECharts.init(this.$el, this.theme || "light-default");
                 this.chart = chart;
                 if(this.group){
                     chart.group = this.group;
