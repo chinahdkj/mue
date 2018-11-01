@@ -19,6 +19,17 @@
             line-height: 40px;
             font-size: 16px;
             color: @light-common;
+            &:not(:last-child){
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    height: 20px;
+                    top: 10px;
+                    width: 1px;
+                    background: @light-border-color-base;
+                }
+            }
             &.van-tab--active {
                 color: @light-primary;
             }
