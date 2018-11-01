@@ -1,0 +1,42 @@
+@import '../../var.light.less';
+.van-tabs {
+    &.van-tabs--line {
+        padding-top: 40px;
+
+        .van-tabs__wrap {
+            height: 40px;
+            &.van-hairline--top-bottom:after {
+                // 去除上边框
+                border-top: 0;
+            }
+        }
+
+        .van-tabs__line {
+            background-color: @light-primary
+        }
+
+        .van-tab {
+            line-height: 40px;
+            font-size: 16px;
+            color: @light-common;
+            &.van-tab--active {
+                color: @light-primary;
+            }
+        }
+    }
+
+    &.van-tabs--card {
+        .van-tabs__nav--card {
+            border-color: @light-primary;
+        }
+        .van-tab {
+            color: @light-primary;
+            border-color: @light-primary;
+            &.van-tab--active {
+                color: @light-white;
+                background-color: @light-primary;
+            }
+        }
+    }
+
+}

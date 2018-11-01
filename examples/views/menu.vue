@@ -3,6 +3,7 @@
         <h3>VANT-UI</h3>
         <van-cell-group border>
             <van-cell value="BUTTON" @click="open('BUTTON', '/vant/button')"/>
+            <van-cell value="TAB" @click="open('TAB', '/vant/tab')"/>
         </van-cell-group>
 
         <h3>MUE</h3>

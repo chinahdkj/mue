@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import vbutton from "../views/vant/button";
+import vtab from "../views/vant/tab";
 
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
@@ -16,6 +17,11 @@ export default new Router({
             path: '/vant/button',
             name: 'vant_button',
             component: vbutton
+        },
+        {
+            path: '/vant/tab',
+            name: 'vant_tab',
+            component: vtab
         },
 
 
