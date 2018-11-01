@@ -25,6 +25,13 @@
             <van-button disabled round type="primary">禁用按钮</van-button>
         </mue-panel>
 
+        <mue-panel title="mini">
+            <van-button size="mini">mini按钮</van-button>
+            <van-button size="mini" type="primary">mini按钮</van-button>
+            <van-button size="mini" plain>mini按钮</van-button>
+            <van-button size="mini" plain type="primary">mini按钮</van-button>
+        </mue-panel>
+
     </div>
 
 </template>
