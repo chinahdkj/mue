@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import vbutton from "../views/vant/button";
 import vtab from "../views/vant/tab";
+import vcheckbox from "../views/vant/checkbox";
+import vradio from "../views/vant/radio";
 
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
@@ -17,6 +19,16 @@ export default new Router({
             path: '/vant/button',
             name: 'vant_button',
             component: vbutton
+        },
+        {
+            path: '/vant/checkbox',
+            name: 'vant_checkbox',
+            component: vcheckbox
+        },
+        {
+            path: '/vant/radio',
+            name: 'vant_radio',
+            component: vradio
         },
         {
             path: '/vant/tab',

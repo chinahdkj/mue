@@ -1,0 +1,23 @@
+@import '../../var.light.less';
+.van-radio {
+    line-height: 0;
+    .van-radio__input {
+        font-size: @radio-size;
+        .van-icon-checked {
+            color: @light-primary;
+        }
+        .van-icon-check {
+            color: @light-border-color-dark;
+        }
+
+    }
+    .van-radio__label {
+        line-height: @radio-size;
+        font-size: @radio-font-size;
+    }
+
+    &.van-radio--disabled .van-icon {
+        background: @light-disable-background;
+        color: @light-disable-color;
+    }
+}

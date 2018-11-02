@@ -3,6 +3,8 @@
         <h3>VANT-UI</h3>
         <van-cell-group border>
             <van-cell value="BUTTON" @click="open('BUTTON', '/vant/button')"/>
+            <van-cell value="CHECKBOX" @click="open('CHECKBOX', '/vant/checkbox')"/>
+            <van-cell value="RADIO" @click="open('RADIO', '/vant/radio')"/>
             <van-cell value="TAB" @click="open('TAB', '/vant/tab')"/>
         </van-cell-group>
 

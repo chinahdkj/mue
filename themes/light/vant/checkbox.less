@@ -1,0 +1,35 @@
+@import '../../var.light.less';
+.van-checkbox {
+    line-height: 0;
+    .van-checkbox__icon {
+        line-height: @checkbox-size;
+        .van-icon {
+            height: @checkbox-size;
+            width: @checkbox-size;
+            border-radius: 2px;
+            border-color: @light-border-color-dark;
+        }
+        &.van-checkbox__icon--checked .van-icon {
+            color: @light-white;
+            background: @light-primary;
+            border-color: @light-primary;
+        }
+        &.van-checkbox__icon--disabled {
+            &.van-checkbox__icon--checked .van-icon {
+                color: @light-white;
+            }
+            .van-icon {
+                color: @light-disable-background;
+                background: @light-disable-background;
+                border-color: @light-disable-color;
+            }
+        }
+    }
+
+    .van-checkbox__label {
+        line-height: @checkbox-size;
+        font-size: @checkbox-font-size;
+        margin-top: -2px;
+    }
+
+}
