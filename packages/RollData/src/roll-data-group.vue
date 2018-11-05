@@ -18,6 +18,10 @@
         },
         methods: {
             calcSize(){
+                if(!this.$slots["default"]){
+                    this.size = "";
+                    return;
+                }
                 let count = this.$slots["default"].filter((vnode) => {
                     return vnode.componentOptions
                         && vnode.componentOptions.tag.toLowerCase() == "mue-roll-data";

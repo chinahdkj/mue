@@ -19,7 +19,7 @@
             line-height: 40px;
             font-size: 16px;
             color: @light-common;
-            &:not(:last-child){
+            &:not(:last-child) {
                 &:after {
                     content: "";
                     position: absolute;
@@ -50,4 +50,28 @@
         }
     }
 
+    &.no-flex {
+        .van-tabs__nav--line {
+            display: -moz-box;
+            display: -webkit-box;
+            .van-tabs__line {
+                display: none;
+            }
+            .van-tab {
+                padding: 0 15px;
+                &.van-tab--active:before {
+                    content: "";
+                    display: block;
+                    width: calc(~"100% - 30px");
+                    height: 2px;
+                    border-radius: 2px;
+                    background: @light-primary;
+                    bottom: 0;
+                    left: 15px;
+                    position: absolute;
+                    z-index: 10;
+                }
+            }
+        }
+    }
 }

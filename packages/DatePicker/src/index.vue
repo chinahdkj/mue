@@ -4,8 +4,8 @@
         <div class="pick-bar" @click="pop = true">
             <span class="pick-bar-content">
                 {{value}}
-                <van-icon name="arrow-left"/>
-                <van-icon name="arrow"/>
+                <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
+                <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
             </span>
         </div>
 
@@ -69,6 +69,9 @@
                 }
                 this.$emit("input", val);
                 this.$emit("confirm", val);
+            },
+            onClickArrow(act){
+                this.$emit("arrow", act);
             }
         }
     }
