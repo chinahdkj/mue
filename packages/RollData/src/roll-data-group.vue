@@ -27,6 +27,9 @@
         },
         created(){
             this.calcSize();
+        },
+        beforeUpdate(){
+            this.calcSize();
         }
     }
 </script>
