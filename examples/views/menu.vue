@@ -17,6 +17,7 @@
             '/mue/datepicker')"/>
             <van-cell value="DATE-RANGE-PICKER" @click="open('DATE-RANGE-PICKER',
             '/mue/daterangepicker')"/>
+            <van-cell value="SEARCH" @click="open('SEARCH', '/mue/search')"/>
         </van-cell-group>
     </div>
 </template>

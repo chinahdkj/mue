@@ -1,0 +1,56 @@
+@import "../../var.light.less";
+.mue-search {
+    @__height: 38px;
+    .van-search {
+        padding: 0;
+        border: 1px solid @light-border-color-base;
+        border-radius: 4px;
+        overflow: hidden;
+        .van-cell {
+            height: @__height;
+            border-radius: 0;
+            font-size: @font-size;
+            padding: 7px 10px;
+            background: @light-background-common;
+            .van-cell__left-icon {
+                margin-right: 10px;
+                color: @light-primary;
+            }
+
+            input.van-field__control {
+                color: @light-common;
+            }
+            input.van-field__control::-webkit-input-placeholder {
+                color: @light-disable-color;
+            }
+            input.van-field__control::-moz-placeholder { /* Mozilla Firefox 19+ */
+                color: @light-disable-color;
+            }
+            input.van-field__control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                color: @light-disable-color;
+            }
+            input.van-field__control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                color: @light-disable-color;
+            }
+        }
+
+        .van-search__action {
+            height: @__height;
+            line-height: @__height;
+            box-sizing: border-box;
+            padding: 0 15px;
+            border-left: 1px solid @light-border-color-base;
+            background: @light-background-common;
+            color: @light-common;
+        }
+
+        &.inputing {
+            .van-search__action {
+                color: @light-white;
+                border-left: 1px solid @light-primary;
+                background: @light-primary;
+            }
+        }
+    }
+
+}
