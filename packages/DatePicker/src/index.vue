@@ -3,7 +3,7 @@
 
         <div class="pick-bar" @click="pop = true">
             <span class="pick-bar-content">
-                {{value}}
+                <a>{{value}}</a>
                 <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
                 <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
             </span>

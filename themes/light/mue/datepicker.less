@@ -1,53 +1,29 @@
 @import "../../var.light.less";
-.mue-date-picker {
-    color: @light-common;
-    .pick-bar {
-        height: 40px;
-        line-height: 40px;
-        font-size: @font-size;
-        background:@light-background-common;
-        border-bottom: 1px solid @light-border-color-base;
-        text-align: center;
-        .pick-bar-content{
-            padding: 0 30px;
-            box-sizing: border-box;
-            position: relative;
-            .van-icon{
-                position: absolute;
-                color: @light-gray;
-                top: 3px;
-                &.van-icon-arrow-left{
-                    left: 0;
-                }
-                &.van-icon-arrow{
-                    right: 0;
-                }
-            }
-        }
-    }
-}
-
+.mue-date-picker,
 .mue-date-range-picker {
     color: @light-common;
     .pick-bar {
-        height: 40px;
-        line-height: 40px;
-        font-size: @font-size;
-        background:@light-background-common;
-        border-bottom: 1px solid @light-border-color-base;
+        height: 50px;
+        line-height: 49px;
+        background: @light-background-common;
+        border-top: 1px solid @light-border-color-base;
         text-align: center;
-        .pick-bar-content{
-            padding: 0 30px;
-            box-sizing: border-box;
+        box-sizing: border-box;
+        .pick-bar-content {
+            padding: 0 35px;
             position: relative;
-            .van-icon{
+            > a {
+                font-size: @font-size-large;
+                font-weight: 400;
+            }
+            .van-icon {
                 position: absolute;
                 color: @light-gray;
                 top: 3px;
-                &.van-icon-arrow-left{
+                &.van-icon-arrow-left {
                     left: 0;
                 }
-                &.van-icon-arrow{
+                &.van-icon-arrow {
                     right: 0;
                 }
             }
