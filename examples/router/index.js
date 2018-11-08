@@ -11,6 +11,7 @@ import rolldata from "../views/mue/rolldata";
 import datepicker from "../views/mue/datepicker";
 import daterangepicker from "../views/mue/daterangepicker";
 import search from "../views/mue/search";
+import popover from "../views/mue/popover";
 
 Vue.use(Router);
 
@@ -67,6 +68,11 @@ export default new Router({
             path: '/mue/search',
             name: 'mue_search',
             component: search
+        },
+        {
+            path: '/mue/popover',
+            name: 'mue_popover',
+            component: popover
         },
     ]
 })
