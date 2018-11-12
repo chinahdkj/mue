@@ -5,11 +5,14 @@ import DatePicker from '../packages/DatePicker/index.js';
 import DateRangePicker from '../packages/DateRangePicker/index.js';
 import Search from '../packages/Search/index.js';
 import Popover from '../packages/Popover/index.js';
+import {Tabs, Tab} from '../packages/Tabs/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
 
-const components = [Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover];
+const components = [
+    Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab
+];
 
 const install = function(Vue){
     // 加载Vant

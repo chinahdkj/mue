@@ -5,6 +5,7 @@
 
         .van-tabs__wrap {
             height: 40px;
+            background: @light-white;
             &.van-hairline--top-bottom:after {
                 // 去除上边框
                 border-top: 0;
@@ -28,6 +29,11 @@
                     top: 10px;
                     width: 1px;
                     background: @light-border-color-base;
+                }
+            }
+            &.is-last{
+                &:after{
+                    display: none;
                 }
             }
             &.van-tab--active {
@@ -73,5 +79,9 @@
                 }
             }
         }
+    }
+
+    .van-tabs__content{
+        background: @light-white;
     }
 }

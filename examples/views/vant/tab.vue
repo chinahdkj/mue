@@ -2,12 +2,7 @@
     <div>
         <mue-panel title="基础用法">
             <van-tabs v-model="a0">
-                <van-tab title="标签1">内容1</van-tab>
-                <van-tab title="标签2">内容2</van-tab>
-                <van-tab title="标签3">内容3</van-tab>
-                <van-tab title="标签4">内容4</van-tab>
-                <van-tab title="标签5">内容5</van-tab>
-                <van-tab title="标签6">内容6</van-tab>
+                <van-tab v-for="i in c" :title="'标签' + i" :key="i">内容{{i}}</van-tab>
             </van-tabs>
         </mue-panel>
 
@@ -46,7 +41,7 @@
     export default {
         components: {},
         data(){
-            return {a0: 0, a1: 0, a2: 0};
+            return {c: 5, a0: 0, a1: 0, a2: 0};
         },
         methods: {}
     }

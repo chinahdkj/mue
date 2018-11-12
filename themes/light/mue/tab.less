@@ -1,0 +1,104 @@
+@import "../../var.light.less";
+.mue-tabs {
+    position: relative;
+    > .van-tabs {
+        height: 100%;
+        box-sizing: border-box;
+        > .van-tabs__wrap {
+            padding-right: 0;
+            box-sizing: border-box;
+
+        }
+        > .van-tabs__content {
+            height: 100%;
+            > .van-tab__pane {
+                height: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    .mue-tabs-more {
+        background: transparent;
+        display: none;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 100;
+        text-align: center;
+        line-height: 40px;
+        &.in-more {
+            color: @light-primary;
+        }
+    }
+
+    &.has-more {
+        > .van-tabs > .van-tabs__wrap {
+            padding-right: 40px;
+        }
+        .mue-tabs-more {
+            display: block;
+        }
+    }
+
+    .mue-tab {
+        height: 20px;
+        display: block;
+        overflow: hidden;
+        margin-top: 10px;
+        > .mue-tab-icon {
+            display: block;
+            float: left;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            width: 20px;
+            margin-right: 5px;
+        }
+        > .mue-tab-title {
+            display: block;
+            float: left;
+            height: 20px;
+            line-height: 20px;
+        }
+    }
+}
+.mue-tabs-pop {
+    .mue-tabs-pop-tab {
+        height: 30px;
+        line-height: 30px;
+        border-left: 2px solid transparent;
+        padding-right: 2px;
+        color: @light-common;
+        font-size: 14px;
+        > .mue-tab-icon {
+            font-size: 14px;
+            display: block;
+            float: left;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            width: 20px;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+        > .mue-tab-title {
+            display: block;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            max-width: 100px;
+            padding: 0 10px 0 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &.is-active {
+            border-left-color: @light-primary;
+            color: @light-primary;
+        }
+    }
+}

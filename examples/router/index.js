@@ -12,6 +12,7 @@ import datepicker from "../views/mue/datepicker";
 import daterangepicker from "../views/mue/daterangepicker";
 import search from "../views/mue/search";
 import popover from "../views/mue/popover";
+import tabs from "../views/mue/tabs";
 
 Vue.use(Router);
 
@@ -73,6 +74,11 @@ export default new Router({
             path: '/mue/popover',
             name: 'mue_popover',
             component: popover
+        },
+        {
+            path: '/mue/tabs',
+            name: 'mue_tabs',
+            component: tabs
         },
     ]
 })
