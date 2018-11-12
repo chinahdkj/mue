@@ -5,7 +5,7 @@
     border-radius: 2px;
     border: 1px solid @light-border-color-base;
     padding: 0;
-    z-index: 2000;
+    z-index: 200;
     color: @light-common;
     text-align: justify;
     font-size: @font-size;
@@ -72,7 +72,7 @@
         }
     }
 
-    .mue-popover[x-placement^=left] .popper__arrow {
+    &[x-placement^=left] .popper__arrow {
         top: 50%;
         right: -6px;
         margin-bottom: 3px;
@@ -85,6 +85,10 @@
             border-right-width: 0;
             border-left-color: @light-white;
         }
+    }
+    &:focus,
+    &:focus:active {
+        outline-width: 0
     }
 }
 
