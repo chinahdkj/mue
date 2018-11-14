@@ -41,9 +41,10 @@
                 };
             },
             popTabs(){
-                return this.tabs.filter((t) => {
-                    return !!t.isMore;
-                });
+                return this.tabs;
+                // return this.tabs.filter((t) => {
+                //     return !!t.isMore;
+                // });
             },
             popNoIcon(){
                 return this.popTabs.every((t) => {
@@ -51,9 +52,10 @@
                 });
             },
             inMore(){
-                return this.popTabs.some((t) => {
-                    return t.isActive;
-                });
+                return false;
+                // return this.popTabs.some((t) => {
+                //     return t.isActive;
+                // });
             }
         },
         watch: {
@@ -65,6 +67,7 @@
             },
             current(v){
                 this.$emit("input", v);
+                this.$emit("change", v, this.tabs[v].title);
             },
         },
         methods: {
@@ -82,24 +85,25 @@
                 }
             },
             toggleTab(tab){
-                if(!this.pop){
-                    return;
-                }
-                let x = this.tabs.indexOf(tab);
-                this.$nextTick(() => {
-                    let $tabs = $(this.$el).find(">.van-tabs>.van-tabs__wrap a.mue-tab");
-                    $tabs.eq(x).parents(".van-tab:first").toggle(!tab.isMore);
-                    $tabs.each(function(){
-                        $(this).parents(".van-tab:first").removeClass("is-last");
-                    });
-                    for(let i = this.tabs.length - 1; i >= 0; i--){
-                        let t = this.tabs[i];
-                        if(!t.isMore){
-                            $tabs.eq(i).parents(".van-tab:first").addClass("is-last");
-                            break
-                        }
-                    }
-                });
+                return;
+                // if(!this.pop){
+                //     return;
+                // }
+                // let x = this.tabs.indexOf(tab);
+                // this.$nextTick(() => {
+                //     let $tabs = $(this.$el).find(">.van-tabs>.van-tabs__wrap a.mue-tab");
+                //     $tabs.eq(x).parents(".van-tab:first").toggle(!tab.isMore);
+                //     $tabs.each(function(){
+                //         $(this).parents(".van-tab:first").removeClass("is-last");
+                //     });
+                //     for(let i = this.tabs.length - 1; i >= 0; i--){
+                //         let t = this.tabs[i];
+                //         if(!t.isMore){
+                //             $tabs.eq(i).parents(".van-tab:first").addClass("is-last");
+                //             break
+                //         }
+                //     }
+                // });
             },
             addTab(tab){
                 let x = this.indexOfTab(tab);

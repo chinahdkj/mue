@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mue-tabs height="300px" v-model="v">
+        <mue-tabs height="300px" v-model="v" @change="onChange">
             <mue-tab v-for="(t, i) in tabs" :title="t.title" :is-more="t.more" :key="i"
                      :icon="t.icon">
                 {{t}}
@@ -54,8 +54,8 @@
             };
         },
         methods: {
-            onSearch(v){
-                this.$toast(v);
+            onChange(index, title){
+                alert([index, title]);
             }
         },
         mounted(){
