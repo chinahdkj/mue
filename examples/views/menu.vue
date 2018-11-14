@@ -20,6 +20,7 @@
             <van-cell value="SEARCH" @click="open('SEARCH', '/mue/search')"/>
             <van-cell value="POPOVER" @click="open('POPOVER', '/mue/popover')"/>
             <van-cell value="TABS" @click="open('TABS', '/mue/tabs')"/>
+            <van-cell value="LOADING" @click="open('LOADING', '/mue/loading')"/>
         </van-cell-group>
     </div>
 </template>

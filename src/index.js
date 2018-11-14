@@ -6,6 +6,7 @@ import DateRangePicker from '../packages/DateRangePicker/index.js';
 import Search from '../packages/Search/index.js';
 import Popover from '../packages/Popover/index.js';
 import {Tabs, Tab} from '../packages/Tabs/index.js';
+import Loading from '../packages/Loading/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
@@ -20,7 +21,10 @@ const install = function(Vue){
     components.map(component => {
         Vue.component(component.name, component);
     });
+    Vue.use(Loading.directive);
     Vue.directive(resize.name, resize);
+
+    Vue.prototype.$loading = Loading.service
 };
 
 if(typeof window !== 'undefined' && window.Vue){
