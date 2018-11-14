@@ -4,7 +4,8 @@
             <slot></slot>
         </van-tabs>
         <a v-if="!pop" class="mue-tabs-more" :class="icon" @click="onMoreClick"></a>
-        <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop">
+        <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop"
+                     :append-to-body="false">
             <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
             <ul class="mue-tabs-pop-tabs">
                 <li v-for="(t, i) in popTabs" :key="i" @click="onPopTabClick(t)"
