@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mue-date-picker bar v-model="value" format="yyyy-MM-dd" @confirm="onConfirm"
+        <mue-date-picker bar v-model="value" format="YYYY-MM-DD" @confirm="onConfirm"
                          @arrow="onArrow">
         </mue-date-picker>
     </div>

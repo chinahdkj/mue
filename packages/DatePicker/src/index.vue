@@ -18,14 +18,14 @@
 </template>
 
 <script>
-    import {Date2String, GetType, String2Date} from './utils';
+    import {GetType} from './utils';
 
     export default {
         name: "MueDatePicker",
         components: {},
         props: {
             format: {
-                type: String, default: "yyyy-MM-dd"
+                type: String, default: "YYYY-MM-DD"
             },
             bar: {
                 type: Boolean, default: false
@@ -48,16 +48,18 @@
                 if(!v){
                     return;
                 }
+                console.info(this.dtype);
                 if(this.dtype === "time"){
                     this.val = this.value;
                 }
                 else{
-                    this.val = String2Date(this.value, this.format);
+                    this.val = moment(this.value, this.format).toDate();
                 }
             }
         },
         methods: {
             onConfirm(v){
+                debugger
                 this.val = v;
                 this.pop = false;
                 let val;
@@ -65,7 +67,7 @@
                     val = this.val;
                 }
                 else{
-                    val = Date2String(this.val, this.format);
+                    val = moment(this.val).format(this.format);
                 }
                 this.$emit("input", val);
                 this.$emit("confirm", val);

@@ -21,14 +21,14 @@
 </template>
 
 <script>
-    import {Date2String, GetType, String2Date} from '../../DatePicker/src/utils';
+    import {GetType} from '../../DatePicker/src/utils';
 
     export default {
         name: "MueDateRangePicker",
         components: {},
         props: {
             format: {
-                type: String, default: "yyyy-MM-dd"
+                type: String, default: "YYYY-MM-DD"
             },
             bar: {
                 type: Boolean, default: false
@@ -68,8 +68,8 @@
                     this.ev = this.end;
                 }
                 else{
-                    this.bv = String2Date(this.begin, this.format);
-                    this.ev = String2Date(this.end, this.format);
+                    this.bv = moment(this.begin, this.format).toDate();
+                    this.ev = moment(this.end, this.format).toDate();
                 }
             }
         },
@@ -88,8 +88,8 @@
                     ev = this.ev;
                 }
                 else{
-                    bv = Date2String(this.bv, this.format);
-                    ev = Date2String(this.ev, this.format);
+                    bv = moment(this.bv).format(this.format);
+                    ev = moment(this.ev).format(this.format);
                 }
                 this.$emit("update:begin", bv);
                 this.$emit("update:end", ev);
