@@ -67,13 +67,22 @@
     }
 }
 .mue-tabs-pop {
+    >.mue-tabs-pop-tabs{
+        max-height: 180px;
+        padding: 0 10px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
     .mue-tabs-pop-tab {
-        height: 30px;
-        line-height: 30px;
-        border-left: 2px solid transparent;
-        padding-right: 2px;
-        color: @light-common;
+        height: 40px;
+        padding: 5px;
+        box-sizing: border-box;
+        color: @light-gray;
         font-size: 14px;
+        border-bottom: 1px solid @light-border-color-light;
+        &:last-child{
+            border-bottom: 0;
+        }
         > .mue-tab-icon {
             font-size: 14px;
             display: block;
@@ -83,7 +92,6 @@
             text-align: center;
             width: 20px;
             margin-top: 5px;
-            margin-left: 5px;
         }
         > .mue-tab-title {
             display: block;
@@ -91,7 +99,7 @@
             height: 30px;
             line-height: 30px;
             max-width: 100px;
-            padding: 0 10px 0 5px;
+            padding: 0 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
