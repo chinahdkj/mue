@@ -116,7 +116,7 @@
             },
             onPopTabClick(tab){
                 this.popVis = false;
-                let x = this.indexOfTab(tab);
+                let x = this.tabs.indexOf(tab);
                 if(x > -1){
                     this.current = x;
                 }
