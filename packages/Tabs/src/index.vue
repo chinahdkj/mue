@@ -1,9 +1,10 @@
 <template>
-    <div class="mue-tabs" :style="style" :class="{'has-more': popTabs.length > 0}">
+    <div class="mue-tabs" :style="style" :class="{'has-more': !pop || popTabs.length > 0}">
         <van-tabs class="no-flex" v-model="current">
             <slot></slot>
         </van-tabs>
-        <mue-popover placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop">
+        <a v-if="!pop" class="mue-tabs-more" :class="icon" @click="onMoreClick"></a>
+        <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop">
             <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
             <ul>
                 <li v-for="(t, i) in popTabs" :key="i" @click="onPopTabClick(t)"
@@ -23,7 +24,8 @@
         props: {
             value: {type: Number, default: 0},
             icon: {type: String, default: "iconfont icon-gengduo1"},
-            height: {type: [String, Number], default: "100%"}
+            height: {type: [String, Number], default: "100%"},
+            pop: {type: Boolean, default: true}
         },
         data(){
             return {
@@ -80,6 +82,9 @@
                 }
             },
             toggleTab(tab){
+                if(!this.pop){
+                    return;
+                }
                 let x = this.tabs.indexOf(tab);
                 this.$nextTick(() => {
                     let $tabs = $(this.$el).find(">.van-tabs>.van-tabs__wrap a.mue-tab");
@@ -111,6 +116,9 @@
                 if(x > -1){
                     this.current = x;
                 }
+            },
+            onMoreClick(){
+                this.$emit("more-click");
             }
         },
         components: {}

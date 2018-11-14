@@ -6,6 +6,32 @@
                 {{t}}
             </mue-tab>
         </mue-tabs>
+
+        <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="popVis = true">
+            <mue-tab title="报表1">
+                :pop="false"
+                @more-click
+            </mue-tab>
+            <mue-tab title="报表2">
+                :pop="false"
+                @more-click
+            </mue-tab>
+            <mue-tab title="报表3">
+                :pop="false"
+                @more-click
+            </mue-tab>
+            <mue-tab title="报表4">
+                :pop="false"
+                @more-click
+            </mue-tab>
+            <mue-tab title="报表5">
+                :pop="false"
+                @more-click
+            </mue-tab>
+        </mue-tabs>
+
+        <van-popup class="tab-pop" v-model="popVis" position="right" :lazy-render="false">
+        </van-popup>
     </div>
 
 </template>
@@ -22,7 +48,9 @@
                     {title: "标签4", more: false, icon: "iconfont icon-aliuliang"},
                     {title: "标签5", more: true, icon: ""},
                 ],
-                v: 2
+                v: 2,
+                v2: 0,
+                popVis: false
             };
         },
         methods: {
@@ -34,3 +62,9 @@
         }
     }
 </script>
+<style lang="less" scoped>
+    .tab-pop {
+        height: 100%;
+        width: 80%;
+    }
+</style>
