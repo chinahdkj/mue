@@ -14,7 +14,8 @@ import Vant from 'vant';
 
 import axios from 'axios'
 import http from './lib/http';
-// import {} from './lib/native';
+import native from './lib/native';
+import comm from './lib/common';
 
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
@@ -33,6 +34,8 @@ const install = function(Vue){
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;
     Vue.prototype.$http = http;
+    Vue.prototype.$native = native;
+    Vue.prototype.$comm = comm;
 };
 
 if(typeof window !== 'undefined' && window.Vue){
