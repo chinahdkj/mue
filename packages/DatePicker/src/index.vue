@@ -59,7 +59,6 @@
         },
         methods: {
             onConfirm(v){
-                debugger
                 this.val = v;
                 this.pop = false;
                 let val;
