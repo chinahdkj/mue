@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Loading from './loading.vue';
 import {addClass, getStyle, removeClass} from '../../../src/utils/dom';
 import {PopupManager} from '../../../src/utils/popup';
+import afterLeave from '../../../src/utils/after-leave';
 
 const Mask = Vue.extend(Loading);
 
@@ -30,8 +31,7 @@ loadingDirective.install = Vue => {
                         ['top', 'left'].forEach(property => {
                             const scroll = property === 'top' ? 'scrollTop' : 'scrollLeft';
                             el.maskStyle[property] = el.getBoundingClientRect()[property] +
-                                document.body[scroll] +
-                                document.documentElement[scroll] -
+                                document.body[scroll] + document.documentElement[scroll] -
                                 parseInt(getStyle(document.body, `margin-${ property }`), 10) +
                                 'px';
                         });
@@ -49,6 +49,13 @@ loadingDirective.install = Vue => {
             });
         }
         else{
+            afterLeave(el.instance, _ => {
+                el.domVisible = false;
+                const target = binding.modifiers.fullscreen ? document.body : el;
+                removeClass(target, 'mue-loading-parent--relative');
+                removeClass(target, 'mue-loading-parent--hidden');
+                el.instance.hiding = false;
+            }, 300, true);
             el.instance.visible = false;
             el.instance.hiding = true;
         }
