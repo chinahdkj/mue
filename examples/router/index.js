@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+
 import vbutton from "../views/vant/button";
 import vtab from "../views/vant/tab";
 import vcheckbox from "../views/vant/checkbox";
 import vradio from "../views/vant/radio";
 
+import container from "../views/mue/container";
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
 import rolldata from "../views/mue/rolldata";
@@ -40,6 +42,11 @@ export default new Router({
             component: vtab
         },
 
+        {
+            path: '/mue/container',
+            name: 'mue_container',
+            component: container
+        },
 
         {
             path: '/mue/chart',

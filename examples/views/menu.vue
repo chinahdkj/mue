@@ -10,8 +10,9 @@
 
         <h3>MUE</h3>
         <van-cell-group border>
-            <van-cell value="CHART" @click="open('CHART', '/mue/chart')"/>
+            <van-cell value="CONTAINER" @click="open('CONTAINER', '/mue/container')"/>
             <van-cell value="PANEL" @click="open('PANEL', '/mue/panel')"/>
+            <van-cell value="CHART" @click="open('CHART', '/mue/chart')"/>
             <van-cell value="ROLL-DATA" @click="open('ROLL-DATA', '/mue/rolldata')"/>
             <van-cell value="DATE-PICKER" @click="open('DATE-PICKER',
             '/mue/datepicker')"/>
