@@ -12,6 +12,10 @@ import {Container, Footer, Header, Main} from '../packages/Container/index.js';
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
 
+import axios from 'axios'
+import http from './lib/http';
+// import {} from './lib/native';
+
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
     Container, Header, Main, Footer
@@ -26,7 +30,9 @@ const install = function(Vue){
     Vue.use(Loading.directive);
     Vue.directive(resize.name, resize);
 
-    Vue.prototype.$loading = Loading.service
+    Vue.prototype.$loading = Loading.service;
+    Vue.prototype.$ajax = axios;
+    Vue.prototype.$http = http;
 };
 
 if(typeof window !== 'undefined' && window.Vue){
