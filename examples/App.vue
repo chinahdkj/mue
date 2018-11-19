@@ -23,6 +23,13 @@
         methods: {
             onOpen(n, p){
                 this.pop = false;
+                if(!p){
+                    return;
+                }
+                if(!n){
+                    window.open(p);
+                    return;
+                }
                 this.title = n;
                 this.$router.push(p);
             }

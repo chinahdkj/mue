@@ -1,18 +1,8 @@
 @import 'normalize.css';
 @import (inline) '~vant/lib/index.css';
 @import "./fonts/iconfont.css";
-
-// day
-body{
-    @import "./light/index.less";
-}
-
-// night
-body .nightcolor{
-    @import "./dark/index.less";
-}
-
-html, body, #app{
+@import "./font-awesome/css/font-awesome.css";
+html, body, #app {
     height: 100%;
     width: 100%;
 }
@@ -22,5 +12,20 @@ html, body, #app{
     -khtml-user-select: none; /*早期浏览器*/
     -moz-user-select: none; /*火狐*/
     -ms-user-select: none; /*IE10*/
+
+    //隐藏滚动条
     user-select: none;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+// day
+#app {
+    @import "./light/index.less";
+}
+// night
+#app .nightcolor {
+    @import "./dark/index.less";
 }

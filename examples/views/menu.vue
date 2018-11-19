@@ -2,7 +2,8 @@
     <div>
         <h3>ICON</h3>
         <van-cell-group border>
-            <van-cell value="HEDA" @click="openPage('/static/font/demo_fontclass.html')"/>
+            <van-cell value="HEDA" @click="open(null, '/static/font/demo_fontclass.html')"/>
+            <van-cell value="AWESOME" @click="open(null, 'http://www.fontawesome.com.cn/faicons/')"/>
         </van-cell-group>
 
         <h3>VANT-UI</h3>
@@ -40,9 +41,6 @@
         methods: {
             open(n, p){
                 this.$emit("open", n, p);
-            },
-            openPage(p){
-                window.open(p);
             }
         }
     }
