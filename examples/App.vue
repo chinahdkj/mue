@@ -1,7 +1,8 @@
 <template>
     <div id="app">
         <header>
-            <van-nav-bar :title="title" left-text="菜单" @click-left="pop=true" fixed/>
+            <van-nav-bar :title="title" left-text="菜单" @click-left="pop=true" fixed
+                         :right-text="source ? '示例' : ''" @click-right="openSouce"/>
         </header>
         <section>
             <router-view/>
@@ -18,20 +19,34 @@
     export default {
         name: 'App',
         data(){
-            return {pop: false, title: "CUE"};
+            return {pop: false};
+        },
+        computed: {
+            title(){
+                let ps = (this.$route.path || "").split("/");
+                ps.reverse();
+                return ps[0] || "MUE";
+            },
+            source(){
+                let p = (this.$route.path || "").substring(1);
+                return !p ? "" :
+                       `https://hub.hddznet.com/uniplatform/mue/src/master/examples/views/${p}.vue`;
+            }
         },
         methods: {
-            onOpen(n, p){
+            onOpen(p, _blank){
                 this.pop = false;
                 if(!p){
                     return;
                 }
-                if(!n){
+                if(_blank){
                     window.open(p);
                     return;
                 }
-                this.title = n;
                 this.$router.push(p);
+            },
+            openSouce(){
+                this.source && window.open(this.source);
             }
         },
         components: {vmenu}

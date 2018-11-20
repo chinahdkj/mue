@@ -16,6 +16,7 @@ import search from "../views/mue/search";
 import popover from "../views/mue/popover";
 import tabs from "../views/mue/tabs";
 import loading from "../views/mue/loading";
+import datatable from "../views/mue/datatable";
 
 Vue.use(Router);
 
@@ -92,6 +93,11 @@ export default new Router({
             path: '/mue/loading',
             name: 'mue_loading',
             component: loading
+        },
+        {
+            path: '/mue/datatable',
+            name: 'mue_datatable',
+            component: datatable
         }
     ]
 })

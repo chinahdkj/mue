@@ -8,6 +8,7 @@ import Popover from '../packages/Popover/index.js';
 import {Tab, Tabs} from '../packages/Tabs/index.js';
 import Loading from '../packages/Loading/index.js';
 import {Container, Footer, Header, Main} from '../packages/Container/index.js';
+import Datatable from '../packages/Datatable/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 import Vant from 'vant';
@@ -19,7 +20,7 @@ import comm from './lib/common';
 
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
-    Container, Header, Main, Footer
+    Container, Header, Main, Footer, Datatable
 ];
 
 const install = function(Vue){

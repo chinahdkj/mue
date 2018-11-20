@@ -1,0 +1,208 @@
+@import "../../var.light.less";
+.mue-datatable {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+    background: @light-background-common;
+    color: @light-common;
+    position: relative;
+    .mue-datatable-header {
+        overflow: hidden;
+        width: 100%;
+        display: block;
+        height: 0;
+        position: absolute;
+        background: @light-background-common;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        box-sizing: border-box;
+        &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 1px;
+            width: 100%;
+            z-index: 20;
+            background: @light-border-color-base;
+        }
+    }
+    .mue-datatable-main {
+        display: block;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        border-top: 0 solid transparent;
+        box-sizing: border-box;
+        &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 1px;
+            width: 100%;
+            z-index: 20;
+            background: @light-border-color-base;
+        }
+    }
+
+    .mue-datatable-fixed {
+        box-sizing: border-box;
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+        z-index: 20;
+    }
+    .mue-datatable-center {
+        box-sizing: border-box;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        float: left;
+    }
+    .mue-datatable-scroller {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        overflow-y: scroll;
+        .mue-datatable-scroller-content {
+            overflow: hidden;
+            width: 100%;
+        }
+        .van-loading {
+            display: none;
+        }
+    }
+
+    .mue-datatable__inner-table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+        word-break: break-all;
+        th, td {
+            vertical-align: middle;
+            box-sizing: border-box;
+            position: relative;
+            text-align: center;
+            font-size: @font-size;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        th {
+            height: 36px;
+            font-weight: 500;
+            font-size: @table-th-font-size;
+            padding: 3px 5px;
+            > a {
+                padding: 0 5px;
+                display: block;
+                background: @light-table-th-background;
+                float: left;
+                box-sizing: border-box;
+                overflow: hidden;
+                height: 30px;
+                line-height: 30px;
+                width: 100%;
+                border-radius: 2px;
+                vertical-align: middle;
+            }
+
+            .th-title {
+                display: inline-block;
+                height: 24px;
+                line-height: 24px;
+                position: relative;
+                &.is-sortable {
+                    padding-right: 12px;
+                    > i.icon-asc,
+                    > i.icon-desc {
+                        display: block;
+                    }
+                    &.is-asc > i.icon-asc {
+                        color: @light-primary;
+                    }
+                    &.is-desc > i.icon-desc {
+                        color: @light-primary;
+                    }
+                }
+                i.icon-asc,
+                i.icon-desc {
+                    height: 12px;
+                    width: 12px;
+                    line-height: 12px;
+                    text-align: center;
+                    position: absolute;
+                    right: 0;
+                    display: none;
+                    color: @light-gray-light;
+                }
+                i.icon-asc {
+                    top: 3px;
+                }
+                i.icon-desc {
+                    bottom: 3px;
+                }
+            }
+
+            i.icon-asc, i.icon-desc {
+                color: @light-primary;
+                display: none;
+
+            }
+            a.mue-datatable-asc {
+                padding-right: 16px;
+                position: relative;
+                i.icon-asc {
+                    display: block;
+                }
+            }
+            a.mue-datatable-desc {
+                padding-right: 16px;
+                position: relative;
+                i.icon-desc {
+                    display: block;
+                }
+            }
+        }
+        td {
+            padding: 0 10px;
+            &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 1px;
+                width: 100%;
+                background: @light-border-color-base;
+            }
+        }
+    }
+
+    .mue-datatable-header .mue-datatable__inner-table{
+        margin: 2px 0;
+    }
+
+    .mue-datatable-main {
+        .mue-datatable-center {
+            overflow: auto;
+        }
+        .mue-datatable__inner-table tr {
+            background: @light-white;
+            &.tr_stripe {
+                // todo 斑马线
+            }
+        }
+    }
+}
