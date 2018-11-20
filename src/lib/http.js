@@ -16,12 +16,8 @@ if(APP){
 }
 
 // 测试token
-axios.defaults.headers.common['Authorization'] =
-    process.env.NODE_ENV === 'production' ? sessionStorage.getItem('authortoken') :
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjcxMzYxMzcsIm5hbWUiOiJodTEiLCJwd2QiOiJBYTEyMzQ1NiIsInJvbGVzIjpbeyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoi57O757uf566h55CG5ZGYIn0seyJyb2xlIjoiNWFhNjBlZjI1NDg2N2IwMDA5NzkzZDcxIiwibmFtZSI6IuiDoeWPjOaIkOaYvuekuuWQjSJ9XSwicnl0b2tlbiI6IldYOSthaGdiYlhEZm5TanVkYWZHY1JqRDN4S1FBVzRhYm9DQzdvTllHdXhtNE9RWjVUQjhEQXpDUWFidmNTZFkvZnRsKzV6dXMySUxHRC9odUVWREJBK3JXYWxXTnlmK1kzQnZwU0IwMURsVHQzVzZQWnBvY21sUzUvYkprS0dkRktsL2IrOUNjWGs9IiwidWlkIjoiYmRkZGFiMmYtMGY1OC00NjYzLTk4OTktMWVmM2Y3M2RiY2JjIn0.CuI8O3igTN2jpnK-qZd5lHm3ydRP-3YTiJY2qJfCuKs";
-axios.defaults.headers.common['APP'] =
-    process.env.NODE_ENV === 'production' ? sessionStorage.getItem('authorapp') :
-    '5a9912544d4843264cb002fc';
+axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
+axios.defaults.headers.common['APP'] = sessionStorage.getItem('authorapp');
 
 axios.interceptors.request.use(config => {
     return config;
