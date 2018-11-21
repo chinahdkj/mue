@@ -46,7 +46,7 @@ axios.interceptors.response.use(response => {
 
 
 export default {
-    post(url, data){
+    async post(url, data){
         return axios({
             method: 'post',
             baseURL: process.env.NODE_ENV === 'production' ? host : '/list',
@@ -59,7 +59,7 @@ export default {
             return Promise.reject(e);
         })
     },
-    get(url, params){
+    async get(url, params){
         return axios({
             method: 'get',
             baseURL: process.env.NODE_ENV === 'production' ? host : '/list',
