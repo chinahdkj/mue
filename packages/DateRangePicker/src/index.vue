@@ -1,9 +1,9 @@
 <template>
-    <div class="mue-date-range-picker">
+    <div :class="bar ? 'mue-date-range-picker' : 'mue-date-range-picker-input'">
 
-        <div class="pick-bar" @click="pop = true">
+        <div class="pick-bar" @click="pop = true" v-if="bar">
             <span class="pick-bar-content">
-                <a>{{begin}} ~ {{end}}</a>
+                <a v-html="begin + '&nbsp;~&nbsp;' + end"></a>
                 <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
                 <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
             </span>
@@ -12,10 +12,11 @@
         <van-popup class="mue-date-picker-pop" v-model="pop" position="bottom"
                    :lazy-render="false">
             <van-datetime-picker v-if="step == 'begin'" :type="dtype" v-model="bv"
-                                 title="起始" @confirm="onConfirmBegin" @cancel="pop = false"/>
+                                 title="起始" @confirm="onConfirmBegin"
+                                 @cancel="onCancel" :cancel-button-text="cancelText"/>
             <van-datetime-picker v-if="step == 'end'" :type="dtype" v-model="ev"
                                  title="截止" v-bind="pickOpt2" @confirm="onConfirmEnd"
-                                 @cancel="pop = false"/>
+                                 @cancel="onCancel" :cancel-button-text="cancelText"/>
         </van-popup>
     </div>
 </template>
@@ -33,8 +34,9 @@
             bar: {
                 type: Boolean, default: false
             },
-            begin: {type: String},
-            end: {type: String},
+            begin: {type: String, default: ""},
+            end: {type: String, default: ""},
+            clearable: {type: Boolean, default: false}
         },
         data(){
             return {
@@ -47,6 +49,9 @@
         computed: {
             dtype(){
                 return GetType(this.format);
+            },
+            cancelText(){
+                return !this.bar && this.clearable ? "清空" : "取消";
             },
             pickOpt2(){
                 if(this.dtype === "time"){
@@ -68,8 +73,8 @@
                     this.ev = this.end;
                 }
                 else{
-                    this.bv = moment(this.begin, this.format).toDate();
-                    this.ev = moment(this.end, this.format).toDate();
+                    this.bv = (this.value ? moment(this.begin, this.format) : moment()).toDate();
+                    this.ev = (this.value ? moment(this.end, this.format) : moment()).toDate();
                 }
             }
         },
@@ -97,6 +102,14 @@
             },
             onClickArrow(act){
                 this.$emit("arrow", act);
+            },
+            onCancel(){
+                if(!this.bar && this.clearable){
+                    this.$emit("update:begin", "");
+                    this.$emit("update:end", "");
+                    this.$emit("confirm", "", "");
+                }
+                this.pop = false;
             }
         }
     }

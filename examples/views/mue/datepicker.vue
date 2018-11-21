@@ -3,6 +3,12 @@
         <mue-date-picker bar v-model="value" format="YYYY-MM-DD" @confirm="onConfirm"
                          @arrow="onArrow">
         </mue-date-picker>
+
+        <mue-date-picker bar v-model="year" format="YYYY" @confirm="onConfirm"
+                         @arrow="onArrow">
+        </mue-date-picker>
+
+        <mue-date-picker v-model="value" format="YYYY-MM-DD"></mue-date-picker>
     </div>
 
 </template>
@@ -12,7 +18,8 @@
         components: {},
         data(){
             return {
-                value: "2018-06-10",
+                value: "",
+                year: "2016",
             };
         },
         methods: {
