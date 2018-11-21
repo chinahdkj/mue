@@ -59,9 +59,18 @@
         position: absolute;
         left: 0;
         top: 0;
-        -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
         z-index: 20;
+        &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            z-index: 20;
+            background: @light-border-color-base;
+        }
     }
     .mue-datatable-center {
         box-sizing: border-box;
