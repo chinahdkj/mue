@@ -93,4 +93,8 @@ const Loading = (options = {}) => {
     return instance;
 };
 
+export function CloseLoading(){
+    fullscreenLoading && fullscreenLoading.close();
+}
+
 export default Loading;
