@@ -79,7 +79,7 @@ export default {
     get(url, params){
         return axios({
             method: 'get',
-            baseURL: process.env.NODE_ENV === 'production' ? '/list' :
+            baseURL: process.env.NODE_ENV !== 'production' ? '/list' :
                      (host && host.indexOf('http://') > -1 ? host : sessionStorage.getItem('host')),
             url,
             params, // get 请求时带的参数
