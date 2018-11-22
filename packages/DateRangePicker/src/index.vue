@@ -111,6 +111,9 @@
                 }
                 this.pop = false;
             }
+        },
+        mounted(){
+            $(this.$refs.pop.$el).appendTo("body");
         }
     }
 </script>
