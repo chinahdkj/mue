@@ -1,11 +1,13 @@
 <template>
     <div style="height: 400px;" v-loading="loading">
-        <mue-datatable :columns="columns" :min-col-width="minColWidth" :data="data"
+        <mue-datatable ref="table" :columns="columns" :min-col-width="minColWidth" :data="data"
                        :sort="sort" :total="total" row-class="rowClass" :stripe="stripe"
                        :row-key="rowKey" :row-height="rowHeight" :header="header"
                        @sort-change="onSortChange" @refresh="onRefresh" @load-more="onLoadMore"
                        @row-click="onRowClick">
         </mue-datatable>
+
+        <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
     </div>
 </template>
 
@@ -108,6 +110,10 @@
 
             onRowClick(row, index){
                 alert([JSON.stringify(row), index]);
+            },
+
+            toLeft(){
+                this.$refs.table.ScrollLeft();
             }
         },
         mounted(){

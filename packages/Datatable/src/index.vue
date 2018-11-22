@@ -181,7 +181,6 @@
                 }
                 return null;
             },
-
             rowCls(row, i){
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
@@ -224,7 +223,6 @@
                 }
                 return `${this.getValue(row, this.rowKey)}${i}`;
             },
-
             setCols(){
                 let tableWidth = this.$el.offsetWidth;
                 let headerRows = 0;
@@ -342,7 +340,7 @@
                 let self = this;
                 let callback = () => {
                     self.refreshing = false;
-                    self.$refs.main_table.scrollLeft = 0;
+                    self.ScorllLeft();
                 };
                 self.$emit("refresh", callback);
             },
@@ -355,6 +353,10 @@
             },
             onRowClick(row, i){
                 this.$emit("row-click", row, i);
+            },
+
+            ScrollLeft(l = 0){
+                this.$refs.main_table && (this.$refs.main_table.scrollLeft = l);
             }
         },
         mounted(){
