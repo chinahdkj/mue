@@ -9,7 +9,7 @@
             </span>
         </div>
 
-        <van-popup class="mue-date-picker-pop" v-model="pop" position="bottom"
+        <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
                    :lazy-render="false">
             <van-datetime-picker v-if="step == 'begin'" :type="dtype" v-model="bv"
                                  title="起始" @confirm="onConfirmBegin"
