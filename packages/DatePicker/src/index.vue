@@ -9,8 +9,9 @@
             </span>
         </div>
 
-        <div class="pick-input input-box" v-else @click="pop = true">
-            <input type="text" readonly :value="value"/>
+        <div class="mue-form-input" v-else @click="pop = true">
+            <input type="text" class="input__inner" readonly :value="value"/>
+            <i class="input__suffix iconfont icon-zhouli"></i>
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"

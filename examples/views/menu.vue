@@ -19,6 +19,7 @@
         <van-cell-group border>
             <van-cell value="CONTAINER" @click="open('/mue/container')"/>
             <van-cell value="PANEL" @click="open('/mue/panel')"/>
+            <van-cell value="FORM-ITEM" @click="open('/mue/formitem')"/>
             <van-cell value="CHART" @click="open('/mue/chart')"/>
             <van-cell value="ROLL-DATA" @click="open('/mue/rolldata')"/>
             <van-cell value="DATE-PICKER" @click="open('/mue/datepicker')"/>

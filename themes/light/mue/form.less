@@ -1,37 +1,19 @@
 @import "../../var.light.less";
-.mue-date-picker,
-.mue-date-range-picker {
+.mue-form-input{
+    background: @light-background-common;
     color: @light-common;
-    .pick-bar {
-        height: 40px;
-        line-height: 40px;
-        background: @light-background-common;
-        text-align: center;
+    display: inline-block;
+    font-size: @font-size;
+    .input__inner{
+        border: 0;
+        padding: 0 5px;
+        margin: 0;
+        display: inline-block;
         box-sizing: border-box;
-        .pick-bar-content {
-            padding: 0 35px;
-            position: relative;
-            > a {
-                font-size: @font-size-large;
-                font-weight: 400;
-            }
-            .van-icon {
-                position: absolute;
-                color: @light-gray;
-                top: 3px;
-                &.van-icon-arrow-left {
-                    left: 0;
-                }
-                &.van-icon-arrow {
-                    right: 0;
-                }
-            }
-        }
     }
 }
 
-.mue-date-picker-input,
-.mue-date-range-picker-input{
+.mue-select{
     height: 30px;
     min-width: 50px;
     display: inline-block;
