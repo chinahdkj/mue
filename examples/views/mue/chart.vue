@@ -32,7 +32,10 @@
                             type: 'line',
                             smooth: true
                         }
-                    ]
+                    ],
+                    tooltip:{
+                        show:true, trigger: 'axis'
+                    }
                 }
 
             };

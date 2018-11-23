@@ -80,7 +80,7 @@
             group(group){
                 this.chart.group = group;
             },
-            theme(){
+            thm(){
                 this.dispose();
                 this.init();
             }
@@ -97,7 +97,7 @@
                 if(this.chart){
                     return;
                 }
-                let chart = ECharts.init(this.$el, this.theme || "light-default");
+                let chart = ECharts.init(this.$el, this.thm);
                 this.chart = chart;
                 if(this.group){
                     chart.group = this.group;
@@ -173,6 +173,15 @@
             },
             registerTheme(...args){
                 ECharts.registerTheme(...args);
+            }
+        },
+        computed:{
+            thm(){
+                if(!this.$route){
+                    return 'light-' + (this.theme || "default");
+                }
+                let t = (this.$route.query || {}).theme;
+                return `${t == "night" ? "dark": "light"}-${(this.theme || "default")}`;
             }
         },
         components: {},
