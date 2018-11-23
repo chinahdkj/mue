@@ -3,10 +3,14 @@
 @import '~vant/lib/icon/local.less';
 @import "./fonts/iconfont.css";
 @import "./font-awesome/font-awesome.css";
+
 html, body, #app {
     height: 100%;
     width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+    //font-family: Arial, Verdana, Tahoma, serif;
 }
+
 * {
     -webkit-touch-callout: none; /*系统默认菜单被禁用*/
     -webkit-user-select: none; /*webkit浏览器*/
@@ -18,14 +22,17 @@ html, body, #app {
     user-select: none;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
 }
+
 // day
 body {
     @import "./light/index.less";
 }
+
 // night
 body .nightcolor {
     @import "./dark/index.less";
