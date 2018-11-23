@@ -57,9 +57,22 @@
              :style="header ? {'border-top-width': headerHeight} : {}">
 
             <van-pull-refresh class="mue-datatable-scroller" v-model="refreshing"
-                              @refresh="onRefresh" loading-text="刷新中..."
-                              :disabled="!$listeners.refresh">
-                <van-list class="mue-datatable-scroller-content" v-model="loading"
+                              @refresh="onRefresh" :disabled="!$listeners.refresh">
+
+                <div slot="pulling" class="mue-datatable-loading">
+                    <i class="iconfont icon-jiantou-down" aria-hidden="true"></i>&nbsp;下拉可以刷新
+                </div>
+                <div slot="loosing" class="mue-datatable-loading">
+                    <i class="iconfont icon-jiantou-down" aria-hidden="true"></i>&nbsp;下拉可以刷新
+                </div>
+                <div slot="loading" class="mue-datatable-loading">刷新中...</div>
+
+                <div v-if="data.length === 0" class="mue-datatable-nodata">
+                    <img src="../assets/no-data.png"/>
+                    <span>暂无数据</span>
+                </div>
+
+                <van-list v-else class="mue-datatable-scroller-content" v-model="loading"
                           :finished="!$listeners['load-more'] || data.length >= total"
                           @load="onLoad" :immediate-check="true" :offset="10">
 
@@ -106,6 +119,7 @@
                         </table>
                     </div>
 
+                    <div slot="loading" class="mue-datatable-loading">加载中...</div>
                 </van-list>
             </van-pull-refresh>
         </div>
@@ -340,7 +354,7 @@
                 let self = this;
                 let callback = () => {
                     self.refreshing = false;
-                    self.ScorllLeft();
+                    self.ScrollLeft();
                 };
                 self.$emit("refresh", callback);
             },

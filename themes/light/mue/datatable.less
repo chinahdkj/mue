@@ -1,4 +1,5 @@
 @import "../../var.less";
+
 .mue-datatable {
     width: 100%;
     height: 100%;
@@ -8,6 +9,7 @@
     background: @light-background-common;
     color: @light-common;
     position: relative;
+
     .mue-datatable-header {
         overflow: hidden;
         width: 100%;
@@ -19,6 +21,7 @@
         left: 0;
         z-index: 10;
         box-sizing: border-box;
+
         &:after {
             content: "";
             display: block;
@@ -31,6 +34,7 @@
             background: @light-border-color-base;
         }
     }
+
     .mue-datatable-main {
         display: block;
         overflow: hidden;
@@ -39,6 +43,7 @@
         position: relative;
         border-top: 0 solid transparent;
         box-sizing: border-box;
+
         &:after {
             content: "";
             display: block;
@@ -54,12 +59,12 @@
 
     .mue-datatable-fixed {
         box-sizing: border-box;
-        height: 100%;
         overflow: hidden;
         position: absolute;
         left: 0;
         top: 0;
         z-index: 20;
+
         &:after {
             content: "";
             display: block;
@@ -72,6 +77,7 @@
             background: @light-border-color-base;
         }
     }
+
     .mue-datatable-center {
         box-sizing: border-box;
         height: 100%;
@@ -79,17 +85,30 @@
         overflow: hidden;
         float: left;
     }
+
     .mue-datatable-scroller {
         height: 100%;
         width: 100%;
         overflow: auto;
         overflow-y: scroll;
+
         .mue-datatable-scroller-content {
             overflow: hidden;
             width: 100%;
         }
-        .van-loading {
-            display: none;
+
+        .van-list__loading{
+            float: left;
+            width: 100%;
+        }
+        .mue-datatable-loading{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            overflow: hidden;
+            font-size: @font-size;
+            color: @light-gray;
         }
     }
 
@@ -98,6 +117,7 @@
         border-spacing: 0;
         table-layout: fixed;
         word-break: break-all;
+
         th, td {
             vertical-align: middle;
             box-sizing: border-box;
@@ -108,11 +128,13 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         th {
             height: 36px;
             font-weight: 500;
             font-size: @table-th-font-size;
             padding: 3px 5px;
+
             > a {
                 padding: 0 5px;
                 display: block;
@@ -132,19 +154,24 @@
                 height: 24px;
                 line-height: 24px;
                 position: relative;
+
                 &.is-sortable {
                     padding-right: 12px;
+
                     > i.icon-asc,
                     > i.icon-desc {
                         display: block;
                     }
+
                     &.is-asc > i.icon-asc {
                         color: @light-primary;
                     }
+
                     &.is-desc > i.icon-desc {
                         color: @light-primary;
                     }
                 }
+
                 i.icon-asc,
                 i.icon-desc {
                     height: 12px;
@@ -156,9 +183,11 @@
                     display: none;
                     color: @light-gray-light;
                 }
+
                 i.icon-asc {
                     top: 3px;
                 }
+
                 i.icon-desc {
                     bottom: 3px;
                 }
@@ -169,23 +198,29 @@
                 display: none;
 
             }
+
             a.mue-datatable-asc {
                 padding-right: 16px;
                 position: relative;
+
                 i.icon-asc {
                     display: block;
                 }
             }
+
             a.mue-datatable-desc {
                 padding-right: 16px;
                 position: relative;
+
                 i.icon-desc {
                     display: block;
                 }
             }
         }
+
         td {
             padding: 0 10px;
+
             &:after {
                 content: "";
                 display: block;
@@ -199,7 +234,7 @@
         }
     }
 
-    .mue-datatable-header .mue-datatable__inner-table{
+    .mue-datatable-header .mue-datatable__inner-table {
         margin: 2px 0;
     }
 
@@ -207,11 +242,27 @@
         .mue-datatable-center {
             overflow: auto;
         }
+
         .mue-datatable__inner-table tr {
             background: @light-white;
+
             &.tr_stripe {
                 // todo 斑马线
             }
+        }
+    }
+
+    .mue-datatable-nodata {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        color: @light-gray;
+        font-size: @font-size-large;
+
+        > img {
+            height: 180px;
+            margin: 10px 0;
         }
     }
 }
