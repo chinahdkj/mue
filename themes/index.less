@@ -28,12 +28,24 @@ html, body, #app {
     }
 }
 
+@import "./vant/index.less";
+@import "./mue/index.less";
 // day
 body {
+    color: @light-common;
+    background: @light-background-common;
+
+    .vant;
+    .mue;
     @import "./light/index.less";
 }
 
 // night
-body .nightcolor {
+body.nightcolor {
+    color: @dark-common;
+    background: @dark-background-common;
+
+    .vant(@theme: dark);
+    .mue(@theme: dark);
     @import "./dark/index.less";
 }

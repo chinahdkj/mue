@@ -1,0 +1,74 @@
+@import "../var.less";
+
+.mue-search(@theme:light) {
+    .mue-search {
+        @__height: 38px;
+
+        @border-color:  %("%s-search-border-color", @theme);
+        @color: %("%s-common", @theme);
+        @primary : %("%s-primary", @theme);
+        @background: %("%s-background-common", @theme);
+        @cancel: %("%s-search-cancel", @theme);
+        @placeholder: %("%s-placeholder", @theme);
+
+        .van-search {
+            padding: 0;
+            border: 1px solid @@border-color;
+            border-radius: 4px;
+            overflow: hidden;
+            color: @@color;
+
+            .van-cell {
+                height: @__height;
+                border-radius: 0;
+                font-size: @font-size;
+                padding: 7px 10px;
+                background: @@background;
+
+                .van-cell__left-icon {
+                    margin-right: 10px;
+                    color: @@primary;
+                }
+
+                input.van-field__control {
+                    color: @@color;
+                }
+
+                input.van-field__control::-webkit-input-placeholder {
+                    color: @@placeholder;
+                }
+
+                input.van-field__control::-moz-placeholder { /* Mozilla Firefox 19+ */
+                    color: @@placeholder;
+                }
+
+                input.van-field__control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                    color: @@placeholder;
+                }
+
+                input.van-field__control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                    color: @@placeholder;
+                }
+            }
+
+            .van-search__action {
+                height: @__height;
+                line-height: @__height;
+                box-sizing: border-box;
+                padding: 0 15px;
+                border-left: 1px solid @@border-color;
+                background: @@background;
+                color: @@cancel;
+            }
+
+            &.inputing {
+                .van-search__action {
+                    color: #FFF;
+                    border-left: 1px solid @@primary;
+                    background: @@primary;
+                }
+            }
+        }
+
+    }
+}

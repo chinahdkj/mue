@@ -1,0 +1,53 @@
+@import '../var.less';
+
+.van-checkbox(@theme: light) {
+
+    @border-color: %("%s-border-color-dark", @theme);
+    @label-color: %("%s-common", @theme);
+    @primary: %("%s-primary", @theme);
+
+    @disable-color: %("%s-disable-color", @theme);
+    @disable-background: %("%s-disable-background", @theme);
+
+    .van-checkbox {
+        line-height: 0;
+
+        .van-checkbox__icon {
+            line-height: @checkbox-size;
+
+            .van-icon {
+                height: @checkbox-size;
+                width: @checkbox-size;
+                border-radius: 2px;
+                border-color: @@border-color;
+                background: #FFFFFF;
+            }
+
+            &.van-checkbox__icon--checked .van-icon {
+                color: #FFFFFF;
+                background: @@primary;
+                border-color: @@primary;
+            }
+
+            &.van-checkbox__icon--disabled {
+                &.van-checkbox__icon--checked .van-icon {
+                    color: @@disable-color;
+                }
+
+                .van-icon {
+                    color: @@disable-background;
+                    background: @@disable-background;
+                    border-color: @@disable-background;
+                }
+            }
+        }
+
+        .van-checkbox__label {
+            line-height: @checkbox-size;
+            font-size: @checkbox-font-size;
+            margin-top: -2px;
+            color: @@label-color;
+        }
+
+    }
+}

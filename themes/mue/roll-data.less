@@ -1,0 +1,133 @@
+@import "../var.less";
+
+.mue-roll-data(@theme: light) {
+
+    @color: %("%s-common", @theme);
+    @gray: %("%s-gray", @theme);
+    @background: %("%s-background-common", @theme);
+    @border-color: %("%s-border-color-base", @theme);
+
+    .mue-roll-data {
+        display: block;
+        float: left;
+        height: 100px;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        background: @@background;
+
+        > .mue-roll-data--value {
+            float: left;
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            color: @@color;
+            font-size: 30px;
+            width: 100%;
+            text-align: center;
+            margin: 15px 0 0 0;
+            font-weight: 400;
+            overflow: hidden;
+            perspective: 800px;
+        }
+
+        > .mue-roll-data--title {
+            float: left;
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            color: @@color;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .value-toggle-enter-active, .value-toggle-leave-active {
+            transition: all .5s;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .value-toggle-enter {
+            transform: rotateX(180deg);
+            opacity: 0;
+        }
+
+        .value-toggle-enter-to {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+
+        .value-toggle-leave {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+
+        .value-toggle-leave-to {
+            transform: rotateX(180deg);
+            opacity: 0;
+        }
+    }
+    .mue-roll-data-group {
+        width: 100%;
+        float: left;
+
+        &.has-split {
+            border-top: solid 1px @@border-color;
+        }
+
+        &.is-normal {
+            .mue-roll-data {
+                height: 40px;
+                width: 50%;
+
+                > .mue-roll-data--title {
+                    color: @@gray;
+                    font-size: 12px;
+                    height: 16px;
+                    line-height: 16px;
+                }
+
+                > .mue-roll-data--value {
+                    margin-top: 2px;
+                    font-size: 15px;
+                    height: 20px;
+                    line-height: 20px;
+                }
+            }
+        }
+
+        &.is-small {
+            .mue-roll-data {
+                height: 40px;
+                width: calc(~"100% / 3");
+
+                > .mue-roll-data--title {
+                    color: @@gray;
+                    font-size: 12px;
+                    height: 16px;
+                    line-height: 16px;
+                }
+
+                > .mue-roll-data--value {
+                    margin-top: 2px;
+                    font-size: 15px;
+                    height: 20px;
+                    line-height: 20px;
+                }
+            }
+        }
+
+        & > .mue-roll-data:not(:first-child):before {
+            display: block;
+            width: 1px;
+            height: calc(~"100% - 10px");
+            position: absolute;
+            left: 0;
+            top: 5px;
+            background: @@border-color;
+            content: "";
+        }
+
+    }
+}

@@ -1,0 +1,52 @@
+@import '../var.less';
+
+.van-radio(@theme:light) {
+
+    @border-color: %("%s-border-color-dark", @theme);
+    @label-color: %("%s-common", @theme);
+    @primary: %("%s-primary", @theme);
+
+    @disable-color: %("%s-disable-color", @theme);
+    @disable-background: %("%s-disable-background", @theme);
+
+    .van-radio {
+        line-height: 0;
+
+        .van-radio__input {
+            font-size: @radio-size;
+            width: @radio-size;
+            height: @radio-size;
+            border-radius: 100%;
+            background: #FFFFFF;
+
+            .van-icon-checked {
+                color: @@primary;
+            }
+
+            .van-icon-check {
+                display: none;
+            }
+
+        }
+
+        .van-radio__label {
+            line-height: @radio-size;
+            font-size: @radio-font-size;
+            color: @@label-color;
+        }
+
+        &.van-radio--disabled {
+            .van-radio__input{
+                background: @@disable-background;
+            }
+            .van-icon-checked {
+                color: @@disable-background;
+                background: @@disable-color;
+            }
+            //.van-icon {
+            //    background: @@disable-background;
+            //    color: @@disable-color;
+            //}
+        }
+    }
+}

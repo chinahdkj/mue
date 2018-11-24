@@ -1,0 +1,109 @@
+@import '../var.less';
+
+.van-button(@theme: light) {
+
+    .disabled() {
+        @background: %("%s-button-disable-background", @theme);
+        @color: %("%s-button-disable-color", @theme);
+        background: @@background;
+        color: @@color;
+        border-color: @@background;
+        opacity: 1;
+    }
+
+    .van-button {
+        font-size: @button-font-size;
+        height: @button-height;
+        line-height: calc(@button-height - 2px);
+        border-radius: 0;
+        padding: 0 15px;
+
+        &:active:before {
+            opacity: @button-active-mask;
+        }
+
+        &.van-button--unclickable:before {
+            display: none;
+        }
+
+        &.van-button--default {
+            @color: %("%s-common", @theme);
+            color: @@color;
+            @background: %("%s-button-background", @theme);
+            background-color: @@background;
+            border: 1px solid @@background;
+        }
+
+        &.van-button--primary {
+            @background: %("%s-primary", @theme);
+            color: #fff;
+            background-color: @@background;
+            border: 1px solid @@background;
+        }
+
+        &.van-button--plain {
+            @color: %("%s-common", @theme);
+            @background: %("%s-button-background-plain", @theme);
+            background-color: @@background;
+            color: @@color;
+
+            &.van-button--primary {
+                @primary: %("%s-primary", @theme);
+                color: @@primary;
+
+                &:active:before {
+                    background: @@primary;
+                }
+            }
+
+            &.van-button--disabled {
+                .disabled;
+            }
+        }
+
+        &.van-button--large {
+            width: 143px;
+            height: @button-height;
+            line-height: calc(@button-height - 2px);
+        }
+
+        &.van-button--normal {
+            height: @button-height;
+            line-height: calc(@button-height - 2px);
+            padding: 0 15px;
+        }
+
+        &.van-button--small {
+            height: @button-height;
+            line-height: calc(@button-height - 2px);
+            padding: 0 10px;
+        }
+
+        &.van-button--mini {
+            width: auto;
+            height: auto;
+            box-sizing: border-box;
+            line-height: @button-mini-font-size;
+            font-size: @button-mini-font-size;
+            padding: @button-mini-padding;
+        }
+
+        &.van-button--loading {
+            .van-loading {
+                display: inline-block;
+            }
+        }
+
+        &.van-button--disabled {
+            .disabled;
+        }
+
+        &.van-button--round {
+            border-radius: 10em;
+        }
+
+        &.van-button--square {
+            border-radius: 0;
+        }
+    }
+}

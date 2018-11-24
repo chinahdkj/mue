@@ -1,32 +1,68 @@
+// 字号
 @font-size: 14px;
 @font-size-large: 16px;
 
+// 颜色
 @light-white: #fff;
 @light-black: #000;
-@light-gray: #757575;
-@light-gray-light: #999999;
-@light-common: #212121;
-@light-primary: #4796e3;
 
+@light-gray: #757575;
+@dark-gray: #bbbcc1;
+
+@light-gray-light: #999999;
+
+@light-common: #212121;
+@dark-common: #ffffff;
+
+@light-primary: #4796e3;
+@dark-primary: #42b2fa;
+
+
+// 背景色
 @light-background-common: #fff;
+@dark-background-common: #1C1F2E;
+
 
 // 边框颜色
 @light-border-color-base: #e0e0e0;
-@light-border-color-light: #f0f0f0;
-@light-border-color-dark: #cccccc;
+@dark-border-color-base: #252c3e; //todo
 
+@light-border-color-light: #f0f0f0;
+@dark-border-color-light: #252c3e; //todo
+
+@light-border-color-dark: #cccccc;
+@dark-border-color-dark: #252c3e; //todo
+
+@light-placeholder: #bdbdbd;
+@dark-placeholder: #84868e;
+
+// 禁用
 @light-disable-color: #bdbdbd;
+@dark-disable-color: rgba(255,255,255, 0.4);
 @light-disable-background: #f0f0f0;
+@dark-disable-background: #2e364c;
+
 
 // button
 @button-font-size: 16px;
 @button-height: 44px;
 @button-mini-font-size: 14px;
 @button-mini-padding: 6px 10px;
+@button-active-mask: 0.2;
+
+@light-button-color: #212121;
+@dark-button-color: #768da2;
 
 @light-button-background: #f0f0f0;
+@dark-button-background: #2e364c;
 
-@light-button-active-mask: 0.2;
+@light-button-background-plain: #ffffff;
+@dark-button-background-plain: #1C1F2E;
+
+@light-button-disable-color: @light-disable-color;
+@dark-button-disable-color: @dark-disable-color;
+@light-button-disable-background: @light-disable-background;
+@dark-button-disable-background: @dark-disable-background;
 
 // radio
 @radio-size: 20px;
@@ -36,8 +72,21 @@
 @checkbox-size: 20px;
 @checkbox-font-size: 14px;
 
-//panel
+// panel
 @light-panel-background: #fff;
+@dark-panel-background: #1c1f2e;
+
+@light-panel-header-color: @light-common;
+@dark-panel-header-color: @dark-common;
+
+
+// search
+@light-search-border-color: #bdbdbd;
+@dark-search-border-color: @dark-primary;
+
+@light-search-cancel: @light-common;
+@dark-search-cancel: @dark-primary;
+
 
 // datatable
 @table-th-font-size: 12px;
