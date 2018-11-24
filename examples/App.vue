@@ -31,6 +31,9 @@
                 let p = (this.$route.path || "").substring(1);
                 return !p ? "" :
                        `https://hub.hddznet.com/uniplatform/mue/src/master/examples/views/${p}.vue`;
+            },
+            theme(){
+                return this.$route.query.theme || "";
             }
         },
         methods: {
@@ -43,7 +46,8 @@
                     window.open(p);
                     return;
                 }
-                this.$router.push(p);
+
+                this.$router.push({path: p, query: {theme: this.theme}});
             },
             openSouce(){
                 this.source && window.open(this.source);

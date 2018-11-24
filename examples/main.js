@@ -14,6 +14,19 @@ new Vue({
     el: '#app',
     router,
     render: h => h(App),
+    watch: {
+        "$route.query.theme": {
+            immediate: true,
+            handler(v){
+                if(v === "night"){
+                    $("body").addClass("nightcolor");
+                }
+                else{
+                    $("body").removeClass("nightcolor");
+                }
+            }
+        }
+    },
     mounted(){
     }
 });
