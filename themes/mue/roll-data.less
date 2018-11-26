@@ -3,9 +3,9 @@
 .mue-roll-data(@theme: light) {
 
     @color: %("%s-common", @theme);
-    @gray: %("%s-gray", @theme);
-    @background: %("%s-background-common", @theme);
-    @border-color: %("%s-border-color-base", @theme);
+    @grey: %("%s-grey", @theme);
+    @background: %("%s-background", @theme);
+    @border-color: %("%s-border-color", @theme);
 
     .mue-roll-data {
         display: block;
@@ -82,7 +82,7 @@
                 width: 50%;
 
                 > .mue-roll-data--title {
-                    color: @@gray;
+                    color: @@grey;
                     font-size: 12px;
                     height: 16px;
                     line-height: 16px;
@@ -103,7 +103,7 @@
                 width: calc(~"100% / 3");
 
                 > .mue-roll-data--title {
-                    color: @@gray;
+                    color: @@grey;
                     font-size: 12px;
                     height: 16px;
                     line-height: 16px;

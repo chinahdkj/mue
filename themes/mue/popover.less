@@ -1,14 +1,14 @@
 @import "../var.less";
 .mue-popover(@theme: light){
-    @color: %("%s-popover-color", @theme);
-    @background: %("%s-popover-background", @theme);
-    @border-color: %("%s-border-color-base", @theme);
+    @color: %("%s-common", @theme);
+    @background: %("%s-background-pop", @theme);
+    //@border-color: %("%s-border-color", @theme);
 
     .mue-popover {
         position: absolute;
         background: @@background;
         border-radius: 6px;
-        border: 1px solid @@border-color;
+        //border: 1px solid @@border-color;
         padding: 0;
         z-index: 200;
         color: @@color;
@@ -39,7 +39,7 @@
             bottom: -6px;
             left: 50%;
             margin-right: 3px;
-            border-top-color: @@border-color;
+            border-top-color: @@background;
             border-bottom-width: 0;
             &:after {
                 bottom: 1px;
@@ -54,7 +54,7 @@
             left: 50%;
             margin-right: 3px;
             border-top-width: 0;
-            border-bottom-color: @@border-color;
+            border-bottom-color: @@background;
             &:after {
                 top: 1px;
                 margin-left: -6px;
@@ -67,7 +67,7 @@
             top: 50%;
             left: -6px;
             margin-bottom: 3px;
-            border-right-color: @@border-color;
+            border-right-color: @@background;
             border-left-width: 0;
             &:after {
                 bottom: -6px;
@@ -82,7 +82,7 @@
             right: -6px;
             margin-bottom: 3px;
             border-right-width: 0;
-            border-left-color: @@border-color;
+            border-left-color: @@background;
             &:after {
                 right: 1px;
                 bottom: -6px;

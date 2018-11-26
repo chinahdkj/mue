@@ -2,45 +2,54 @@
 @font-size: 14px;
 @font-size-large: 16px;
 
-// 颜色
-@light-white: #fff;
-@light-black: #000;
-
-@light-gray: #757575;
-@dark-gray: #bbbcc1;
-
-@light-gray-light: #999999;
-
-@light-common: #212121;
-@dark-common: #ffffff;
+@white: #ffffff;
+@black: #000000;
 
 @light-primary: #4796e3;
 @dark-primary: #42b2fa;
 
+// 文字
+@light-common: #212121;
+@dark-common: #ffffff;
 
-// 背景色
-@light-background-common: #fff;
-@dark-background-common: #1C1F2E;
+// 次要文字
+@light-grey: #757575;
+@dark-grey: #bbbcc1;
 
-
-// 边框颜色
-@light-border-color-base: #e0e0e0;
-@dark-border-color-base: #252c3e; //todo
-
-@light-border-color-light: #f0f0f0;
-@dark-border-color-light: #252c3e; //todo
-
-@light-border-color-dark: #cccccc;
-@dark-border-color-dark: #252c3e; //todo
+// 次次要文字
+@light-grey-sub: #999999;
+@dark-grey-sub: #84868e;
 
 @light-placeholder: #bdbdbd;
 @dark-placeholder: #84868e;
 
-// 禁用
-@light-disable-color: #bdbdbd;
-@dark-disable-color: rgba(255,255,255, 0.4);
-@light-disable-background: #f0f0f0;
-@dark-disable-background: #2e364c;
+// 背景
+@light-background-base: #f0f0f0;
+@dark-background-base: #131420;
+
+// 内容背景
+@light-background: #ffffff;
+@dark-background: #1c1f2e;
+
+// 弹出层背景
+@light-background-pop: #ffffff;
+@dark-background-pop: #282e4d;
+
+// 边框
+@light-border-color: #e0e0e0;
+@dark-border-color: #252c3e;
+
+// 弹出层内的边框分割线
+@light-border-color-pop: #e0e0e0;
+@dark-border-color-pop: #454a65;
+
+
+// search
+@light-search-border-color: #bdbdbd;
+@dark-search-border-color: @dark-primary;
+
+@light-search-cancel: @light-common;
+@dark-search-cancel: @dark-primary;
 
 
 // button
@@ -56,51 +65,35 @@
 @light-button-background: #f0f0f0;
 @dark-button-background: #2e364c;
 
-@light-button-background-plain: #ffffff;
-@dark-button-background-plain: #1C1F2E;
+@light-button-background-plain: @light-background;
+@dark-button-background-plain: @dark-background;
 
-@light-button-disable-color: @light-disable-color;
-@dark-button-disable-color: @dark-disable-color;
-@light-button-disable-background: @light-disable-background;
-@dark-button-disable-background: @dark-disable-background;
+@light-button-disable-color: #bdbdbd;
+@dark-button-disable-color: rgba(255, 255, 255, 0.4);
 
-// radio
-@radio-size: 20px;
-@radio-font-size: 14px;
 
 // checkbox
 @checkbox-size: 20px;
 @checkbox-font-size: 14px;
 
-// panel
-@light-panel-background: #fff;
-@dark-panel-background: #1c1f2e;
+@light-checkbox-disable-background: #f0f0f0;
+@dark-checkbox-disable-background: #2e364c;
 
-@light-panel-header-color: @light-common;
-@dark-panel-header-color: @dark-common;
+@light-checkbox-disable-color: #bdbdbd;
+@dark-checkbox-disable-color: rgba(255, 255, 255, 0.4);
 
 
-// search
-@light-search-border-color: #bdbdbd;
-@dark-search-border-color: @dark-primary;
+// radio
+@radio-size: 20px;
+@radio-font-size: 14px;
 
-@light-search-cancel: @light-common;
-@dark-search-cancel: @dark-primary;
+@light-radio-disable-background: #f0f0f0;
+@dark-radio-disable-background: #2e364c;
+
+@light-radio-disable-color: #bdbdbd;
+@dark-radio-disable-color: rgba(255, 255, 255, 0.4);
 
 
 // datatable
 @table-th-font-size: 12px;
 @light-table-th-background: #ebebeb;
-
-// tab
-@light-tab-split: #ebebeb;
-@dark-tab-split: #252c3e;
-@light-tab-more-split: #ebebeb;
-@dark-tab-more-split: #454a65;
-
-// popover
-@light-popover-background: @light-background-common;
-@dark-popover-background: #282e4e;
-
-@light-popover-color: @light-common;
-@dark-popover-color: #ffffff;

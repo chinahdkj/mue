@@ -1,49 +1,105 @@
 module.exports = {
     modifyVars: {
+        // 字号
         "font-size": "14px",
         "font-size-large": "16px",
 
-        "light-white": "#fff",
-        "light-black": "#000",
-        "light-gray": "#757575",
-        "light-gray-light": "#999999",
-        "light-common": "#212121",
+        "white": "#ffffff",
+        "black": "#000000",
+
         "light-primary": "#4796e3",
+        "dark-primary": "#42b2fa",
 
-        "light-background-common": "#fff",
+        // 文字
+        "light-common": "#212121",
+        "dark-common": "#ffffff",
 
-        // 边框颜色
-        "light-border-color-base": "#e0e0e0",
-        "light-border-color-light": "#f0f0f0",
-        "light-border-color-dark": "#cccccc",
+        // 次要文字
+        "light-grey": "#757575",
+        "dark-grey": "#bbbcc1",
 
-        "light-disable-color": "#bdbdbd",
-        "light-disable-background": "#f0f0f0",
+        // 次次要文字
+        "light-grey-sub": "#999999",
+        "dark-grey-sub": "#84868e",
+
+        "light-placeholder": "#bdbdbd",
+        "dark-placeholder": "#84868e",
+
+        // 背景
+        "light-background-base": "#f0f0f0",
+        "dark-background-base": "#131420",
+
+        // 内容背景
+        "light-background": "#ffffff",
+        "dark-background": "#1c1f2e",
+
+        // 弹出层背景
+        "light-background-pop": "#ffffff",
+        "dark-background-pop": "#282e4d",
+
+        // 边框
+        "light-border-color": "#e0e0e0",
+        "dark-border-color": "#252c3e",
+
+        // 弹出层内的边框分割线
+        "light-border-color-pop": "#e0e0e0",
+        "dark-border-color-pop": "#454a65",
+
+
+        // search
+        "light-search-border-color": "#bdbdbd",
+        "dark-search-border-color": "@dark-primary",
+
+        "light-search-cancel": "@light-common",
+        "dark-search-cancel": "@dark-primary",
+
 
         // button
         "button-font-size": "16px",
         "button-height": "44px",
         "button-mini-font-size": "14px",
         "button-mini-padding": "6px 10px",
+        "button-active-mask": "0.2",
+
+        "light-button-color": "#212121",
+        "dark-button-color": "#768da2",
 
         "light-button-background": "#f0f0f0",
+        "dark-button-background": "#2e364c",
 
-        "light-button-active-mask": "0.2",
+        "light-button-background-plain": "@light-background",
+        "dark-button-background-plain": "@dark-background",
 
-        // radio
-        "radio-size": "20px",
-        "radio-font-size": "14px",
+        "light-button-disable-color": "#bdbdbd",
+        "dark-button-disable-color": "rgba(255, 255, 255, 0.4)",
+
 
         // checkbox
         "checkbox-size": "20px",
         "checkbox-font-size": "14px",
 
-        //panel
-        "light-panel-background": "#fff",
+        "light-checkbox-disable-background": "#f0f0f0",
+        "dark-checkbox-disable-background": "#2e364c",
+
+        "light-checkbox-disable-color": "#bdbdbd",
+        "dark-checkbox-disable-color": "rgba(255, 255, 255, 0.4)",
+
+
+        // radio
+        "radio-size": "20px",
+        "radio-font-size": "14px",
+
+        "light-radio-disable-background": "#f0f0f0",
+        "dark-radio-disable-background": "#2e364c",
+
+        "light-radio-disable-color": "#bdbdbd",
+        "dark-radio-disable-color": "rgba(255, 255, 255, 0.4)",
+
 
         // datatable
         "table-th-font-size": "12px",
-        "light-table-th-background": "#ebebeb"
+        "light-table-th-background": "#ebebeb",
 
     }
 };
+

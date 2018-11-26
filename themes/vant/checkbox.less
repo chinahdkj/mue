@@ -2,12 +2,12 @@
 
 .van-checkbox(@theme: light) {
 
-    @border-color: %("%s-border-color-dark", @theme);
+    @border-color: %("%s-grey", @theme);
     @label-color: %("%s-common", @theme);
     @primary: %("%s-primary", @theme);
 
-    @disable-color: %("%s-disable-color", @theme);
-    @disable-background: %("%s-disable-background", @theme);
+    @disable-color: %("%s-checkbox-disable-color", @theme);
+    @disable-background: %("%s-checkbox-disable-background", @theme);
 
     .van-checkbox {
         line-height: 0;
@@ -20,24 +20,41 @@
                 width: @checkbox-size;
                 border-radius: 2px;
                 border-color: @@border-color;
-                background: #FFFFFF;
+                overflow: hidden;
+
+                &:before {
+                    display: none;
+                }
             }
 
             &.van-checkbox__icon--checked .van-icon {
-                color: #FFFFFF;
                 background: @@primary;
                 border-color: @@primary;
+
+                &:before {
+                    display: block;
+                    content: "";
+                    float: left;
+                    width: calc(@checkbox-size / 2 + 2px);
+                    height: calc(@checkbox-size / 2 - 4px);
+                    border: 2px solid @white;
+                    border-top: 0;
+                    border-right: 0;
+                    margin-top: calc(@checkbox-size / 4 - 2px);
+                    margin-left: calc(@checkbox-size / 4 - 3px);
+                    transform: rotate(-45deg);
+                }
             }
 
             &.van-checkbox__icon--disabled {
-                &.van-checkbox__icon--checked .van-icon {
-                    color: @@disable-color;
+                &.van-checkbox__icon--checked .van-icon:before {
+                    border-color: @@disable-color;
                 }
 
+
                 .van-icon {
-                    color: @@disable-background;
+                    border-color: @@disable-color;
                     background: @@disable-background;
-                    border-color: @@disable-background;
                 }
             }
         }

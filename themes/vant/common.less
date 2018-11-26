@@ -1,13 +1,17 @@
 @import "../var.less";
 
 .van-common(@theme: light) {
+    @border-color: %("%s-border-color", @theme);
+    @border-color-pop: %("%s-border-color-pop", @theme);
     .van-modal {
         background: rgba(0, 0, 0, 0.6);
     }
 
     [class*=van-hairline]::after {
-        @border-color: %("%s-border-color-base", @theme);
         border-color: @@border-color;
+    }
+    .van-popup [class*=van-hairline]::after {
+        border-color: @@border-color-pop;
     }
 }
 

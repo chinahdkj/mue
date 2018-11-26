@@ -1,15 +1,19 @@
 @import "../var.less";
 
 .mue-panel(@theme: light) {
+    @color: %("%s-common", @theme);
+    @background: %("%s-background", @theme);
+    @primary: %("%s-primary", @theme);
+    @hairline: %("%s-background-base", @theme);
+    @border: %("%s-border-color", @theme);
+
     .mue-panel {
-        @background: %("%s-panel-background", @theme);
         display: block;
         box-sizing: border-box;
         background: @@background;
         width: 100%;
 
         .mue-panel-header {
-            @color: %("%s-panel-header-color", @theme);
             display: block;
             box-sizing: border-box;
             width: 100%;
@@ -42,7 +46,6 @@
             width: 100%;
             padding: 0;
             box-sizing: border-box;
-            @color: %("%s-common", @theme);
             color: @@color;
         }
 
@@ -87,7 +90,6 @@
         margin: 0;
 
         &:before {
-            @primary: %("%s-primary", @theme);
             content: "";
             margin-right: 8px;
             width: 3px;
@@ -101,22 +103,23 @@
     }
 
     .mue-hairline {
-        @border: %("%s-border-color-light", @theme);
         display: block;
         height: 0;
         width: 100%;
-        background: @@border;
 
         &.mue-hairline--thin {
             height: 1px;
+            background: @@border;
         }
 
         &.mue-hairline--normal {
             height: 4px;
-        }
+            background: @@hairline;
 
-        &.mue-hairline--wide {
-            height: 6px;
+            &.mue-hairline--wide {
+                height: 6px;
+                background: @@hairline;
+            }
         }
     }
 }

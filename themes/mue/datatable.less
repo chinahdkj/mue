@@ -1,4 +1,4 @@
-@import "../../var.less";
+@import "../var.less";
 
 .mue-datatable {
     width: 100%;
@@ -6,7 +6,7 @@
     box-sizing: border-box;
     display: block;
     overflow: hidden;
-    background: @light-background-common;
+    background: @light-background;
     color: @light-common;
     position: relative;
 
@@ -16,7 +16,7 @@
         display: block;
         height: 0;
         position: absolute;
-        background: @light-background-common;
+        background: @light-background;
         top: 0;
         left: 0;
         z-index: 10;
@@ -31,7 +31,7 @@
             height: 1px;
             width: 100%;
             z-index: 20;
-            background: @light-border-color-base;
+            background: @light-border-color;
         }
     }
 
@@ -62,7 +62,7 @@
             height: 100%;
             width: 1px;
             z-index: 20;
-            background: @light-border-color-base;
+            background: @light-border-color;
         }
     }
 
@@ -96,7 +96,7 @@
             text-align: center;
             overflow: hidden;
             font-size: @font-size;
-            color: @light-gray;
+            color: @light-grey;
         }
     }
 
@@ -169,7 +169,7 @@
                     position: absolute;
                     right: 0;
                     display: none;
-                    color: @light-gray-light;
+                    color: @light-grey-sub;
                 }
 
                 i.icon-asc {
@@ -217,7 +217,7 @@
                 bottom: 0;
                 height: 1px;
                 width: 100%;
-                background: @light-border-color-base;
+                background: @light-border-color;
             }
         }
     }
@@ -232,7 +232,7 @@
         }
 
         .mue-datatable__inner-table tr {
-            background: @light-white;
+            background: @light-background;
 
             &.tr_stripe {
                 // todo 斑马线
@@ -245,7 +245,7 @@
         justify-content: center;
         flex-direction: column;
         align-items: center;
-        color: @light-gray;
+        color: @light-grey;
         font-size: @font-size-large;
 
         > img {

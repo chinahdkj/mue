@@ -1,12 +1,16 @@
 @import '../var.less';
 
 .van-button(@theme: light) {
+    @color: %("%s-button-color", @theme);
+    @background: %("%s-button-background", @theme);
+    @background-plain: %("%s-button-background-plain", @theme);
+    @color-disable: %("%s-button-disable-color", @theme);
+    @primary: %("%s-primary", @theme);
+    @color-mini: %("%s-common", @theme);
 
     .disabled() {
-        @background: %("%s-button-disable-background", @theme);
-        @color: %("%s-button-disable-color", @theme);
         background: @@background;
-        color: @@color;
+        color: @@color-disable;
         border-color: @@background;
         opacity: 1;
     }
@@ -27,28 +31,22 @@
         }
 
         &.van-button--default {
-            @color: %("%s-common", @theme);
             color: @@color;
-            @background: %("%s-button-background", @theme);
             background-color: @@background;
             border: 1px solid @@background;
         }
 
         &.van-button--primary {
-            @background: %("%s-primary", @theme);
             color: #fff;
-            background-color: @@background;
-            border: 1px solid @@background;
+            background-color: @@primary;
+            border: 1px solid @@primary;
         }
 
         &.van-button--plain {
-            @color: %("%s-common", @theme);
-            @background: %("%s-button-background-plain", @theme);
-            background-color: @@background;
+            background-color: @@background-plain;
             color: @@color;
 
             &.van-button--primary {
-                @primary: %("%s-primary", @theme);
                 color: @@primary;
 
                 &:active:before {
@@ -86,6 +84,11 @@
             line-height: @button-mini-font-size;
             font-size: @button-mini-font-size;
             padding: @button-mini-padding;
+            color: @@color-mini;
+
+            &.van-button--plain {
+                color: @@color;
+            }
         }
 
         &.van-button--loading {

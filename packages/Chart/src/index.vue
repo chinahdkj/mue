@@ -105,8 +105,7 @@
 
                 try{
                     this.options && "series" in this.options && chart.setOption(this.options, true);
-                }
-                catch(e){
+                } catch(e){
 
                 }
 
@@ -175,13 +174,10 @@
                 ECharts.registerTheme(...args);
             }
         },
-        computed:{
+        computed: {
             thm(){
-                if(!this.$route){
-                    return 'light-' + (this.theme || "default");
-                }
-                let t = (this.$route.query || {}).theme;
-                return `${t == "night" ? "dark": "light"}-${(this.theme || "default")}`;
+                let isNight = this.$comm.isNight(this.$route);
+                return `${isNight ? "dark" : "light"}-${(this.theme || "default")}`;
             }
         },
         components: {},
