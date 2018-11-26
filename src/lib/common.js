@@ -146,5 +146,8 @@ export function newFixed(value, pre){
 }
 
 export default {
-    GetQueryString, isIos, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, newFixed
+    GetQueryString, isIos, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, newFixed,
+    isNight: ($route) => {
+        return (($route || {}).query || {}).theme === "night";
+    }
 };

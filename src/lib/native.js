@@ -3,8 +3,10 @@ import {isIos} from './common';
 
 const _cache = {};
 const _cache2 = {};
-const fns = ['getLocation', 'analyse', 'save', 'query', 'rotate', 'startNavi', 'isCollected', 'hideHeader', 'copy', 'share', 'goback'];
-
+const fns = [
+    'getLocation', 'analyse', 'save', 'query', 'rotate', 'startNavi', 'isCollected',
+    'hideHeader', 'copy', 'share', 'goback', 'userBehaviorRecord'
+];
 
 const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
