@@ -1,21 +1,21 @@
 @import "../var.less";
 .mue-popover(@theme: light){
-    @color: %("%s-common", @theme);
-    @background: %("%s-background-common", @theme);
+    @color: %("%s-popover-color", @theme);
+    @background: %("%s-popover-background", @theme);
     @border-color: %("%s-border-color-base", @theme);
 
     .mue-popover {
         position: absolute;
         background: @@background;
-        border-radius: 2px;
+        border-radius: 6px;
         border: 1px solid @@border-color;
         padding: 0;
         z-index: 200;
         color: @@color;
         text-align: justify;
         font-size: @font-size;
-        -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+        -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
 
         .popper__arrow,
         .popper__arrow:after {

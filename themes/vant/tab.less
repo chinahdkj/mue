@@ -1,0 +1,120 @@
+@import '../var.less';
+
+.van-tabs(@theme: light) {
+    @background: %("%s-background-common", @theme);
+    @primary: %("%s-primary", @theme);
+    @border-color: %("%s-border-color-base", @theme);
+    @gray: %("%s-gray", @theme);
+    @split: %("%s-tab-split", @theme);
+
+    .van-tabs {
+
+        .van-tabs__nav {
+            background: @@background;
+
+            .van-tab {
+                background: @@background;
+            }
+        }
+
+        &.van-tabs--line {
+            padding-top: 40px;
+
+            .van-tabs__wrap {
+                height: 40px;
+
+                .van-tabs__nav--line {
+                    background: @@background;
+                }
+
+                &.van-hairline--top-bottom:after {
+                    // 去除上边框
+                    border-top: 0;
+                }
+            }
+
+            .van-tabs__line {
+                background-color: @@primary
+            }
+
+            .van-tab {
+                line-height: 40px;
+                font-size: @font-size;
+                color: @@gray;
+
+
+                &:not(:last-child) {
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        right: 0;
+                        height: 20px;
+                        top: 10px;
+                        width: 1px;
+                        background: @@split;
+                    }
+                }
+
+                &.is-last {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                &.van-tab--active {
+                    color: @@primary;
+                }
+            }
+        }
+
+        &.van-tabs--card {
+            .van-tabs__nav--card {
+                border-color: @@primary;
+            }
+
+            .van-tab {
+                color: @@primary;
+                border-color: @@primary;
+
+                &.van-tab--active {
+                    color: @light-white;
+                    background-color: @@primary;
+                }
+            }
+        }
+
+        &.no-flex.van-tabs--line {
+            .van-tabs__nav--line {
+                display: -moz-box;
+                display: -webkit-box;
+
+                .van-tabs__line {
+                    display: none;
+                }
+
+                .van-tab {
+                    padding: 0 15px;
+                    height: 100%;
+
+                    &.van-tab--active:before {
+                        content: "";
+                        display: block;
+                        width: calc(~"100% - 30px");
+                        height: 2px;
+                        border-radius: 2px;
+                        background: @@primary;
+                        bottom: 0;
+                        left: 15px;
+                        position: absolute;
+                        z-index: 10;
+                    }
+                }
+            }
+        }
+
+        .van-tabs__content {
+            background: @@background;
+        }
+    }
+}
+

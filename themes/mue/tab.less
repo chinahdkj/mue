@@ -1,0 +1,135 @@
+@import "../var.less";
+.mue-tabs(@theme: light) {
+    @background: %("%s-background-common", @theme);
+    @primary: %("%s-primary", @theme);
+    @border-color: %("%s-border-color-base", @theme);
+    @gray: %("%s-gray", @theme);
+    @pop-color: %("%s-popover-color", @theme);
+    @pop-split: %("%s-tab-more-split", @theme);
+
+    .mue-tabs {
+        position: relative;
+
+        > .van-tabs {
+            height: 100%;
+            box-sizing: border-box;
+
+            > .van-tabs__wrap {
+                padding-right: 0;
+                box-sizing: border-box;
+
+            }
+
+            > .van-tabs__content {
+                height: 100%;
+
+                > .van-tab__pane {
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .mue-tabs-more {
+            background: transparent;
+            display: none;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 100;
+            text-align: center;
+            line-height: 40px;
+            color: @@gray;
+
+            &.in-more {
+                color: @@primary;
+            }
+        }
+
+        &.has-more {
+            > .van-tabs > .van-tabs__wrap {
+                padding-right: 40px;
+            }
+
+            .mue-tabs-more {
+                display: block;
+            }
+        }
+
+        .mue-tab {
+            height: 20px;
+            display: block;
+            overflow: hidden;
+            margin-top: 10px;
+
+            > .mue-tab-icon {
+                display: block;
+                float: left;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+                width: 20px;
+                margin-right: 5px;
+            }
+
+            > .mue-tab-title {
+                display: block;
+                float: left;
+                height: 20px;
+                line-height: 20px;
+            }
+        }
+
+        .mue-tabs-pop {
+            > .mue-tabs-pop-tabs {
+                max-height: 180px;
+                padding: 0 10px;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .mue-tabs-pop-tab {
+                height: 40px;
+                padding: 5px;
+                box-sizing: border-box;
+                color: @@pop-color;
+                font-size: 14px;
+                border-bottom: 1px solid @@pop-split;
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+
+                > .mue-tab-icon {
+                    font-size: 14px;
+                    display: block;
+                    float: left;
+                    height: 20px;
+                    line-height: 20px;
+                    text-align: center;
+                    width: 20px;
+                    margin-top: 5px;
+                }
+
+                > .mue-tab-title {
+                    display: block;
+                    float: left;
+                    height: 30px;
+                    line-height: 30px;
+                    max-width: 100px;
+                    padding: 0 5px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &.is-active {
+                    border-left-color: @@primary;
+                    color: @@primary;
+                }
+            }
+        }
+    }
+}
