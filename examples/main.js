@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './App';
-import router from './router/index';
 import Mue from '../src/index';
 import '../themes/index.less';
 import "../static/demo.less";
@@ -8,6 +7,10 @@ import "../static/demo.less";
 Vue.use(Mue);
 
 Vue.config.productionTip = false;
+
+import routes from './router/index';
+import {InitRouter} from '../src/router';
+let router = InitRouter(routes);
 
 /* eslint-disable no-new */
 new Vue({
