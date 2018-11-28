@@ -68,7 +68,8 @@
                 <div slot="loading" class="mue-datatable-loading">刷新中...</div>
 
                 <div v-if="data.length === 0" class="mue-datatable-nodata">
-                    <img src="../assets/no-data.png"/>
+                    <img v-if="!isNight" src="../assets/no-data.png"/>
+                    <img v-else src="../assets/no-data-dark.png"/>
                     <span>暂无数据</span>
                 </div>
 
@@ -167,6 +168,9 @@
         computed: {
             headerHeight(){
                 return (this.headerRows * 36 + 4) + "px";
+            },
+            isNight(){
+                return this.$comm.isNight(this.$route);
             }
         },
         watch: {
