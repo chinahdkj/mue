@@ -1,0 +1,31 @@
+@import "../var.less";
+
+.van-tabbar(@theme:light) {
+    @background: %("%s-background", @theme);
+    @border-color: %("%s-tabbar-border-color", @theme);
+    @grey: %("%s-grey", @theme);
+    @primary: %("%s-primary", @theme);
+
+    .van-tabbar {
+        height: 52px;
+        background: @@background;
+        box-sizing: border-box;
+        border-top: 1px solid @@border-color;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .van-tabbar-item {
+        color: @@grey;
+
+        &.van-tabbar-item--active {
+            color: @@primary;
+        }
+
+        .van-tabbar-item__icon--dot:after {
+            background: @bubble-background;
+        }
+    }
+}

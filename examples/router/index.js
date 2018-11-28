@@ -1,5 +1,6 @@
 import vbutton from "../views/vant/button";
 import vtab from "../views/vant/tab";
+import vtabbar from "../views/vant/tabbar";
 import vcheckbox from "../views/vant/checkbox";
 import vradio from "../views/vant/radio";
 
@@ -37,6 +38,11 @@ export default [
         path: '/vant/tab',
         name: 'vant_tab',
         component: vtab
+    },
+    {
+        path: '/vant/tabbar',
+        name: 'vant_tabbar',
+        component: vtabbar
     },
 
     {

@@ -1,0 +1,30 @@
+@import "../var.less";
+
+.van-picker(@theme:light) {
+    @primary: %("%s-primary", @theme);
+    @color: %("%s-common", @theme);
+    @grey-sub: %("%s-grey-sub", @theme);
+    @disable: %("%s-placeholder", @theme);
+
+    .van-picker {
+        background: transparent;
+    }
+
+    .van-picker__cancel,
+    .van-picker__confirm {
+        color: @@primary;
+    }
+
+    .van-picker-column__item {
+        color: @@grey-sub;
+    }
+
+    .van-picker-column__item--selected {
+        color: @@color;
+    }
+
+    .van-picker-column__item--disabled {
+        color: @@disable;
+        opacity: 0.8;
+    }
+}

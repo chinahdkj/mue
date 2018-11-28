@@ -13,6 +13,7 @@
             <van-cell value="CHECKBOX" @click="open('/vant/checkbox')"/>
             <van-cell value="RADIO" @click="open('/vant/radio')"/>
             <van-cell value="TAB" @click="open('/vant/tab')"/>
+            <van-cell value="TABBAR" @click="open('/vant/tabbar')"/>
         </van-cell-group>
 
         <h3>MUE</h3>

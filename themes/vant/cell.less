@@ -1,0 +1,24 @@
+@import "../var.less";
+
+.van-cell(@theme: light) {
+    @color: %("%s-common", @theme);
+    @border-color: %("%s-border-color", @theme);
+    @border-color-pop: %("%s-border-color-pop", @theme);
+
+    .van-cell-group {
+        background: transparent;
+    }
+
+    .van-cell {
+        background: transparent;
+        color: @@color;
+
+        &:not(:last-child):after{
+            border-color: @@border-color;
+        }
+    }
+
+    .van-popup .van-cell:not(:last-child):after{
+        border-color: @@border-color-pop;
+    }
+}

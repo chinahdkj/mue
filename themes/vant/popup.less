@@ -1,0 +1,9 @@
+@import "../var.less";
+
+.van-popup(@theme: light){
+    @background: %("%s-background-pop", @theme);
+
+    .van-popup{
+        background: @@background;
+    }
+}
