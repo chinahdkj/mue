@@ -1,0 +1,14 @@
+@import "../var.less";
+
+.van-navbar(@theme:light) {
+    @background: %("%s-navbar-background", @theme);
+    @color: %("%s-common", @theme);
+
+    .van-nav-bar {
+        background: @@background;
+
+        .van-nav-bar__text {
+            color: @@color;
+        }
+    }
+}
