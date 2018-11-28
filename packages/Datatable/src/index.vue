@@ -250,10 +250,14 @@
                     if(level >= headerRows){
                         headerRows = level + 1;
                     }
+
+                    let options = $.extend(true, {}, col);
+                    delete options.children;
                     let column = {
                         fixed: fixed, align: col.align || "center", title: col.title,
-                        children: [], slot: col.slot, level: level
+                        children: [], slot: col.slot, level: level, options
                     };
+
                     let chs = col.children || [];
                     for(let i = 0; i < chs.length; i++){
                         let ch = chs[i];
@@ -300,10 +304,7 @@
 
 
                 // 分配锁定滚动列
-                let fcols = Array.from({length: headerRows}).map(() => {
-                        return [];
-                    }),
-                    cols = Array.from({length: headerRows}).map(() => {
+                let cols = Array.from({length: headerRows}).map(() => {
                         return [];
                     }),
                     fwd = 0, wd = 0, ffields = [], fields = [];
