@@ -3,9 +3,11 @@ import {isIos} from './common';
 
 const _cache = {};
 const _cache2 = {};
+
 const fns = [
-    'getLocation', 'analyse', 'save', 'query', 'rotate', 'startNavi', 'isCollected',
-    'hideHeader', 'copy', 'share', 'goback', 'userBehaviorRecord'
+    "save", "delete", "query", "rotate", "startNavi", "getLocation", "isCollected", "sysInfo",
+    "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
+    "collect", "nfcData", "goback", "refreshBadge", "signature"
 ];
 
 const postMessage = ({cb, method, params}) => {
