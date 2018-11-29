@@ -8,7 +8,8 @@
                          @arrow="onArrow">
         </mue-date-picker>
 
-        <mue-date-picker v-model="value" format="YYYY-MM-DD"></mue-date-picker>
+        <mue-date-picker style="margin: 10px;" v-model="value" format="YYYY-MM-DD">
+        </mue-date-picker>
     </div>
 
 </template>
@@ -18,7 +19,7 @@
         components: {},
         data(){
             return {
-                value: "",
+                value: "2018-01-01",
                 year: "2016",
             };
         },

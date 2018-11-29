@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mue-select :data="select.data" v-model="select.value"
+        <mue-select style="margin: 10px;" :data="select.data" v-model="select.value"
                     @change="selectChange"></mue-select>
     </div>
 </template>
