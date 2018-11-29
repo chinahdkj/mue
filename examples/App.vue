@@ -33,7 +33,7 @@
                        `https://hub.hddznet.com/uniplatform/mue/src/master/examples/views/${p}.vue`;
             },
             theme(){
-                return this.$route.query.theme || "";
+                return this.$comm.isNight(this.$route) ? "night" : "";
             }
         },
         methods: {
@@ -46,8 +46,8 @@
                     window.open(p);
                     return;
                 }
-
-                this.$router.push({path: p, query: {theme: this.theme}});
+                let query = this.theme ? {theme: this.theme} : {};
+                this.$router.push({path: p, query});
             },
             openSouce(){
                 this.source && window.open(this.source);

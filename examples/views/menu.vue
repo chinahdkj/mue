@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="menus">
         <h3>ICON</h3>
         <van-cell-group border>
             <van-cell value="HEDA" @click="open('/static/font/demo_fontclass.html', true)"/>
@@ -31,6 +31,10 @@
             <van-cell value="LOADING" @click="open('/mue/loading')"/>
             <van-cell value="DATATABLE" @click="open('/mue/datatable')"/>
         </van-cell-group>
+
+        <div class="night-switch" @click="toggleNight">
+            <i class="fa" :class="[isNight ? 'fa-sun-o' : 'fa-moon-o']" aria-hidden="true"></i>
+        </div>
     </div>
 </template>
 
@@ -39,10 +43,40 @@
         data(){
             return {};
         },
+        computed: {
+            isNight(){
+                return this.$comm.isNight(this.$route);
+            }
+        },
         methods: {
             open(p, _blank){
                 this.$emit("open", p, _blank);
+            },
+
+            toggleNight(){
+                let path = this.$route.path;
+                let query = !this.isNight ? {theme: "night"} : {};
+                this.$router.push({path, query});
             }
         }
     }
 </script>
+
+<style lang="less" scoped>
+    .menus {
+        position: relative;
+
+        h3 {
+            margin: 0 5px;
+            height: 60px;
+            line-height: 60px;
+        }
+
+        .night-switch {
+            position: absolute;
+            top: 17px;
+            right: 15px;
+            font-size: 20px;
+        }
+    }
+</style>
