@@ -42,7 +42,7 @@
         },
         methods: {
             onSearch(){
-                q.length > 0 && this.$emit("search", this.q);
+                this.q.length > 0 && this.$emit("search", this.q);
             }
         }
     }
