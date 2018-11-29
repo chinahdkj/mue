@@ -2,17 +2,17 @@
 
 .van-tabs(@theme: light) {
     @background: %("%s-background", @theme);
+    @background-bar: %("%s-background-bar", @theme);
     @primary: %("%s-primary", @theme);
-    @border-color: %("%s-border-color", @theme);
-    @grey: %("%s-grey", @theme);
-    @split: %("%s-border-color", @theme);
+    @grey: %("%s-tabs-color", @theme);
+    @split: %("%s-border-color-bar", @theme);
     @color: %("%s-common", @theme);
 
     .van-tabs {
         background: @@background;
 
         .van-tabs__nav {
-            background: transparent;
+            background: @@background-bar;
 
             .van-tab {
                 background: transparent;
@@ -28,6 +28,7 @@
                 &.van-hairline--top-bottom:after {
                     // 去除上边框
                     border-top: 0;
+                    border-color: @@split;
                 }
             }
 

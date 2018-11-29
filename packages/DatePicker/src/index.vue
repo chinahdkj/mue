@@ -9,7 +9,7 @@
             </span>
         </div>
 
-        <div class="mue-form-input" v-else @click="pop = true">
+        <div class="mue-form-input has-suffix" v-else @click="pop = true">
             <input type="text" class="input__inner" readonly :value="value"/>
             <i class="input__suffix iconfont icon-zhouli"></i>
         </div>

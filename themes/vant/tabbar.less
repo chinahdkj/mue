@@ -3,7 +3,7 @@
 .van-tabbar(@theme:light) {
     @background: %("%s-tabbar-background", @theme);
     @border-color: %("%s-tabbar-border-color", @theme);
-    @grey: %("%s-grey", @theme);
+    @color: %("%s-tabbar-color", @theme);
     @primary: %("%s-primary", @theme);
 
     .van-tabbar {
@@ -18,7 +18,7 @@
     }
 
     .van-tabbar-item {
-        color: @@grey;
+        color: @@color;
 
         &.van-tabbar-item--active {
             color: @@primary;

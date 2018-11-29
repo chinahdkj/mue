@@ -37,6 +37,10 @@ module.exports = {
         "light-background-pop": "#ffffff",
         "dark-background-pop": "#282e4d",
 
+        // bar （tabs、navbar、datepicker-bar）
+        "light-background-bar": "#ffffff",
+        "dark-background-bar": "#202737",
+
         // 边框
         "light-border-color": "#e0e0e0",
         "dark-border-color": "#252c3e",
@@ -44,6 +48,10 @@ module.exports = {
         // 弹出层内的边框分割线
         "light-border-color-pop": "#e0e0e0",
         "dark-border-color-pop": "#454a65",
+
+        // tabs、navbar、datepicker-bar 分割线
+        "light-border-color-bar": "#e0e0e0",
+        "dark-border-color-bar": "#2e364c",
 
 
         // search
@@ -98,7 +106,30 @@ module.exports = {
 
         // datatable
         "table-th-font-size": "12px",
+
         "light-table-th-background": "#ebebeb",
+        "dark-table-th-background": "#272f42",
+
+
+        // tabbar
+        "light-tabbar-border-color": "#cccccc",
+        "dark-tabbar-border-color": "transparent",
+
+        "light-tabbar-background": "#ffffff",
+        "dark-tabbar-background": "#181a27",
+
+        "light-tabbar-color": "#757575",
+        "dark-tabbar-color": "#768da2",
+
+
+        // tabs
+        "light-tabs-color": "#757575",
+        "dark-tabs-color": "#768da2",
+
+
+        // bubble
+        "bubble-background": "#ff0000",
+        "bubble-color": "#ffffff",
 
     }
 };

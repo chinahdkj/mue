@@ -1,63 +1,51 @@
 @import "../var.less";
-.mue-date-picker,
-.mue-date-range-picker {
-    color: @light-common;
-    .pick-bar {
-        height: 40px;
-        line-height: 40px;
-        background: @light-background;
-        text-align: center;
-        box-sizing: border-box;
-        .pick-bar-content {
-            padding: 0 35px;
-            position: relative;
-            > a {
-                font-size: @font-size-large;
-                font-weight: 400;
-            }
-            .van-icon {
-                position: absolute;
-                color: @light-grey;
-                top: 3px;
-                &.van-icon-arrow-left {
-                    left: 0;
+
+.mue-datepicker(@theme: light) {
+    .mue-date-picker,
+    .mue-date-range-picker {
+        @background: %("%s-background-bar", @theme);
+        @color: %("%s-common", @theme);
+        @grey: %("%s-grey", @theme);
+        @border-color: %("%s-border-color-bar", @theme);
+
+        color: @@color;
+
+        .pick-bar {
+            height: 40px;
+            line-height: 40px;
+            background: @@background;
+            text-align: center;
+            box-sizing: border-box;
+            border-bottom: 1px solid @@border-color;
+
+            .pick-bar-content {
+                padding: 0 35px;
+                position: relative;
+
+                > a {
+                    font-size: @font-size-large;
+                    font-weight: 400;
                 }
-                &.van-icon-arrow {
-                    right: 0;
+
+                .van-icon {
+                    position: absolute;
+                    color: @@grey;
+                    top: 3px;
+
+                    &.van-icon-arrow-left {
+                        left: 0;
+                    }
+
+                    &.van-icon-arrow {
+                        right: 0;
+                    }
                 }
             }
         }
     }
-}
 
-.mue-date-picker-input,
-.mue-date-range-picker-input{
-    height: 30px;
-    min-width: 50px;
-    display: inline-block;
-    background: @light-background;
-    box-sizing: border-box;
-    border: 1px solid @light-border-color;
-    border-radius: 2px;
-    .mue-form-input{
-        height: 100%;
-        width: 100%;
-        position: relative;
-        .input__inner{
-            width: 100%;
-            padding-right: 30px;
-            height: 100%;
-        }
-        .input__suffix{
-            position: absolute;
-            right: 5px;
-            width: 20px;
-            text-align: center;
-            height: 20px;
-            line-height: 20px;
-            top: 50%;
-            margin-top: -10px;
-            color: @light-grey;
-        }
+    .mue-date-picker-input,
+    .mue-date-range-picker-input {
+        display: inline-block;
     }
 }

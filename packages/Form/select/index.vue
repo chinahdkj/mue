@@ -1,6 +1,6 @@
 <template>
     <div class="mue-select">
-        <div class="mue-form-input" @click="showPop">
+        <div class="mue-form-input has-suffix" @click="showPop">
             <input type="text" class="input__inner" readonly :value="text"/>
             <i class="input__suffix iconfont icon-arrows-copy-copy"></i>
         </div>

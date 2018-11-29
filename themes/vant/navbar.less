@@ -1,11 +1,16 @@
 @import "../var.less";
 
 .van-navbar(@theme: light) {
-    @background: %("%s-navbar-background", @theme);
+    @background: %("%s-background-bar", @theme);
     @color: %("%s-common", @theme);
+    @border-color: %("%s-border-color-bar", @theme);
 
     .van-nav-bar {
         background: @@background;
+
+        &:after {
+            border-color: @@border-color;
+        }
 
         .van-nav-bar__text {
             color: @@color;

@@ -2,8 +2,10 @@
 
 .mue-tabs(@theme: light) {
     @background: %("%s-background", @theme);
+    @background-bar: %("%s-background-bar", @theme);
     @primary: %("%s-primary", @theme);
     @grey: %("%s-grey", @theme);
+    @color-bar: %("%s-tabs-color", @theme);
     @pop-split: %("%s-border-color-pop", @theme);
 
     .mue-tabs {
@@ -31,7 +33,7 @@
         }
 
         .mue-tabs-more {
-            background: transparent;
+            background: @@background-bar;
             display: none;
             width: 40px;
             height: 40px;
@@ -41,7 +43,7 @@
             z-index: 100;
             text-align: center;
             line-height: 40px;
-            color: @@grey;
+            color: @@color-bar;
 
             &.in-more {
                 color: @@primary;
