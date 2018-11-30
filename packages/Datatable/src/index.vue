@@ -170,7 +170,7 @@
                 return (this.headerRows * 36 + 4) + "px";
             },
             isNight(){
-                return this.$comm.isNight(this.$route);
+                return this.$root.theme === "night";
             }
         },
         watch: {

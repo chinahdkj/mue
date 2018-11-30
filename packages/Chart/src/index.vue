@@ -59,6 +59,12 @@
                 chart: null
             };
         },
+        computed: {
+            thm(){
+                let isNight = this.$root.theme === "night";
+                return `${isNight ? "dark" : "light"}-${(this.theme || "default")}`;
+            }
+        },
         watch: {
             options: {
                 deep: true,
@@ -172,12 +178,6 @@
             },
             registerTheme(...args){
                 ECharts.registerTheme(...args);
-            }
-        },
-        computed: {
-            thm(){
-                let isNight = this.$comm.isNight(this.$route);
-                return `${isNight ? "dark" : "light"}-${(this.theme || "default")}`;
             }
         },
         components: {},

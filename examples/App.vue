@@ -46,8 +46,7 @@
                     window.open(p);
                     return;
                 }
-                let query = this.theme ? {theme: this.theme} : {};
-                this.$router.push({path: p, query});
+                this.$router.push({path: p});
             },
             openSouce(){
                 this.source && window.open(this.source);

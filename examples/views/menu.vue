@@ -45,7 +45,7 @@
         },
         computed: {
             isNight(){
-                return this.$comm.isNight(this.$route);
+                return this.$root.theme === "night";
             }
         },
         methods: {
@@ -55,7 +55,7 @@
 
             toggleNight(){
                 let path = this.$route.path;
-                let query = !this.isNight ? {theme: "night"} : {};
+                let query = !this.isNight ? {theme: "night"} : {theme: "day"};
                 this.$router.push({path, query});
             }
         }
