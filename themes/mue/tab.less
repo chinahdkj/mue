@@ -7,6 +7,7 @@
     @grey: %("%s-grey", @theme);
     @color-bar: %("%s-tabs-color", @theme);
     @pop-split: %("%s-border-color-pop", @theme);
+    @border-color: %("%s-border-color-bar", @theme);
 
     .mue-tabs {
         position: relative;
@@ -38,12 +39,15 @@
             width: 40px;
             height: 40px;
             position: absolute;
+            box-sizing: border-box;
             top: 0;
             right: 0;
             z-index: 100;
             text-align: center;
             line-height: 40px;
             color: @@color-bar;
+            border-top: 1px solid @@border-color;
+            border-bottom: 1px solid @@border-color;
 
             &.in-more {
                 color: @@primary;

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <br/>
         <mue-tabs height="300px" v-model="v" @change="onChange">
             <mue-tab v-for="(t, i) in tabs" :title="t.title" :is-more="t.more" :key="i"
                      :icon="t.icon">
@@ -7,6 +8,7 @@
             </mue-tab>
         </mue-tabs>
 
+        <br/>
         <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="popVis = true">
             <mue-tab title="报表1">
                 :pop="false"

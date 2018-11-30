@@ -1,11 +1,13 @@
 <template>
     <div>
-        <mue-date-picker bar v-model="value" format="YYYY-MM-DD" @confirm="onConfirm"
-                         @arrow="onArrow">
+        <br/>
+        <mue-date-picker bar v-model="value" format="YYYY-MM-DD"
+                         @confirm="onConfirm" @arrow="onArrow">
         </mue-date-picker>
 
-        <mue-date-picker bar v-model="year" format="YYYY" @confirm="onConfirm"
-                         @arrow="onArrow">
+        <br/>
+        <mue-date-picker bar v-model="year" format="YYYY"
+                         @confirm="onConfirm" @arrow="onArrow">
         </mue-date-picker>
 
         <mue-date-picker style="margin: 10px;" v-model="value" format="YYYY-MM-DD">

@@ -55,10 +55,12 @@ const THEMES = {
         "bar": {
             "itemStyle": {
                 "normal": {
+                    "barBorderRadius": [3, 3, 0, 0],
                     "barBorderWidth": 0,
                     "barBorderColor": "#ffffff"
                 },
                 "emphasis": {
+                    "barBorderRadius": [3, 3, 0, 0],
                     "barBorderWidth": 0,
                     "barBorderColor": "#ffffff"
                 }
@@ -567,10 +569,12 @@ const THEMES = {
         "bar": {
             "itemStyle": {
                 "normal": {
+                    "barBorderRadius": [3, 3, 0, 0],
                     "barBorderWidth": 0,
                     "barBorderColor": "#ffffff"
                 },
                 "emphasis": {
+                    "barBorderRadius": [3, 3, 0, 0],
                     "barBorderWidth": 0,
                     "barBorderColor": "#ffffff"
                 }

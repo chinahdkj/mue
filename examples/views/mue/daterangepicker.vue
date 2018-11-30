@@ -1,8 +1,8 @@
 <template>
     <div>
-        <mue-date-range-picker bar :begin.sync="begin" :end.sync="end"
-                               format="YYYY-MM-DD" @confirm="onConfirm"
-                               @arrow="onArrow">
+        <br/>
+        <mue-date-range-picker bar :begin.sync="begin" :end.sync="end" format="YYYY-MM-DD"
+                               @confirm="onConfirm" @arrow="onArrow">
         </mue-date-range-picker>
     </div>
 
