@@ -2,13 +2,14 @@
 
 .mue-datatable(@theme: light) {
     @color: %("%s-common", @theme);
-    @grey:  %("%s-grey", @theme);
+    @grey: %("%s-grey", @theme);
     @grey-sub: %("%s-grey-sub", @theme);
     @primary: %("%s-primary", @theme);
     @border-color: %("%s-border-color", @theme);
     @background: %("%s-background", @theme);
     @background-th: %("%s-table-th-background", @theme);
-
+    @background-pop: %("%s-background-pop", @theme);
+    @border-color-pop: %("%s-border-color-pop", @theme);
 
     .mue-datatable {
         width: 100%;
@@ -237,8 +238,41 @@
                 height: 180px;
                 margin: 10px 0;
             }
-            > span{
+
+            > span {
                 margin-bottom: 100px;
+            }
+        }
+
+        .mue-datatable-gotop {
+            display: block;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 40px;
+            height: 40px;
+            background: fade(@@background-pop, 30%);
+            box-sizing: border-box;
+            border: 2px solid @@border-color-pop;
+            border-radius: 50%;
+
+            > span {
+                display: block;
+                float: left;
+                height: 17px;
+                line-height: 17px;
+                width: 100%;
+                text-align: center;
+                color: @@color;
+                font-size: 12px;
+
+                &:first-child {
+                    border-bottom: 1px solid @@border-color-pop;
+                }
+
+                &:last-child {
+                    border-top: 1px solid @@border-color-pop;
+                }
             }
         }
     }

@@ -5,8 +5,9 @@
                 <mue-datatable ref="table" :columns="columns" :min-col-width="minColWidth"
                                :data="data" :sort="sort" :total="total" :row-class="rowClass"
                                :stripe="stripe" :row-key="rowKey" :row-height="rowHeight"
-                               :header="header" @sort-change="onSortChange" @refresh="onRefresh"
-                               @load-more="onLoadMore" @row-click="onRowClick">
+                               :header="header" :page-size="pageSize" @sort-change="onSortChange"
+                               @refresh="onRefresh" @load-more="onLoadMore"
+                               @row-click="onRowClick">
                     <!--<template slot="row" slot-scope="{row, cols, no}">-->
                     <!--<td v-for="c in cols" :key="c.field">-->
                     <!--{{no}}{{row[c.field]}}-->
@@ -27,7 +28,12 @@
             rowClass: 行样式类 string、function(row, no)<br/>
             rowHeight: 行高 number 默认40<br/>
             stripe: 斑马线[false, true], 暂无样式支持<br/>
-            sort: 排序{field, order}, 支持sync
+            sort: 排序{field, order}, 支持sync<br/>
+            pageSize: 分页大小 number<br/>
+            rowNo: 行序号 string、function(row, no); string 取行属性; 缺省为 no + 1<br/>
+
+            pageSize > 0 可视区域最后一行的rowNo 计算当前页码， 页码 > 1时 显示右下角分页按钮，点击返回顶部。
+            <br/>
         </van-tab>
 
         <van-tab title="列定义">
@@ -67,7 +73,6 @@
             return {
                 loading: false,
                 pageNo: 0,
-                pageSize: 20,
 
                 header: true, // 显示表头
                 columns: [ // 列定义
@@ -92,7 +97,8 @@
                     return i % 2 === 0 ? "tr0" : "tr1";
                 },
                 rowHeight: 40, // 行高 缺省40
-                stripe: true // 斑马线 样式暂无
+                stripe: true, // 斑马线 样式暂无
+                pageSize: 20 // 分页大小
             };
         },
         components: {},

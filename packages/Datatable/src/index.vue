@@ -56,10 +56,11 @@
         <div class="mue-datatable-main"
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
-            <mue-load-more @refresh="onRefresh" @load-more="onLoad"
+            <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
                            :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more']"
-                           :all-loaded="data.length >= total">
+                           :all-loaded="data.length >= total"
+                           @scroll.native="onScrollY">
 
                 <div v-if="total === 0" class="mue-datatable-nodata">
                     <img v-if="!isNight" src="../assets/no-data.png"/>
@@ -122,6 +123,10 @@
 
             </mue-load-more>
 
+            <a class="mue-datatable-gotop" @click="ScrollTop(0)" v-show="pageNo > 1">
+                <span>{{pageNo}}</span>
+                <span>{{total}}</span>
+            </a>
         </div>
     </div>
 </template>
@@ -162,7 +167,8 @@
                 cols: [], // 列渲染结构，二维数组
                 fcolFields: [], // 锁定列属性
                 colFields: [], // 滚动列属性
-                headerRows: 0 // 表头行数
+                headerRows: 0, // 表头行数
+                pageNo: 0
             };
         },
         computed: {
@@ -185,6 +191,12 @@
             }
         },
         methods: {
+            getRowNo(row, index){
+                if(typeof this.rowNo === "function"){
+                    return this.rowNo(row, index);
+                }
+                return this.rowNo ? row[this.rowNo] : (index + 1);
+            },
             getValue(row, field){
                 if(!field){
                     return;
@@ -357,12 +369,30 @@
                     this.$refs.top_table.scrollLeft = target.scrollLeft;
                 }
             },
+            onScrollY(){
+                if(!this.pageSize){
+                    this.pageNo = 0;
+                    return;
+                }
+                let sbottom = this.$refs.load_more.$el.getBoundingClientRect().bottom;
+                let trs = this.$refs.main_table.getElementsByClassName("__row");
+                let i = 0;
+                for(i = 0; i < trs.length; i++){
+                    let tr = trs[i];
+                    if(tr.getBoundingClientRect().bottom >= sbottom){
+                        break;
+                    }
+                }
+                i = Math.max(i - 1, 0);
+                let rowNo = this.getRowNo(this.data[i], i);
+                this.pageNo = parseInt(rowNo / this.pageSize) + 1;
+            },
             syncScrollX(event){
                 let target = event.target;
                 if(this.$refs.main_table.scrollLeft === target.scrollLeft){
                     return;
                 }
-                this.ScrollLeft(target.scrollLeft);
+                this.ScrollLeft(target.scrollLeft, 0);
             },
             onRefresh(success){
                 let self = this;
@@ -383,8 +413,21 @@
                 this.$emit("row-click", row, i);
             },
 
-            ScrollLeft(l = 0){
-                this.$refs.main_table && (this.$refs.main_table.scrollLeft = l);
+            ScrollLeft(l = 0, duration = 400){
+                if(this.$refs.main_table){
+                    if(duration === 0){
+                        this.$refs.main_table.scrollLeft = l;
+                    }
+                    else{
+                        $(this.$refs.main_table).animate({scrollLeft: l}, duration);
+                    }
+
+                }
+            },
+            ScrollTop(t = 0){
+                if(this.$refs.load_more){
+                    $(this.$refs.load_more.$el).animate({scrollTop: t}, 400);
+                }
             }
         },
         mounted(){
