@@ -16,8 +16,18 @@
             background: @@background;
             text-align: center;
             box-sizing: border-box;
-            border-bottom: 1px solid @@border-color;
-            border-top: 1px solid @@border-color;
+
+            .border(@t) when (@t = dark) {
+                border-bottom: 0;
+                border-top: 1px solid @@border-color;
+            }
+
+            .border(@t) when not (@t = dark) {
+                border-bottom: 1px solid @@border-color;
+                border-top: 0;
+            }
+
+            .border(@theme);
 
             .pick-bar-content {
                 padding: 0 35px;
