@@ -1,6 +1,6 @@
 <template>
     <div class="mue-datatable">
-        <div class="mue-datatable-header" v-if="header" :style="{height: headerHeight}">
+        <div class="mue-datatable-header" v-if="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fcolFields.length > 0"
                  :style="{width:fixedWidth + 'px' }">
                 <table class="mue-datatable__inner-table"
@@ -26,8 +26,8 @@
                 </table>
             </div>
 
-            <div ref="top_table" class="mue-datatable-center"
-                 :style="{'margin-left':fixedWidth + 'px', width: (width - fixedWidth) + 'px'}">
+            <div ref="top_table" class="mue-datatable-center" @scroll="syncScrollX($event)"
+                 :style="{width: (width - fixedWidth) + 'px'}">
                 <table class="mue-datatable__inner-table"
                        :style="{width: scrollWidth + 'px'}">
                     <col-group :columns="colFields"/>
@@ -54,75 +54,74 @@
         </div>
 
         <div class="mue-datatable-main"
-             :style="header ? {'border-top-width': headerHeight} : {}">
+             :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
-            <van-pull-refresh class="mue-datatable-scroller" v-model="refreshing"
-                              @refresh="onRefresh" :disabled="!$listeners.refresh">
+            <mue-load-more @refresh="onRefresh" @load-more="onLoad"
+                           :dis-refresh="!$listeners['refresh']"
+                           :dis-load-more="!$listeners['load-more']"
+                           :all-loaded="data.length >= total">
 
-                <div slot="pulling" class="mue-datatable-loading">
-                    <i class="iconfont icon-jiantou-down" aria-hidden="true"></i>&nbsp;下拉可以刷新
-                </div>
-                <div slot="loosing" class="mue-datatable-loading">
-                    <i class="iconfont icon-jiantou-down" aria-hidden="true"></i>&nbsp;下拉可以刷新
-                </div>
-                <div slot="loading" class="mue-datatable-loading">刷新中...</div>
-
-                <div v-if="data.length === 0" class="mue-datatable-nodata">
+                <div v-if="total === 0" class="mue-datatable-nodata">
                     <img v-if="!isNight" src="../assets/no-data.png"/>
                     <img v-else src="../assets/no-data-dark.png"/>
                     <span>暂无数据</span>
                 </div>
 
-                <van-list v-else class="mue-datatable-scroller-content" v-model="loading"
-                          :finished="!$listeners['load-more'] || data.length >= total"
-                          @load="onLoad" :immediate-check="true" :offset="10">
-
+                <div v-else class="mue-datatable-scroller">
                     <div ref="left_table" class="mue-datatable-fixed" v-if="fcolFields.length > 0"
-                         :style="{width:fixedWidth + 'px' }">
-                        <table class="mue-datatable__inner-table">
-                            <col-group :columns="fcolFields"/>
+                         :style="{width: fixedWidth + 'px' }">
+                        <table class="mue-datatable__inner-table"
+                               :style="{width: (fixedWidth + scrollWidth) + 'px'}">
+                            <col-group :columns="[...fcolFields, ...colFields]"/>
                             <tbody>
-                            <tr v-for="(d, i) in data" :key="rowId(d, i)" :class="rowCls(d, i)"
-                                @click="onRowClick(d, i)">
-                                <td v-for="(c, j) in fcolFields" :key="j"
-                                    :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
-                                    <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
-                                          :row="d" :col="c" :value="getValue(d, c.field)" :no="i">
-                                    </slot>
-                                    <template v-else>
-                                        {{getValue(d, c.field)}}
-                                    </template>
-                                </td>
+                            <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
+                                :class="rowCls(d, i)" @click="onRowClick(d, i)">
+                                <slot name="row" :cols="[...fcolFields, ...colFields]" :row="d"
+                                      :no="i">
+                                    <td v-for="(c, j) in fcolFields" :key="j"
+                                        :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
+                                        <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
+                                              :row="d" :col="c" :value="getValue(d, c.field)"
+                                              :no="i">
+                                        </slot>
+                                        <template v-else>
+                                            {{getValue(d, c.field)}}
+                                        </template>
+                                    </td>
+                                </slot>
                             </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div ref="main_table" class="mue-datatable-center" @scroll="onScroll($event)"
-                         :style="{'margin-left': fixedWidth + 'px', width: (width - fixedWidth) + 'px'}">
+                         :style="{width: (width - fixedWidth) + 'px'}">
                         <table class="mue-datatable__inner-table"
                                :style="{width: scrollWidth + 'px'}">
                             <col-group :columns="colFields"/>
                             <tbody>
-                            <tr v-for="(d, i) in data" :key="rowId(d, i)" :class="rowCls(d, i)"
-                                @click="onRowClick(d, i)">
-                                <td v-for="(c, j) in colFields" :key="j"
-                                    :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
-                                    <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
-                                          :row="d" :col="c" :value="getValue(d, c.field)" :no="i">
-                                    </slot>
-                                    <template v-else>
-                                        {{getValue(d, c.field)}}
-                                    </template>
-                                </td>
+                            <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
+                                :class="rowCls(d, i)" @click="onRowClick(d, i)">
+                                <slot name="row" :cols="colFields" :row="d" :no="i">
+                                    <td v-for="(c, j) in colFields" :key="j"
+                                        :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
+                                        <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
+                                              :row="d" :col="c" :value="getValue(d, c.field)"
+                                              :no="i">
+                                        </slot>
+                                        <template v-else>
+                                            {{getValue(d, c.field)}}
+                                        </template>
+                                    </td>
+                                </slot>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
 
-                    <div slot="loading" class="mue-datatable-loading">加载中...</div>
-                </van-list>
-            </van-pull-refresh>
+            </mue-load-more>
+
         </div>
     </div>
 </template>
@@ -150,7 +149,10 @@
             rowClass: {type: [String, Function], default: ""},
             rowHeight: {type: Number, default: 40}, // 行高
             stripe: {type: Boolean, default: false}, // 斑马线
-            sort: {type: Object, default: null} // 排序
+            sort: {type: Object, default: null}, // 排序
+
+            pageSize: {type: Number, default: 0},
+            rowNo: {type: [String, Function], default: ""}
         },
         data(){
             return {
@@ -160,14 +162,15 @@
                 cols: [], // 列渲染结构，二维数组
                 fcolFields: [], // 锁定列属性
                 colFields: [], // 滚动列属性
-                headerRows: 0, // 表头行数
-                refreshing: false,
-                loading: false
+                headerRows: 0 // 表头行数
             };
         },
         computed: {
+            headerVisibel(){
+                return this.header && (this.fcolFields.length + this.colFields.length) > 0;
+            },
             headerHeight(){
-                return (this.headerRows * 36 + 4) + "px";
+                return (this.headerVisibel ? (this.headerRows * 36 + 4) : 0) + "px";
             },
             isNight(){
                 return this.$root.theme === "night";
@@ -352,21 +355,27 @@
                 let target = event.target;
                 if(this.header){
                     this.$refs.top_table.scrollLeft = target.scrollLeft;
-                    // this.$refs.top_table.style.left = -target.scrollLeft + "px";
                 }
             },
-            onRefresh(){
+            syncScrollX(event){
+                let target = event.target;
+                if(this.$refs.main_table.scrollLeft === target.scrollLeft){
+                    return;
+                }
+                this.ScrollLeft(target.scrollLeft);
+            },
+            onRefresh(success){
                 let self = this;
                 let callback = () => {
-                    self.refreshing = false;
                     self.ScrollLeft();
+                    success();
                 };
                 self.$emit("refresh", callback);
             },
-            onLoad(){
+            onLoad(success){
                 let self = this;
                 let callback = () => {
-                    self.loading = false;
+                    success();
                 };
                 self.$emit("load-more", callback);
             },

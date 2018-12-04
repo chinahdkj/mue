@@ -1,0 +1,45 @@
+@import "../var.less";
+
+.mue-load-more(@theme: light) {
+    @background: %("%s-background", @theme);
+    @grey: %("%s-grey", @theme);
+    .mue-load-more {
+        background: @@background;
+        overflow: auto;
+        height: 100%;
+        width: 100%;
+
+        .mue-load-more-wrap {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .mue-load-more-content {
+            overflow: visible;
+
+            &.is-dropped {
+                transition: .2s
+            }
+        }
+
+        .mue-load-more-top, .mue-load-more-bottom {
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            width: 100%;
+            display: block;
+            color: @@grey;
+            font-size: @font-size;
+        }
+
+        .mue-load-more-top {
+            margin-top: -50px;
+        }
+
+        .mue-load-more-bottom {
+            margin-bottom: -50px;
+        }
+
+
+    }
+}

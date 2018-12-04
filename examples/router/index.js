@@ -16,6 +16,7 @@ import tabs from "../views/mue/tabs";
 import loading from "../views/mue/loading";
 import datatable from "../views/mue/datatable";
 import formitem from "../views/mue/formitem";
+import loadmore from "../views/mue/loadmore";
 
 
 export default [
@@ -105,5 +106,10 @@ export default [
         path: '/mue/formitem',
         name: 'mue_formitem',
         component: formitem
+    },
+    {
+        path: '/mue/loadmore',
+        name: 'mue_loadmore',
+        component: loadmore
     }
 ];

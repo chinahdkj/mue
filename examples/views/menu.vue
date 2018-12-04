@@ -29,6 +29,7 @@
             <van-cell value="POPOVER" @click="open('/mue/popover')"/>
             <van-cell value="TABS" @click="open('/mue/tabs')"/>
             <van-cell value="LOADING" @click="open('/mue/loading')"/>
+            <van-cell value="LOADMORE" @click="open('/mue/loadmore')"/>
             <van-cell value="DATATABLE" @click="open('/mue/datatable')"/>
         </van-cell-group>
 

@@ -2,7 +2,8 @@
     <div id="app">
         <header>
             <van-nav-bar :title="title" left-text="菜单" @click-left="pop=true" fixed
-                         :right-text="source ? '示例' : ''" @click-right="openSouce"/>
+                         :right-text="source ? '示例' : ''" @click-right="openSouce"
+                         style="z-index: 1000;"/>
         </header>
         <section>
             <router-view/>
