@@ -1,7 +1,8 @@
 <template>
     <div class="mue-select">
         <div class="mue-form-input has-suffix" @click="showPop">
-            <input type="text" class="input__inner" readonly :value="text"/>
+            <input type="text" class="input__inner" readonly :value="text"
+                   unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix iconfont icon-arrows-copy-copy"></i>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"

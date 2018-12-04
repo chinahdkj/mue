@@ -10,7 +10,8 @@
         </div>
 
         <div class="mue-form-input has-suffix" v-else @click="pop = true">
-            <input type="text" class="input__inner" readonly :value="value"/>
+            <input type="text" class="input__inner" readonly :value="value"
+                   unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix iconfont icon-zhouli"></i>
         </div>
 
