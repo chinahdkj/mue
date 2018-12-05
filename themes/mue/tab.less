@@ -46,8 +46,19 @@
             text-align: center;
             line-height: 40px;
             color: @@color-bar;
-            border-top: 1px solid @@border-color;
-            border-bottom: 1px solid @@border-color;
+            border: 0 solid @@border-color;
+
+            .border(@t) when (@t = dark) {
+                border-bottom-width: 0;
+                border-top-width: 1px;
+            }
+
+            .border(@t) when not (@t = dark) {
+                border-bottom-width: 1px;
+                border-top-width: 0;
+            }
+
+            .border(@theme);
 
             &.in-more {
                 color: @@primary;

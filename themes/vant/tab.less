@@ -27,6 +27,19 @@
 
                 &.van-hairline--top-bottom:after {
                     border-color: @@split;
+
+                    .border(@t) when (@t = dark) {
+                        border-bottom-width: 0;
+                        border-top-width: 1px;
+                    }
+
+                    .border(@t) when not (@t = dark) {
+                        border-bottom-width: 1px;
+                        border-top-width: 0;
+                    }
+
+                    .border(@theme);
+
                 }
             }
 
