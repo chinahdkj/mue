@@ -30,14 +30,31 @@
             display: block;
             color: @@grey;
             font-size: @font-size;
+
+            i {
+                transition: .2s;
+                display: inline-block;
+                height: 16px;
+                width: 16px;
+                text-align: center;
+                line-height: 16px;
+            }
         }
 
         .mue-load-more-top {
             margin-top: -50px;
+
+            i.is-drop {
+                transform: rotate(180deg) translate3d(0, 2px, 0);
+            }
         }
 
         .mue-load-more-bottom {
             margin-bottom: -50px;
+
+            i.is-drop {
+                transform: rotate(180deg) translate3d(0, 0, 0);
+            }
         }
 
 

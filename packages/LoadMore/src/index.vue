@@ -7,8 +7,18 @@
 
                 <div class="mue-load-more-top" v-if="$listeners.refresh">
                     <span class="mue-load-more-text">
-                        <i class="iconfont icon-jiantou-down" aria-hidden="true"></i>
-                        {{topText }}</span>
+                        <i v-if="topStatus !== 'loading'" class="iconfont icon-jiantou-down"
+                           aria-hidden="true" :class="{'is-drop': topStatus === 'drop'}"></i>
+                        <template v-if="topStatus === 'pull'">
+                            {{topPullText}}
+                        </template>
+                        <template v-else-if="topStatus === 'drop'">
+                            {{topDropText}}
+                        </template>
+                        <template v-else-if="topStatus === 'loading'">
+                            {{topLoadingText}}
+                        </template>
+                    </span>
                 </div>
 
                 <slot></slot>
@@ -16,8 +26,18 @@
                 <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
                     <span v-if="allLoaded" class="mue-load-more-text">没有更多了</span>
                     <span v-else class="mue-load-more-text">
-                        <i class="iconfont icon-jiantou-up" aria-hidden="true"></i>
-                        {{ bottomText }}</span>
+                        <i v-if="bottomStatus !== 'loading'" class="iconfont icon-jiantou-up"
+                           aria-hidden="true" :class="{'is-drop': bottomStatus === 'drop'}"></i>
+                        <template v-if="bottomStatus === 'pull'">
+                            {{bottomPullText}}
+                        </template>
+                        <template v-else-if="bottomStatus === 'drop'">
+                            {{bottomDropText}}
+                        </template>
+                        <template v-else-if="bottomStatus === 'loading'">
+                            {{bottomLoadingText}}
+                        </template>
+                    </span>
                 </div>
 
             </div>
@@ -33,11 +53,11 @@
             autoFill: {type: Boolean, default: true},
 
             topPullText: {type: String, default: "下拉可以刷新"},
-            topDropText: {type: String, default: "下拉可以刷新"},
+            topDropText: {type: String, default: "释放开始刷新"},
             topLoadingText: {type: String, default: "刷新中..."},
 
             bottomPullText: {type: String, default: "上拉加载更多"},
-            bottomDropText: {type: String, default: "上拉加载更多"},
+            bottomDropText: {type: String, default: "释放开始加载"},
             bottomLoadingText: {type: String, default: "加载中..."},
 
             allLoaded: {type: Boolean, default: false},
@@ -72,35 +92,8 @@
         },
         computed: {
             transform(){
-                return this.translate === 0 ? null : 'translate3d(0, ' + this.translate + 'px, 0)';
-            }
-        },
-        watch: {
-            topStatus(val){
-                switch(val){
-                    case "pull":
-                        this.topText = this.topPullText;
-                        break;
-                    case "drop":
-                        this.topText = this.topDropText;
-                        break;
-                    case "loading":
-                        this.topText = this.topLoadingText;
-                        break;
-                }
-            },
-            bottomStatus(val){
-                switch(val){
-                    case "pull":
-                        this.bottomText = this.bottomPullText;
-                        break;
-                    case "drop":
-                        this.bottomText = this.bottomDropText;
-                        break;
-                    case "loading":
-                        this.bottomText = this.bottomLoadingText;
-                        break;
-                }
+                return this.translate === 0 ? null :
+                       `translate3d(0, ${parseInt(this.translate)}px, 0)`;
             }
         },
         methods: {
