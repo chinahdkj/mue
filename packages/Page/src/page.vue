@@ -19,16 +19,16 @@
         name: 'MuePage',
 
         props: {
-            headerHeight: {type: Number, defalut: 40},
-            footerHeight: {type: Number, defalut: 50}
+            headerHeight: {type: Number, default: 40},
+            footerHeight: {type: Number, default: 50}
         },
 
         computed: {
             hheight(){
-                return this.$slots.header ? `${Math.max(0, this.headerHeight)}px` : "0px";
+                return this.$slots.header ? `${Math.max(0, this.headerHeight) || 0}px` : "0px";
             },
             fheight(){
-                return this.$slots.footer ? `${Math.max(0, this.footerHeight)}px` : "0px";
+                return this.$slots.footer ? `${Math.max(0, this.footerHeight) || 0}px` : "0px";
             },
             cheight(){
                 return `calc(100% - ${this.hheight} - ${this.fheight})`;
