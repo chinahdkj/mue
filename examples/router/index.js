@@ -4,6 +4,7 @@ import vtabbar from "../views/vant/tabbar";
 import vcheckbox from "../views/vant/checkbox";
 import vradio from "../views/vant/radio";
 
+import page from "../views/mue/page";
 import container from "../views/mue/container";
 import panel from "../views/mue/panel";
 import chart from "../views/mue/chart";
@@ -47,11 +48,15 @@ export default [
     },
 
     {
+        path: '/mue/page',
+        name: 'mue_page',
+        component: page
+    },
+    {
         path: '/mue/container',
         name: 'mue_container',
         component: container
     },
-
     {
         path: '/mue/chart',
         name: 'mue_chart',

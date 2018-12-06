@@ -1,3 +1,26 @@
+.mue-page {
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    > .mue-page-header,
+    > .mue-page-footer {
+        width: 100%;
+        overflow: hidden;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    > .mue-page-content {
+        width: 100%;
+        overflow: auto;
+        display: block;
+        box-sizing: border-box;
+    }
+}
+
 .mue-container {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -15,6 +38,7 @@
     box-sizing: border-box;
     min-width: 0;
     height: 100%;
+
     &.is-vertical {
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
@@ -22,18 +46,21 @@
         flex-direction: column;
     }
 }
+
 .mue-footer {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -ms-flex-negative: 0;
     flex-shrink: 0
 }
+
 .mue-header {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -ms-flex-negative: 0;
     flex-shrink: 0
 }
+
 .mue-main {
     display: block;
     -webkit-box-flex: 1;
