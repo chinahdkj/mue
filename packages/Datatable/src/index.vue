@@ -58,9 +58,8 @@
 
             <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
                            :dis-refresh="!$listeners['refresh']"
-                           :dis-load-more="!$listeners['load-more']"
-                           :all-loaded="data.length >= total"
-                           @scroll.native="onScrollY">
+                           :dis-load-more="!$listeners['load-more'] || total === 0"
+                           :all-loaded="data.length >= total" @scroll.native="onScrollY">
 
                 <div v-if="total === 0" class="mue-datatable-nodata">
                     <img v-if="!isNight" src="../assets/no-data.png"/>
@@ -370,7 +369,7 @@
                 }
             },
             onScrollY(){
-                if(!this.pageSize){
+                if(!this.pageSize || !this.$refs.main_table){
                     this.pageNo = 0;
                     return;
                 }
