@@ -2,8 +2,8 @@
     <mue-container>
         <mue-header style="background: pink;"></mue-header>
         <mue-main style="background: orange;">
-            弃用此组件，改用meu-page<br/>
-            由于低版本IOS浏览器对flex布局兼容性不佳
+            <mue-panel style="height: 50%" hairline="wide" title="1"></mue-panel>
+            <mue-panel style="height: 50%" hairline="wide" title="2"></mue-panel>
         </mue-main>
         <mue-footer style="background: pink;"></mue-footer>
     </mue-container>

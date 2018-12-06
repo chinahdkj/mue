@@ -18,7 +18,7 @@
 
         <h3>MUE</h3>
         <van-cell-group border>
-            <van-cell value="PAGE" @click="open('/mue/page')"/>
+            <!--<van-cell value="PAGE" @click="open('/mue/page')"/>-->
             <van-cell value="CONTAINER" @click="open('/mue/container')"/>
             <van-cell value="PANEL" @click="open('/mue/panel')"/>
             <van-cell value="FORM-ITEM" @click="open('/mue/formitem')"/>

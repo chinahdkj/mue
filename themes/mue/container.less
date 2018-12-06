@@ -1,0 +1,59 @@
+.mue-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &.is-vertical {
+        flex-direction: column;
+    }
+}
+
+.mue-footer {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.mue-header {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.mue-main {
+    flex: 1;
+    position: relative;
+
+    > .mue-main-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+}
+
+.mue-page {
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    > .mue-page-header,
+    > .mue-page-footer {
+        width: 100%;
+        overflow: hidden;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    > .mue-page-content {
+        width: 100%;
+        overflow: auto;
+        display: block;
+        box-sizing: border-box;
+    }
+}

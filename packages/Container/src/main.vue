@@ -1,6 +1,8 @@
 <template>
     <main class="mue-main">
-        <slot></slot>
+        <div class="mue-main-content">
+            <slot></slot>
+        </div>
     </main>
 </template>
 
