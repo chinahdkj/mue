@@ -79,7 +79,8 @@
             box-sizing: border-box;
             height: 100%;
             width: 100%;
-            overflow: auto hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             float: left;
         }
 
@@ -240,36 +241,5 @@
             }
         }
 
-        .mue-datatable-gotop {
-            display: block;
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            width: 40px;
-            height: 40px;
-            background: fade(@@background-pop, 30%);
-            box-sizing: border-box;
-            border: 2px solid @@border-color-pop;
-            border-radius: 50%;
-
-            > span {
-                display: block;
-                float: left;
-                height: 17px;
-                line-height: 17px;
-                width: 100%;
-                text-align: center;
-                color: @@color;
-                font-size: 12px;
-
-                &:first-child {
-                    border-bottom: 1px solid @@border-color-pop;
-                }
-
-                &:last-child {
-                    border-top: 1px solid @@border-color-pop;
-                }
-            }
-        }
     }
 }

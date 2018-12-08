@@ -112,7 +112,7 @@
                     };
                 });
 
-                return {rows: rows, total: 80};
+                return {rows: rows, total: 180};
 
 
             },
@@ -128,7 +128,7 @@
                     self.data = temp.rows;
                     self.total = temp.total;
                     self.loading = false;
-                }, 2000);
+                }, 1000);
             },
 
             onRefresh(success){

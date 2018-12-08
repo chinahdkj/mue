@@ -1,11 +1,12 @@
 <template>
     <div class="mue-load-more">
-        <div class="mue-load-more-wrap">
-            <div class="mue-load-more-content"
-                 :class="{ 'is-dropped': topDropped || bottomDropped}"
-                 :style="{ 'transform': transform }">
+        <div class="mue-load-more-box" @scroll="onScroll">
+            <div class="mue-load-more-wrap">
+                <div class="mue-load-more-content"
+                     :class="{ 'is-dropped': topDropped || bottomDropped}"
+                     :style="{ 'transform': transform }">
 
-                <div class="mue-load-more-top" v-if="$listeners.refresh">
+                    <div class="mue-load-more-top" v-if="$listeners.refresh">
                     <span class="mue-load-more-text">
                         <i v-if="topStatus !== 'loading'" class="iconfont icon-jiantou-down"
                            aria-hidden="true" :class="{'is-drop': topStatus === 'drop'}"></i>
@@ -19,13 +20,13 @@
                             {{topLoadingText}}
                         </template>
                     </span>
-                </div>
+                    </div>
 
-                <slot></slot>
+                    <slot></slot>
 
-                <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
-                    <span v-if="allLoaded" class="mue-load-more-text">没有更多了</span>
-                    <span v-else class="mue-load-more-text">
+                    <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
+                        <span v-if="allLoaded" class="mue-load-more-text">没有更多了</span>
+                        <span v-else class="mue-load-more-text">
                         <i v-if="bottomStatus !== 'loading'" class="iconfont icon-jiantou-up"
                            aria-hidden="true" :class="{'is-drop': bottomStatus === 'drop'}"></i>
                         <template v-if="bottomStatus === 'pull'">
@@ -38,10 +39,29 @@
                             {{bottomLoadingText}}
                         </template>
                     </span>
-                </div>
+                    </div>
 
+                </div>
             </div>
         </div>
+
+
+        <transition name="van-slide-up">
+            <div class="mue-load-more-pagination" v-show="pageNo > 1"
+                 :class="{'is-scrolling': scrolling}" @click="backTop">
+                <a class="__backtop">
+                    <i class="iconfont icon-zhiding"></i>
+                </a>
+                <a class="__pager">
+                    <ul ref="pager">
+                        <li v-for="i in pageTotal" :key="i">
+                            {{i}}
+                        </li>
+                    </ul>
+                    <span>{{pageTotal}}</span>
+                </a>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -49,6 +69,7 @@
     export default {
         name: "MueLoadMore",
         components: {},
+
         props: {
             autoFill: {type: Boolean, default: true},
 
@@ -64,6 +85,9 @@
 
             disRefresh: {type: Boolean, default: false},
             disLoadMore: {type: Boolean, default: false},
+
+            pageNo: {type: Number, default: 0},
+            pageTotal: {type: Number, default: 0},
         },
         data(){
             return {
@@ -87,7 +111,11 @@
                 topStatus: '',
                 bottomStatus: '',
 
-                $content: null
+                $content: null,
+                $box: null,
+
+                scrolling: false,
+                scrollTimer: null
             };
         },
         computed: {
@@ -96,12 +124,20 @@
                        `translate3d(0, ${parseInt(this.translate)}px, 0)`;
             }
         },
+        watch: {
+            pageNo(v){
+                if(!this.$refs.pager){
+                    return;
+                }
+                $(this.$refs.pager).animate({scrollTop: (v - 1) * 20}, 200);
+            }
+        },
         methods: {
             bottomMethod(){
                 let success = () => {
                     this.bottomStatus = "pull";
                     this.bottomDropped = false;
-                    this.$el.scrollTop += 50;
+                    this.$box.scrollTop += 50;
                     this.translate = 0;
                     this.fillContainer();
                 };
@@ -118,7 +154,7 @@
                 this.$emit("refresh", success);
             },
             getScrollTop(){
-                return this.$el.scrollTop;
+                return this.$box.scrollTop;
             },
             bindTouchEvents(){
                 this.$content.addEventListener("touchstart", this.handleTouchStart);
@@ -128,6 +164,7 @@
             init(){
                 this.topStatus = "pull";
                 this.bottomStatus = "pull";
+                this.$box = this.$el.getElementsByClassName("mue-load-more-box")[0];
                 this.$content = this.$el.getElementsByClassName("mue-load-more-wrap")[0];
                 this.bindTouchEvents();
                 this.fillContainer();
@@ -139,7 +176,7 @@
                 }
                 this.$nextTick(() => {
                     this.containerFilled = this.$content.getBoundingClientRect().bottom >=
-                        this.$el.getBoundingClientRect().bottom;
+                        this.$box.getBoundingClientRect().bottom;
 
                     if(!this.containerFilled){
                         this.bottomStatus = "loading";
@@ -149,7 +186,7 @@
             },
             checkBottomReached(){
                 return parseInt(this.$content.getBoundingClientRect().bottom) <=
-                    parseInt(this.$el.getBoundingClientRect().bottom) + 1;
+                    parseInt(this.$box.getBoundingClientRect().bottom) + 1;
             },
             handleTouchStart(event){
                 this.startY = event.touches[0].clientY;
@@ -230,6 +267,19 @@
                     }
                 }
                 this.direction = "";
+            },
+
+            backTop(){
+                $(this.$box).animate({scrollTop: 0}, 400);
+            },
+
+            onScroll(){
+                clearTimeout(this.scrollTimer);
+                this.scrolling = true;
+                this.$emit("scroll-change", this.$box.getBoundingClientRect());
+                this.scrollTimer = setTimeout(() => {
+                    this.scrolling = false;
+                }, 1500);
             }
         },
         mounted(){

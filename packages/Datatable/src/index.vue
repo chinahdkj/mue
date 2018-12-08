@@ -59,7 +59,8 @@
             <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
                            :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
-                           :all-loaded="data.length >= total" @scroll.native="onScrollY">
+                           :all-loaded="data.length >= total" @scroll-change="onScrollY"
+                           :page-no="pageNo" :page-total="pageTotal">
 
                 <div v-if="total === 0" class="mue-datatable-nodata">
                     <img v-if="!isNight" src="../assets/no-data.png"/>
@@ -121,11 +122,6 @@
                 </div>
 
             </mue-load-more>
-
-            <a class="mue-datatable-gotop" @click="ScrollTop(0)" v-show="pageNo > 1">
-                <span>{{pageNo}}</span>
-                <span>{{total}}</span>
-            </a>
         </div>
     </div>
 </template>
@@ -179,6 +175,13 @@
             },
             isNight(){
                 return this.$root.theme === "night";
+            },
+            pageTotal(){
+                if(this.pageSize){
+                    return parseInt(this.total / this.pageSize) +
+                        (this.total % this.pageSize === 0 ? 0 : 1);
+                }
+                return 0;
             }
         },
         watch: {
@@ -368,12 +371,11 @@
                     this.$refs.top_table.scrollLeft = target.scrollLeft;
                 }
             },
-            onScrollY(){
+            onScrollY({bottom: sbottom}){
                 if(!this.pageSize || !this.$refs.main_table){
                     this.pageNo = 0;
                     return;
                 }
-                let sbottom = this.$refs.load_more.$el.getBoundingClientRect().bottom;
                 let trs = this.$refs.main_table.getElementsByClassName("__row");
                 let i = 0;
                 for(i = 0; i < trs.length; i++){

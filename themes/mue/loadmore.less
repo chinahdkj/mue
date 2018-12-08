@@ -2,12 +2,23 @@
 
 .mue-load-more(@theme: light) {
     @background: %("%s-background", @theme);
+    @color: %("%s-common", @theme);
     @grey: %("%s-grey", @theme);
+    @background-pop: %("%s-background-pop", @theme);
+    @border-color-pop: %("%s-border-color-pop", @theme);
+
     .mue-load-more {
         background: @@background;
-        overflow: auto;
+        overflow: hidden;
         height: 100%;
         width: 100%;
+        position: relative;
+
+        .mue-load-more-box {
+            overflow: auto;
+            height: 100%;
+            width: 100%;
+        }
 
         .mue-load-more-wrap {
             overflow: hidden;
@@ -57,6 +68,94 @@
             }
         }
 
+        @keyframes pager-rotate {
+            from {
+                transform: translateZ(-20px) rotateX(-90deg);
+            }
+            to {
+                transform: translateZ(-20px) rotateX(0deg);
+            }
+        }
 
+        .mue-load-more-pagination {
+            position: absolute;
+            display: block;
+            right: 20px;
+            bottom: 20px;
+            width: 40px;
+            height: 40px;
+            transform-style: preserve-3d;
+            transform: translateZ(-20px) rotateX(-90deg);
+            transition-duration: 0.5s;
+
+            &.is-scrolling {
+                transform: translateZ(-20px) rotateX(0deg);
+            }
+
+            > a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: fade(@@background-pop, 30%);
+                box-sizing: border-box;
+                border: 2px solid @@border-color-pop;
+                position: absolute;
+                border-radius: 50%;
+            }
+
+            > a.__pager {
+                transform: translateZ(20px);
+
+                &:before {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    height: 2px;
+                    width: 28px;
+                    left: 4px;
+                    background: @@border-color-pop;
+                    top: 18px;
+                }
+
+                > span {
+                    display: block;
+                    float: left;
+                    width: 100%;
+                    text-align: center;
+                    height: 14px;
+                    line-height: 14px;
+                    color: @@grey;
+                    font-size: 12px;
+                }
+
+                > ul {
+                    height: 20px;
+                    overflow: hidden;
+                    color: @@color;
+                    font-size: 14px;
+                    line-height: 20px;
+                    float: left;
+                    width: 100%;
+
+                    > li {
+                        text-align: center;
+                        float: left;
+                        width: 100%;
+                    }
+                }
+            }
+
+            > a.__backtop {
+                transform: translateY(-20px) rotateX(90deg);
+                vertical-align: middle;
+                text-align: center;
+                line-height: 40px;
+
+                > i {
+                    font-size: 24px;
+                    color: @@color;
+                }
+            }
+        }
     }
 }
