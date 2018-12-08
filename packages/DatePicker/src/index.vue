@@ -1,17 +1,17 @@
 <template>
     <div :class="bar ? 'mue-date-picker' : 'mue-date-picker-input'">
 
-        <div class="pick-bar" @click="pop = true" v-if="bar">
-            <span class="pick-bar-content">
+        <div class="pick-bar" @click="showPop" v-if="bar">
+            <span class="pick-bar-content" :class="{'is-disabled': disabled}">
                 <a v-html="value || '&nbsp;&nbsp;&nbsp;&nbsp;'"></a>
                 <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
                 <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
             </span>
         </div>
 
-        <div class="mue-form-input has-suffix" v-else @click="pop = true">
-            <input type="text" class="input__inner" readonly :value="value"
-                   unselectable="on" onfocus="this.blur()"/>
+        <div class="mue-form-input has-suffix" v-else @click="showPop">
+            <input type="text" class="input__inner" readonly :value="value" :disabled="disabled"
+                   :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix iconfont icon-zhouli"></i>
         </div>
 
@@ -41,7 +41,9 @@
                 type: Boolean, default: false
             },
             value: {type: String, default: ""},
-            clearable: {type: Boolean, default: false}
+            clearable: {type: Boolean, default: false},
+            placeholder: {type: String, default: ""},
+            disabled: {type: Boolean, default: false}
         },
         data(){
             return {
@@ -71,6 +73,11 @@
             }
         },
         methods: {
+            showPop(){
+                if(!this.disabled){
+                    this.pop = true;
+                }
+            },
             onConfirm(v){
                 this.val = v;
                 this.pop = false;
@@ -85,7 +92,7 @@
                 this.$emit("confirm", val);
             },
             onClickArrow(act){
-                this.$emit("arrow", act);
+                !this.disabled && this.$emit("arrow", act);
             },
             onCancel(){
                 if(!this.bar && this.clearable){

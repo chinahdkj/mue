@@ -1,7 +1,17 @@
+import Form from './src/form';
+import FormItemGroup from './src/form-item-group';
+import FormItem from './src/form-item';
+
+import Input from './input/index';
 import Select from './select/index';
+import Textarea from './textarea/index';
 
-Select.install = function(Vue){
-    Vue.component(Select.name, Select);
-};
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea];
 
-export default {Select};
+cmps.forEach((cmp) => {
+    cmp.install = (Vue) => {
+        Vue.component(cmp.name, cmp);
+    };
+});
+
+export default {...cmps};

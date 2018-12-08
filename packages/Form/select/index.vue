@@ -1,8 +1,8 @@
 <template>
     <div class="mue-select">
         <div class="mue-form-input has-suffix" @click="showPop">
-            <input type="text" class="input__inner" readonly :value="text"
-                   unselectable="on" onfocus="this.blur()"/>
+            <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
+                   :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix iconfont icon-arrows-copy-copy"></i>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
@@ -22,8 +22,13 @@
             group: {default: false, type: Boolean},
             value: {default: null},
             clearable: {default: false, type: Boolean},
-            data: {type: Array, default: []},
+            data: {
+                type: Array, default(){
+                    return [];
+                }
+            },
             disabled: {type: Boolean, default: false},
+            placeholder: {type: String, default: ""}
         },
         data(){
             return {

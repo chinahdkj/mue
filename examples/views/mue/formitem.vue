@@ -2,6 +2,13 @@
     <div>
         <mue-select style="margin: 10px;" :data="select.data" v-model="select.value"
                     @change="selectChange"></mue-select>
+
+        <mue-input style="margin: 10px;" type="text" v-model.number="input.value"
+                   placeholder="请输入"/>
+        <mue-input style="margin: 10px;" type="password" v-model.number="input.value"
+                   placeholder="请输入" icon="iconfont icon-tongxunlu" @icon-click="pwdIconClick"/>
+        <mue-input style="margin: 10px;" type="number" v-model.number="input.number"
+                   placeholder="请输入数字"/>
     </div>
 </template>
 
@@ -19,12 +26,16 @@
                         {code: "c4", name: "选项4"},
                         {code: "c5", name: "选项5"},
                     ]
-                }
+                },
+                input: {number: 0, value: ""},
             };
         },
         methods: {
             selectChange(value, option){
                 console.info("select", value, option);
+            },
+            pwdIconClick(){
+                alert(this.input.value);
             }
         },
     }

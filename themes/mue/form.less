@@ -1,10 +1,12 @@
 @import "../var.less";
 
 .mue-form(@theme: light) {
+    @background-base: %("%s-background-base", @theme);
     @background: %("%s-background", @theme);
     @color: %("%s-common", @theme);
     @grey: %("%s-grey", @theme);
     @border-color: %("%s-border-color", @theme);
+    @placeholder: %("%s-placeholder", @theme);
 
     .mue-form-input {
         background: @@background;
@@ -15,6 +17,7 @@
         box-sizing: border-box;
         height: 30px;
         min-width: 50px;
+        width: 100%;
         padding: 0 5px;
         position: relative;
 
@@ -27,6 +30,10 @@
             background: transparent;
             height: 100%;
             width: 100%;
+        }
+
+        .input__inner::-webkit-input-placeholder {
+            color: @@placeholder;
         }
 
         .input__suffix {
@@ -48,7 +55,168 @@
         }
     }
 
+    .mue-input {
+        display: inline-block;
+    }
+
     .mue-select {
         display: inline-block;
+    }
+
+    .mue-textarea {
+        display: inline-block;
+        line-height: 0;
+
+        .textarea__inner {
+            font-size: @font-size;
+            line-height: 20px;
+            padding: 5px;
+            background: @@background;
+            display: inline-block;
+            border: 1px solid @@border-color;
+            border-radius: 2px;
+            box-sizing: border-box;
+            min-width: 50px;
+            width: 100%;
+            resize: none;
+        }
+
+        .textarea__inner::-webkit-input-placeholder {
+            color: @@placeholder;
+        }
+    }
+
+    .mue-form {
+        background: @@background-base;
+
+        .mue-form-item-group {
+            background: @@background;
+            margin-bottom: 4px;
+
+            div.mue-form-item-group-title {
+                margin: 0;
+                height: 36px;
+                padding: 0 10px;
+                box-sizing: border-box;
+                border-bottom: @@border-color 1px solid;
+
+                > span:first-child {
+                    float: left;
+                    font-size: @font-size-large;
+                    color: @@grey;
+                    margin-top: 8px;
+                }
+
+                > span:nth-child(2) {
+                    float: right;
+                    font-size: @font-size;
+                    color: @@grey;
+                    margin-top: 8px;
+                    line-height: 20px;
+
+                    i.__icon {
+                        float: right;
+                        outline: 0;
+                        display: block;
+                        height: 20px;
+                        width: 20px;
+                        text-align: center;
+                        line-height: 20px;
+                        padding-left: 5px;
+                        color: #fcb100;
+                    }
+
+                    .mue-form-help {
+                        color: @black;
+                        padding: 5px;
+                        margin-top: 5px;
+                        background: #fbf0b8;
+                        font-size: @font-size;
+
+                        .popper__arrow {
+                            border-bottom-color: #fbf0b8;
+
+                            &:after {
+                                border-bottom-color: #fbf0b8;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .mue-form-item {
+            background: @@background;
+            min-height: 40px;
+            margin: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+            border-bottom: @@border-color 1px solid;
+            position: relative;
+
+            > label {
+                display: inline-block;
+                color: @@color;
+                font-size: @font-size-large;
+                position: absolute;
+                top: 50%;
+                z-index: 10;
+                transform: translateY(-50%);
+            }
+        }
+
+        .mue-form-item-content {
+            padding: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: right;
+
+        }
+
+    }
+
+
+    // 表单内组件样式覆盖
+    .mue-form-item-content {
+        .mue-form-input {
+            padding: 0;
+            border: 0;
+
+            .input__inner {
+                text-align: right;
+                padding-right: 25px;
+            }
+
+            .input__suffix {
+                right: 0;
+            }
+        }
+
+        // input
+        .mue-input {
+            width: 100%;
+        }
+
+        // select
+        .mue-select {
+            width: 100%;
+            // 箭头旋转
+            .input__suffix.icon-arrows-copy-copy {
+                transform: rotate(-90deg);
+            }
+        }
+
+        // date-picker
+        .mue-date-picker-input{
+            width: 100%;
+        }
+
+        // textarea
+        .mue-textarea {
+            width: 100%;
+            .textarea__inner{
+                border: 0;
+            }
+        }
     }
 }
