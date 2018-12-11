@@ -5,6 +5,7 @@
     @background: %("%s-background", @theme);
     @color: %("%s-common", @theme);
     @grey: %("%s-grey", @theme);
+    @grey-sub: %("%s-grey-sub", @theme);
     @disabled: %("%s-button-disable-color", @theme);
     @border-color: %("%s-border-color", @theme);
     @placeholder: %("%s-placeholder", @theme);
@@ -45,7 +46,7 @@
             height: 20px;
             line-height: 20px;
             top: 50%;
-            margin-top: -10px;
+            margin-top: -9px;
             color: @@grey;
         }
 
@@ -177,7 +178,7 @@
                 > span:nth-child(2) {
                     float: right;
                     font-size: @font-size;
-                    color: @@grey;
+                    color: @@grey-sub;
                     margin-top: 8px;
                     line-height: 20px;
 
@@ -244,6 +245,19 @@
 
         }
 
+        .mue-form-buttons {
+            width: 310px;
+            margin: 15px auto;
+            overflow: hidden;
+
+            > .van-button:first-child {
+                float: left;
+            }
+
+            > .van-button:last-child {
+                float: right;
+            }
+        }
     }
 
 
@@ -292,7 +306,7 @@
         }
 
         // img-upload
-        .mue-img-upload{
+        .mue-img-upload {
             width: 100%;
         }
     }

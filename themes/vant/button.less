@@ -18,7 +18,7 @@
     .van-button {
         font-size: @button-font-size;
         height: @button-height;
-        line-height: calc(@button-height - 2px);
+        line-height: @button-height - 2px;
         border-radius: 0;
         padding: 0 15px;
 
@@ -62,18 +62,19 @@
         &.van-button--large {
             width: 143px;
             height: @button-height;
-            line-height: calc(@button-height - 2px);
+            line-height: @button-height - 2px;
+            border-radius: 4px;
         }
 
         &.van-button--normal {
             height: @button-height;
-            line-height: calc(@button-height - 2px);
+            line-height: @button-height - 2px;
             padding: 0 15px;
         }
 
         &.van-button--small {
             height: @button-height;
-            line-height: calc(@button-height - 2px);
+            line-height: @button-height - 2px;
             padding: 0 10px;
         }
 
@@ -85,6 +86,7 @@
             font-size: @button-mini-font-size;
             padding: @button-mini-padding;
             color: @@color-mini;
+            border-radius: 4px;
 
             &.van-button--plain {
                 color: @@color;

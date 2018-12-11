@@ -31,11 +31,11 @@ new Vue({
         "$route.query.theme": {
             immediate: true,
             handler(v){
-                if(["night", "day"].indexOf(v) === -1){
-                    return;
+                if(["night", "day"].indexOf(v) !== -1){
+                    sessionStorage.setItem("theme", v);
                 }
+                v = sessionStorage.getItem("theme");
                 this.theme = v;
-                sessionStorage.setItem("theme", v);
                 $("body")[v === "night" ? "addClass" : "removeClass"]("nightcolor");
             }
         }
