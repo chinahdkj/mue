@@ -1,6 +1,6 @@
 <template>
     <mue-form>
-        <mue-form-item-group title="基本信息" sub-title="自动保存">
+        <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
             <div slot="help">11111</div>
 
             <mue-form-item label="客户名称">
@@ -17,6 +17,11 @@
             <mue-form-item label="安装时间">
                 <mue-date-picker placeholder="请选择"></mue-date-picker>
             </mue-form-item>
+
+            <mue-form-item label="站点图片">
+                <mue-img-upload multiple v-model="model.station.pics"></mue-img-upload>
+            </mue-form-item>
+
             <mue-form-item label="备注">
                 <mue-textarea placeholder="请选择"></mue-textarea>
             </mue-form-item>
@@ -29,11 +34,18 @@
 </template>
 
 <script>
-    import MueFormItem from '../../../packages/Form/src/form-item';
+    import MueImgUpload from '../../../packages/Form/img-upload/index';
+
     export default {
-        components: {MueFormItem},
+        components: {MueImgUpload},
         data(){
-            return {};
+            return {
+                model: {
+                    station: {
+                        pics: []
+                    }
+                }
+            };
         },
         methods: {}
     }

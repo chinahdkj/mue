@@ -29,7 +29,7 @@
         props: {
             title: {type: String, default: ""},
             subTitle: {type: String, default: ""},
-            icon: {type: String, default: "van-icon van-icon-question"},
+            icon: {type: String, default: "iconfont icon-icon_wenhao"},
             labelWidth: {type: Number, default: 90}
         },
         provide(){

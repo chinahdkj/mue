@@ -5,8 +5,9 @@ import FormItem from './src/form-item';
 import Input from './input/index';
 import Select from './select/index';
 import Textarea from './textarea/index';
+import ImgUpload from './img-upload/index'
 
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea];
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload];
 
 cmps.forEach((cmp) => {
     cmp.install = (Vue) => {

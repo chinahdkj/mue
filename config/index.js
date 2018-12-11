@@ -3,6 +3,25 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path');
+const server = "http://192.168.100.150:47006"; // 宁波测试
+const proxy = {
+    '/list': {
+        target: "http://192.168.100.150:47006",
+        pathRewrite: {
+            '^/list': '/'
+        },
+        changeOrigin: true
+    }
+};
+
+const mods = ["/upload"];
+for(let i = 0; i < mods.length; i++){
+    let mod = mods[i];
+    proxy[mod] = {
+        target: server,
+        changeOrigin: true//是否跨域
+    };
+}
 
 module.exports = {
     dev: {
@@ -10,7 +29,7 @@ module.exports = {
         // Paths
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        proxyTable: {},
+        proxyTable: proxy,
 
         // Various Dev Server settings
         host: 'localhost', // can be overwritten by process.env.HOST

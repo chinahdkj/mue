@@ -1,0 +1,44 @@
+@import "../var.less";
+
+.van-dialog(@theme: light) {
+    @background: %("%s-background-pop", @theme);
+    @color: %("%s-common", @theme);
+    @grey: %("%s-grey", @theme);
+
+    .van-dialog {
+        background: @@background;
+        width: 300px;
+        border-radius: 6px;
+
+        .van-dialog__header {
+            font-size: 18px;
+            padding-top: 27px;
+        }
+
+        .van-dialog__content {
+            .van-dialog__message {
+                font-size: @font-size;
+                text-align: center;
+                line-height: 26px;
+                padding: 27px;
+                color: @@color;
+
+                &--has-title {
+                    color: @@grey;
+                }
+            }
+        }
+
+        .van-dialog__footer--buttons {
+            .van-button {
+                background: @@background;
+                border: 0;
+                color: @@color;
+
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
+}

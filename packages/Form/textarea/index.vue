@@ -14,7 +14,7 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
-            rows: {type: Number, default: "2"}
+            rows: {type: [Number, String], default: 2}
         },
         data(){
             return {

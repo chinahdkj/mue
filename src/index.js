@@ -14,10 +14,12 @@ import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
+
 import Vant from 'vant';
 
 import axios from 'axios'
 import http from './lib/http';
+import {InitHttp} from './lib/http';
 import native from './lib/native';
 import comm from './lib/common';
 
@@ -37,6 +39,7 @@ const install = function(Vue){
 
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;
+    InitHttp();
     Vue.prototype.$http = http;
     Vue.prototype.$native = native;
     Vue.prototype.$comm = comm;

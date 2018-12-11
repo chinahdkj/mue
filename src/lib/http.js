@@ -17,33 +17,34 @@ if(host){
     sessionStorage.setItem('host', host);
 }
 
-axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
-axios.defaults.headers.common['APP'] = sessionStorage.getItem('authorapp');
+export function InitHttp(){
+    axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
+    axios.defaults.headers.common['APP'] = sessionStorage.getItem('authorapp');
 
-axios.interceptors.request.use(config => {
-    return config;
-}, error => {
-    return Promise.error(error);
-});
+    axios.interceptors.request.use(config => {
+        return config;
+    }, error => {
+        return Promise.error(error);
+    });
 
-axios.interceptors.response.use(response => {
-    CloseLoading();
-    if(response.status === 200){
-        if(response.data.Code === 0){
-            return Promise.resolve(response.data)
+    axios.interceptors.response.use(response => {
+        CloseLoading();
+        if(response.status === 200){
+            if(response.data.Code === 0){
+                return Promise.resolve(response.data)
+            }
+            else{
+                return Promise.reject(response.data)
+            }
         }
         else{
-            return Promise.reject(response.data)
+            return Promise.reject(response)
         }
-    }
-    else{
-        return Promise.reject(response)
-    }
-}, e => {
-    CloseLoading();
-    return Promise.reject(e);
-});
-
+    }, e => {
+        CloseLoading();
+        return Promise.reject(e);
+    });
+}
 
 export default {
     post(url, data){

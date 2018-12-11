@@ -16,7 +16,7 @@
         padding: 0 4px;
     }
 
-    [class*=van-hairline]::after {
+    [class*=van-hairline]:after {
         top: 0;
         left: 0;
         right: 0;
@@ -24,7 +24,8 @@
         transform: none;
         border-color: @@border-color;
     }
-    .van-popup [class*=van-hairline]::after {
+    .van-popup [class*=van-hairline]:after,
+    .van-dialog [class*=van-hairline]:after {
         border-color: @@border-color-pop;
     }
 }
