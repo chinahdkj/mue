@@ -8,7 +8,7 @@
 
                     <div class="mue-load-more-top" v-if="$listeners.refresh">
                     <span class="mue-load-more-text">
-                        <i v-if="topStatus !== 'loading'" class="iconfont icon-jiantou-down"
+                        <i v-if="topStatus !== 'loading'" class="iconfont icon-xiangxiajiantou"
                            aria-hidden="true" :class="{'is-drop': topStatus === 'drop'}"></i>
                         <template v-if="topStatus === 'pull'">
                             {{topPullText}}
@@ -25,10 +25,13 @@
                     <slot></slot>
 
                     <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
-                        <span v-if="allLoaded" class="mue-load-more-text">没有更多了</span>
+                        <span v-if="allLoaded" class="mue-load-more-text">
+                            {{moreThenView ? "没有更多了" : ""}}
+                        </span>
                         <span v-else class="mue-load-more-text">
-                        <i v-if="bottomStatus !== 'loading'" class="iconfont icon-jiantou-up"
-                           aria-hidden="true" :class="{'is-drop': bottomStatus === 'drop'}"></i>
+                        <i v-if="bottomStatus !== 'loading'" aria-hidden="true"
+                           class="iconfont icon-xiangxiajiantou-copy"
+                           :class="{'is-drop': bottomStatus === 'drop'}"></i>
                         <template v-if="bottomStatus === 'pull'">
                             {{bottomPullText}}
                         </template>
@@ -115,7 +118,8 @@
                 $box: null,
 
                 scrolling: false,
-                scrollTimer: null
+                scrollTimer: null,
+                moreThenView: false
             };
         },
         computed: {
@@ -171,6 +175,7 @@
 
             },
             fillContainer(){
+                this.moreThenView = this.$box.clientHeight <= this.$content.clientHeight;
                 if(!this.autoFill || this.allLoaded){
                     return;
                 }

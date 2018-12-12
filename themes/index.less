@@ -19,14 +19,23 @@ html, body, #app {
     -khtml-user-select: none; /*早期浏览器*/
     -moz-user-select: none; /*火狐*/
     -ms-user-select: none; /*IE10*/
+    user-select: none;
 
     //隐藏滚动条
-    user-select: none;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
+    &::-webkit-scrollbar
+    {
         display: none;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-track
+    {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb
+    {
+        background: transparent;
     }
 }
 
