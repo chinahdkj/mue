@@ -47,29 +47,31 @@ export function InitHttp(){
 }
 
 export default {
-    post(url, data){
+    post(url, data, failed = false){
         return axios({
             method: 'post',
-            baseURL: process.env.NODE_ENV === 'production' ? host : '/list',
+            baseURL: process.env.NODE_ENV === 'production'
+                     ? sessionStorage.getItem('host') : '/list',
             url,
             data: data,
             timeout: 30000
         }).then(res => res.Response).catch(e => {
             console.log(e);
-            Vue.prototype.$toast("请求出错，请稍候再试!");
+            !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
             return Promise.reject(e);
         })
     },
-    get(url, params){
+    get(url, params, failed = false){
         return axios({
             method: 'get',
-            baseURL: process.env.NODE_ENV === 'production' ? host : '/list',
+            baseURL: process.env.NODE_ENV === 'production'
+                     ? sessionStorage.getItem('host') : '/list',
             url,
             params, // get 请求时带的参数
             timeout: 30000
         }).then(res => res.Response).catch(e => {
             console.log(e);
-            Vue.prototype.$toast("请求出错，请稍候再试!");
+            !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
             return Promise.reject(e);
         })
     }

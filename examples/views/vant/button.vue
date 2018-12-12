@@ -2,6 +2,7 @@
     <div>
         <mue-panel title="默认">
             <van-button size="large">默认按钮</van-button>
+            <van-button size="large" square>方形按钮</van-button>
             <van-button size="large" type="primary">默认按钮</van-button>
         </mue-panel>
 
