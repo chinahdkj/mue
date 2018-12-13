@@ -15,13 +15,16 @@ import LoadMore from '../packages/LoadMore/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 
-import Vant from 'vant';
-
+import Vant, {Locale} from 'vant';
+import zhCN from 'vant/lib/locale/lang/zh-CN';
 import axios from 'axios'
-import http from './lib/http';
-import {InitHttp} from './lib/http';
+import http, {InitHttp} from './lib/http';
 import native from './lib/native';
 import comm from './lib/common';
+
+import {objectGet} from './utils/object';
+
+Locale.use('zh-CN', zhCN);
 
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
@@ -43,6 +46,11 @@ const install = function(Vue){
     Vue.prototype.$http = http;
     Vue.prototype.$native = native;
     Vue.prototype.$comm = comm;
+
+    // 过滤器
+    Vue.filter('OBJECT_GET', (object, expression) => {
+        return objectGet(object, expression)
+    });
 };
 
 if(typeof window !== 'undefined' && window.Vue){

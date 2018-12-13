@@ -7,9 +7,9 @@
 
 
         <mue-panel hairline="normal" title="input">
-            <mue-input style="margin: 10px;" type="text" v-model.number="input.value"
+            <mue-input style="margin: 10px;" type="text" v-model="input.value"
                        placeholder="请输入"/>
-            <mue-input style="margin: 10px;" type="password" v-model.number="input.value"
+            <mue-input style="margin: 10px;" type="password" v-model="input.value"
                        placeholder="请输入" icon="iconfont icon-tongxunlu" @icon-click="pwdIconClick"/>
             <mue-input style="margin: 10px;" type="number" v-model.number="input.number"
                        placeholder="请输入数字"/>
