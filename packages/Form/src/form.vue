@@ -3,8 +3,8 @@
         <slot></slot>
 
         <div class="mue-form-buttons">
-            <van-button size="large" plain @click="cancel">取消</van-button>
-            <van-button size="large" type="primary" @click="submit">提交</van-button>
+            <van-button size="large" plain @click.prevent="cancel">取消</van-button>
+            <van-button size="large" type="primary" @click.prevent="confirm">提交</van-button>
         </div>
     </form>
 </template>
@@ -46,7 +46,7 @@
                 this.ClearValid();
                 this.$emit('cancel');
             },
-            submit(){
+            confirm(){
                 this.Validate(({result, messages, inputs}) => {
                     if(result){
                         this.$emit("confirm", this.value);
