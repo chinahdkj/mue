@@ -10,12 +10,12 @@
 
         <mue-form-item-group title="站点信息">
 
-            <mue-form-item label="片区名称" required>
+            <mue-form-item label="片区名称">
                 <mue-select placeholder="请选择"></mue-select>
             </mue-form-item>
 
-            <mue-form-item label="安装时间">
-                <mue-date-picker placeholder="请选择"></mue-date-picker>
+            <mue-form-item label="安装时间" required field="date">
+                <mue-date-picker placeholder="请选择" v-model="model.date"></mue-date-picker>
             </mue-form-item>
 
             <mue-form-item label="站点图片" field="station.pics">
@@ -30,6 +30,8 @@
         <mue-form-item label="站点类型">
             <mue-select placeholder="请选择"></mue-select>
         </mue-form-item>
+
+        <a href="https://github.com/yiminghe/async-validator" target="_blank">验证规则定义参考</a>
     </mue-form>
 </template>
 
