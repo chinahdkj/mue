@@ -47,19 +47,21 @@
                 this.$emit('cancel');
             },
             confirm(){
-                this.Validate(({result, messages, inputs}) => {
-                    if(result){
-                        this.$emit("confirm", this.value);
-                        return;
-                    }
-                    inputs.forEach((ipt) => {
-                        ipt.isError = true;
-                    });
-                    this.$dialog.alert({
-                        className: "mue-form-valid-dialog",
-                        message: `<div class="valid-errors">${messages.join("<br/>")}</div>`
+                let promise = new Promise((resolve, reject) => {
+                    this.Validate().then(()=>{
+                        resolve(this.value);
+                    }).catch(({messages, inputs})=>{
+                        inputs.forEach((ipt) => {
+                            ipt.isError = true;
+                        });
+                        this.$dialog.alert({
+                            className: "mue-form-valid-dialog",
+                            message: `<div class="valid-errors">${messages.join("<br/>")}</div>`
+                        });
+                        reject({messages, inputs});
                     });
                 });
+                this.$emit("confirm", promise);
             },
 
             ClearValid(){
@@ -95,8 +97,8 @@
                 }
                 let promise;
                 // if no callback, return promise
-                if(typeof callback !== 'function' && window.Promise){
-                    promise = new window.Promise((resolve, reject) => {
+                if(typeof callback !== 'function' && Promise){
+                    promise = new Promise((resolve, reject) => {
                         callback = (valid) => {
                             valid.result ? resolve(valid) : reject(valid);
                         };

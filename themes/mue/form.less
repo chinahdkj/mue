@@ -236,6 +236,10 @@
                 z-index: 10;
                 transform: translateY(-50%);
                 padding-left: 5px;
+
+                &.is-error {
+                    color: @red;
+                }
             }
 
             &.is-required:before {
@@ -253,18 +257,18 @@
                 left: 4px;
             }
 
-            .error-icon {
-                font-size: 16px;
-                color: @red;
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                line-height: 20px;
-                text-align: center;
-                top: 50%;
-                transform: translateY(-10px);
-                right: 10px;
-            }
+            //.error-icon {
+            //    font-size: 16px;
+            //    color: @red;
+            //    position: absolute;
+            //    width: 20px;
+            //    height: 20px;
+            //    line-height: 20px;
+            //    text-align: center;
+            //    top: 50%;
+            //    transform: translateY(-10px);
+            //    right: 10px;
+            //}
         }
 
         .mue-form-item-content {

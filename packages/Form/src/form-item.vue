@@ -1,11 +1,11 @@
 <template>
     <div class="mue-form-item" :class="{'is-required': isRequired}">
-        <label>{{label}}</label>
+        <label :class="{'is-error': isError}">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
              :style="[{'padding-left': paddingLeft}, contentStyle]">
             <slot></slot>
         </div>
-        <i v-if="isError" class="error-icon fa fa-exclamation-circle" aria-hidden="true"></i>
+        <!--<i v-if="isError" class="error-icon fa fa-exclamation-circle" aria-hidden="true"></i>-->
     </div>
 </template>
 
@@ -49,7 +49,7 @@
                 return `${w}px`;
             },
             isRequired(){
-                return this.required || this.rules.filter((r)=>{
+                return this.required || this.rules.filter((r) => {
                     return !!r.required;
                 }).length > 0;
             }

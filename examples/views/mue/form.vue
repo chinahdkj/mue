@@ -54,9 +54,12 @@
             onCancel(){
                 alert("点击取消");
             },
-            onConfirm(v){
-                alert("表单验证成功");
-                console.info(v, this.model);
+            onConfirm(promise){
+                promise.then((v) => {
+                    alert("表单验证成功")
+                }).catch(() => {
+
+                });
             }
         }
     }
