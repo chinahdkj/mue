@@ -97,10 +97,8 @@
 
 <script>
 
-    import MueFormItem from '../../../packages/Form/src/form-item';
-
     export default {
-        components: {MueFormItem},
+        components: {},
         data(){
             return {
                 confirming: false,
