@@ -9,11 +9,10 @@
 </template>
 
 <script>
-    import emitter from "../../../src/mixins/emitter";
 
     export default {
         name: "MueTab",
-        mixins: [emitter],
+        inject: ["TABS"],
         props: {
             title: {type: String, default: ""},
             icon: {type: String, default: ""},
@@ -22,42 +21,28 @@
         components: {},
         data(){
             return {
-                parent: null,
                 isActive: false
             };
         },
         watch: {
             isMore(){
-                this.parent.toggleTab(this);
+                this.TABS.toggleTab(this);
             },
-            "parent.current": {
+            "TABS.current": {
                 immediate: true,
                 handler(v){
-                    if(!this.parent){
-                        this.isActive = false;
-                        return;
-                    }
-                    let x = this.parent.tabs.indexOf(this);
+                    let x = this.TABS.tabs.indexOf(this);
                     this.isActive = x === v;
                 }
             }
         },
         methods: {},
-        created(){
-            this.parent = this.findParent("mue-tabs");
-        },
         mounted(){
-            if(!this.parent){
-                return;
-            }
-            this.parent.addTab(this);
+            this.TABS.addTab(this);
         },
 
         beforeDestroy(){
-            if(!this.parent){
-                return;
-            }
-            this.parent.removeTab(this);
+            this.TABS.removeTab(this);
         }
     }
 </script>

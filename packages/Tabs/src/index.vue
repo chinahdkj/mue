@@ -21,7 +21,11 @@
 <script>
     export default {
         name: "MueTabs",
-        componentName: "MueTabs",
+        provide(){
+            return {
+                TABS: this
+            };
+        },
         props: {
             value: {type: Number, default: 0},
             icon: {type: String, default: "iconfont icon-gengduo1"},
