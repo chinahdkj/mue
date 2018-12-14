@@ -116,8 +116,12 @@
                         let msgs = [], inputs = [];
                         errors.forEach(({field, message}) => {
                             let input = vinputs[field];
-                            msgs.push(message.replace(`*#{${field}}#*`,
-                                `<b class="valid-error">${input.label}</b>`));
+
+                            let msg = message.indexOf(`*#{${field}}#*`) > -1?
+                                      message.replace(`*#{${field}}#*`,
+                                          `<b class="valid-error">${input.label}</b> `):
+                                      `<b class="valid-error">${input.label}</b> ${message}`;
+                            msgs.push(msg);
                             inputs.push(input);
                         });
 

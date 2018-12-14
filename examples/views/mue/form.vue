@@ -1,64 +1,156 @@
 <template>
-    <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm">
-        <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
-            <div slot="help">11111</div>
+    <van-tabs v-loading="confirming">
+        <van-tab title="demo">
+            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm">
+                <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
+                    <div slot="help">11111</div>
 
-            <mue-form-item label="客户名称" required field="name" :rules="[{min: 3}]">
-                <mue-input placeholder="请输入" v-model.trim="model.name"></mue-input>
-            </mue-form-item>
-        </mue-form-item-group>
+                    <mue-form-item label="客户名称" required field="name" :rules="[{min: 3}]">
+                        <mue-input placeholder="请输入" v-model.trim="model.name"></mue-input>
+                    </mue-form-item>
+                </mue-form-item-group>
 
-        <mue-form-item-group title="站点信息">
+                <mue-form-item-group title="站点信息">
 
-            <mue-form-item label="片区名称">
-                <mue-select placeholder="请选择"></mue-select>
-            </mue-form-item>
+                    <mue-form-item label="片区名称" field="div">
+                        <mue-select placeholder="请选择"></mue-select>
+                    </mue-form-item>
 
-            <mue-form-item label="安装时间" required field="date">
-                <mue-date-picker placeholder="请选择" v-model="model.date"></mue-date-picker>
-            </mue-form-item>
+                    <mue-form-item label="安装时间" required field="date">
+                        <mue-date-picker placeholder="请选择" v-model="model.date"></mue-date-picker>
+                    </mue-form-item>
 
-            <mue-form-item label="站点图片" field="station.pics">
-                <mue-img-upload multiple v-model="model.station.pics"></mue-img-upload>
-            </mue-form-item>
+                    <mue-form-item label="站点图片" field="station.pics">
+                        <mue-img-upload multiple v-model="model.station.pics"></mue-img-upload>
+                    </mue-form-item>
 
-            <mue-form-item label="备注">
-                <mue-textarea placeholder="请输入备注"></mue-textarea>
-            </mue-form-item>
-        </mue-form-item-group>
+                    <mue-form-item label="备注" field="remark">
+                        <mue-textarea placeholder="请输入备注"></mue-textarea>
+                    </mue-form-item>
+                </mue-form-item-group>
 
-        <mue-form-item label="站点类型">
-            <mue-select placeholder="请选择"></mue-select>
-        </mue-form-item>
+                <mue-form-item label="数字验证" field="valid.number"
+                               :rules="[{type:'number', min: 10, max: 80}]">
+                    <mue-input type="number" v-model.number="model.valid.number"/>
+                </mue-form-item>
 
-        <a href="https://github.com/yiminghe/async-validator" target="_blank">验证规则定义参考</a>
-    </mue-form>
+                <mue-form-item label="自定义验证" field="valid.custom"
+                               :rules="[{validator: rules.custom}]">
+                    <mue-input type="text" v-model="model.valid.custom"/>
+                </mue-form-item>
+
+                <mue-form-item label="异步验证" field="valid.sync"
+                               :rules="[{validator: rules.sync}]">
+                    <mue-input type="text" v-model="model.valid.sync"/>
+                </mue-form-item>
+
+            </mue-form>
+        </van-tab>
+
+        <van-tab title="表单">
+            <b>mue-form</b>
+            <mue-panel title="props">
+                labelWidth: 左侧label宽度 Number <br/>
+                value: 表单数据对象
+            </mue-panel>
+
+            <mue-panel title="event" hairline="normal">
+                confirm: 点击确认按钮事件 参数promise
+                cancel: 点击取消按钮事件
+            </mue-panel>
+        </van-tab>
+
+        <van-tab title="输入项组">
+            <b>mue-form-item-group</b>
+            <mue-panel title="props">
+                labelWidth: 左侧label宽度(覆盖form设置) Number <br/>
+                title: 组标题 String,
+                subTitle: 组副标题 右侧 String,
+                icon: 右侧按钮图标 String default: "iconfont icon-icon_wenhao"
+            </mue-panel>
+
+            <mue-panel title="slot" hairline="normal">
+                help: 右侧图标点击弹出内容
+            </mue-panel>
+
+            <mue-panel title="event" hairline="normal">
+                icon-click: 右侧图标点击事件（有此事件回调，将不触发help弹出）
+            </mue-panel>
+        </van-tab>
+
+        <van-tab title="输入项">
+            <b>mue-form-item</b>
+            <mue-panel title="props">
+                labelWidth: 左侧label宽度(覆盖form、group设置) Number <br/>
+                label: 左侧label String,
+                field: 表单字段 String,
+                required: 必填项 Boolean,
+                rules: 验证规则 Array
+                contentStyle: 输入内容区域样式
+                contentClass: 输入内容区域样式类
+            </mue-panel>
+            <br/>
+            <a href="https://github.com/yiminghe/async-validator" target="_blank">验证规则定义参考</a>
+        </van-tab>
+    </van-tabs>
 </template>
 
 <script>
 
+    import MueFormItem from '../../../packages/Form/src/form-item';
 
     export default {
-        components: {},
+        components: {MueFormItem},
         data(){
             return {
+                confirming: false,
+
+                rules: {
+                    custom(rule, value, callback){
+                        if(value === "xx"){
+                            callback(new Error("值不能为xx"));
+                        }
+                        callback();
+                    },
+                    sync(rule, value, callback){
+                        setTimeout(() => {
+                            if(value === "qq"){
+                                callback(new Error("值不能为qq"));
+                            }
+                            callback();
+                        }, 1000);
+                    }
+                },
+
                 model: {
                     name: "",
                     station: {
                         pics: []
+                    },
+                    valid: {
+                        number: 0,
+                        custom: "xx",
+                        sync: "qq"
                     }
                 }
             };
         },
         methods: {
             onCancel(){
-                alert("点击取消");
+                this.$toast("点击取消");
             },
             onConfirm(promise){
+                this.confirming = true;
                 promise.then((v) => {
-                    alert("表单验证成功")
-                }).catch(() => {
+                    // 提交表单
+                    setTimeout(() => {
+                        this.confirming = false;
+                        this.$toast("点击确定，提交表单");
+                        console.info(v);
+                    }, 1000);
 
+                }).catch(() => {
+                    this.confirming = false;
                 });
             }
         }
