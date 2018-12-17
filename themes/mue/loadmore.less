@@ -70,10 +70,10 @@
 
         @keyframes pager-rotate {
             from {
-                transform: translateZ(-20px) rotateX(-90deg);
+                transform: rotateX(-90deg);
             }
             to {
-                transform: translateZ(-20px) rotateX(0deg);
+                transform: rotateX(0deg);
             }
         }
 
@@ -85,12 +85,12 @@
             width: 40px;
             height: 40px;
             transform-style: preserve-3d;
-            transform: translateZ(-20px) rotateX(-90deg);
+            transform: rotateX(-90deg);
             transition-duration: 0.5s;
             z-index: 80;
 
             &.is-scrolling {
-                transform: translateZ(-20px) rotateX(0deg);
+                transform: rotateX(0deg);
             }
 
             > a {
@@ -105,7 +105,7 @@
             }
 
             > a.__pager {
-                transform: translateZ(20px);
+                //transform: translateZ(20px);
 
                 &:before {
                     content: "";
@@ -147,7 +147,7 @@
             }
 
             > a.__backtop {
-                transform: translateY(-20px) rotateX(90deg);
+                transform: translate3d(0, -20px, -20px) rotateX(90deg);
                 vertical-align: middle;
                 text-align: center;
                 line-height: 40px;
