@@ -84,77 +84,82 @@
             bottom: 20px;
             width: 40px;
             height: 40px;
-            transform-style: preserve-3d;
-            transform: translateZ(-20px) rotateX(-90deg);
-            transition-duration: 0.5s;
+
             z-index: 80;
-
-            &.is-scrolling {
-                transform: translateZ(-20px) rotateX(0deg);
-            }
-
-            > a {
-                display: block;
+            > .__button{
+                transform-style: preserve-3d;
+                transform: translateZ(-20px) rotateX(-90deg);
+                transition-duration: 0.5s;
                 width: 100%;
                 height: 100%;
-                background: fade(@@background-pop, 30%);
-                box-sizing: border-box;
-                border: 2px solid @@border-color-pop;
-                position: absolute;
-                border-radius: 50%;
-            }
 
-            > a.__pager {
-                transform: translateZ(20px);
+                &.is-scrolling {
+                    transform: translateZ(-20px) rotateX(0deg);
+                }
 
-                &:before {
-                    content: "";
+                > a {
                     display: block;
+                    width: 100%;
+                    height: 100%;
+                    background: fade(@@background-pop, 30%);
+                    box-sizing: border-box;
+                    border: 2px solid @@border-color-pop;
                     position: absolute;
-                    height: 2px;
-                    width: 28px;
-                    left: 4px;
-                    background: @@border-color-pop;
-                    top: 18px;
+                    border-radius: 50%;
                 }
 
-                > span {
-                    display: block;
-                    float: left;
-                    width: 100%;
-                    text-align: center;
-                    height: 14px;
-                    line-height: 14px;
-                    color: @@grey;
-                    font-size: 12px;
-                }
+                > a.__pager {
+                    transform: translateZ(20px);
 
-                > ul {
-                    height: 20px;
-                    overflow: hidden;
-                    color: @@color;
-                    font-size: 14px;
-                    line-height: 20px;
-                    float: left;
-                    width: 100%;
+                    &:before {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        height: 2px;
+                        width: 28px;
+                        left: 4px;
+                        background: @@border-color-pop;
+                        top: 18px;
+                    }
 
-                    > li {
-                        text-align: center;
+                    > span {
+                        display: block;
                         float: left;
                         width: 100%;
+                        text-align: center;
+                        height: 14px;
+                        line-height: 14px;
+                        color: @@grey;
+                        font-size: 12px;
+                    }
+
+                    > ul {
+                        height: 20px;
+                        overflow: hidden;
+                        color: @@color;
+                        font-size: 14px;
+                        line-height: 20px;
+                        float: left;
+                        width: 100%;
+
+                        > li {
+                            text-align: center;
+                            float: left;
+                            width: 100%;
+                        }
                     }
                 }
-            }
 
-            > a.__backtop {
-                transform: translateY(-20px) rotateX(90deg);
-                vertical-align: middle;
-                text-align: center;
-                line-height: 40px;
+                > a.__backtop {
+                    transform: translateY(-20px) rotateX(90deg);
+                    vertical-align: middle;
+                    text-align: center;
+                    line-height: 40px;
 
-                > i {
-                    font-size: 24px;
-                    color: @@color;
+                    > i {
+                        font-size: 24px;
+                        color: @@color;
+                    }
                 }
             }
         }

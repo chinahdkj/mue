@@ -50,19 +50,20 @@
 
 
         <transition name="van-slide-up">
-            <div class="mue-load-more-pagination" v-show="pageNo > 1"
-                 :class="{'is-scrolling': scrolling}">
-                <a class="__backtop" @click="backTop">
-                    <i class="iconfont icon-zhiding"></i>
-                </a>
-                <a class="__pager" @click="backTop">
-                    <ul ref="pager">
-                        <li v-for="i in pageTotal" :key="i">
-                            {{i}}
-                        </li>
-                    </ul>
-                    <span>{{pageTotal}}</span>
-                </a>
+            <div class="mue-load-more-pagination" v-show="pageNo > 1" @click="backTop">
+                <div class="__button" :class="{'is-scrolling': scrolling}">
+                    <a class="__backtop">
+                        <i class="iconfont icon-zhiding"></i>
+                    </a>
+                    <a class="__pager">
+                        <ul ref="pager">
+                            <li v-for="i in pageTotal" :key="i">
+                                {{i}}
+                            </li>
+                        </ul>
+                        <span>{{pageTotal}}</span>
+                    </a>
+                </div>
             </div>
         </transition>
     </div>
