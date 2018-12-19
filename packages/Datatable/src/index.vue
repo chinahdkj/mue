@@ -390,7 +390,7 @@
             },
             syncScrollX(event){
                 let target = event.target;
-                if(this.$refs.main_table.scrollLeft === target.scrollLeft){
+                if(this.$refs.main_table && this.$refs.main_table.scrollLeft === target.scrollLeft){
                     return;
                 }
                 this.ScrollLeft(target.scrollLeft, 0);
