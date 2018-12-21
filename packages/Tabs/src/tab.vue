@@ -1,5 +1,5 @@
 <template>
-    <van-tab>
+    <van-tab :disabled="disabled">
         <a slot="title" class="mue-tab">
             <i class="mue-tab-icon" v-if="icon" :class="icon"></i>
             <span class="mue-tab-title">{{title}}</span>
@@ -16,7 +16,8 @@
         props: {
             title: {type: String, default: ""},
             icon: {type: String, default: ""},
-            isMore: {type: Boolean, default: false}
+            isMore: {type: Boolean, default: false},
+            disabled: {type: Boolean, default: false}
         },
         components: {},
         data(){

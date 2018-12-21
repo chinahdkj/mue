@@ -7,6 +7,7 @@
     @grey: %("%s-tabs-color", @theme);
     @split: %("%s-border-color-bar", @theme);
     @color: %("%s-common", @theme);
+    @color-disabled: %("%s-button-disable-color", @theme);
 
     .van-tabs {
         background: @@background;
@@ -52,7 +53,6 @@
                 font-size: @font-size;
                 color: @@grey;
 
-
                 &:not(:last-child) {
                     &:after {
                         content: "";
@@ -74,6 +74,10 @@
                 &.van-tab--active {
                     color: @@primary;
                 }
+
+                &.van-tab--disabled {
+                    color: @@color-disabled;
+                }
             }
         }
 
@@ -89,6 +93,10 @@
                 &.van-tab--active {
                     color: @white;
                     background-color: @@primary;
+                }
+
+                &.van-tab--disabled {
+                    color: @@color-disabled;
                 }
             }
         }

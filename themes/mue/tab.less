@@ -8,6 +8,7 @@
     @color-bar: %("%s-tabs-color", @theme);
     @pop-split: %("%s-border-color-pop", @theme);
     @border-color: %("%s-border-color-bar", @theme);
+    @color-disabled: %("%s-button-disable-color", @theme);
 
     .mue-tabs {
         position: relative;
@@ -140,6 +141,13 @@
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                }
+
+                &.is-disabled{
+                    color: @@color-disabled;
+                    > .mue-tab-icon{
+                        color: @@color-disabled;
+                    }
                 }
 
                 &.is-active {
