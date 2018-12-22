@@ -1,15 +1,15 @@
 <template>
     <div class="mue-datatable">
         <div class="mue-datatable-header" v-if="headerVisibel" :style="{height: headerHeight}">
-            <div class="mue-datatable-fixed" v-if="fcolFields.length > 0"
+            <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                  :style="{width:fixedWidth + 'px' }">
                 <table class="mue-datatable__inner-table"
-                       :style="{width: (fixedWidth + scrollWidth) + 'px'}">
-                    <col-group :columns="[...fcolFields, ...colFields]"/>
+                       :style="{width: tableWidth + 'px'}">
+                    <col-group :columns="colFields"/>
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" :rowspan="c.rowspan">
-                            <a :style="{'text-align': c.align || 'center'}">
+                            <a v-if="c.fixed" :style="{'text-align': c.align || 'center'}">
                                 <span :class="sortCls(c)" @click="onChangeSort(c)">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
@@ -26,16 +26,14 @@
                 </table>
             </div>
 
-            <div ref="top_table" class="mue-datatable-center" @scroll="syncScrollX($event)"
-                 :style="{width: (width - fixedWidth) + 'px'}">
-                <table class="mue-datatable__inner-table"
-                       :style="{width: scrollWidth + 'px'}">
+            <div ref="top_table" class="mue-datatable-center" @scroll="syncScrollX($event)">
+                <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
                     <col-group :columns="colFields"/>
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
-                        <th v-for="(c, i) in r" v-if="!c.fixed" :key="i" :colspan="c.colspan"
+                        <th v-for="(c, i) in r" :key="i" :colspan="c.colspan"
                             :rowspan="c.rowspan">
-                            <a :style="{'text-align': c.align || 'center'}">
+                            <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}">
                                 <span :class="sortCls(c)" @click="onChangeSort(c)">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
@@ -69,52 +67,79 @@
                 </div>
 
                 <div v-else class="mue-datatable-scroller">
-                    <div ref="left_table" class="mue-datatable-fixed" v-if="fcolFields.length > 0"
+                    <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                          :style="{width: fixedWidth + 'px' }">
                         <table class="mue-datatable__inner-table"
-                               :style="{width: (fixedWidth + scrollWidth) + 'px'}">
-                            <col-group :columns="[...fcolFields, ...colFields]"/>
+                               :style="{width: tableWidth + 'px'}">
+                            <col-group :columns="colFields"/>
                             <tbody>
                             <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
                                 :class="rowCls(d, i)" @click="onRowClick(d, i)">
-                                <slot name="row" :cols="[...fcolFields, ...colFields]" :row="d"
-                                      :no="i">
-                                    <td v-for="(c, j) in fcolFields" :key="j"
-                                        :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
-                                        <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
-                                              :row="d" :col="c" :value="getValue(d, c.field)"
-                                              :no="i">
-                                        </slot>
-                                        <template v-else>
-                                            {{getValue(d, c.field)}}
-                                        </template>
-                                    </td>
+
+                                <slot name="row" :cols="colFields" :row="d" :no="i">
+
+                                    <template v-for="(c, j) in colFields">
+                                        <td v-if="c.fixed" :key="j"
+                                            :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
+
+                                            <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
+                                                  :name="c.tmpl"
+                                                  :row="d" :col="c" :value="getValue(d, c.field)"
+                                                  :no="i">
+                                            </slot>
+                                            <template v-else>
+                                                {{getValue(d, c.field)}}
+                                            </template>
+
+                                        </td>
+
+                                        <td v-else :key="j"
+                                            :style="{'line-height': rowHeight + 'px'}">
+                                            &nbsp;
+                                        </td>
+
+                                    </template>
+
                                 </slot>
                             </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div ref="main_table" class="mue-datatable-center" @scroll="onScroll($event)"
-                         :style="{width: (width - fixedWidth) + 'px'}">
+                    <div ref="main_table" class="mue-datatable-center" @scroll="onScroll">
                         <table class="mue-datatable__inner-table"
-                               :style="{width: scrollWidth + 'px'}">
+                               :style="{width: tableWidth + 'px'}">
                             <col-group :columns="colFields"/>
                             <tbody>
                             <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
                                 :class="rowCls(d, i)" @click="onRowClick(d, i)">
+
                                 <slot name="row" :cols="colFields" :row="d" :no="i">
-                                    <td v-for="(c, j) in colFields" :key="j"
-                                        :style="{'text-align': c.align || 'center', height: rowHeight + 'px', 'line-height': rowHeight + 'px'}">
-                                        <slot v-if="c.tmpl && $scopedSlots[c.tmpl]" :name="c.tmpl"
-                                              :row="d" :col="c" :value="getValue(d, c.field)"
-                                              :no="i">
-                                        </slot>
-                                        <template v-else>
-                                            {{getValue(d, c.field)}}
-                                        </template>
-                                    </td>
+
+                                    <template v-for="(c, j) in colFields">
+                                        <td v-if="!c.fixed" :key="j"
+                                            :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
+
+                                            <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
+                                                  :name="c.tmpl"
+                                                  :row="d" :col="c" :value="getValue(d, c.field)"
+                                                  :no="i">
+                                            </slot>
+                                            <template v-else>
+                                                {{getValue(d, c.field)}}
+                                            </template>
+
+                                        </td>
+
+                                        <td v-else :key="j"
+                                            :style="{'line-height': rowHeight + 'px'}">
+                                            &nbsp;
+                                        </td>
+
+                                    </template>
+
                                 </slot>
+
                             </tr>
                             </tbody>
                         </table>
@@ -156,19 +181,17 @@
         },
         data(){
             return {
-                width: 0, //表格宽度
+                tableWidth: 0, //表格宽度
                 fixedWidth: 0, // 固定列宽度
-                scrollWidth: 0, // 滚动列宽度
                 cols: [], // 列渲染结构，二维数组
-                fcolFields: [], // 锁定列属性
-                colFields: [], // 滚动列属性
+                colFields: [], // 列属性
                 headerRows: 0, // 表头行数
                 pageNo: 0
             };
         },
         computed: {
             headerVisibel(){
-                return this.header && (this.fcolFields.length + this.colFields.length) > 0;
+                return this.header && this.colFields.length > 0;
             },
             headerHeight(){
                 return (this.headerVisibel ? (this.headerRows * 36 + 4) : 0) + "px";
@@ -351,18 +374,17 @@
                 }
 
                 if(fwd >= tableWidth){
-                    fields = [...ffields, ...fields];
+                    ffields.forEach((c) => {
+                        c.fixed = false;
+                    });
                     wd = fwd + wd;
-                    ffields = [];
                     fwd = 0;
                 }
 
-                this.width = tableWidth;
+                this.tableWidth = fwd + wd;
                 this.fixedWidth = fwd;
-                this.scrollWidth = wd;
                 this.cols = cols;
-                this.fcolFields = ffields;
-                this.colFields = fields;
+                this.colFields = [...ffields, ...fields];
                 this.headerRows = headerRows;
             },
             onScroll(event){

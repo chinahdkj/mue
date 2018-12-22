@@ -18,6 +18,8 @@
             overflow: auto;
             height: 100%;
             width: 100%;
+            padding-right: @scroll-size; // 隐藏右侧滚动条
+            box-sizing: content-box;
         }
 
         .mue-load-more-wrap {
@@ -36,11 +38,20 @@
         .mue-load-more-top, .mue-load-more-bottom {
             text-align: center;
             height: 50px;
-            line-height: 50px;
             width: 100%;
             display: block;
             color: @@grey;
             font-size: @font-size;
+            background: @@background;
+            position: relative;
+
+            .mue-load-more-text {
+                z-index: 5;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
 
             i {
                 transition: .2s;
@@ -86,7 +97,8 @@
             height: 40px;
 
             z-index: 80;
-            > .__button{
+
+            > .__button {
                 transform-style: preserve-3d;
                 transform: translateZ(-20px) rotateX(-90deg);
                 transition-duration: 0.5s;
