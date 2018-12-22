@@ -4,23 +4,26 @@
  * @param {*} name
  * @param {*} type
  */
-export const GetQueryString = (name, type) => {
-    let target;
-    if(type === 'hash'){
-        target = window.location.hash.split('?')[1];
+export const GetQueryString = (n) => {
+    fn = (name, type) => {
+        let target;
+        if (type === 'hash') {
+            target = window.location.hash.split('?')[1];
+        }
+        else {
+            target = window.location.search.substr(1);
+        }
+        if (!target) {
+            return null;
+        }
+        let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        let r = target.match(reg);
+        if (r != null) {
+            return r[2];
+        }
+        return null
     }
-    else{
-        target = window.location.search.substr(1);
-    }
-    if(!target){
-        return null;
-    }
-    let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-    let r = target.match(reg);
-    if(r != null){
-        return r[2];
-    }
-    return null;
+    return fn(n) || fn(n, "hash");
 };
 
 /**
@@ -37,12 +40,12 @@ export const isIos = () => {
  */
 export const setDocumentTitle = (title) => {
     document.title = title;
-    if(/ip(hone|od|ad)/i.test(navigator.userAgent)){
+    if (/ip(hone|od|ad)/i.test(navigator.userAgent)) {
         var i = document.createElement('iframe');
         i.src = '';
         i.style.display = 'none';
-        i.onload = function(){
-            setTimeout(function(){
+        i.onload = function () {
+            setTimeout(function () {
                 i.remove();
             }, 9);
         }
@@ -61,7 +64,7 @@ export const setDocumentTitle = (title) => {
 var EARTH_RADIUS = 6378137.0; //单位M
 var PI = Math.PI;
 
-function getRad(d){
+function getRad(d) {
     return d * PI / 180.0;
 }
 
@@ -83,41 +86,41 @@ export const getGreatCircleDistance = (lat1, lng1, lat2, lng2) => {
  * @param {*} value
  * @param {*} unit
  */
-export function KGLFORMAT(value, unit){
-    if(value === "" || value == null){
+export function KGLFORMAT(value, unit) {
+    if (value === "" || value == null) {
         return "";
     }
     var Rtn = value;
-    try{
-        if(!!!unit){ //如果单位是空
+    try {
+        if (!!!unit) { //如果单位是空
             Rtn = value;
         }
-        else if(unit.indexOf("*") == 0 && unit.lastIndexOf("#") == unit.length - 1){ //单位是*开头，#结尾
+        else if (unit.indexOf("*") == 0 && unit.lastIndexOf("#") == unit.length - 1) { //单位是*开头，#结尾
             var c = unit.split("#");
-            for(var i = 0; i < c.length; i++){
-                if(c[i] && c[i].indexOf("*" + value.toString() + ":") >= 0){
+            for (var i = 0; i < c.length; i++) {
+                if (c[i] && c[i].indexOf("*" + value.toString() + ":") >= 0) {
                     Rtn = c[i].split(":")[1];
                 }
             }
         }
-        else if(unit.indexOf("@") == 0 && unit.lastIndexOf("$") == unit.length - 1){ //单位是@开头，$结尾
+        else if (unit.indexOf("@") == 0 && unit.lastIndexOf("$") == unit.length - 1) { //单位是@开头，$结尾
             var vlst = unit.replace("@", "").replace("$", "").split("|");
-            if(value == 0){
+            if (value == 0) {
                 Rtn = vlst[0];
             }
-            else{
+            else {
                 var nv = value.toString(2);
                 var rts = []
-                for(i = 0; i < nv.length; i++){
+                for (i = 0; i < nv.length; i++) {
                     var v = nv.charAt(nv.length - 1 - i);
-                    if(v == "1"){
+                    if (v == "1") {
                         rts.push(vlst[i + 1]);
                     }
                 }
                 Rtn = rts.join(",")
             }
         }
-    } catch(error){
+    } catch (error) {
         console.log(error);
     }
     return Rtn;
@@ -126,20 +129,20 @@ export function KGLFORMAT(value, unit){
 /**
  * 截取精度位数
  */
-export function newFixed(value, pre){
-    if(value === "" || value == null){
+export function newFixed(value, pre) {
+    if (value === "" || value == null) {
         return "";
     }
     var Rtn = value;
     var re = /^[0-9]+.?[0-9]*$/;
-    try{
-        if(!re.test(pre)){ //如果精度是空
+    try {
+        if (!re.test(pre)) { //如果精度是空
             Rtn = value;
         }
-        else{
+        else {
             Rtn = (parseInt(value * Math.pow(10, pre)) / Math.pow(10, pre)).toFixed(pre)
         }
-    } catch(error){
+    } catch (error) {
         console.log(error);
     }
     return Rtn;
@@ -147,7 +150,7 @@ export function newFixed(value, pre){
 
 export default {
     GetQueryString, isIos, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, newFixed,
-    isNight(){
+    isNight() {
         return sessionStorage.getItem("theme") === "night";
     }
 };
