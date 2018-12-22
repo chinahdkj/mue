@@ -5,7 +5,7 @@
  * @param {*} type
  */
 export const GetQueryString = (n) => {
-    fn = (name, type) => {
+    var fn = (name, type) => {
         let target;
         if (type === 'hash') {
             target = window.location.hash.split('?')[1];
