@@ -19,6 +19,7 @@ if (host) {
 
 export function InitHttp() {
     axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
+    axios.defaults.headers.common['Token'] = sessionStorage.getItem('authortoken');
     axios.defaults.headers.common['APP'] = sessionStorage.getItem('authorapp');
 
     axios.interceptors.request.use(config => {
