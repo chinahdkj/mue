@@ -1,5 +1,5 @@
 <template>
-    <van-tabs>
+    <van-tabs class="no-flex">
         <van-tab title="demo">
             <div style="height: 400px;" v-loading="loading">
                 <mue-datatable ref="table" :columns="columns" :min-col-width="minColWidth"
