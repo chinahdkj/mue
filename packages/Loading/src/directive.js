@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Loading from './loading.vue';
 import {addClass, getStyle, removeClass} from '../../../src/utils/dom';
 import {PopupManager} from '../../../src/utils/popup';
-import afterLeave from '../../../src/utils/after-leave';
 
 const Mask = Vue.extend(Loading);
 
@@ -32,7 +31,7 @@ loadingDirective.install = Vue => {
                             const scroll = property === 'top' ? 'scrollTop' : 'scrollLeft';
                             el.maskStyle[property] = el.getBoundingClientRect()[property] +
                                 document.body[scroll] + document.documentElement[scroll] -
-                                parseInt(getStyle(document.body, `margin-${ property }`), 10) +
+                                parseInt(getStyle(document.body, `margin-${property}`), 10) +
                                 'px';
                         });
                         ['height', 'width'].forEach(property => {
@@ -49,15 +48,8 @@ loadingDirective.install = Vue => {
             });
         }
         else{
-            afterLeave(el.instance, _ => {
-                el.domVisible = false;
-                const target = binding.modifiers.fullscreen ? document.body : el;
-                removeClass(target, 'mue-loading-parent--relative');
-                removeClass(target, 'mue-loading-parent--hidden');
-                el.instance.hiding = false;
-            }, 300, true);
             el.instance.visible = false;
-            el.instance.hiding = true;
+            el.domVisible = false;
         }
     };
     const insertDom = (parent, el, binding) => {
@@ -77,12 +69,7 @@ loadingDirective.install = Vue => {
 
             parent.appendChild(el.mask);
             Vue.nextTick(() => {
-                if(el.instance.hiding){
-                    el.instance.$emit('after-leave');
-                }
-                else{
-                    el.instance.visible = true;
-                }
+                el.instance.visible = true;
             });
             el.domInserted = true;
         }
