@@ -1,8 +1,11 @@
 <template>
     <div class="mue-input">
         <div class="mue-form-input" :class="{'has-suffix': icon}">
-            <input :type="type" class="input__inner" :readonly="readonly"
-                   :disabled="disabled" v-model="ipt" :placeholder="placeholder"/>
+            <input v-if="readonly" :type="type" class="input__inner" readonly
+                   :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
+                   onfocus="this.blur()"/>
+            <input v-else :type="type" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder"/>
 
             <i class="input__suffix" :class="icon" v-if="icon" @click="$emit('icon-click')"></i>
         </div>
