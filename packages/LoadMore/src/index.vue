@@ -141,10 +141,10 @@
             }
         },
         methods: {
-            bottomMethod(){
+            bottomMethod(disScroll = false){
                 let success = () => {
                     this.LoadSuccess();
-                    this.$nextTick(() => {
+                    !disScroll && this.$nextTick(() => {
                         this.ScrollTop(this.getScrollTop() + 50);
                     });
                 };
@@ -169,7 +169,6 @@
                 this.$content = this.$el.getElementsByClassName("mue-load-more-wrap")[0];
                 this.bindTouchEvents();
                 this.fillContainer();
-
             },
             fillContainer(){
                 this.$nextTick(() => {
@@ -180,7 +179,7 @@
                     // 数据未填充满，再加载
                     if(!this.moreThenView){
                         this.bottomStatus = "loading";
-                        this.bottomMethod();
+                        this.bottomMethod(true);
                     }
                 });
             },
