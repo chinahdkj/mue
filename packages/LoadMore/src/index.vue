@@ -105,7 +105,6 @@
 
                 translate: 0,
 
-                containerFilled: false,
                 topText: "",
                 topDropped: false,
                 bottomText: "",
@@ -144,24 +143,16 @@
         methods: {
             bottomMethod(){
                 let success = () => {
-                    this.direction = "";
-                    this.bottomStatus = "pull";
-                    this.bottomDropped = false;
-                    this.translate = 0;
-                    this.fillContainer();
+                    this.LoadSuccess();
+                    this.$nextTick(() => {
+                        this.ScrollTop(this.getScrollTop() + 50);
+                    });
                 };
 
                 this.$emit("load-more", success);
             },
             topMethod(){
-                let success = () => {
-                    this.direction = "";
-                    this.topStatus = "pull";
-                    this.topDropped = false;
-                    this.translate = 0;
-                    this.fillContainer();
-                };
-                this.$emit("refresh", success);
+                this.$emit("refresh", this.LoadSuccess);
             },
             getScrollTop(){
                 return this.$box.scrollTop;
@@ -186,10 +177,8 @@
                     if(!this.autoFill || this.allLoaded){
                         return;
                     }
-                    this.containerFilled = this.$content.getBoundingClientRect().bottom >=
-                        this.$box.getBoundingClientRect().bottom;
-
-                    if(!this.containerFilled){
+                    // 数据未填充满，再加载
+                    if(!this.moreThenView){
                         this.bottomStatus = "loading";
                         this.bottomMethod();
                     }
@@ -262,7 +251,7 @@
                     else{
                         this.translate = "0";
                         this.topStatus = "pull";
-                        this.setTimeout(() => {
+                        setTimeout(() => {
                             this.direction = "";
                         }, 200);
                     }
@@ -278,7 +267,7 @@
                     else{
                         this.translate = "0";
                         this.bottomStatus = "pull";
-                        this.setTimeout(() => {
+                        setTimeout(() => {
                             this.direction = "";
                         }, 200);
                     }
@@ -287,7 +276,7 @@
             },
 
             backTop(){
-                $(this.$box).animate({scrollTop: 0}, 400);
+                this.ScrollTop(0);
             },
 
             onScroll(){
@@ -297,6 +286,20 @@
                 this.scrollTimer = setTimeout(() => {
                     this.scrolling = false;
                 }, 1500);
+            },
+
+            LoadSuccess(){
+                this.direction = "";
+                this.bottomStatus = "pull";
+                this.bottomDropped = false;
+                this.topStatus = "pull";
+                this.topDropped = false;
+                this.translate = 0;
+                this.fillContainer();
+            },
+
+            ScrollTop(t = 0){
+                $(this.$box).animate({scrollTop: t}, 400);
             }
         },
         mounted(){

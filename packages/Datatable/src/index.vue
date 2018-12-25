@@ -449,8 +449,12 @@
             },
             ScrollTop(t = 0){
                 if(this.$refs.load_more){
-                    $(this.$refs.load_more.$el).animate({scrollTop: t}, 400);
+                    this.$refs.load_more.ScrollTop(t);
                 }
+            },
+
+            LoadSuccess(){
+                this.$refs.load_more.LoadSuccess();
             }
         },
         mounted(){

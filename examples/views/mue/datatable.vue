@@ -61,6 +61,8 @@
 
         <van-tab title="Method">
             ScrollLeft: 设置table 滚动部分的左滚动距离，参数: Number(距离)
+            ScrollTop: 设置table 滚动部分的上滚动距离，参数: Number(距离)
+            LoadSuccess: 数据加载完成时调用，类似refresh 和 load-more 的func参数，主要用于检查数据是否已填充满
         </van-tab>
     </van-tabs>
 </template>
