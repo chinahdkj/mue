@@ -1,5 +1,5 @@
 <template>
-    <form class="mue-form">
+    <form class="mue-form" :class="{'required-at-end': requiredPos === 'end' }">
         <slot></slot>
 
         <div class="mue-form-buttons">
@@ -18,6 +18,7 @@
         components: {},
         props: {
             labelWidth: {type: Number, default: 90},
+            requiredPos: {type: String, default: "end"},
             value: {
                 default(){
                     return {};
@@ -48,9 +49,9 @@
             },
             confirm(){
                 let promise = new Promise((resolve, reject) => {
-                    this.Validate().then(()=>{
+                    this.Validate().then(() => {
                         resolve(this.value);
-                    }).catch(({messages, inputs})=>{
+                    }).catch(({messages, inputs}) => {
                         inputs.forEach((ipt) => {
                             ipt.isError = true;
                         });
@@ -117,9 +118,9 @@
                         errors.forEach(({field, message}) => {
                             let input = vinputs[field];
 
-                            let msg = message.indexOf(`*#{${field}}#*`) > -1?
+                            let msg = message.indexOf(`*#{${field}}#*`) > -1 ?
                                       message.replace(`*#{${field}}#*`,
-                                          `<b class="valid-error">${input.label}</b> `):
+                                          `<b class="valid-error">${input.label}</b> `) :
                                       `<b class="valid-error">${input.label}</b> ${message}`;
                             msgs.push(msg);
                             inputs.push(input);

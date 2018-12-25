@@ -8,6 +8,7 @@
     @grey-sub: %("%s-grey-sub", @theme);
     @disabled: %("%s-button-disable-color", @theme);
     @border-color: %("%s-border-color", @theme);
+    @border-color-title: %("%s-form-title-border-color", @theme);
     @placeholder: %("%s-placeholder", @theme);
 
     .mue-form-input {
@@ -30,7 +31,8 @@
             display: inline-block;
             box-sizing: border-box;
             background: transparent;
-            height: 100%;
+            height: 30px;
+            line-height: 30px;
             width: 100%;
         }
 
@@ -160,7 +162,6 @@
         .mue-form-item-group {
             background: @@background;
             margin-bottom: 4px;
-            border-bottom: solid 1px @@border-color;
             border-top: solid 1px @@border-color;
 
             div.mue-form-item-group-title {
@@ -168,12 +169,14 @@
                 height: 36px;
                 padding: 0 10px;
                 box-sizing: border-box;
+                position: relative;
 
                 > span:first-child {
                     float: left;
-                    font-size: @font-size-large;
+                    font-size: @font-size;
                     color: @@grey;
                     margin-top: 8px;
+                    line-height: 20px;
                 }
 
                 > span:nth-child(2) {
@@ -215,6 +218,16 @@
                         }
                     }
                 }
+
+                &:after {
+                    content: "";
+                    width: 100%;
+                    height: 1px;
+                    background: @@border-color-title;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
             }
         }
 
@@ -224,7 +237,7 @@
             margin: 0;
             padding: 0 10px;
             box-sizing: border-box;
-            border-top: @@border-color 1px solid;
+            border-bottom: @@border-color 1px solid;
             position: relative;
 
             > label {
@@ -233,9 +246,12 @@
                 font-size: @font-size;
                 position: absolute;
                 top: 50%;
+                line-height: 16px;
                 z-index: 10;
                 transform: translateY(-50%);
                 padding-left: 5px;
+                padding-right: 15px;
+                box-sizing: border-box;
 
                 &.is-error {
                     color: @red;
@@ -253,8 +269,12 @@
                 font-size: 12px;
                 color: @red;
                 top: 50%;
-                transform: translateY(-8px);
+                transform: translateY(-6px);
                 left: 4px;
+
+                > label:after {
+                    content: none;
+                }
             }
 
             //.error-icon {
@@ -271,6 +291,29 @@
             //}
         }
 
+        &.required-at-end {
+            .mue-form-item.is-required {
+                &:before {
+                    content: none;
+                }
+
+                > label:after {
+                    content: "*";
+                    position: absolute;
+                    display: block;
+                    width: 10px;
+                    height: 16px;
+                    line-height: 16px;
+                    text-align: center;
+                    font-size: 12px;
+                    color: @red;
+                    top: 50%;
+                    transform: translateY(-6px);
+                    right: 5px;
+                }
+            }
+        }
+
         .mue-form-item-content {
             padding: 5px 0;
             width: 100%;
@@ -280,16 +323,14 @@
         }
 
         .mue-form-buttons {
-            width: 310px;
-            margin: 15px auto;
+            width: 100%;
+            margin: 20px 0;
             overflow: hidden;
 
-            > .van-button:first-child {
+            > .van-button {
                 float: left;
-            }
-
-            > .van-button:last-child {
-                float: right;
+                width: calc(~"50% - 30px");
+                margin: 0 15px;
             }
         }
     }

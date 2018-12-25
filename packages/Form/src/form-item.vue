@@ -1,6 +1,7 @@
 <template>
     <div class="mue-form-item" :class="{'is-required': isRequired}">
-        <label :class="{'is-error': isError}">{{label}}</label>
+        <label :class="{'is-error': isError}"
+               :style="{'max-width': paddingLeft}">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
              :style="[{'padding-left': paddingLeft}, contentStyle]">
             <slot></slot>

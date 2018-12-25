@@ -131,6 +131,13 @@ module.exports = {
         "bubble-background": "#ff0000",
         "bubble-color": "#ffffff",
 
+
+        "scroll-size": "20px",
+
+
+        // form
+        "light-form-title-border-color": "#cccccc",
+        "dark-form-title-border-color": "#2e364c"
     }
 };
 
