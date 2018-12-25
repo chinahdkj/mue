@@ -18,7 +18,7 @@
         components: {},
         props: {
             labelWidth: {type: Number, default: 90},
-            requiredPos: {type: String, default: "end"},
+            requiredPos: {type: String, default: "start"},
             value: {
                 default(){
                     return {};
