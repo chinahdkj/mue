@@ -24,6 +24,10 @@
 
                     <slot></slot>
 
+                    <div :style="{height: maxDistance + 'px'}"
+                         class="mue-load-more-end" v-if="direction === 'down' && !moreThenView ">
+                    </div>
+
                     <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
                         <span v-if="allLoaded" class="mue-load-more-text">
                             {{moreThenView ? "没有更多了" : ""}}
@@ -140,9 +144,9 @@
         methods: {
             bottomMethod(){
                 let success = () => {
+                    this.direction = "";
                     this.bottomStatus = "pull";
                     this.bottomDropped = false;
-                    this.$box.scrollTop += 50;
                     this.translate = 0;
                     this.fillContainer();
                 };
@@ -151,6 +155,7 @@
             },
             topMethod(){
                 let success = () => {
+                    this.direction = "";
                     this.topStatus = "pull";
                     this.topDropped = false;
                     this.translate = 0;
@@ -257,6 +262,9 @@
                     else{
                         this.translate = "0";
                         this.topStatus = "pull";
+                        this.setTimeout(() => {
+                            this.direction = "";
+                        }, 200);
                     }
                 }
                 if(this.direction === "up" && this.bottomReached && this.translate < 0){
@@ -270,9 +278,12 @@
                     else{
                         this.translate = "0";
                         this.bottomStatus = "pull";
+                        this.setTimeout(() => {
+                            this.direction = "";
+                        }, 200);
                     }
                 }
-                this.direction = "";
+
             },
 
             backTop(){

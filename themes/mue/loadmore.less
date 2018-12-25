@@ -25,15 +25,19 @@
         .mue-load-more-wrap {
             overflow: hidden;
             width: 100%;
-            min-height: calc(~"100% - 1px");
         }
 
         .mue-load-more-content {
             overflow: visible;
 
             &.is-dropped {
-                transition: .2s
+                transition: .2s;
             }
+        }
+
+        .mue-load-more-end {
+            width: 100%;
+            display: block;
         }
 
         .mue-load-more-top, .mue-load-more-bottom {
@@ -77,15 +81,6 @@
 
             i.is-drop {
                 transform: rotate(180deg) translate3d(0, 0, 0);
-            }
-        }
-
-        @keyframes pager-rotate {
-            from {
-                transform: translateZ(-20px) rotateX(-90deg);
-            }
-            to {
-                transform: translateZ(-20px) rotateX(0deg);
             }
         }
 
