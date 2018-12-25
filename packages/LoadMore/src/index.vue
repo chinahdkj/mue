@@ -1,8 +1,7 @@
 <template>
     <div class="mue-load-more">
         <div class="mue-load-more-box" @scroll="onScroll">
-            <div class="mue-load-more-wrap"
-                 :class="{'is-less-then-view': allLoaded && !moreThenView}">
+            <div class="mue-load-more-wrap">
                 <div class="mue-load-more-content"
                      :class="{ 'is-dropped': topDropped || bottomDropped}"
                      :style="{ 'transform': transform }">
@@ -177,7 +176,6 @@
 
             },
             fillContainer(){
-                this.moreThenView = true;
                 this.$nextTick(() => {
                     this.moreThenView = this.$box.clientHeight <= this.$content.clientHeight;
                     if(!this.autoFill || this.allLoaded){
