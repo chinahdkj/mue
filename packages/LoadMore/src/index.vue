@@ -177,6 +177,7 @@
 
             },
             fillContainer(){
+                this.moreThenView = true;
                 this.$nextTick(() => {
                     this.moreThenView = this.$box.clientHeight <= this.$content.clientHeight;
                     if(!this.autoFill || this.allLoaded){
