@@ -1,7 +1,7 @@
 <template>
     <van-tabs v-loading="confirming" class="no-flex">
         <van-tab title="demo">
-            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm">
+            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110">
                 <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
                     <div slot="help">11111</div>
 

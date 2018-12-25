@@ -136,8 +136,11 @@ module.exports = {
 
 
         // form
-        "light-form-title-border-color": "#cccccc",
-        "dark-form-title-border-color": "#2e364c"
+        "light-form-title-border-color": "#e0e0e0",
+        "dark-form-title-border-color": "#2e364c",
+
+        "light-form-border-color": "#ebebeb",
+        "dark-form-border-color": "#252c3e"
     }
 };
 
