@@ -80,6 +80,7 @@
 
                                     <template v-for="(c, j) in colFields">
                                         <td v-if="c.fixed" :key="j"
+                                            @click.stop="onCellClick(d, c, i)"
                                             :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
 
                                             <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
@@ -118,6 +119,7 @@
 
                                     <template v-for="(c, j) in colFields">
                                         <td v-if="!c.fixed" :key="j"
+                                            @click.stop="onCellClick(d, c, i)"
                                             :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
 
                                             <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
@@ -152,6 +154,7 @@
 </template>
 <script>
     import colGroup from "./col-group";
+    import {objectGet} from '../../../src/utils/object';
 
     export default {
         name: "MueDatatable",
@@ -226,18 +229,7 @@
                 if(!field){
                     return;
                 }
-                let fs = field.split(".");
-                let temp = row;
-                for(let i = 0; i < fs.length; i++){
-                    let f = fs[i];
-                    if(i === fs.length - 1){
-                        return temp[f];
-                    }
-                    else{
-                        temp = temp[f] || {};
-                    }
-                }
-                return null;
+                return objectGet(row || {}, field);
             },
             rowCls(row, i){
                 return [
@@ -434,6 +426,11 @@
             },
             onRowClick(row, i){
                 this.$emit("row-click", row, i);
+            },
+
+            onCellClick(row, col, i){
+                let value = this.getValue(row, col.field);
+                this.$emit("cell-click", value, row, col, i);
             },
 
             ScrollLeft(l = 0, duration = 400){

@@ -57,6 +57,7 @@
             refresh: 顶部下拉刷新 参数: func(回调方法，执行完以后调用) <br/>
             load-more: 底部上拉刷新加载 参数: func(回调方法，执行完以后调用) <br/>
             row-click: 行点击 参数: row(行数据), no(行索引) <br/>
+            cell-click: 单元格点击 参数: value(单元格数据), row(行数据), col(列定义), no(行索引)
         </van-tab>
 
         <van-tab title="Method">
