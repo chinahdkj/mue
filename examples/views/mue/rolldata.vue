@@ -1,7 +1,9 @@
 <template>
     <div>
         <mue-panel title="单个">
-            <mue-roll-data title="日水量(吨)" :value="value"/>
+            <mue-roll-data title="日水量(吨)" :value="value">
+                <i slot="end" class="fa fa-line-chart" aria-hidden="true"></i>
+            </mue-roll-data>
         </mue-panel>
 
         <mue-panel title="两个">

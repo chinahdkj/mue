@@ -11,6 +11,11 @@
             split: Boolean
         },
         components: {},
+        provide(){
+            return {
+                RDGROUP: this
+            };
+        },
         data(){
             return {
                 size: "large"
