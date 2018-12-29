@@ -2,7 +2,7 @@
     <form class="mue-form" :class="{'required-at-end': requiredPos === 'end' }">
         <slot></slot>
 
-        <div class="mue-form-buttons">
+        <div class="mue-form-buttons" v-if="!readonly">
             <van-button size="large" plain @click.prevent="cancel">取消</van-button>
             <van-button size="large" type="primary" @click.prevent="confirm">提交</van-button>
         </div>
@@ -17,6 +17,7 @@
         name: "MueForm",
         components: {},
         props: {
+            readonly: {type: Boolean, default: false},
             labelWidth: {type: Number, default: 90},
             requiredPos: {type: String, default: "start"},
             value: {

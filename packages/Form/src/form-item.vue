@@ -1,5 +1,6 @@
 <template>
-    <div class="mue-form-item" :class="{'is-required': isRequired}">
+    <div class="mue-form-item"
+         :class="{'is-required': !readonly && isRequired, 'is-readonly': readonly}">
         <label :class="{'is-error': isError}"
                :style="{'max-width': paddingLeft}">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
@@ -53,6 +54,9 @@
                 return this.required || this.rules.filter((r) => {
                     return !!r.required;
                 }).length > 0;
+            },
+            readonly(){
+                return this.FORM.readonly;
             }
         },
         methods: {},

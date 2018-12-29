@@ -399,4 +399,30 @@
             }
         }
     }
+
+    // 只读
+    .mue-form .mue-form-item.is-readonly {
+        &:after {
+            position: absolute;
+            z-index: 50;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: transparent;
+            content: "";
+        }
+
+        .mue-form-item-content {
+            .mue-img-upload li.__upload-btn {
+                display: none;
+            }
+
+            .input__inner::-webkit-input-placeholder,
+            .textarea__inner::-webkit-input-placeholder {
+                color: transparent;
+            }
+        }
+    }
 }

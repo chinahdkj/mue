@@ -51,7 +51,8 @@
             <b>mue-form</b>
             <mue-panel title="props">
                 labelWidth: 左侧label宽度 Number <br/>
-                value: 表单数据对象
+                value: 表单数据对象 <br/>
+                readonly: 只读模式
             </mue-panel>
 
             <mue-panel title="event" hairline="normal">
