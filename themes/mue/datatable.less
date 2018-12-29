@@ -257,5 +257,20 @@
             }
         }
 
+        // 无边框模式
+        &.no-border {
+            .mue-datatable-header:after {
+                content: none;
+            }
+
+            .mue-datatable-fixed:after {
+                content: none;
+            }
+
+            .mue-datatable__inner-table td:after {
+                content: none;
+            }
+        }
+
     }
 }

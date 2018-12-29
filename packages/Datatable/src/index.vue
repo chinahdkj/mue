@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-datatable">
+    <div class="mue-datatable" :class="{'no-border': noborder}">
         <div class="mue-datatable-header" v-if="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                  :style="{width:fixedWidth + 'px' }">
@@ -177,6 +177,7 @@
             rowClass: {type: [String, Function], default: ""},
             rowHeight: {type: Number, default: 40}, // 行高
             stripe: {type: Boolean, default: false}, // 斑马线
+            noborder: {type: Boolean, default: false}, // 不显示边框
             sort: {type: Object, default: null}, // 排序
 
             pageSize: {type: Number, default: 0},

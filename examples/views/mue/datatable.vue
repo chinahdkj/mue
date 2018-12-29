@@ -27,6 +27,7 @@
             rowKey: 行数据主键<br/>
             rowClass: 行样式类 string、function(row, no)<br/>
             rowHeight: 行高 number 默认40<br/>
+            noborder: 不显示边框[false, true]<br/>
             stripe: 斑马线[false, true], 暂无样式支持<br/>
             sort: 排序{field, order}, 支持sync<br/>
             pageSize: 分页大小 number<br/>
