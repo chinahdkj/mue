@@ -80,7 +80,7 @@
 
                                     <template v-for="(c, j) in colFields">
                                         <td v-if="c.fixed" :key="j"
-                                            @click.stop="onCellClick(d, c, i)"
+                                            @click="onCellClick(d, c, i, $event)"
                                             :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
 
                                             <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
@@ -119,7 +119,7 @@
 
                                     <template v-for="(c, j) in colFields">
                                         <td v-if="!c.fixed" :key="j"
-                                            @click.stop="onCellClick(d, c, i)"
+                                            @click="onCellClick(d, c, i, $event)"
                                             :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
 
                                             <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
@@ -429,9 +429,9 @@
                 this.$emit("row-click", row, i);
             },
 
-            onCellClick(row, col, i){
+            onCellClick(row, col, i, $event){
                 let value = this.getValue(row, col.field);
-                this.$emit("cell-click", value, row, col, i);
+                this.$emit("cell-click", value, row, col, i, $event);
             },
 
             ScrollLeft(l = 0, duration = 400){
