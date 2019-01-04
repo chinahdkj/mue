@@ -18,7 +18,7 @@
         components: {},
         props: {
             readonly: {type: Boolean, default: false},
-            labelWidth: {type: Number, default: 90},
+            labelWidth: {type: Number, default: 110},
             requiredPos: {type: String, default: "start"},
             value: {
                 default(){

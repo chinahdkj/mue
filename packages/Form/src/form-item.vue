@@ -29,7 +29,7 @@
         props: {
             label: {type: String, default: ""},
             field: {type: String, default: ""},
-            labelWidth: {type: Number, default: 90},
+            labelWidth: {type: Number, default: 110},
             contentStyle: null,
             contentClass: null,
 
