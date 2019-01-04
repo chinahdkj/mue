@@ -12,6 +12,7 @@
         box-sizing: border-box;
         background: @@background;
         width: 100%;
+        overflow: hidden;
 
         .mue-panel-header {
             display: block;
@@ -42,24 +43,25 @@
         }
 
         .mue-panel-body {
-            height: calc(~"100% - 40px");
+            height: calc(~"100% - 40px + 20px");
             overflow: auto;
-            width: 100%;
-            padding: 0;
+            width: calc(~"100% + 20px");
+            margin-bottom: -20px;
+            padding: 0 20px 20px 0;
             box-sizing: border-box;
             color: @@color;
         }
 
         &.mue-panel--hairline-wide .mue-panel-body {
-            height: calc(~"100% - 40px - 6px");
+            height: calc(~"100% - 40px - 6px + 20px");
         }
 
         &.mue-panel--hairline-thin .mue-panel-body {
-            height: calc(~"100% - 40px - 1px");
+            height: calc(~"100% - 40px - 1px + 20px");
         }
 
         &.mue-panel--hairline-normal .mue-panel-body {
-            height: calc(~"100% - 40px - 4px");
+            height: calc(~"100% - 40px - 4px + 20px");
         }
 
         &.mue-panel--no-header {
@@ -68,15 +70,15 @@
             }
 
             &.mue-panel--hairline-wide .mue-panel-body {
-                height: calc(~"100% - 6px");
+                height: calc(~"100% - 6px + 20px");
             }
 
             &.mue-panel--hairline-thin .mue-panel-body {
-                height: calc(~"100% - 1px");
+                height: calc(~"100% - 1px + 20px");
             }
 
             &.mue-panel--hairline-normal .mue-panel-body {
-                height: calc(~"100% - 4px");
+                height: calc(~"100% - 4px + 20px");
             }
         }
     }
