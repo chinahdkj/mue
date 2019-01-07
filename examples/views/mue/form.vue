@@ -1,7 +1,8 @@
 <template>
     <van-tabs v-loading="confirming" class="no-flex">
         <van-tab title="demo">
-            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110">
+            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110"
+                      :readonly="true">
                 <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
                     <div slot="help">11111</div>
 
@@ -25,7 +26,7 @@
                     </mue-form-item>
 
                     <mue-form-item label="备注" field="remark">
-                        <mue-textarea placeholder="请输入备注"></mue-textarea>
+                        <mue-textarea placeholder="请输入备注" v-model="model.remark"></mue-textarea>
                     </mue-form-item>
                 </mue-form-item-group>
 
@@ -126,6 +127,7 @@
                     station: {
                         pics: []
                     },
+                    remark: "",
                     valid: {
                         number: 0,
                         custom: "xx",

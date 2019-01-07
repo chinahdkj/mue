@@ -355,6 +355,7 @@
 
             .input__inner {
                 text-align: right;
+                padding-left: 5px;
                 padding-right: 25px;
             }
 
@@ -455,6 +456,21 @@
             .input__inner::-webkit-input-placeholder,
             .textarea__inner::-webkit-input-placeholder {
                 color: transparent;
+            }
+
+            .mue-form-text {
+                text-align: right;
+                padding: 5px;
+                line-height: 20px;
+                white-space: normal;
+                word-break: break-word;
+                display: inline-block;
+                width: 100%;
+                color: @@grey;
+            }
+
+            .mue-textarea .mue-form-text {
+                text-align: left;
             }
         }
     }

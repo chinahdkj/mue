@@ -26,6 +26,11 @@
                 }
             }
         },
+        provide(){
+            return {
+                FORM_ITEM: this
+            };
+        },
         props: {
             label: {type: String, default: ""},
             field: {type: String, default: ""},
