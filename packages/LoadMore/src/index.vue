@@ -1,7 +1,9 @@
 <template>
     <div class="mue-load-more">
-        <div class="mue-load-more-box" @scroll="onScroll">
-            <div class="mue-load-more-wrap">
+        <div class="mue-load-more-box" @scroll="onScroll"
+             :class="{'is-scrolling': !translate || scrolling}">
+            <div class="mue-load-more-wrap" @touchstart="handleTouchStart($event)"
+                 @touchmove="handleTouchMove($event)" @touchend="handleTouchEnd()">
                 <div class="mue-load-more-content"
                      :class="{ 'is-dropped': topDropped || bottomDropped}"
                      :style="{ 'transform': transform }">
@@ -55,7 +57,7 @@
 
         <transition name="van-slide-up">
             <div class="mue-load-more-pagination" v-show="pageNo > 1" @click="backTop">
-                <div class="__button" :class="{'is-scrolling': scrolling}">
+                <div class="__button" :class="{'is-pager': isPager}">
                     <a class="__backtop">
                         <i class="iconfont icon-zhiding"></i>
                     </a>
@@ -123,13 +125,24 @@
 
                 scrolling: false,
                 scrollTimer: null,
-                moreThenView: false
+                isPager: false,
+                pagerTimer: null,
+                moreThenView: false,
             };
         },
         computed: {
             transform(){
-                return this.translate === 0 ? null :
-                       `translate3d(0, ${parseInt(this.translate)}px, 0)`;
+                if(this.translate === 0){
+                    return null;
+                }
+                let translate = parseInt(this.translate);
+                if(translate < -this.maxDistance){
+                    translate = -this.maxDistance;
+                }
+                if(translate > this.maxDistance){
+                    translate = this.maxDistance;
+                }
+                return this.translate === 0 ? null : `translate3d(0, ${translate}px, 0)`;
             }
         },
         watch: {
@@ -157,17 +170,11 @@
             getScrollTop(){
                 return this.$box.scrollTop;
             },
-            bindTouchEvents(){
-                this.$content.addEventListener("touchstart", this.handleTouchStart);
-                this.$content.addEventListener("touchmove", this.handleTouchMove);
-                this.$content.addEventListener("touchend", this.handleTouchEnd);
-            },
             init(){
                 this.topStatus = "pull";
                 this.bottomStatus = "pull";
                 this.$box = this.$el.getElementsByClassName("mue-load-more-box")[0];
                 this.$content = this.$el.getElementsByClassName("mue-load-more-wrap")[0];
-                this.bindTouchEvents();
                 this.fillContainer();
             },
             fillContainer(){
@@ -188,6 +195,12 @@
                     parseInt(this.$box.getBoundingClientRect().bottom) + 1;
             },
             handleTouchStart(event){
+                if(this.scrolling){
+                    this.translate = 0;
+                    this.topStatus = "pull";
+                    this.bottomStatus = "pull";
+                    return;
+                }
                 this.startY = event.touches[0].clientY;
                 this.startScrollTop = this.getScrollTop();
                 this.bottomReached = false;
@@ -240,31 +253,33 @@
 
             },
             handleTouchEnd(){
-                if(this.direction === "down" && this.getScrollTop() === 0 && this.translate > 0){
+                if(this.direction === "down" && this.getScrollTop() === 0
+                    && this.translate > 0){
                     this.topDropped = true;
-                    if(this.topStatus === "drop"){
-                        this.translate = "50";
+                    if(this.topStatus === "drop" && this.translate >= this.distance){
+                        this.translate = this.distance;
                         this.topStatus = "loading";
                         this.topMethod();
                     }
                     else{
-                        this.translate = "0";
+                        this.translate = 0;
                         this.topStatus = "pull";
                         setTimeout(() => {
                             this.direction = "";
-                        }, 200);
+                        }, 400);
                     }
                 }
-                if(this.direction === "up" && this.bottomReached && this.translate < 0){
+                if(this.direction === "up" && this.bottomReached
+                    && this.translate < 0){
                     this.bottomDropped = true;
                     this.bottomReached = false;
-                    if(this.bottomStatus === "drop"){
-                        this.translate = "-50";
+                    if(this.bottomStatus === "drop" && this.translate <= -this.distance){
+                        this.translate = -this.distance;
                         this.bottomStatus = "loading";
                         this.bottomMethod();
                     }
                     else{
-                        this.translate = "0";
+                        this.translate = 0;
                         this.bottomStatus = "pull";
                         setTimeout(() => {
                             this.direction = "";
@@ -280,11 +295,17 @@
 
             onScroll(){
                 clearTimeout(this.scrollTimer);
+                clearTimeout(this.pagerTimer);
+                this.isPager = true;
                 this.scrolling = true;
                 this.$emit("scroll-change", this.$box.getBoundingClientRect());
                 this.scrollTimer = setTimeout(() => {
                     this.scrolling = false;
+                }, 100);
+                this.pagerTimer = setTimeout(() => {
+                    this.isPager = false;
                 }, 1500);
+
             },
 
             LoadSuccess(){

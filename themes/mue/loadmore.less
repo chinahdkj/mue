@@ -20,6 +20,11 @@
             width: 100%;
             padding-right: @scroll-size; // 隐藏右侧滚动条
             box-sizing: content-box;
+            -webkit-overflow-scrolling: auto;
+
+            &.is-scrolling {
+                -webkit-overflow-scrolling: touch;
+            }
         }
 
         .mue-load-more-wrap {
@@ -101,7 +106,7 @@
                 width: 100%;
                 height: 100%;
 
-                &.is-scrolling {
+                &.is-pager {
                     transform: translateZ(-20px) rotateX(0deg);
                 }
 
