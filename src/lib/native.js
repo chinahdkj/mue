@@ -7,7 +7,7 @@ const _cache2 = {};
 const fns = [
     "save", "delete", "query", "rotate", "startNavi", "getLocation", "isCollected", "sysInfo",
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
-    "collect", "nfcData", "goback", "refreshBadge", "signature"
+    "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData"
 ];
 
 const postMessage = ({cb, method, params}) => {
