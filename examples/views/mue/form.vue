@@ -1,8 +1,7 @@
 <template>
     <van-tabs v-loading="confirming" class="no-flex">
         <van-tab title="demo">
-            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110"
-                      :readonly="true">
+            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110">
                 <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
                     <div slot="help">11111</div>
 
@@ -53,7 +52,8 @@
             <mue-panel title="props">
                 labelWidth: 左侧label宽度 Number <br/>
                 value: 表单数据对象 <br/>
-                readonly: 只读模式
+                readonly: 只读模式 <br/>
+                inline: label 和 输入框 同在一行 Boolean 默认true
             </mue-panel>
 
             <mue-panel title="event" hairline="normal">

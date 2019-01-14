@@ -30,7 +30,7 @@
             title: {type: String, default: ""},
             subTitle: {type: String, default: ""},
             icon: {type: String, default: "iconfont icon-icon_wenhao"},
-            labelWidth: {type: Number, default: 110}
+            labelWidth: {type: Number, default: 0}
         },
         provide(){
             return {

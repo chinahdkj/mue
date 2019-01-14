@@ -27,10 +27,9 @@
 </template>
 
 <script>
-    import MueImgUpload from '../../../packages/Form/img-upload/index';
 
     export default {
-        components: {MueImgUpload},
+        components: {},
         data(){
             return {
                 select: {

@@ -1,10 +1,11 @@
 <template>
     <div class="mue-form-item"
-         :class="{'is-required': !readonly && isRequired, 'is-readonly': readonly}">
+         :class="{'is-required': !readonly && isRequired, 'is-readonly': readonly,
+         'not-inline': !inline}">
         <label :class="{'is-error': isError}"
-               :style="{'max-width': paddingLeft}">{{label}}</label>
+               :style="inline ? {'max-width': paddingLeft} : null">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
-             :style="[{'padding-left': paddingLeft}, contentStyle]">
+             :style="[inline ? {'padding-left': paddingLeft} : null, contentStyle]">
             <slot></slot>
         </div>
         <!--<i v-if="isError" class="error-icon fa fa-exclamation-circle" aria-hidden="true"></i>-->
@@ -34,10 +35,9 @@
         props: {
             label: {type: String, default: ""},
             field: {type: String, default: ""},
-            labelWidth: {type: Number, default: 110},
+            labelWidth: {type: Number, default: 0},
             contentStyle: null,
             contentClass: null,
-
             required: {type: Boolean, default: false},
             rules: {
                 type: Array, default(){
@@ -52,8 +52,11 @@
         },
         computed: {
             paddingLeft(){
-                let w = this.GROUP.labelWidth || this.FORM.labelWidth || this.labelWidth || 90;
+                let w = this.labelWidth || this.GROUP.labelWidth || this.FORM.labelWidth || 110;
                 return `${w}px`;
+            },
+            inline(){
+                return this.FORM.inline;
             },
             isRequired(){
                 return this.required || this.rules.filter((r) => {
@@ -66,6 +69,7 @@
         },
         methods: {},
         mounted(){
+            debugger
             if(this.FORM){
                 this.FORM.addItem(this);
             }
