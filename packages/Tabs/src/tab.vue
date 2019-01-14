@@ -1,8 +1,10 @@
 <template>
     <van-tab :disabled="disabled">
         <a slot="title" class="mue-tab">
-            <i class="mue-tab-icon" v-if="icon" :class="icon"></i>
-            <span class="mue-tab-title">{{title}}</span>
+            <slot name="title">
+                <i class="mue-tab-icon" v-if="icon" :class="icon"></i>
+                <span class="mue-tab-title">{{title}}</span>
+            </slot>
         </a>
         <slot></slot>
     </van-tab>
