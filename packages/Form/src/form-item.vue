@@ -69,7 +69,6 @@
         },
         methods: {},
         mounted(){
-            debugger
             if(this.FORM){
                 this.FORM.addItem(this);
             }
