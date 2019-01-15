@@ -20,7 +20,7 @@
             readonly: {type: Boolean, default: false},
             labelWidth: {type: Number, default: 110},
             requiredPos: {type: String, default: "start"},
-            inline: {type: Boolean, default: false},
+            inline: {type: Boolean, default: true},
             value: {
                 default(){
                     return {};
