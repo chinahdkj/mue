@@ -1,21 +1,42 @@
-# mue
+# MUE 和达 Vue 组件库
 
-> A Vue.js project
+## 快速上手
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
++ MUE 安装
+git submodule
+```
+git submodule add https://hub.hddznet.com/uniplatform/mue.git ./node_modules/mue
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+cnpm
+```
+cnpm i git+https://hub.hddznet.com/uniplatform/mue.git --save
+```
+
+
++ MUE 引入
+```
+import Vue from 'vue'; 
+import Mue from 'mue/src/index.js';
+// 引入CUE的同时，已全局引用vant-ui。
+Vue.use(Mue);
+```
++ CUE 样式引入
+```
+/*
+引入的CUE样式包含：
+    1. vant-ui 样式
+    2. mue 组件样式
+    3. hd web 字体图标库
+    4. awesome 字体图标库
+*/
+import 'mue/themes/index.less'; // 样式
+```
+
+## [组件示例](http://192.168.100.185:3003)
+
+
+## 模板项目
+```
+https://hub.hddznet.com/appv2/h5app-template
+```
