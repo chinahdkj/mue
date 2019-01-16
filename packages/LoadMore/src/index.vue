@@ -27,7 +27,7 @@
                     <slot></slot>
 
                     <div :style="{height: maxDistance + 'px'}"
-                         class="mue-load-more-end" v-if="direction === 'down' && !moreThenView ">
+                         class="mue-load-more-end" v-if="translate > 0 && !moreThenView ">
                     </div>
 
                     <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
