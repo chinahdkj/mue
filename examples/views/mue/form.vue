@@ -31,7 +31,9 @@
 
                 <mue-form-item label="数字验证" field="valid.number"
                                :rules="[{type:'number', min: 10, max: 80}]">
-                    <mue-input type="number" v-model.number="model.valid.number"/>
+                    <mue-input type="number" v-model.number="model.valid.number">
+                        <template slot="suffix">只</template>
+                    </mue-input>
                 </mue-form-item>
 
                 <mue-form-item label="自定义验证" field="valid.custom"

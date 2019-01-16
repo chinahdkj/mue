@@ -3,7 +3,7 @@
         <div class="mue-form-input has-suffix" @click="showPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
-            <i class="input__suffix iconfont icon-arrows-copy-copy"></i>
+            <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
                    :lazy-render="false">

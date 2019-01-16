@@ -12,7 +12,7 @@
         <div class="mue-form-input has-suffix" v-else @click="showPop">
             <input type="text" class="input__inner" readonly :value="value" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
-            <i class="input__suffix iconfont icon-zhouli"></i>
+            <i class="input__suffix input__suffix_icon iconfont icon-zhouli"></i>
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
