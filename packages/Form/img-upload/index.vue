@@ -3,7 +3,7 @@
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in imgs" :key="i" class="__upload-img"
                 @contextmenu.stop.prevent="removeImg(i)" @click.stop.prevent="showPic(i)">
-                <img :src="m"/>
+                <img :src="getPath(m)"/>
             </li>
             <li class="__upload-btn">
                 <van-loading v-if="uploading" color=""/>
@@ -26,7 +26,8 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
-            multiple: {type: Boolean, default: false}
+            multiple: {type: Boolean, default: false},
+            base64: {type: Boolean, default: false} // 新上传图片直接返回base64
         },
         data(){
             return {
@@ -56,6 +57,13 @@
             }
         },
         methods: {
+            getPath(m){
+                if(m.startsWith("/upload")){
+                    return `${window.location.origin}${m}`;
+                }
+                return m;
+            },
+
             base64ToFile(base64, file){
 
                 let arr = base64.split(",");
@@ -75,6 +83,22 @@
                 if(!Array.isArray(files)){
                     files = [files];
                 }
+
+                if(this.base64){
+                    let rs = files.map(({content}) => {
+                        return content
+                    });
+
+                    if(this.multiple){
+                        this.imgs.splice(-1, 0, ...rs);
+                    }
+                    else{
+                        this.imgs = rs.length > 0 ? [rs[0]] : [];
+                    }
+                    this.uploading = false;
+                    return;
+                }
+
                 let posts = files.map(({content, file}) => {
 
                     let form = new FormData();
