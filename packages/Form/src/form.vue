@@ -68,15 +68,9 @@
                 let promise = new Promise((resolve, reject) => {
                     this.Validate().then(() => {
                         resolve(this.value);
-                    }).catch(({messages, inputs}) => {
-                        inputs.forEach((ipt) => {
-                            ipt.isError = true;
-                        });
-                        this.$dialog.alert({
-                            className: "mue-form-valid-dialog",
-                            message: `<div class="valid-errors">${messages.join("<br/>")}</div>`
-                        });
-                        reject({messages, inputs});
+                    }).catch((e) => {
+                        this.ShowError(e);
+                        reject(e);
                     });
                 });
                 this.$emit("confirm", promise);
@@ -85,6 +79,15 @@
             ClearValid(){
                 this.items.forEach((item) => {
                     item.isError = false;
+                });
+            },
+            ShowError({messages, inputs}){
+                inputs.forEach((ipt) => {
+                    ipt.isError = true;
+                });
+                this.$dialog.alert({
+                    className: "mue-form-valid-dialog",
+                    message: `<div class="valid-errors">${messages.join("<br/>")}</div>`
                 });
             },
             Validate(callback){

@@ -66,6 +66,13 @@
                 super-confirm: 点击确认按钮事件, 只是点击的回调，无任何业务处理 <br/>
                 super-cancel: 点击确认按钮事件, 只是点击的回调，无任何业务处理
             </mue-panel>
+
+            <mue-panel title="method" hairline="normal">
+                Validate: 验证表单，参数验证回调，无参数是返回Promise；验证回调和Pormise回调的参数结构
+                { result: [bool]是否成功, messages: [array]错误信息, inputs: [array]验证错误的输入项 }
+                ClearValid: 清空验证错误信息 <br/>
+                ShowError: 显示验证错误信息 参数{messages: [array]错误信息, inputs: [array]验证错误的输入项}
+            </mue-panel>
         </van-tab>
 
         <van-tab title="输入项组">
