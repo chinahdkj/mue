@@ -3,8 +3,12 @@
         <slot></slot>
 
         <div class="mue-form-buttons" v-if="!readonly">
-            <van-button size="large" plain @click.prevent="cancel">取消</van-button>
-            <van-button size="large" type="primary" @click.prevent="confirm">提交</van-button>
+            <van-button size="large" plain @click.prevent="cancel">
+                {{cancelText}}
+            </van-button>
+            <van-button size="large" type="primary" @click.prevent="confirm">
+                {{confirmText}}
+            </van-button>
         </div>
     </form>
 </template>
@@ -25,7 +29,9 @@
                 default(){
                     return {};
                 }
-            }
+            },
+            cancelText: {type: String, default: "取消"},
+            confirmText: {type: String, default: "提交"}
         },
         provide(){
             return {
@@ -46,10 +52,19 @@
                 this.items.splice(i, 1);
             },
             cancel(){
+                if(this.$listeners["super-cancel"]){
+                    this.$emit("super-cancel");
+                    return;
+                }
                 this.ClearValid();
-                this.$emit('cancel');
+                this.$emit("cancel");
             },
             confirm(){
+                if(this.$listeners["super-confirm"]){
+                    this.$emit("super-confirm");
+                    return;
+                }
+
                 let promise = new Promise((resolve, reject) => {
                     this.Validate().then(() => {
                         resolve(this.value);

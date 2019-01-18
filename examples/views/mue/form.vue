@@ -55,12 +55,16 @@
                 labelWidth: 左侧label宽度 Number <br/>
                 value: 表单数据对象 <br/>
                 readonly: 只读模式 <br/>
-                inline: label 和 输入框 同在一行 Boolean 默认true
+                inline: label 和 输入框 同在一行 Boolean 默认true <br/>
+                cancelText: 取消按钮显示文本 默认 取消<br/>
+                confirmText: 提交按钮显示文本 默认 提交
             </mue-panel>
 
             <mue-panel title="event" hairline="normal">
                 confirm: 点击确认按钮事件 参数promise
                 cancel: 点击取消按钮事件
+                super-confirm: 点击确认按钮事件, 只是点击的回调，无任何业务处理
+                super-cancel: 点击确认按钮事件, 只是点击的回调，无任何业务处理
             </mue-panel>
         </van-tab>
 
