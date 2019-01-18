@@ -27,7 +27,12 @@
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            base64: {type: Boolean, default: false} // 新上传图片直接返回base64
+            base64: {type: Boolean, default: false}, // 新上传图片直接返回base64
+            quality: {
+                type: Number, default: 1, validator(v){
+                    return v > 0 && v <= 1;
+                }
+            }
         },
         data(){
             return {
@@ -65,9 +70,7 @@
             },
 
             base64ToFile(base64, file){
-
                 let arr = base64.split(",");
-                let mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
                 let bytes = atob(arr[1].replace(/\s/g, ""));
                 let n = bytes.length;
                 let u8arr = new Uint8Array(n);
@@ -75,7 +78,29 @@
                     u8arr[i] = bytes.charCodeAt(i);
                 }
 
-                return new File([u8arr], file.name, {type: mime});
+                return new File([u8arr], file.name, {type: file.type});
+            },
+
+            zipImg(content, {type, name}){
+                return new Promise((resolve) => {
+                    if(this.quality === 1){
+                        resolve({content, file: {type, name}});
+                        return;
+                    }
+                    let self = this;
+                    let img = new Image();
+                    img.src = content;
+                    img.onload = function(){
+                        let canvas = document.createElement("canvas");
+                        canvas.height = this.height;
+                        canvas.width = this.width;
+                        let ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        resolve({
+                            content: canvas.toDataURL(type, self.quality), file: {type, name}
+                        });
+                    }
+                });
             },
 
             upload(files){
@@ -84,43 +109,46 @@
                     files = [files];
                 }
 
-                if(this.base64){
-                    let rs = files.map(({content}) => {
-                        return content
-                    });
-
-                    if(this.multiple){
-                        this.imgs.splice(-1, 0, ...rs);
-                    }
-                    else{
-                        this.imgs = rs.length > 0 ? [rs[0]] : [];
-                    }
-                    this.uploading = false;
-                    return;
-                }
-
-                let posts = files.map(({content, file}) => {
-
-                    let form = new FormData();
-                    let f = this.base64ToFile(content, file);
-                    form.append("file", f, file.name);
-
-                    return this.$http.post("/app/v1.0/upload.json", form, {
-                        processData: false, contentType: false
-                    });
+                let datas = files.map(({content, file}) => {
+                    return this.zipImg(content, file);
                 });
-                this.$ajax.all(posts).then((rs) => {
-                    if(this.multiple){
-                        rs.forEach(({url}) => {
-                            this.imgs.push(url);
+                Promise.all(datas).then((rs) => {
+                    if(this.base64){
+                        if(this.multiple){
+                            rs.forEach(({content}) => {
+                                this.imgs.push(content);
+                            });
+                        }
+                        else{
+                            this.imgs = rs.length > 0 ? [rs[0].content] : [];
+                        }
+                        this.uploading = false;
+                        return;
+                    }
+
+                    let posts = rs.map(({content, file}) => {
+                        let form = new FormData();
+                        let f = this.base64ToFile(content, file);
+                        form.append("file", f, file.name);
+
+                        return this.$http.post("/app/v1.0/upload.json", form, {
+                            processData: false, contentType: false
                         });
-                    }
-                    else{
-                        this.imgs = rs.length > 0 ? [rs[0].url] : [];
-                    }
-                    this.uploading = false;
-                }).catch(()=>{
-                    this.uploading = false;
+                    });
+
+                    this.$ajax.all(posts).then((rs) => {
+                        if(this.multiple){
+                            rs.forEach(({url}) => {
+                                this.imgs.push(url);
+                            });
+                        }
+                        else{
+                            this.imgs = rs.length > 0 ? [rs[0].url] : [];
+                        }
+                        this.uploading = false;
+                    }).catch(() => {
+                        this.uploading = false;
+                    });
                 });
             },
             showPic(i){

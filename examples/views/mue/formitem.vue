@@ -16,7 +16,7 @@
         </mue-panel>
 
         <mue-panel hairline="normal" title="图片单张上传" style="height:120px;">
-            <mue-img-upload style="margin-left: 5px;" v-model="img.single"/>
+            <mue-img-upload style="margin-left: 5px;" v-model="img.single" base64 :quality="0.5"/>
         </mue-panel>
 
         <mue-panel hairline="normal" title="图片批量上传" style="height:120px;">
@@ -33,9 +33,17 @@
         data(){
             return {
                 select: {
-                    value: "c2",
+                    value: "c3",
                     data: [
-                        {code: "c1", name: "选项1"},
+                        {
+                            code: "c1", name: "选项1", children: [
+                                {code: "d1", name: "1-1"},
+                                {code: "d2", name: "1-2"},
+                                {code: "d3", name: "1-3"},
+                                {code: "d4", name: "1-4"},
+                                {code: "d5", name: "1-5"},
+                            ]
+                        },
                         {code: "c2", name: "选项2"},
                         {code: "c3", name: "选项3", disabled: true},
                         {code: "c4", name: "选项4"},
