@@ -1,7 +1,12 @@
 <template>
     <div class="mue-form-item-group">
         <div class="mue-form-item-group-title">
-            <span>{{title}}</span>
+            <span>
+                <slot name="prefix">
+                    <i v-if="prefix" class="__icon" :class="prefix" aria-hidden="true"></i>
+                </slot>
+                {{title}}
+            </span>
             <span>
                 {{subTitle}}
 
@@ -29,6 +34,7 @@
         props: {
             title: {type: String, default: ""},
             subTitle: {type: String, default: ""},
+            prefix: {type: String, default: ""},
             icon: {type: String, default: "iconfont icon-icon_wenhao"},
             labelWidth: {type: Number, default: 0}
         },

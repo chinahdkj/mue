@@ -79,12 +79,14 @@
             <b>mue-form-item-group</b>
             <mue-panel title="props">
                 labelWidth: 左侧label宽度(覆盖form设置) Number <br/>
-                title: 组标题 String,
-                subTitle: 组副标题 右侧 String,
+                title: 组标题 String <br/>
+                subTitle: 组副标题 右侧 String <br/>
+                prefix: 组标题左侧图标样式 String<br/>
                 icon: 右侧按钮图标 String default: "iconfont icon-icon_wenhao"
             </mue-panel>
 
             <mue-panel title="slot" hairline="normal">
+                prefix: 组标题 左侧插槽 此插槽覆盖prefix属性渲染 <br/>
                 help: 右侧图标点击弹出内容
             </mue-panel>
 
