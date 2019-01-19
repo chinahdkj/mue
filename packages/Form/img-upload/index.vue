@@ -1,9 +1,9 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li v-for="(m, i) in imgs" :key="i" class="__upload-img"
+            <li v-for="(m, i) in thumbs" :key="i" class="__upload-img"
                 @contextmenu.stop.prevent="removeImg(i)" @click.stop.prevent="showPic(i)">
-                <img :src="getPath(m)"/>
+                <img :src="m"/>
             </li>
             <li class="__upload-btn">
                 <van-loading v-if="uploading" color=""/>
@@ -36,7 +36,7 @@
         },
         data(){
             return {
-                imgs: [], uploading: false
+                imgs: [], thumbs: [], uploading: false
             };
         },
         watch: {
@@ -59,6 +59,22 @@
                     this.$emit("input", v.length === 0 ? "" : v[0]);
                 }
 
+                let thumbs = [];
+                for(let i = 0; i < v.length; i++){
+                    let src = this.getPath(v[i]);
+                    thumbs.push(this.zipImg(src, {type: "image/jpeg"}, 1, 50));
+                }
+                this.thumbs = [];
+                if(thumbs.length === 0){
+                    return;
+                }
+                this.uploading = true;
+                Promise.all(thumbs).then((rs) => {
+                    this.thumbs = rs.map(({content}) => {
+                        return content;
+                    });
+                    this.uploading = false;
+                });
             }
         },
         methods: {
@@ -81,23 +97,29 @@
                 return new File([u8arr], file.name, {type: file.type});
             },
 
-            zipImg(content, {type, name}){
+            zipImg(content, {type, name}, quality, maxWidth){
                 return new Promise((resolve) => {
-                    if(this.quality === 1){
+                    if(quality === 1 && !maxWidth){
                         resolve({content, file: {type, name}});
                         return;
                     }
-                    let self = this;
                     let img = new Image();
                     img.src = content;
                     img.onload = function(){
                         let canvas = document.createElement("canvas");
-                        canvas.height = this.height;
-                        canvas.width = this.width;
-                        let ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0);
+                        let height = this.height;
+                        let width = this.width;
+                        if(maxWidth && width > maxWidth){
+                            let hw = height / width;
+                            width = maxWidth;
+                            height = hw * width;
+                        }
+                        canvas.height = height;
+                        canvas.width = width;
+                        let ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
                         resolve({
-                            content: canvas.toDataURL(type, self.quality), file: {type, name}
+                            content: canvas.toDataURL(type, quality), file: {type, name}
                         });
                     }
                 });
@@ -110,7 +132,7 @@
                 }
 
                 let datas = files.map(({content, file}) => {
-                    return this.zipImg(content, file);
+                    return this.zipImg(content, file, this.quality);
                 });
                 Promise.all(datas).then((rs) => {
                     if(this.base64){
@@ -152,7 +174,10 @@
                 });
             },
             showPic(i){
-                ImagePreview({images: this.imgs, startPosition: i, loop: true});
+                let images = this.imgs.map((m) => {
+                    return this.getPath(m);
+                });
+                ImagePreview({images, startPosition: i, loop: true});
             },
             removeImg(i){
                 if(this.disabled){
