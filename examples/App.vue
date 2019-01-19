@@ -6,6 +6,7 @@
                          style="z-index: 1000;"/>
         </header>
         <section>
+            {{file}}
             <router-view/>
         </section>
         <van-popup class="menubox" v-model="pop" position="left" :lazy-render="false">
@@ -20,7 +21,7 @@
     export default {
         name: 'App',
         data(){
-            return {pop: false};
+            return {pop: false, file: this.$comm.newFilePath("jpg")};
         },
         computed: {
             title(){

@@ -1,4 +1,5 @@
 // 通用方法
+import uuid from '../utils/uuid';
 /**
  * 获取url参数
  * @param {*} name
@@ -148,8 +149,18 @@ export function newFixed(value, pre) {
     return Rtn;
 }
 
+/**
+ * 本地生成图片路径
+ */
+export function newFilePath(filetype) {
+    let id = uuid(32);
+    let first = id.substring(0,1);
+    let second = id.substring(0, 2);
+    return `/upload/${first}/${second}/${id}.${filetype}`;
+}
+
 export default {
-    GetQueryString, isIos, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, newFixed,
+    GetQueryString, isIos, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, newFixed,newFilePath,
     isNight() {
         return sessionStorage.getItem("theme") === "night";
     }
