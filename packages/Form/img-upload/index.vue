@@ -59,10 +59,11 @@
                     this.$emit("input", v.length === 0 ? "" : v[0]);
                 }
 
+                // 缩略图压缩
                 let thumbs = [];
                 for(let i = 0; i < v.length; i++){
                     let src = this.getPath(v[i]);
-                    thumbs.push(this.zipImg(src, {type: "image/jpeg"}, 1, 50));
+                    thumbs.push(this.zipImg(src, {type: "image/jpeg"}, 0.5, 50));
                 }
                 this.thumbs = [];
                 if(thumbs.length === 0){
