@@ -19,7 +19,6 @@
         name: "MueSelect",
         components: {},
         props: {
-            group: {default: false, type: Boolean},
             value: {default: null},
             clearable: {default: false, type: Boolean},
             data: {
@@ -33,55 +32,17 @@
         data(){
             return {
                 pop: false,
-                col0: [],
-                col1: [],
-                idx0: 0,
-                idx1: 0
+                depth: 0,
+                dict: {},
+                columns: []
             };
         },
         computed: {
             cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
             },
-            dict(){
-                let col0 = [], col1 = [], dict = {};
-                let data = this.data || [];
-                for(let i = 0; i < data.length; i++){
-                    let d = data[i];
-                    if(this.group){
-                        col0.push({
-                            name: d.name, disabled: d.disabled
-                        });
-                        let opts = (d.values || []).map((o, j) => {
-                            dict[o.code] = {index: [i, j], text: o.name, data: o};
-                            return {
-                                code: o.code, name: o.name, data: o, disabled: o.disabled
-                            };
-                        });
-                        col1.push(opts);
-                    }
-                    else{
-                        dict[d.code] = {index: [i], text: d.name, data: d};
-                        col0.push({
-                            code: d.code, name: d.name, data: d, disabled: d.disabled
-                        });
-                    }
-                }
-                this.col0 = col0;
-                this.col1 = col1;
-                return dict;
-            },
-            columns(){
-                if(!this.group){
-                    return this.col0;
-                }
-                return [
-                    {values: this.col0, defaultIndex: this.idx0},
-                    {values: this.col1[this.idx0 || 0] || [], defaultIndex: this.idx1}
-                ];
-            },
             text(){
-                return (this.dict[this.value] || {}).text || "";
+                return (this.dict[this.value] || {}).name || "";
             }
         },
         watch: {
@@ -89,17 +50,64 @@
                 if(!v){
                     return;
                 }
-                let idx = (this.dict[this.value] || {}).index || [];
-                this.idx0 = idx[0] || 0;
-                this.idx1 = idx[1] || 0;
+                let opt = this.dict[this.value] || {};
+                this.initCols(opt.disabled ? null : opt.$road);
             },
-            idx0(v){
-                this.$nextTick(() => {
-                    this.$refs.picker.setIndexes([v, this.idx1]);
-                });
+            data: {
+                deep: true, immediate: true,
+                handler(v){
+                    let dict = {}, depth = 0;
+
+                    let feach = (opts, road, disabled) => {
+                        let lv = road.length;
+                        if(lv > depth){
+                            depth = lv;
+                        }
+                        opts.forEach((opt, i) => {
+                            let clone = {
+                                ...opt, $lv: lv, $index: i, $road: [...road, opt.code],
+                                $parent: road.length === 0 ? null : road[road.length - 1],
+                                disabled: disabled || opt.disabled
+                            };
+                            delete clone.children;
+                            dict[opt.code] = clone;
+
+                            feach(opt.children || [], clone.$road, clone.disabled);
+                        });
+
+                    };
+
+                    feach(v, [], false);
+                    this.depth = depth;
+                    this.dict = dict;
+                }
             }
         },
         methods: {
+            initCols(road){
+                road = road || [];
+                let cols = [];
+                for(let i = 0; i < this.depth; i++){
+                    let parent = null;
+                    if(i !== 0){
+                        let {values, defaultIndex} = cols[i - 1];
+                        parent = (values[defaultIndex] || {}).code;
+
+                    }
+                    let values = Object.values(this.dict).filter((o) => {
+                        return o.$parent === parent && o.$lv === i;
+                    });
+                    let index = values.findIndex((o) => {
+                        return o.code === road[i];
+                    });
+
+                    cols.push({values, defaultIndex: Math.max(0, index)});
+
+                    this.columns = cols;
+
+                }
+                this.columns = cols;
+            },
             showPop(){
                 if(this.disabled){
                     return;
@@ -108,35 +116,31 @@
             },
             onConfirm(){
                 this.pop = false;
-                let ixs = this.$refs.picker.getIndexes();
-                let temp = this.group ? (this.col1[ixs[0]] || [])[ixs[1]] : this.col0[ixs[0]];
-
-                let v = (temp || {}).code;
-                let opt = (temp || {}).data;
-                this.$emit("input", v);
-                this.$emit("change", v, opt);
+                let values = this.$refs.picker.getValues();
+                let last = null;
+                for(let i = 0; i < values.length; i++){
+                    if(values[i] === undefined || values === null){
+                        break;
+                    }
+                    last = values[i];
+                }
+                // this.text = (last || {}).name;
+                this.$emit("input", last.code);
+                this.$emit("change", last.code, last);
             },
             onCancel(){
                 this.pop = false;
                 if(this.clearable){
-                    this.text = "";
+                    // this.text = "";
                     this.$emit("input", null);
                     this.$emit("change", null, null);
                 }
             },
             onChange(picker){
-                if(!this.group){
-                    return;
-                }
-                let pidx = picker.getIndexes();
-                if(this.idx0 === pidx[0]){
-                    this.idx1 = pidx[1];
-                }
-                else{
-                    this.idx0 = pidx[0];
-                    let idx = (this.dict[this.value] || {}).index || [];
-                    this.idx1 = idx[0] === pidx[0] ? idx[1] : 0;
-                }
+                let road = picker.getValues();
+                this.initCols(road.map((r) => {
+                    return (r || {}).code;
+                }));
             }
         },
         mounted(){

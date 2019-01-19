@@ -33,19 +33,28 @@
         data(){
             return {
                 select: {
-                    value: "c3",
+                    value: "d2",
                     data: [
                         {
                             code: "c1", name: "选项1", children: [
                                 {code: "d1", name: "1-1"},
                                 {code: "d2", name: "1-2"},
                                 {code: "d3", name: "1-3"},
-                                {code: "d4", name: "1-4"},
+                                {code: "d4", name: "1-4", disabled: true},
                                 {code: "d5", name: "1-5"},
                             ]
                         },
                         {code: "c2", name: "选项2"},
-                        {code: "c3", name: "选项3", disabled: true},
+                        {
+                            code: "c3", name: "选项3", disabled: true,
+                            children: [
+                                {code: "cd1", name: "3-1"},
+                                {code: "cd2", name: "3-2"},
+                                {code: "cd3", name: "3-3"},
+                                {code: "cd4", name: "3-4"},
+                                {code: "cd5", name: "3-5"},
+                            ]
+                        },
                         {code: "c4", name: "选项4"},
                         {code: "c5", name: "选项5"},
                     ]
