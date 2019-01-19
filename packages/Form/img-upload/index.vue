@@ -69,9 +69,9 @@
                     this.$native.queryLocalData({
                         params: {datas: query},
                         cb: ({datas}) => {
-                            datas.forEach(({_id, data}) => {
+                            datas.forEach(({id, data}) => {
                                 data = JSON.parse(data);
-                                this.dict[_id] = data.base64;
+                                this.dict[id] = data.base64;
                             });
                             this.createThumbs();
                         }
