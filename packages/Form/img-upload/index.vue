@@ -36,7 +36,7 @@
         },
         data(){
             return {
-                imgs: [], thumbs: [], uploading: false
+                imgs: [], thumbs: [], uploading: false, dict: {}
             };
         },
         watch: {
@@ -59,10 +59,37 @@
                     this.$emit("input", v.length === 0 ? "" : v[0]);
                 }
 
-                // 缩略图压缩
+                this.dict = {};
+                let query = v.map((p) => {
+                    this.dict[p] = p;
+                    return {key: "_id", value: p};
+                });
+
+                if(this.base64){
+                    this.$native.queryLocalData({
+                        params: {datas: query},
+                        cb: ({datas}) => {
+                            datas.forEach(({_id, data}) => {
+                                data = JSON.parse(data);
+                                this.dict[_id] = data.base64;
+                            });
+                            this.createThumbs();
+                        }
+                    });
+                }
+                else{
+                    this.createThumbs();
+                }
+
+
+            }
+        },
+        methods: {
+            createThumbs(){
+                // 生成缩略图
                 let thumbs = [];
-                for(let i = 0; i < v.length; i++){
-                    let src = this.getPath(v[i]);
+                for(let i = 0; i < this.imgs.length; i++){
+                    let src = this.getPath(this.imgs[i]);
                     thumbs.push(this.zipImg(src, {type: "image/jpeg"}, 0.5, 50));
                 }
                 this.thumbs = [];
@@ -76,14 +103,43 @@
                     });
                     this.uploading = false;
                 });
-            }
-        },
-        methods: {
-            getPath(m){
-                if(m.startsWith("/upload")){
-                    return `${window.location.origin}${m}`;
+            },
+
+            saveLocal(rs, callback){
+                let imgs = rs;
+                if(!this.multiple){
+                    imgs = rs.length > 0 ? [rs[0]] : [];
                 }
-                return m;
+                imgs = imgs.map(({content, file}) => {
+                    let {name, type} = file;
+                    let ext = name.split(".");
+                    ext = ext[ext.length - 1];
+                    let id = this.$comm.newFilePath(ext);
+                    return {
+                        _id: id,
+                        data: JSON.stringify({
+                            contextType: type, url: id, name, base64: content
+                        })
+                    }
+                });
+
+                this.$native.saveLocalData({
+                    params: {type: "common-image", state: "1", datas: imgs},
+                    cb: (result) => {
+                        callback(result, imgs);
+                    }
+                });
+            },
+
+            getPath(m){
+                let data = this.dict[m];
+                if(!data){
+                    return "";
+                }
+                if(data.startsWith("/upload")){
+                    return `${window.location.origin}${data}`;
+                }
+                return data;
             },
 
             base64ToFile(base64, file){
@@ -136,16 +192,26 @@
                     return this.zipImg(content, file, this.quality);
                 });
                 Promise.all(datas).then((rs) => {
+                    // 图片本地保存
                     if(this.base64){
-                        if(this.multiple){
-                            rs.forEach(({content}) => {
-                                this.imgs.push(content);
-                            });
+                        if(rs.length === 0){
+                            this.uploading = false;
+                            return;
                         }
-                        else{
-                            this.imgs = rs.length > 0 ? [rs[0].content] : [];
-                        }
-                        this.uploading = false;
+                        this.saveLocal(rs, (result, images) => {
+                            if(result.state === 0){
+                                if(!this.multiple){
+                                    this.imgs = [];
+                                }
+                                images.forEach(({_id}) => {
+                                    this.imgs.push(_id);
+                                });
+                            }
+                            else{
+                                console.error(result.msg);
+                            }
+                            this.uploading = false;
+                        });
                         return;
                     }
 
