@@ -60,28 +60,30 @@
                 }
 
                 this.dict = {};
-                let query = v.map((p) => {
+                v.forEach((p) => {
                     this.dict[p] = p;
-                    return {key: "_id", value: p};
                 });
 
                 if(this.base64){
-                    this.$native.queryLocalData({
-                        params: {datas: query},
-                        cb: ({datas}) => {
-                            datas.forEach(({id, data}) => {
-                                data = JSON.parse(data);
-                                this.dict[id] = data.base64;
-                            });
-                            this.createThumbs();
+                    let prms = v.map((p) => {
+                        return this.queryLocal(p);
+                    });
+
+                    Promise.all(prms).then((datas)=>{
+                        for(let i = 0; i < datas.length; i++){
+                            let {id, data} = datas[i];
+                            if(!id){
+                                continue;
+                            }
+                            data = JSON.parse(data);
+                            this.dict[id] = data.base64;
                         }
+                        this.createThumbs();
                     });
                 }
                 else{
                     this.createThumbs();
                 }
-
-
             }
         },
         methods: {
@@ -103,6 +105,17 @@
                     });
                     this.uploading = false;
                 });
+            },
+
+            queryLocal(id){
+                return new Promise((resolve) => {
+                    return this.$native.queryLocalData({
+                        params: {datas: [{key: "_id", value: id}]},
+                        cb: ({datas}) => {
+                            resolve(datas.length === 0 ? {} : datas[0]);
+                        }
+                    });
+                })
             },
 
             saveLocal(rs, callback){
@@ -137,7 +150,7 @@
                     return "";
                 }
                 if(data.startsWith("/upload")){
-                    return `${window.location.origin}${data}`;
+                    return `${sessionStorage.getItem("host") || ""}${data}`;
                 }
                 return data;
             },
