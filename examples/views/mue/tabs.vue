@@ -9,7 +9,8 @@
         </mue-tabs>
 
         <br/>
-        <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="popVis = true">
+        <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="moreClick"
+                  @click="activeAtMore = false" :active-at-more="activeAtMore">
             <mue-tab title="报表1">
                 :pop="false"
                 @more-click
@@ -52,12 +53,17 @@
                 ],
                 v: 2,
                 v2: 0,
-                popVis: false
+                popVis: false,
+                activeAtMore: false,
             };
         },
         methods: {
             onChange(index, title){
                 alert([index, title]);
+            },
+            moreClick(){
+                this.popVis = true;
+                this.activeAtMore = true;
             }
         },
         mounted(){

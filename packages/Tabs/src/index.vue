@@ -1,6 +1,7 @@
 <template>
-    <div class="mue-tabs" :style="style" :class="{'has-more': !pop || popTabs.length > 0}">
-        <van-tabs class="no-flex" v-model="current">
+    <div class="mue-tabs" :style="style"
+         :class="{'has-more': !pop || popTabs.length > 0, 'active-at-more': !pop && activeAtMore}">
+        <van-tabs class="no-flex" v-model="current" @click="onTabClick">
             <slot></slot>
         </van-tabs>
         <a v-if="!pop" class="mue-tabs-more" :class="[icon, {'in-more': activeAtMore}]"
@@ -122,6 +123,9 @@
                 let x = this.tabs.indexOf(tab);
                 this.tabs.splice(x, 1);
             },
+            onTabClick(index, title){
+                this.$emit("click", index, title);
+            },
             onPopTabClick(tab){
                 if(tab.disabled){
                     return;
@@ -131,6 +135,7 @@
                 if(x > -1){
                     this.current = x;
                 }
+                this.$emit("click", x, this.tabs[x].title);
             },
             onMoreClick(){
                 this.$emit("more-click");

@@ -34,6 +34,16 @@
             }
         }
 
+        &.active-at-more {
+            .van-tab.van-tab--active {
+                color: @@grey;
+
+                & > :first-child:before {
+                    content: none;
+                }
+            }
+        }
+
         .mue-tabs-more {
             background: @@background-bar;
             display: none;
@@ -145,16 +155,18 @@
                     text-overflow: ellipsis;
                 }
 
-                &.is-disabled{
+                &.is-disabled {
                     color: @@color-disabled;
-                    > .mue-tab-icon{
+
+                    > .mue-tab-icon {
                         color: @@color-disabled;
                     }
                 }
 
                 &.is-active {
                     color: @@primary;
-                    > .mue-tab-icon{
+
+                    > .mue-tab-icon {
                         color: @@primary;
                     }
                 }
