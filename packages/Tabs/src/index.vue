@@ -117,7 +117,6 @@
                 // });
             },
             addTab(tab){
-                debugger
                 let x = this.indexOfTab(tab);
                 this.tabs.splice(x === -1 ? this.tabs.length : x, 0, tab);
                 this.toggleTab(tab);
