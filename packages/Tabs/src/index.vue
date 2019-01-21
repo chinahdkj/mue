@@ -3,7 +3,8 @@
         <van-tabs class="no-flex" v-model="current">
             <slot></slot>
         </van-tabs>
-        <a v-if="!pop" class="mue-tabs-more" :class="icon" @click="onMoreClick"></a>
+        <a v-if="!pop" class="mue-tabs-more" :class="[icon, {'in-more': activeAtMore}]"
+           @click="onMoreClick"></a>
         <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop"
                      :append-to-body="false">
             <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
@@ -31,7 +32,8 @@
             value: {type: Number, default: 0},
             icon: {type: String, default: "iconfont icon-gengduo1"},
             height: {type: [String, Number], default: "100%"},
-            pop: {type: Boolean, default: true}
+            pop: {type: Boolean, default: true},
+            activeAtMore: {type: Boolean, default: false}
         },
         data(){
             return {

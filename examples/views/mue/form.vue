@@ -20,7 +20,8 @@
                         <mue-date-picker placeholder="请选择" v-model="model.date"></mue-date-picker>
                     </mue-form-item>
 
-                    <mue-form-item label="站点图片" field="station.pics">
+                    <mue-form-item label="站点图片" field="station.pics"
+                                   required :rules="[{type:'array'}]">
                         <mue-img-upload multiple v-model="model.station.pics"></mue-img-upload>
                     </mue-form-item>
 
