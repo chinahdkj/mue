@@ -1,126 +1,103 @@
-import vbutton from "../views/vant/button";
-import vtab from "../views/vant/tab";
-import vtabbar from "../views/vant/tabbar";
-import vcheckbox from "../views/vant/checkbox";
-import vradio from "../views/vant/radio";
-
-import page from "../views/mue/page";
-import container from "../views/mue/container";
-import panel from "../views/mue/panel";
-import chart from "../views/mue/chart";
-import rolldata from "../views/mue/rolldata";
-import datepicker from "../views/mue/datepicker";
-import daterangepicker from "../views/mue/daterangepicker";
-import search from "../views/mue/search";
-import popover from "../views/mue/popover";
-import tabs from "../views/mue/tabs";
-import loading from "../views/mue/loading";
-import datatable from "../views/mue/datatable";
-import formitem from "../views/mue/formitem";
-import form from "../views/mue/form";
-import loadmore from "../views/mue/loadmore";
-
-
 export default [
     {
         path: '/vant/button',
         name: 'vant_button',
-        component: vbutton
+        component: () => import("../views/vant/button")
     },
     {
         path: '/vant/checkbox',
         name: 'vant_checkbox',
-        component: vcheckbox
+        component: () => import("../views/vant/checkbox")
     },
     {
         path: '/vant/radio',
         name: 'vant_radio',
-        component: vradio
+        component: () => import("../views/vant/radio")
     },
     {
         path: '/vant/tab',
         name: 'vant_tab',
-        component: vtab
+        component: () => import("../views/vant/tab")
     },
     {
         path: '/vant/tabbar',
         name: 'vant_tabbar',
-        component: vtabbar
+        component: () => import("../views/vant/tabbar")
     },
 
     {
         path: '/mue/page',
         name: 'mue_page',
-        component: page
+        component: () => import("../views/mue/page")
     },
     {
         path: '/mue/container',
         name: 'mue_container',
-        component: container
+        component: () => import("../views/mue/container")
     },
     {
         path: '/mue/chart',
         name: 'mue_chart',
-        component: chart
+        component: () => import("../views/mue/chart")
     },
     {
         path: '/mue/panel',
         name: 'mue_panel',
-        component: panel
+        component: () => import("../views/mue/panel")
     },
     {
         path: '/mue/rolldata',
         name: 'mue_roll-data',
-        component: rolldata
+        component: () => import("../views/mue/rolldata")
     },
     {
         path: '/mue/datepicker',
         name: 'mue_date-picker',
-        component: datepicker
+        component: () => import("../views/mue/datepicker")
     },
     {
         path: '/mue/daterangepicker',
         name: 'mue_date-range-picker',
-        component: daterangepicker
+        component: () => import("../views/mue/daterangepicker")
     },
     {
         path: '/mue/search',
         name: 'mue_search',
-        component: search
+        component: () => import("../views/mue/search")
     },
     {
         path: '/mue/popover',
         name: 'mue_popover',
-        component: popover
+        component: () => import("../views/mue/popover")
     },
     {
         path: '/mue/tabs',
         name: 'mue_tabs',
-        component: tabs
+        component: () => import("../views/mue/tabs")
     },
     {
         path: '/mue/loading',
         name: 'mue_loading',
-        component: loading
+        component: () => import("../views/mue/loading")
     },
     {
         path: '/mue/datatable',
         name: 'mue_datatable',
-        component: datatable
+        component: () => import("../views/mue/datatable")
     },
     {
         path: '/mue/form',
         name: 'mue_form',
-        component: form
+        component: () => import("../views/mue/form")
     },
     {
         path: '/mue/formitem',
         name: 'mue_formitem',
-        component: formitem
+        component: () => import("../views/mue/formitem")
     },
     {
         path: '/mue/loadmore',
         name: 'mue_loadmore',
-        component: loadmore
+        component: () => import("../views/mue/loadmore")
     }
 ];

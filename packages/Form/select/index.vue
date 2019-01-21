@@ -141,6 +141,10 @@
                 this.initCols(road.map((r) => {
                     return (r || {}).code;
                 }));
+            },
+
+            GetOptionInfo(code){
+                return this.dict[code];
             }
         },
         mounted(){
