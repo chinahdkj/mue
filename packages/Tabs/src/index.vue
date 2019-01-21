@@ -10,18 +10,20 @@
                      :append-to-body="false">
             <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
             <ul class="mue-tabs-pop-tabs">
-                <li v-for="(t, i) in popTabs" :key="i" @click="onPopTabClick(t)"
-                    class="mue-tabs-pop-tab"
+                <pop-tab v-for="(t, i) in popTabs" :key="i" @click.native="onPopTabClick(t)"
+                    :tab="t" :no-icon="popNoIcon" class="mue-tabs-pop-tab"
                     :class="{'is-active': t.isActive, 'is-disabled':t.disabled}">
-                    <i class="mue-tab-icon" v-if="!popNoIcon" :class="t.icon"></i>
-                    <span class="mue-tab-title">{{t.title}}</span>
-                </li>
+                    <!--<i class="mue-tab-icon" v-if="!popNoIcon" :class="t.icon"></i>-->
+                    <!--<span class="mue-tab-title">{{t.title}}</span>-->
+                </pop-tab>
             </ul>
         </mue-popover>
     </div>
 </template>
 
 <script>
+    import popTab from "./poptab";
+
     export default {
         name: "MueTabs",
         provide(){
@@ -115,6 +117,7 @@
                 // });
             },
             addTab(tab){
+                debugger
                 let x = this.indexOfTab(tab);
                 this.tabs.splice(x === -1 ? this.tabs.length : x, 0, tab);
                 this.toggleTab(tab);
@@ -141,6 +144,6 @@
                 this.$emit("more-click");
             }
         },
-        components: {}
+        components: {popTab}
     }
 </script>
