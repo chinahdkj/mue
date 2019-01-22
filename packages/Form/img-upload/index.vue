@@ -71,12 +71,12 @@
 
                     Promise.all(prms).then((datas)=>{
                         for(let i = 0; i < datas.length; i++){
-                            let {id, data} = datas[i];
-                            if(!id){
+                            let {_id, data} = datas[i];
+                            if(!_id){
                                 continue;
                             }
                             data = JSON.parse(data);
-                            this.dict[id] = data.base64;
+                            this.dict[_id] = data.base64;
                         }
                         this.createThumbs();
                     });
