@@ -26,7 +26,8 @@
                 </table>
             </div>
 
-            <div ref="top_table" class="mue-datatable-center" @scroll="syncScrollX($event)">
+            <div ref="top_table" class="mue-datatable-center"
+                 @touchstart.stop="scrollTable = 'top_table'">
                 <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
                     <col-group :columns="colFields"/>
                     <thead>
@@ -107,7 +108,8 @@
                         </table>
                     </div>
 
-                    <div ref="main_table" class="mue-datatable-center" @scroll="onScroll">
+                    <div ref="main_table" class="mue-datatable-center"
+                         @touchstart.stop="scrollTable = 'main_table'">
                         <table class="mue-datatable__inner-table"
                                :style="{width: tableWidth + 'px'}">
                             <col-group :columns="colFields"/>
@@ -153,6 +155,7 @@
     </div>
 </template>
 <script>
+
     import colGroup from "./col-group";
     import {objectGet} from '../../../src/utils/object';
 
@@ -190,7 +193,8 @@
                 cols: [], // 列渲染结构，二维数组
                 colFields: [], // 列属性
                 headerRows: 0, // 表头行数
-                pageNo: 0
+                pageNo: 0,
+                scrollTable: null
             };
         },
         computed: {
@@ -380,12 +384,16 @@
                 this.colFields = [...ffields, ...fields];
                 this.headerRows = headerRows;
             },
-            onScroll(event){
-                let target = event.target;
-                if(this.header){
-                    this.$refs.top_table.scrollLeft = target.scrollLeft;
+
+            syncScrollX(){
+                let table = this.scrollTable;
+                if(table && this.$refs.top_table && this.$refs.main_table){
+                    let other = table === "top_table" ? "main_table" : "top_table";
+                    this.$refs[other].scrollLeft = this.$refs[table].scrollLeft;
                 }
+                window.requestAnimationFrame(this.syncScrollX);
             },
+
             onScrollY({bottom: sbottom}){
                 if(!this.pageSize || !this.$refs.main_table){
                     this.pageNo = 0;
@@ -403,13 +411,7 @@
                 let rowNo = this.getRowNo(this.data[i], i);
                 this.pageNo = parseInt(rowNo / this.pageSize) + 1;
             },
-            syncScrollX(event){
-                let target = event.target;
-                if(this.$refs.main_table && this.$refs.main_table.scrollLeft === target.scrollLeft){
-                    return;
-                }
-                this.ScrollLeft(target.scrollLeft, 0);
-            },
+
             onRefresh(success){
                 let self = this;
                 let callback = () => {
@@ -435,15 +437,9 @@
             },
 
             ScrollLeft(l = 0, duration = 400){
-                if(this.$refs.main_table){
-                    if(duration === 0){
-                        this.$refs.main_table.scrollLeft = l;
-                    }
-                    else{
-                        $(this.$refs.main_table).animate({scrollLeft: l}, duration);
-                    }
-
-                }
+                let refs = this.$refs;
+                refs.main_table && $(refs.main_table).animate({scrollLeft: l}, duration);
+                refs.top_table && $(refs.top_table).animate({scrollLeft: l}, duration);
             },
             ScrollTop(t = 0){
                 if(this.$refs.load_more){
@@ -457,6 +453,8 @@
         },
         mounted(){
             this.setCols();
+
+            this.syncScrollX();
         }
     };
 </script>
