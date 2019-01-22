@@ -1,24 +1,26 @@
 <template>
     <div class="mue-load-more">
-        <div class="mue-load-more-box" @scroll="onScroll"
-             :class="{'is-scrolling': !translate || scrolling}">
-            <div class="mue-load-more-wrap" @touchstart="handleTouchStart($event)"
-                 @touchmove="handleTouchMove($event)" @touchend="handleTouchEnd()">
+        <div class="mue-load-more-box" @scroll.passive="scrollHandler.onScroll"
+             :class="{'is-reached': scrollHandler.reached}">
+            <div class="mue-load-more-wrap"
+                 @touchstart.passive="handleTouchStart($event)"
+                 @touchmove.passive="touchHandler.onMove($event)"
+                 @touchend.passive="handleTouchEnd()">
                 <div class="mue-load-more-content"
-                     :class="{ 'is-dropped': topDropped || bottomDropped}"
+                     :class="{ 'is-dropped': top.dropped || bottom.dropped}"
                      :style="{ 'transform': transform }">
 
                     <div class="mue-load-more-top" v-if="$listeners.refresh">
                     <span class="mue-load-more-text">
-                        <i v-if="topStatus !== 'loading'" class="iconfont icon-xiangxiajiantou"
-                           aria-hidden="true" :class="{'is-drop': topStatus === 'drop'}"></i>
-                        <template v-if="topStatus === 'pull'">
+                        <i v-if="top.state !== 'loading'" class="iconfont icon-xiangxiajiantou"
+                           aria-hidden="true" :class="{'is-drop': top.state === 'drop'}"></i>
+                        <template v-if="top.state === 'pull'">
                             {{topPullText}}
                         </template>
-                        <template v-else-if="topStatus === 'drop'">
+                        <template v-else-if="top.state === 'drop'">
                             {{topDropText}}
                         </template>
-                        <template v-else-if="topStatus === 'loading'">
+                        <template v-else-if="top.state === 'loading'">
                             {{topLoadingText}}
                         </template>
                     </span>
@@ -35,16 +37,16 @@
                             {{moreThenView ? "没有更多了" : ""}}
                         </span>
                         <span v-else class="mue-load-more-text">
-                        <i v-if="bottomStatus !== 'loading'" aria-hidden="true"
+                        <i v-if="bottom.state !== 'loading'" aria-hidden="true"
                            class="iconfont icon-xiangxiajiantou-copy"
-                           :class="{'is-drop': bottomStatus === 'drop'}"></i>
-                        <template v-if="bottomStatus === 'pull'">
+                           :class="{'is-drop': bottom.state === 'drop'}"></i>
+                        <template v-if="bottom.state === 'pull'">
                             {{bottomPullText}}
                         </template>
-                        <template v-else-if="bottomStatus === 'drop'">
+                        <template v-else-if="bottom.state === 'drop'">
                             {{bottomDropText}}
                         </template>
-                        <template v-else-if="bottomStatus === 'loading'">
+                        <template v-else-if="bottom.state === 'loading'">
                             {{bottomLoadingText}}
                         </template>
                     </span>
@@ -57,7 +59,7 @@
 
         <transition name="van-slide-up">
             <div class="mue-load-more-pagination" v-show="pageNo > 1" @click="backTop">
-                <div class="__button" :class="{'is-pager': isPager}">
+                <div class="__button" :class="{'is-pager': scrollHandler.showPager}">
                     <a class="__backtop">
                         <i class="iconfont icon-zhiding"></i>
                     </a>
@@ -76,6 +78,8 @@
 </template>
 
 <script>
+    import {createAnimationFrame} from "../../../src/utils/dom";
+
     export default {
         name: "MueLoadMore",
         components: {},
@@ -104,30 +108,35 @@
                 maxDistance: 70,
                 distance: 50,
                 distanceIndex: 2,
-
                 translate: 0,
-
-                topText: "",
-                topDropped: false,
-                bottomText: "",
-                bottomDropped: false,
-                bottomReached: false,
-
-                direction: '',
-                startY: 0,
-                startScrollTop: 0,
-                currentY: 0,
-                topStatus: '',
-                bottomStatus: '',
-
                 $content: null,
                 $box: null,
 
-                scrolling: false,
-                scrollTimer: null,
-                isPager: false,
-                pagerTimer: null,
                 moreThenView: false,
+
+                scrollHandler: {
+                    onScroll: () => {
+                    },
+                    scrolling: false,
+                    showPager: false,
+                    pagerTimer: null
+                },
+                top: {
+                    state: "pull",
+                    reached: true,
+                    dropped: false
+                },
+                bottom: {
+                    state: "pull",
+                    reached: true,
+                    dropped: false
+                },
+                touchHandler: {
+                    start: null,
+                    direction: "",
+                    onMove: (event) => {
+                    }
+                }
             };
         },
         computed: {
@@ -135,7 +144,8 @@
                 if(this.translate === 0){
                     return null;
                 }
-                let translate = parseInt(this.translate);
+                let translate = !this.top.reached && !this.bottom.reached
+                                ? 0 : parseInt(this.translate);
                 if(translate < -this.maxDistance){
                     translate = -this.maxDistance;
                 }
@@ -175,6 +185,10 @@
                 this.bottomStatus = "pull";
                 this.$box = this.$el.getElementsByClassName("mue-load-more-box")[0];
                 this.$content = this.$el.getElementsByClassName("mue-load-more-wrap")[0];
+
+                this.scrollHandler.onScroll = createAnimationFrame(this.onScroll);
+                this.touchHandler.onMove = createAnimationFrame(this.handleTouchMove);
+                this.resetStates();
                 this.fillContainer();
             },
             fillContainer(){
@@ -190,103 +204,79 @@
                     }
                 });
             },
-            checkBottomReached(){
-                return parseInt(this.$content.getBoundingClientRect().bottom) <=
-                    parseInt(this.$box.getBoundingClientRect().bottom) + 1;
-            },
+
             handleTouchStart(event){
-                if(this.scrolling){
+                if(!this.top.reached && !this.bottom.reached){
                     this.translate = 0;
-                    this.topStatus = "pull";
-                    this.bottomStatus = "pull";
                     return;
                 }
-                this.startY = event.touches[0].clientY;
-                this.startScrollTop = this.getScrollTop();
-                this.bottomReached = false;
-                if(this.topStatus !== "loading"){
-                    this.topStatus = "pull";
-                    this.topDropped = false;
+                this.touchHandler.start = event.touches[0].clientY;
+                this.touchHandler.direction = "";
+
+                if(this.top.state !== "loading"){
+                    this.top.state = "pull";
+                    this.top.dropped = false;
                 }
-                if(this.bottomStatus !== "loading"){
-                    this.bottomStatus = "pull";
-                    this.bottomDropped = false;
+                if(this.bottom.state !== "loading"){
+                    this.bottom.state = "pull";
+                    this.bottom.dropped = false;
                 }
             },
             handleTouchMove(event){
-                if(this.startY < this.$content.getBoundingClientRect().top && this.startY >
-                    this.$content.getBoundingClientRect().bottom){
+                if(this.touchHandler.start == null){
                     return;
                 }
-                this.currentY = event.touches[0].clientY;
-                let distance = (this.currentY - this.startY) / this.distanceIndex;
-                this.direction = distance > 0 ? "down" : "up";
-                if(this.$listeners.refresh && !this.disRefresh && this.direction === "down" &&
-                    this.getScrollTop() === 0 && this.topStatus !== "loading"){
-                    // event.preventDefault();
-                    event.stopPropagation();
-                    this.translate = distance <= this.maxDistance
-                                     ? (distance - this.startScrollTop) : this.translate;
-                    if(this.translate < 0){
-                        this.translate = 0;
-                    }
-                    this.topStatus = this.translate >= this.distance ? "drop" : "pull";
-                }
-                if(this.direction === "up"){
-                    this.bottomReached = this.bottomReached || this.checkBottomReached();
+                let current = event.touches[0].clientY;
+                let distance = (current - this.touchHandler.start) / this.distanceIndex;
+
+                // 顶部下拉
+                if(distance > 0 && this.top.reached && this.$listeners.refresh &&
+                    !this.disRefresh && this.top.state !== "loading"){
+                    this.touchHandler.direction = "down";
+                    this.translate = distance;
+                    this.top.state = this.translate >= this.distance ? "drop" : "pull";
+                    return;
                 }
 
-                if(this.$listeners["load-more"] && !this.disLoadMore && this.direction === "up" &&
-                    this.bottomReached && this.bottomStatus !== "loading"){
-                    // event.preventDefault();
-                    event.stopPropagation();
-
-                    this.translate = Math.abs(distance) <= this.maxDistance ?
-                                     this.getScrollTop() - this.startScrollTop + distance :
-                                     this.translate;
-                    if(this.translate > 0){
-                        this.translate = 0;
-                    }
-                    this.bottomStatus = -this.translate >= this.distance && !this.allLoaded ?
-                                        "drop" : "pull";
+                // 底部上拉
+                if(distance < 0 && this.bottom.reached && this.$listeners["load-more"] &&
+                    !this.disLoadMore && this.bottom.state !== "loading"){
+                    this.touchHandler.direction = "up";
+                    this.translate = distance;
+                    this.bottom.state = -this.translate >= this.distance && !this.allLoaded
+                                        ? "drop" : "pull";
+                    return;
                 }
+
+                this.touchHandler.direction = "";
 
             },
             handleTouchEnd(){
-                if(this.direction === "down" && this.getScrollTop() === 0
-                    && this.translate > 0){
-                    this.topDropped = true;
-                    if(this.topStatus === "drop" && this.translate >= this.distance){
+                if(this.touchHandler.direction === "down" && this.translate > 0){
+                    this.top.dropped = true;
+                    if(this.top.state === "drop" && this.translate >= this.distance){
                         this.translate = this.distance;
-                        this.topStatus = "loading";
+                        this.top.state = "loading";
                         this.topMethod();
-                    }
-                    else{
-                        this.translate = 0;
-                        this.topStatus = "pull";
-                        setTimeout(() => {
-                            this.direction = "";
-                        }, 400);
-                    }
-                }
-                if(this.direction === "up" && this.bottomReached
-                    && this.translate < 0){
-                    this.bottomDropped = true;
-                    this.bottomReached = false;
-                    if(this.bottomStatus === "drop" && this.translate <= -this.distance){
-                        this.translate = -this.distance;
-                        this.bottomStatus = "loading";
-                        this.bottomMethod();
-                    }
-                    else{
-                        this.translate = 0;
-                        this.bottomStatus = "pull";
-                        setTimeout(() => {
-                            this.direction = "";
-                        }, 200);
+                        return;
                     }
                 }
 
+                if(this.touchHandler.direction === "up" && this.translate < 0){
+                    this.bottom.dropped = true;
+                    if(this.bottom.state === "drop" && -this.translate >= this.distance){
+                        this.translate = -this.distance;
+                        this.bottom.state = "loading";
+                        this.bottomMethod();
+                        return;
+                    }
+                }
+
+                this.touchHandler.start = null;
+                this.translate = 0;
+                this.direction = "";
+                this.bottom.state = "pull";
+                this.top.state = "pull";
             },
 
             backTop(){
@@ -294,27 +284,41 @@
             },
 
             onScroll(){
-                clearTimeout(this.scrollTimer);
-                clearTimeout(this.pagerTimer);
-                this.isPager = true;
-                this.scrolling = true;
-                this.$emit("scroll-change", this.$box.getBoundingClientRect());
-                this.scrollTimer = setTimeout(() => {
-                    this.scrolling = false;
-                }, 100);
-                this.pagerTimer = setTimeout(() => {
-                    this.isPager = false;
+                let boxRect = this.$box.getBoundingClientRect();
+                let cntRect = this.$content.getBoundingClientRect();
+                this.top.reached = boxRect.top === cntRect.top;
+                this.bottom.reached = boxRect.bottom >= cntRect.bottom;
+                this.$emit("scroll-change", boxRect);
+
+                clearTimeout(this.scrollHandler.pagerTimer);
+
+                this.scrollHandler.showPager = true;
+                this.scrollHandler.pagerTimer = setTimeout(() => {
+                    this.scrollHandler.showPager = false;
                 }, 1500);
 
             },
 
-            LoadSuccess(){
-                this.direction = "";
-                this.bottomStatus = "pull";
-                this.bottomDropped = false;
-                this.topStatus = "pull";
-                this.topDropped = false;
+            resetStates(){
                 this.translate = 0;
+                this.touchHandler.direction = "";
+
+                this.bottom.state = "pull";
+                this.bottom.dropped = false;
+
+                this.top.state = "pull";
+                this.top.dropped = false;
+
+                this.$nextTick(()=>{
+                    let boxRect = this.$box.getBoundingClientRect();
+                    let cntRect = this.$content.getBoundingClientRect();
+                    this.top.reached = boxRect.top === cntRect.top;
+                    this.bottom.reached = boxRect.bottom >= cntRect.bottom;
+                });
+            },
+
+            LoadSuccess(){
+                this.resetStates();
                 this.fillContainer();
             },
 

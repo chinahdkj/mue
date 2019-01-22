@@ -20,10 +20,10 @@
             width: 100%;
             padding-right: @scroll-size; // 隐藏右侧滚动条
             box-sizing: content-box;
-            -webkit-overflow-scrolling: auto;
+            -webkit-overflow-scrolling: touch;
 
-            &.is-scrolling {
-                -webkit-overflow-scrolling: touch;
+            &.is-reached {
+                -webkit-overflow-scrolling: auto;
             }
         }
 
@@ -33,6 +33,7 @@
         }
 
         .mue-load-more-content {
+            transform: translate3d(0, 0, 0);
             overflow: visible;
 
             &.is-dropped {
