@@ -27,7 +27,7 @@
             </div>
 
             <div ref="top_table" class="mue-datatable-center"
-                 @touchstart.stop="scrollTable = 'top_table'">
+                 @touchstart="scrollTable = 'top_table'">
                 <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
                     <col-group :columns="colFields"/>
                     <thead>
@@ -109,7 +109,7 @@
                     </div>
 
                     <div ref="main_table" class="mue-datatable-center"
-                         @touchstart.stop="scrollTable = 'main_table'">
+                         @touchstart="scrollTable = 'main_table'">
                         <table class="mue-datatable__inner-table"
                                :style="{width: tableWidth + 'px'}">
                             <col-group :columns="colFields"/>
