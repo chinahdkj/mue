@@ -175,6 +175,7 @@
                     }
                     let img = new Image();
                     img.src = content;
+                    img.crossOrigin = "anonymous";
                     img.onload = function(){
                         let canvas = document.createElement("canvas");
                         let height = this.height;
