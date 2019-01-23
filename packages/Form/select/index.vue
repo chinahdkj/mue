@@ -27,7 +27,12 @@
                 }
             },
             disabled: {type: Boolean, default: false},
-            placeholder: {type: String, default: ""}
+            placeholder: {type: String, default: ""},
+            pickLv: {
+                type: String, default: "last", validator(v){
+                    return ["last", "any"].indexOf(v) > -1;
+                }
+            }
         },
         data(){
             return {
@@ -97,6 +102,11 @@
                     let values = Object.values(this.dict).filter((o) => {
                         return o.$parent === parent && o.$lv === i;
                     });
+
+                    if(i > 0 && this.pickLv === "any"){
+                        values.splice(0, 0, {name: "", code: undefined});
+                    }
+
                     let index = values.findIndex((o) => {
                         return o.code === road[i];
                     });
@@ -119,7 +129,7 @@
                 let values = this.$refs.picker.getValues();
                 let last = null;
                 for(let i = 0; i < values.length; i++){
-                    if(values[i] === undefined || values === null){
+                    if(values[i] == null || values[i].code == null){
                         break;
                     }
                     last = values[i];
