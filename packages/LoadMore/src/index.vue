@@ -34,7 +34,7 @@
 
                     <div class="mue-load-more-bottom" v-if="$listeners['load-more']">
                         <span v-if="allLoaded" class="mue-load-more-text">
-                            {{moreThenView ? "没有更多了" : ""}}
+                            {{moreThenView ? allLoadedText : ""}}
                         </span>
                         <span v-else class="mue-load-more-text">
                         <i v-if="bottom.state !== 'loading'" aria-hidden="true"
@@ -94,6 +94,8 @@
             bottomPullText: {type: String, default: "上拉加载更多"},
             bottomDropText: {type: String, default: "释放开始加载"},
             bottomLoadingText: {type: String, default: "加载中..."},
+
+            allLoadedText: {type: String, default: "没有更多了"},
 
             allLoaded: {type: Boolean, default: false},
 
@@ -288,7 +290,7 @@
                 let cntRect = this.$content.getBoundingClientRect();
                 this.top.reached = boxRect.top === cntRect.top;
                 this.bottom.reached = boxRect.bottom >= cntRect.bottom;
-                this.$emit("scroll-change", boxRect);
+                this.$emit("scroll-change", this.$box, this.$content);
 
                 clearTimeout(this.scrollHandler.pagerTimer);
 

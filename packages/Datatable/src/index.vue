@@ -5,7 +5,9 @@
                  :style="{width:fixedWidth + 'px' }">
                 <table class="mue-datatable__inner-table"
                        :style="{width: tableWidth + 'px'}">
+
                     <col-group :columns="colFields"/>
+
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" :rowspan="c.rowspan">
@@ -23,13 +25,16 @@
                         </th>
                     </tr>
                     </thead>
+
                 </table>
             </div>
 
             <div ref="top_table" class="mue-datatable-center"
                  @touchstart="scrollTable = 'top_table'">
                 <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
+
                     <col-group :columns="colFields"/>
+
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan"
@@ -48,17 +53,19 @@
                         </th>
                     </tr>
                     </thead>
+
                 </table>
             </div>
         </div>
 
-        <div class="mue-datatable-main"
+        <div class="mue-datatable-main" v-resize="scrollResize" style="overflow: auto"
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
             <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
                            :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
                            :all-loaded="data.length >= total" @scroll-change="onScrollY"
+                           :all-loaded-text="'已加载' + total + '条数据，没有更多数据了'"
                            :page-no="pageNo" :page-total="pageTotal">
 
                 <div v-if="total === 0" class="mue-datatable-nodata">
@@ -67,101 +74,82 @@
                     <span>暂无数据</span>
                 </div>
 
-                <div v-else class="mue-datatable-scroller">
+                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}"
+                     :style="[virtual ? {height: data.length * rowHeight + 'px'} : null]">
                     <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
-                         :style="{width: fixedWidth + 'px' }">
+                         :style="[{width: fixedWidth + 'px' },
+                         virtual ? {height: data.length * rowHeight + 20 + 'px'} : null
+                         ]">
+
                         <table class="mue-datatable__inner-table"
-                               :style="{width: tableWidth + 'px'}">
+                               :style="[{width: tableWidth + 'px'},
+                                virtual ? {top: virtualBox.white} : null]">
                             <col-group :columns="colFields"/>
                             <tbody>
-                            <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
-                                :class="rowCls(d, i)" @click="onRowClick(d, i)">
+                            <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
+                                  :row="d" :no="i + virtualBox.start">
 
-                                <slot name="row" :cols="colFields" :row="d" :no="i">
+                                <tr class="__row" :key="rowId(d, i + virtualBox.start)"
+                                    :class="rowCls(d, i + virtualBox.start)"
+                                    @click="onRowClick(d, i + virtualBox.start)">
 
-                                    <template v-for="(c, j) in colFields">
-                                        <td v-if="c.fixed" :key="j"
-                                            @click="onCellClick(d, c, i, $event)"
-                                            :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
+                                    <cell v-for="c in colFields" :key="c.field" :col="c"
+                                          :row="d" :fixed="true" :value="getValue(d, c.field)"
+                                          :hstyle="cellHeight" :no="i + virtualBox.start"/>
 
-                                            <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
-                                                  :name="c.tmpl"
-                                                  :row="d" :col="c" :value="getValue(d, c.field)"
-                                                  :no="i">
-                                            </slot>
-                                            <template v-else>
-                                                {{getValue(d, c.field)}}
-                                            </template>
+                                </tr>
 
-                                        </td>
-
-                                        <td v-else :key="j"
-                                            :style="{'line-height': rowHeight + 'px'}">
-                                            &nbsp;
-                                        </td>
-
-                                    </template>
-
-                                </slot>
-                            </tr>
+                            </slot>
                             </tbody>
                         </table>
                     </div>
 
                     <div ref="main_table" class="mue-datatable-center"
-                         @touchstart="scrollTable = 'main_table'">
+                         @touchstart="scrollTable = 'main_table'"
+                         :style="[virtual ? {height: data.length * rowHeight + 20 + 'px'} : null]">
+
                         <table class="mue-datatable__inner-table"
-                               :style="{width: tableWidth + 'px'}">
+                               :style="[{width: tableWidth + 'px'} ,
+                               virtual ? {top: virtualBox.white} : null]">
                             <col-group :columns="colFields"/>
                             <tbody>
-                            <tr class="__row" v-for="(d, i) in data" :key="rowId(d, i)"
-                                :class="rowCls(d, i)" @click="onRowClick(d, i)">
+                            <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
+                                  :row="d" :no="virtualBox.start + i">
 
-                                <slot name="row" :cols="colFields" :row="d" :no="i">
+                                <tr class="__row" :key="rowId(d, virtualBox.start + i)"
+                                    :class="rowCls(d, virtualBox.start + i)"
+                                    @click="onRowClick(d, virtualBox.start  + i)">
 
-                                    <template v-for="(c, j) in colFields">
-                                        <td v-if="!c.fixed" :key="j"
-                                            @click="onCellClick(d, c, i, $event)"
-                                            :style="{'text-align': c.align || 'center', 'line-height': rowHeight + 'px'}">
+                                    <cell v-for="c in colFields" :key="c.field" :col="c"
+                                          :row="d" :fixed="false" :value="getValue(d, c.field)"
+                                          :hstyle="cellHeight" :no="virtualBox.start +i"/>
 
-                                            <slot v-if="c.tmpl && $scopedSlots[c.tmpl]"
-                                                  :name="c.tmpl"
-                                                  :row="d" :col="c" :value="getValue(d, c.field)"
-                                                  :no="i">
-                                            </slot>
-                                            <template v-else>
-                                                {{getValue(d, c.field)}}
-                                            </template>
+                                </tr>
 
-                                        </td>
-
-                                        <td v-else :key="j"
-                                            :style="{'line-height': rowHeight + 'px'}">
-                                            &nbsp;
-                                        </td>
-
-                                    </template>
-
-                                </slot>
-
-                            </tr>
+                            </slot>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
 
             </mue-load-more>
+
         </div>
     </div>
 </template>
 <script>
 
     import colGroup from "./col-group";
+    import cell from "./cell";
     import {objectGet} from '../../../src/utils/object';
 
     export default {
         name: "MueDatatable",
-        components: {colGroup},
+        components: {colGroup, cell},
+        provide(){
+            return {TABLE: this};
+        },
         props: {
             header: {type: Boolean, default: true},
             columns: {
@@ -184,7 +172,9 @@
             sort: {type: Object, default: null}, // 排序
 
             pageSize: {type: Number, default: 0},
-            rowNo: {type: [String, Function], default: ""}
+            rowNo: {type: [String, Function], default: ""},
+
+            virtual: {type: Boolean, default: true} // 虚拟渲染，可视区域之外不渲染
         },
         data(){
             return {
@@ -194,7 +184,10 @@
                 colFields: [], // 列属性
                 headerRows: 0, // 表头行数
                 pageNo: 0,
-                scrollTable: null
+                scrollTable: null, // 操作横向滚动的表格
+                scrollBox: { // 竖向滚动高度，及可视区域高度
+                    top: 0, height: 0
+                }
             };
         },
         computed: {
@@ -213,6 +206,36 @@
                         (this.total % this.pageSize === 0 ? 0 : 1);
                 }
                 return 0;
+            },
+            cellHeight(){
+                let h = `${this.rowHeight}px`;
+                let style = {"line-height": h};
+                if(this.virtual){
+                    style.height = h;
+                }
+                return style;
+            },
+            virtualBox(){
+                if(!this.virtual){
+                    return {
+                        start: 0,
+                        end: this.data.length, // 渲染数据范围
+                        white: null,
+                        rows: this.data
+                    };
+                }
+
+                let half = Math.ceil(this.scrollBox.height / this.rowHeight / 2);
+                let start = Math.floor(this.scrollBox.top / this.rowHeight);
+                start = Math.max(start - half, 0);
+                let end = Math.min(start + 4 * half, this.data.length);
+                return {
+                    start, end,
+                    white: `${this.rowHeight * start}px`,
+                    rows: this.data.filter((r, i) => {
+                        return i >= start && i < end;
+                    })
+                };
             }
         },
         watch: {
@@ -394,22 +417,45 @@
                 window.requestAnimationFrame(this.syncScrollX);
             },
 
-            onScrollY({bottom: sbottom}){
+            onScrollY(box){
                 if(!this.pageSize || !this.$refs.main_table){
                     this.pageNo = 0;
                     return;
                 }
-                let trs = this.$refs.main_table.getElementsByClassName("__row");
-                let i = 0;
-                for(i = 0; i < trs.length; i++){
-                    let tr = trs[i];
-                    if(tr.getBoundingClientRect().bottom >= sbottom){
-                        break;
+
+                if(!this.virtual){
+                    let trs = this.$refs.main_table.getElementsByClassName("__row");
+                    let bottom = box.getBoundingClientRect().bottom;
+                    let i = 0;
+                    for(i = 0; i < trs.length; i++){
+                        let tr = trs[i];
+                        if(tr.getBoundingClientRect().bottom >= bottom){
+                            break;
+                        }
                     }
+                    i = Math.max(i - 2, 0);
+                    let rowNo = this.getRowNo(this.data[i], i);
+                    this.pageNo = parseInt(rowNo / this.pageSize) + 1;
+                    return;
                 }
-                i = Math.max(i - 1, 0);
+
+                // 按行号计算页码
+                let bottom = box.scrollTop + box.clientHeight;
+                let i = parseInt(bottom / this.rowHeight) - 2;
                 let rowNo = this.getRowNo(this.data[i], i);
                 this.pageNo = parseInt(rowNo / this.pageSize) + 1;
+
+                this.scrollBox.top = box.scrollTop;
+            },
+
+            scrollResize(){
+                let $lm = this.$refs.load_more;
+                if(!$lm){
+                    this.scrollBox.height = 0;
+                }
+                else{
+                    this.scrollBox.height = $lm.$el.getBoundingClientRect().height;
+                }
             },
 
             onRefresh(success){
@@ -429,11 +475,6 @@
             },
             onRowClick(row, i){
                 this.$emit("row-click", row, i);
-            },
-
-            onCellClick(row, col, i, $event){
-                let value = this.getValue(row, col.field);
-                this.$emit("cell-click", value, row, col, i, $event);
             },
 
             ScrollLeft(l = 0, duration = 400){

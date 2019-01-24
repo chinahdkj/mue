@@ -83,6 +83,7 @@
             overflow-x: auto;
             overflow-y: hidden;
             padding-bottom: @scroll-size;
+            position: relative;
         }
 
         .mue-datatable-scroller {
@@ -269,6 +270,19 @@
 
             .mue-datatable__inner-table td:after {
                 content: none;
+            }
+        }
+
+        // virtual
+        .mue-datatable-scroller.is-virtual{
+            margin-bottom: 0;
+            &:after{
+                content: none;
+            }
+
+            .mue-datatable__inner-table{
+                position: absolute;
+                left: 0;
             }
         }
 

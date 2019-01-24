@@ -6,13 +6,19 @@
                                :data="data" :sort="sort" :total="total" :row-class="rowClass"
                                :stripe="stripe" :row-key="rowKey" :row-height="rowHeight"
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
-                               @refresh="onRefresh" @load-more="onLoadMore"
-                               @row-click="onRowClick">
+                               @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
+                               @row-click="onRowClick" @cell-click="onCellClick">
                     <!--<template slot="row" slot-scope="{row, cols, no}">-->
-                    <!--<td v-for="c in cols" :key="c.field">-->
-                    <!--{{no}}{{row[c.field]}}-->
-                    <!--</td>-->
+                        <!--<tr>-->
+                            <!--<td v-for="c in cols" :key="c.field">-->
+                                <!--{{no}}{{row[c.field]}}-->
+                            <!--</td>-->
+                        <!--</tr>-->
                     <!--</template>-->
+
+                    <template slot="aa" slot-scope="{row, col, value, no}">
+                        {{col.field}} -- {{value}}
+                    </template>
                 </mue-datatable>
             </div>
             <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
@@ -32,6 +38,7 @@
             sort: 排序{field, order}, 支持sync<br/>
             pageSize: 分页大小 number<br/>
             rowNo: 行序号 string、function(row, no); string 取行属性; 缺省为 no + 1<br/>
+            virtual: 虚拟渲染[true, false], 默认开启，开启时，只渲染部分行，其余留白。<br/>
 
             pageSize > 0 可视区域最后一行的rowNo 计算当前页码， 页码 > 1时 显示右下角分页按钮，点击返回顶部。
             <br/>
@@ -81,7 +88,7 @@
                 header: true, // 显示表头
                 columns: [ // 列定义
                     {field: "a", title: "列1", width: 120, fixed: true, align: "left"},
-                    {field: "b", title: "列2", width: 120},
+                    {field: "b", title: "列2", width: 120, tmpl: "aa"},
                     {field: "c", title: "列3", width: 120, sortable: true},
                     {
                         title: "合并", children: [
@@ -167,11 +174,15 @@
             },
 
             onRowClick(row, index){
-                alert([JSON.stringify(row), index]);
+                // alert([JSON.stringify(row), index]);
             },
 
             toLeft(){
                 this.$refs.table.ScrollLeft();
+            },
+
+            onCellClick(value, row, col, no, event){
+                // alert(value);
             }
         },
         mounted(){
