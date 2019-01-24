@@ -162,7 +162,7 @@
                 if(!this.$refs.pager){
                     return;
                 }
-                $(this.$refs.pager).animate({scrollTop: (v - 1) * 20}, 200);
+                $(this.$refs.pager).animate({scrollTop: (v - 1) * 22}, 200);
             }
         },
         methods: {
