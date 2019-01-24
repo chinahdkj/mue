@@ -6,7 +6,7 @@
                 <table class="mue-datatable__inner-table"
                        :style="{width: tableWidth + 'px'}">
 
-                    <col-group :columns="colFields"/>
+                    <col-group :columns="colFields" filter/>
 
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
@@ -29,15 +29,15 @@
                 </table>
             </div>
 
-            <div ref="top_table" class="mue-datatable-center"
+            <div ref="top_table" class="mue-datatable-center" :style="[centerWidth]"
                  @touchstart="scrollTable = 'top_table'">
                 <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
 
-                    <col-group :columns="colFields"/>
+                    <col-group :columns="colFields" filter/>
 
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
-                        <th v-for="(c, i) in r" :key="i" :colspan="c.colspan"
+                        <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" v-if="!c.fixed"
                             :rowspan="c.rowspan">
                             <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}">
                                 <span :class="sortCls(c)" @click="onChangeSort(c)">
@@ -74,16 +74,12 @@
                     <span>暂无数据</span>
                 </div>
 
-                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}"
-                     :style="[virtual ? {height: data.length * rowHeight + 'px'} : null]">
+                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}">
                     <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
-                         :style="[{width: fixedWidth + 'px' },
-                         virtual ? {height: data.length * rowHeight + 20 + 'px'} : null
-                         ]">
+                         :style="[{width: fixedWidth + 'px' }, mainHeight]">
 
-                        <table class="mue-datatable__inner-table"
-                               :style="[{width: tableWidth + 'px'},
-                                virtual ? {top: virtualBox.white} : null]">
+                        <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
+                                virtual ? {'margin-top': virtualBox.white} : null]">
                             <col-group :columns="colFields"/>
                             <tbody>
                             <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
@@ -106,12 +102,11 @@
 
                     <div ref="main_table" class="mue-datatable-center"
                          @touchstart="scrollTable = 'main_table'"
-                         :style="[virtual ? {height: data.length * rowHeight + 20 + 'px'} : null]">
+                         :style="[mainHeight, centerWidth]">
 
-                        <table class="mue-datatable__inner-table"
-                               :style="[{width: tableWidth + 'px'} ,
-                               virtual ? {top: virtualBox.white} : null]">
-                            <col-group :columns="colFields"/>
+                        <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
+                                virtual ? {'margin-top': virtualBox.white} : null]">
+                            <col-group :columns="colFields" filter/>
                             <tbody>
                             <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
                                   :row="d" :no="virtualBox.start + i">
@@ -120,9 +115,9 @@
                                     :class="rowCls(d, virtualBox.start + i)"
                                     @click="onRowClick(d, virtualBox.start  + i)">
 
-                                    <cell v-for="c in colFields" :key="c.field" :col="c"
-                                          :row="d" :fixed="false" :value="getValue(d, c.field)"
-                                          :hstyle="cellHeight" :no="virtualBox.start +i"/>
+                                    <cell v-for="c in colFields" :key="c.field" v-if="!c.fixed"
+                                          :hstyle="cellHeight" :col="c" :row="d" :fixed="false"
+                                          :value="getValue(d, c.field)" :no="virtualBox.start +i"/>
 
                                 </tr>
 
@@ -191,6 +186,18 @@
             };
         },
         computed: {
+            centerWidth(){
+                if(this.fixedWidth === 0){
+                    return {width: "100%"};
+                }
+                return {width: `calc(100% - ${this.fixedWidth}px)`};
+            },
+            mainHeight(){
+                if(!this.virtual){
+                    return null;
+                }
+                return {height: `${this.data.length * this.rowHeight + Number(!this.border)}px`}
+            },
             headerVisibel(){
                 return this.header && this.colFields.length > 0;
             },
@@ -208,10 +215,10 @@
                 return 0;
             },
             cellHeight(){
-                let h = `${this.rowHeight}px`;
+                let h = `${this.rowHeight - (this.noborder ? 0 : 1)}px`;
                 let style = {"line-height": h};
                 if(this.virtual){
-                    style.height = h;
+                    style.height = `${this.rowHeight}px`;
                 }
                 return style;
             },

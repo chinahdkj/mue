@@ -154,7 +154,7 @@
                 if(translate > this.maxDistance){
                     translate = this.maxDistance;
                 }
-                return this.translate === 0 ? null : `translate3d(0, ${translate}px, 0)`;
+                return this.translate === 0 ? null : `translateY(${translate}px)`;
             }
         },
         watch: {
