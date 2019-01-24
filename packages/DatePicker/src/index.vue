@@ -33,6 +33,14 @@
     export default {
         name: "MueDatePicker",
         components: {yearPicker},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             format: {
                 type: String, default: "YYYY-MM-DD"
@@ -74,9 +82,10 @@
         },
         methods: {
             showPop(){
-                if(!this.disabled){
-                    this.pop = true;
+                if(this.disabled || this.FORM_ITEM.readonly){
+                    return;
                 }
+                this.pop = true;
             },
             onConfirm(v){
                 this.val = v;

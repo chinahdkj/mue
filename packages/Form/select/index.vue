@@ -18,6 +18,14 @@
     export default {
         name: "MueSelect",
         components: {},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             value: {default: null},
             clearable: {default: false, type: Boolean},
@@ -119,7 +127,7 @@
                 this.columns = cols;
             },
             showPop(){
-                if(this.disabled){
+                if(this.disabled || this.FORM_ITEM.readonly){
                     return;
                 }
                 this.pop = true;

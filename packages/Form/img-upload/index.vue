@@ -5,7 +5,7 @@
                 @contextmenu.stop.prevent="removeImg(i)" @click.stop.prevent="showPic(i)">
                 <img :src="m"/>
             </li>
-            <li class="__upload-btn">
+            <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
                 <van-uploader v-else :disabled="disabled" :after-read="upload"
                               result-type="dataUrl" :multiple="multiple">
@@ -23,6 +23,14 @@
     export default {
         name: "MueImgUpload",
         components: {},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
