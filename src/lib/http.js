@@ -60,7 +60,10 @@ export default {
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
-            if (e.Message) {
+
+            if (e.response.status === 404){
+                // TODO
+            } else if (e.Message) {
                 !failed && Vue.prototype.$toast(e.Message);
             } else {
                 !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
