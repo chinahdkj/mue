@@ -61,6 +61,7 @@ export default {
             console.log(e);
 
             // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
+            // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
             if ((e.response && e.response.status === 404) || (e.Code === 21001)){
                 // TODO
             } else if (e.Message) {
