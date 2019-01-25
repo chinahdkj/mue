@@ -40,6 +40,11 @@
                 type: String, default: "last", validator(v){
                     return ["last", "any"].indexOf(v) > -1;
                 }
+            },
+            textLv: {
+                type: String, default: "last", validator(v){
+                    return ["last", "all"].indexOf(v) > -1;
+                }
             }
         },
         data(){
@@ -55,7 +60,16 @@
                 return this.clearable ? "清空" : "取消";
             },
             text(){
-                return (this.dict[this.value] || {}).name || "";
+                let temp = this.dict[this.value] || {};
+                if(this.textLv === "last"){
+                    return temp.code == null ? "" : temp.name;
+                }
+                let text = [];
+                while(temp.code != null){
+                    text.splice(0,0, temp.name);
+                    temp = this.dict[temp.$parent] || {};
+                }
+                return text.join(",");
             }
         },
         watch: {
