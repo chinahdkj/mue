@@ -266,7 +266,12 @@
                 let images = this.imgs.map((m) => {
                     return this.getPath(m);
                 });
-                ImagePreview({images, startPosition: i, loop: true});
+                this.$native.hideHeader({params: {hide: 1}});
+                ImagePreview({
+                    images, startPosition: i, loop: true, onClose: () => {
+                        this.$native.hideHeader({params: {hide: 0}});
+                    }
+                });
             },
             removeImg(i){
                 if(this.disabled){
