@@ -202,3 +202,17 @@ export function setStyle(element, styleName, value){
         }
     }
 };
+
+export function createAnimationFrame(func){
+    let acting = false;
+    return (...args) => {
+        if(acting){
+            return;
+        }
+        acting = true;
+        window.requestAnimationFrame(() => {
+            func(...args);
+            acting = false;
+        });
+    }
+}

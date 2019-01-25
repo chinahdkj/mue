@@ -1,7 +1,7 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li class="__upload-btn">
+            <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
                 <van-uploader v-else :disabled="disabled" :after-read="upload" accept="*/*"
                               result-type="dataUrl">
@@ -20,6 +20,14 @@
     export default {
         name: "MueUpload",
         components: {},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},

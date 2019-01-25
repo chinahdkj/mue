@@ -16,7 +16,7 @@
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
-                   :lazy-render="false">
+                   get-container="body">
             <year-picker v-if="dtype == 'year'" v-model="val" @confirm="onConfirm"
                          @cancel="onCancel" :cancel-button-text="cancelText"></year-picker>
             <van-datetime-picker v-if="dtype != 'year'" :type="dtype" v-model="val"
@@ -33,6 +33,14 @@
     export default {
         name: "MueDatePicker",
         components: {yearPicker},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             format: {
                 type: String, default: "YYYY-MM-DD"
@@ -74,9 +82,10 @@
         },
         methods: {
             showPop(){
-                if(!this.disabled){
-                    this.pop = true;
+                if(this.disabled || this.FORM_ITEM.readonly){
+                    return;
                 }
+                this.pop = true;
             },
             onConfirm(v){
                 this.val = v;
@@ -101,9 +110,6 @@
                 }
                 this.pop = false;
             }
-        },
-        mounted(){
-            $(this.$refs.pop.$el).appendTo("body");
         }
     }
 </script>

@@ -51,7 +51,6 @@
             overflow: hidden;
             height: 100%;
             width: 100%;
-            position: relative;
             border-top: 0 solid transparent;
             box-sizing: border-box;
         }
@@ -59,63 +58,49 @@
         .mue-datatable-fixed {
             box-sizing: border-box;
             overflow: hidden;
-            position: absolute;
-            left: 0;
-            z-index: 10;
             background: @@background;
-
-            &:after {
-                content: "";
-                display: block;
-                position: absolute;
-                right: 0;
-                top: 0;
-                height: 100%;
-                width: 1px;
-                z-index: 20;
-                background: @@border-color;
-            }
+            float: left;
+            border-right: 1px solid @@border-color;
         }
 
         .mue-datatable-center {
             box-sizing: border-box;
-            width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
             float: left;
-            padding-bottom: @scroll-size;
+            //padding-bottom: @scroll-size;
         }
 
         .mue-datatable-scroller {
             width: 100%;
             overflow: hidden;
-            position: relative;
-            margin-bottom: -@scroll-size;
+            //position: relative;
+            //margin-bottom: -@scroll-size;
 
-            &:after {
-                // 遮挡底部滚动条
-                content: "";
-                display: block;
-                height: @scroll-size;
-                width: 100%;
-                position: absolute;
-                z-index: 5;
-                background: @@background;
-                left: 0;
-                bottom: 0;
-            }
+            //&:after {
+            //    // 遮挡底部滚动条
+            //    content: "";
+            //    display: block;
+            //    height: @scroll-size;
+            //    width: 100%;
+            //    position: absolute;
+            //    z-index: 5;
+            //    background: @@background;
+            //    left: 0;
+            //    bottom: 0;
+            //}
         }
 
         .mue-datatable__inner-table {
             border-collapse: collapse;
-            border-spacing: 0;
-            table-layout: fixed;
-            word-break: break-all;
+            float: left;
+            //border-spacing: 0;
+            //table-layout: fixed;
+            //word-break: break-all;
 
             th, td {
                 vertical-align: middle;
                 box-sizing: border-box;
-                position: relative;
                 text-align: center;
                 font-size: @font-size;
                 overflow: hidden;
@@ -214,17 +199,18 @@
 
             td {
                 padding: 0 10px;
+                border-bottom: 1px solid @@border-color;
 
-                &:after {
-                    content: "";
-                    display: block;
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    height: 1px;
-                    width: 100%;
-                    background: @@border-color;
-                }
+                //&:after {
+                //    content: "";
+                //    display: block;
+                //    position: absolute;
+                //    left: 0;
+                //    bottom: 0;
+                //    height: 1px;
+                //    width: 100%;
+                //    background: @@border-color;
+                //}
             }
         }
 
@@ -263,14 +249,21 @@
                 content: none;
             }
 
-            .mue-datatable-fixed:after {
-                content: none;
+            .mue-datatable-fixed {
+                border-right: 0;
             }
 
-            .mue-datatable__inner-table td:after {
-                content: none;
+            .mue-datatable__inner-table td {
+                border-bottom: 0;
             }
         }
+
+        // virtual
+        //.mue-datatable-scroller.is-virtual{
+        //    .mue-datatable__inner-table{
+        //        float: left;
+        //    }
+        //}
 
     }
 }

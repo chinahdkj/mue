@@ -6,7 +6,7 @@
             <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
-                   :lazy-render="false">
+                   get-container="body">
             <van-picker ref="picker" :columns="columns" show-toolbar @confirm="onConfirm"
                         @cancel="onCancel" :cancel-button-text="cancelButtonText"
                         value-key="name" @change="onChange"/>
@@ -18,6 +18,14 @@
     export default {
         name: "MueSelect",
         components: {},
+        inject: {
+            FORM_ITEM: {
+                from: "FORM_ITEM",
+                default(){
+                    return {};
+                }
+            }
+        },
         props: {
             value: {default: null},
             clearable: {default: false, type: Boolean},
@@ -27,7 +35,17 @@
                 }
             },
             disabled: {type: Boolean, default: false},
-            placeholder: {type: String, default: ""}
+            placeholder: {type: String, default: ""},
+            pickLv: {
+                type: String, default: "last", validator(v){
+                    return ["last", "any"].indexOf(v) > -1;
+                }
+            },
+            textLv: {
+                type: String, default: "last", validator(v){
+                    return ["last", "all"].indexOf(v) > -1;
+                }
+            }
         },
         data(){
             return {
@@ -42,7 +60,16 @@
                 return this.clearable ? "清空" : "取消";
             },
             text(){
-                return (this.dict[this.value] || {}).name || "";
+                let temp = this.dict[this.value] || {};
+                if(this.textLv === "last"){
+                    return temp.code == null ? "" : temp.name;
+                }
+                let text = [];
+                while(temp.code != null){
+                    text.splice(0,0, temp.name);
+                    temp = this.dict[temp.$parent] || {};
+                }
+                return text.join(",");
             }
         },
         watch: {
@@ -97,6 +124,11 @@
                     let values = Object.values(this.dict).filter((o) => {
                         return o.$parent === parent && o.$lv === i;
                     });
+
+                    if(i > 0 && this.pickLv === "any"){
+                        values.splice(0, 0, {name: "", code: undefined});
+                    }
+
                     let index = values.findIndex((o) => {
                         return o.code === road[i];
                     });
@@ -109,7 +141,7 @@
                 this.columns = cols;
             },
             showPop(){
-                if(this.disabled){
+                if(this.disabled || this.FORM_ITEM.readonly){
                     return;
                 }
                 this.pop = true;
@@ -119,7 +151,7 @@
                 let values = this.$refs.picker.getValues();
                 let last = null;
                 for(let i = 0; i < values.length; i++){
-                    if(values[i] === undefined || values === null){
+                    if(values[i] == null || values[i].code == null){
                         break;
                     }
                     last = values[i];
@@ -146,9 +178,6 @@
             GetOptionInfo(code){
                 return this.dict[code];
             }
-        },
-        mounted(){
-            $(this.$refs.pop.$el).appendTo("body");
         }
     }
 </script>

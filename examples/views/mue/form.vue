@@ -1,7 +1,8 @@
 <template>
     <van-tabs v-loading="confirming" class="no-flex">
         <van-tab title="demo">
-            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110">
+            <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110"
+                      :readonly="readonly">
                 <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
                     <div slot="help">11111</div>
 
@@ -18,6 +19,10 @@
 
                     <mue-form-item label="安装时间" required field="date">
                         <mue-date-picker placeholder="请选择" v-model="model.date"></mue-date-picker>
+                    </mue-form-item>
+
+                    <mue-form-item label="经纬度" required field="pos">
+                        <mue-gis-point placeholder="请选择" v-model="model.pos"></mue-gis-point>
                     </mue-form-item>
 
                     <mue-form-item label="站点图片" field="station.pics"
@@ -119,6 +124,7 @@
         components: {},
         data(){
             return {
+                readonly: false,
                 confirming: false,
 
                 rules: {
@@ -143,6 +149,7 @@
                     station: {
                         pics: []
                     },
+                    pos: "120,30",
                     remark: "",
                     valid: {
                         number: 0,
