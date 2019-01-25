@@ -95,7 +95,7 @@
         computed: {
             text(){
                 let pos = VALID_POS(this.value);
-                return !this.pos ? "" : `${ROUND(pos.lng)},${ROUND(pos.lat)}`;
+                return !pos ? "" : `${ROUND(pos.lng)},${ROUND(pos.lat)}`;
             },
             cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
