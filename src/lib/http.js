@@ -61,7 +61,7 @@ export default {
             console.log(e);
 
 
-            if (e.response.status === 404){
+            if (e.response && e.response.status === 404){
                 // TODO
             } else if (e.Message) {
                 !failed && Vue.prototype.$toast(e.Message);
