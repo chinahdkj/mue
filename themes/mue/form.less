@@ -12,6 +12,8 @@
     @border-color-title: %("%s-form-title-border-color", @theme);
     @placeholder: %("%s-placeholder", @theme);
 
+    @background-pop: %("%s-background-pop", @theme);
+
     .mue-form-input {
         background: @@background;
         display: inline-block;
@@ -157,6 +159,68 @@
         }
     }
 
+    // gis-point
+    .mue-gis-point-pop {
+        .mue-gis-point-pop--info {
+            height: 30px;
+            width: 100%;
+            font-size: @font-size;
+            box-sizing: border-box;
+            padding-left: 10px;
+
+            > label {
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                width: 40px;
+                display: inline-block;
+                color: @@grey;
+            }
+
+            > span {
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                display: inline-block;
+                color: @@color;
+                width: calc(~"50% - 40px");
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-right: 10px;
+                box-sizing: border-box;
+            }
+        }
+
+        .mue-gis-point-pop--map {
+            width: 100%;
+            height: 250px;
+            position: relative;
+
+            > .mue-gis-point-pop--marker {
+                position: absolute;
+                overflow: hidden;
+                z-index: 1000;
+                left: 50%;
+                top: 50%;
+
+                > img {
+                    width: 100%;
+                    height: 100%;
+                }
+
+                > img.--shadow {
+                    width: 14px;
+                    height: 14px;
+                    position: absolute;
+                    left: 4px;
+                    top: 12px;
+                    opacity: 0.85;
+                }
+            }
+        }
+    }
+
+
     .mue-form {
         background: @@background-base;
         overflow: auto;
@@ -196,7 +260,8 @@
                     color: @@grey;
                     margin-top: 8px;
                     line-height: 20px;
-                    i.__icon{
+
+                    i.__icon {
                         float: left;
                         padding-right: 5px;
                     }
@@ -212,6 +277,7 @@
                     i.__icon {
                         float: right;
                         padding-left: 5px;
+
                         &.icon-icon_wenhao {
                             color: #fcb100;
                         }
@@ -502,8 +568,8 @@
             }
         }
 
-        &.not-inline{
-            .mue-form-item-content .mue-form-text{
+        &.not-inline {
+            .mue-form-item-content .mue-form-text {
                 text-align: left;
             }
         }
