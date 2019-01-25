@@ -8,7 +8,8 @@
         <section>
             <router-view/>
         </section>
-        <van-popup class="menubox" v-model="pop" position="left" :lazy-render="false">
+        <van-popup class="menubox" v-model="pop" position="left" :lazy-render="false"
+                   get-container="body">
             <vmenu @open="onOpen"/>
         </van-popup>
     </div>

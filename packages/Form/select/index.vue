@@ -6,7 +6,7 @@
             <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
-                   :lazy-render="false">
+                   get-container="body">
             <van-picker ref="picker" :columns="columns" show-toolbar @confirm="onConfirm"
                         @cancel="onCancel" :cancel-button-text="cancelButtonText"
                         value-key="name" @change="onChange"/>
@@ -164,9 +164,6 @@
             GetOptionInfo(code){
                 return this.dict[code];
             }
-        },
-        mounted(){
-            $(this.$refs.pop.$el).appendTo("body");
         }
     }
 </script>

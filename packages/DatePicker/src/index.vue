@@ -16,7 +16,7 @@
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
-                   :lazy-render="false">
+                   get-container="body">
             <year-picker v-if="dtype == 'year'" v-model="val" @confirm="onConfirm"
                          @cancel="onCancel" :cancel-button-text="cancelText"></year-picker>
             <van-datetime-picker v-if="dtype != 'year'" :type="dtype" v-model="val"
@@ -110,9 +110,6 @@
                 }
                 this.pop = false;
             }
-        },
-        mounted(){
-            $(this.$refs.pop.$el).appendTo("body");
         }
     }
 </script>
