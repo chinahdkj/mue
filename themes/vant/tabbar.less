@@ -24,8 +24,22 @@
             color: @@primary;
         }
 
+        .van-tabbar-item__icon {
+            margin-bottom: 3px;
+
+            > i:first-child {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                line-height: 24px;
+                text-align: center;
+                font-size: 20px;
+            }
+        }
+
         .van-tabbar-item__icon--dot:after {
             background: @bubble-background;
+            right: -5px;
         }
     }
 }
