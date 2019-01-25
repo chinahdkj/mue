@@ -60,8 +60,8 @@ export default {
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
-
-            if (e.response && e.response.status === 404){
+            // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
+            if ((e.response && e.response.status === 404) || (e.Code === 21001)){
                 // TODO
             } else if (e.Message) {
                 !failed && Vue.prototype.$toast(e.Message);
