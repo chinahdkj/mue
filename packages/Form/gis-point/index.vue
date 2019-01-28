@@ -145,22 +145,19 @@
             round(v){
                 return v == null ? "" : ROUND(v);
             }
-        }
-        ,
+        },
         methods: {
             updateCenter(v){
                 if(!this.FORM_ITEM.readonly){
                     this.pos = v;
                 }
-            }
-            ,
+            },
             showPop(){
                 if(this.disabled || (this.FORM_ITEM.readonly && !this.pos)){
                     return;
                 }
                 this.pop = true;
-            }
-            ,
+            },
             onConfirm(){
                 this.pop = false;
                 if(!this.pos){
@@ -180,8 +177,7 @@
                 }
                 this.$emit("input", value);
                 this.$emit("change", value);
-            }
-            ,
+            },
             onCancel(){
                 this.pop = false;
                 if(this.clearable){
