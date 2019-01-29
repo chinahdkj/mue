@@ -62,10 +62,9 @@
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
             <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
-                           :dis-refresh="!$listeners['refresh']"
+                           @scroll-change="onScrollY" :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
-                           :all-loaded="data.length >= total" @scroll-change="onScrollY"
-                           :all-loaded-text="'已加载' + total + '条数据，没有更多数据了'"
+                           :all-loaded="data.length >= total" :all-loaded-text="allLoadedText"
                            :page-no="pageNo" :page-total="pageTotal">
 
                 <div v-if="total === 0" class="mue-datatable-nodata">
@@ -243,6 +242,9 @@
                         return i >= start && i < end;
                     })
                 };
+            },
+            allLoadedText(){
+                return this.pageTotal > 1 ? `已加载${this.total}条数据，没有更多数据了` : "";
             }
         },
         watch: {
