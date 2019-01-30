@@ -436,7 +436,7 @@
                 }
 
                 if(!this.virtual){
-                    let trs = this.$refs.main_table.getElementsByClassName("__row");
+                    let trs = this.$refs.main_table.querySelectorAll("tr");
                     let bottom = box.getBoundingClientRect().bottom;
                     let i = 0;
                     for(i = 0; i < trs.length; i++){
