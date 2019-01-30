@@ -184,8 +184,6 @@
                 return this.$box.scrollTop;
             },
             init(){
-                this.topStatus = "pull";
-                this.bottomStatus = "pull";
                 this.$box = this.$el.getElementsByClassName("mue-load-more-box")[0];
                 this.$content = this.$el.getElementsByClassName("mue-load-more-wrap")[0];
 
