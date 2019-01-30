@@ -418,6 +418,9 @@
             },
 
             syncScrollX(){
+                if(this._inactive){
+                    return;
+                }
                 let table = this.scrollTable;
                 if(table && this.$refs.top_table && this.$refs.main_table){
                     let other = table === "top_table" ? "main_table" : "top_table";

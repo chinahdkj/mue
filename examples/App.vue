@@ -6,7 +6,9 @@
                          style="z-index: 1000;"/>
         </header>
         <section>
-            <router-view/>
+            <keep-alive>
+                <router-view/>
+            </keep-alive>
         </section>
         <van-popup class="menubox" v-model="pop" position="left" :lazy-render="false"
                    get-container="body">

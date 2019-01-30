@@ -121,7 +121,8 @@
                     },
                     scrolling: false,
                     showPager: false,
-                    pagerTimer: null
+                    pagerTimer: null,
+                    position: {left: 0, top: 0}
                 },
                 top: {
                     state: "pull",
@@ -286,6 +287,9 @@
             },
 
             onScroll(){
+                this.scrollHandler.position.left = this.$box.scrollLeft;
+                this.scrollHandler.position.top = this.$box.scrollTop;
+
                 let boxRect = this.$box.getBoundingClientRect();
                 let cntRect = this.$content.getBoundingClientRect();
                 this.top.reached = boxRect.top === cntRect.top;
@@ -330,6 +334,12 @@
         },
         mounted(){
             this.init();
+        },
+        activated(){
+            this.$nextTick(()=>{
+                this.$box.scrollTop = this.scrollHandler.position.top;
+                this.$box.scrollLeft = this.scrollHandler.position.left;
+            });
         }
     };
 </script>
