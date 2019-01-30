@@ -14,6 +14,7 @@ import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
+import touch from '../packages/directives/touch.js';
 
 import Vant, {Locale} from 'vant';
 import zhCN from 'vant/lib/locale/lang/zh-CN';
@@ -39,6 +40,9 @@ const install = function(Vue){
     });
     Vue.use(Loading.directive);
     Vue.directive(resize.name, resize);
+    Object.entries(touch).forEach(([k, v]) => {
+        Vue.directive(k, v);
+    });
 
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;

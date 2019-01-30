@@ -1,8 +1,8 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li v-for="(m, i) in thumbs" :key="i" class="__upload-img"
-                @contextmenu.stop.prevent="removeImg(i)" @click.stop.prevent="showPic(i)">
+            <li v-for="(m, i) in thumbs" :key="i" class="__upload-img" v-long-tap="()=>removeImg(i)"
+                @contextmenu.stop.prevent="()=>{}" @click.stop.prevent="showPic(i)">
                 <img :src="m"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
@@ -77,7 +77,7 @@
                         return this.queryLocal(p);
                     });
 
-                    Promise.all(prms).then((datas)=>{
+                    Promise.all(prms).then((datas) => {
                         for(let i = 0; i < datas.length; i++){
                             let {_id, data} = datas[i];
                             if(!_id){
