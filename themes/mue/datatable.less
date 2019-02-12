@@ -68,7 +68,14 @@
             overflow-x: auto;
             overflow-y: hidden;
             float: left;
-            //padding-bottom: @scroll-size;
+
+            &:after {
+                content: "";
+                display: block;
+                height: @scroll-size;
+                width: 100%;
+                float: left;
+            }
         }
 
         .mue-datatable-scroller {
@@ -95,7 +102,7 @@
             border-collapse: collapse;
             float: left;
             //border-spacing: 0;
-            //table-layout: fixed;
+            table-layout: fixed;
             //word-break: break-all;
 
             th, td {

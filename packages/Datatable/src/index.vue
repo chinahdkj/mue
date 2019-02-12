@@ -73,9 +73,10 @@
                     <span>暂无数据</span>
                 </div>
 
-                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}">
+                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}"
+                     :style="mainHeight">
                     <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
-                         :style="[{width: fixedWidth + 'px' }, mainHeight]">
+                         :style="[{width: fixedWidth + 'px' }]">
 
                         <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
                                 virtual ? {'margin-top': virtualBox.white} : null]">
@@ -100,8 +101,7 @@
                     </div>
 
                     <div ref="main_table" class="mue-datatable-center"
-                         @touchstart="scrollTable = 'main_table'"
-                         :style="[mainHeight, centerWidth]">
+                         @touchstart="scrollTable = 'main_table'" :style="[centerWidth]">
 
                         <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
                                 virtual ? {'margin-top': virtualBox.white} : null]">
