@@ -1,9 +1,10 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li v-for="(m, i) in thumbs" :key="i" class="__upload-img" v-long-tap="()=>removeImg(i)"
-                @contextmenu.stop.prevent="()=>{}" @click.stop.prevent="showPic(i)">
-                <img :src="m"/>
+            <li v-for="(m, i) in imgs" :key="i" class="__upload-img"
+                v-tap="() => showPic(i)" v-long-tap="() => removeImg(i)"
+                @contextmenu.stop.prevent="()=>{}">
+                <img :src="dict[m]"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
@@ -86,11 +87,11 @@
                             data = JSON.parse(data);
                             this.dict[_id] = data.base64;
                         }
-                        this.createThumbs();
+                        // this.createThumbs();
                     });
                 }
                 else{
-                    this.createThumbs();
+                    // this.createThumbs();
                 }
             }
         },
@@ -176,30 +177,43 @@
             },
 
             zipImg(content, {type, name}, quality, maxWidth){
+                let zip = (img, resolve) => {
+                    let canvas = document.createElement("canvas");
+                    let height = img.height;
+                    let width = img.width;
+
+                    if(maxWidth && width > maxWidth){
+                        let hw = height / width;
+                        width = maxWidth;
+                        height = hw * width;
+                    }
+
+                    canvas.height = height;
+                    canvas.width = width;
+                    let ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve({
+                        content: canvas.toDataURL(type, quality), file: {type, name}
+                    });
+                };
+
                 return new Promise((resolve) => {
                     if(quality === 1 && !maxWidth){
                         resolve({content, file: {type, name}});
                         return;
                     }
                     let img = new Image();
-                    img.src = content;
                     img.crossOrigin = "anonymous";
-                    img.onload = function(){
-                        let canvas = document.createElement("canvas");
-                        let height = this.height;
-                        let width = this.width;
-                        if(maxWidth && width > maxWidth){
-                            let hw = height / width;
-                            width = maxWidth;
-                            height = hw * width;
+                    img.src = content;
+
+                    if(img.complete){
+                        zip(img, resolve);
+                    }
+                    else{
+                        img.onload = function(){
+                            zip(this, resolve);
+                            img.onload = null;
                         }
-                        canvas.height = height;
-                        canvas.width = width;
-                        let ctx = canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve({
-                            content: canvas.toDataURL(type, quality), file: {type, name}
-                        });
                     }
                 });
             },
