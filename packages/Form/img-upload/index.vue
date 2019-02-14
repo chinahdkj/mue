@@ -4,7 +4,7 @@
             <li v-for="(m, i) in imgs" :key="i" class="__upload-img"
                 v-tap="() => showPic(i)" v-long-tap="() => removeImg(i)"
                 @contextmenu.stop.prevent="()=>{}">
-                <img :src="dict[m]"/>
+                <img :src="getPath(dict[m])"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
