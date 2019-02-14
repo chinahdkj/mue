@@ -181,7 +181,8 @@
                 scrollTable: null, // 操作横向滚动的表格
                 scrollBox: { // 竖向滚动高度，及可视区域高度
                     top: 0, height: 0
-                }
+                },
+                isActive: false, // 是否被激活，不激活状态, 停用横向滚动同步
             };
         },
         computed: {
@@ -252,6 +253,12 @@
                 deep: true,
                 handler(){
                     this.setCols();
+                }
+            },
+            isActive:{
+                immediate:true,
+                handler(v){
+                    v && this.syncScrollX();
                 }
             }
         },
@@ -418,7 +425,7 @@
             },
 
             syncScrollX(){
-                if(this._inactive){
+                if(!this.isActive){
                     return;
                 }
                 let table = this.scrollTable;
@@ -506,8 +513,16 @@
         },
         mounted(){
             this.setCols();
-
-            this.syncScrollX();
+            this.isActive = true;
+        },
+        activated(){
+            this.isActive = true;
+        },
+        deactivated(){
+            this.isActive = false;
+        },
+        beforeDestroy(){
+            this.isActive = false;
         }
     };
 </script>
