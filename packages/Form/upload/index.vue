@@ -72,7 +72,10 @@
                     u8arr[i] = bytes.charCodeAt(i);
                 }
 
-                return new File([u8arr], file.name, {type: mime});
+                let blob = new Blob([u8arr], {type: file.type});
+                blob.lastModifiedDate = new Date();
+                blob.name = file.name;
+                return blob;
             },
 
             upload(files){
