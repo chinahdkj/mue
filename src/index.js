@@ -40,9 +40,7 @@ const install = function(Vue){
     });
     Vue.use(Loading.directive);
     Vue.directive(resize.name, resize);
-    Object.entries(touch).forEach(([k, v]) => {
-        Vue.directive(k, v);
-    });
+    Vue.directive(touch.name, touch);
 
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;
