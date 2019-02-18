@@ -1,27 +1,60 @@
+const CONTEXT_MENU = (e) => {
+    e.preventDefault();
+};
+
+const GET_ACTION = (value, name) => {
+    if(typeof value === "function" && name === "tap"){
+        return value;
+    }
+    if(value && typeof value === "object" && typeof value[name] === "function"){
+        return value[name];
+    }
+    return null;
+};
+
 export default {
     name: "touch",
     bind(el, binding){
-        let start = {x: null, y: null, t: null};
+        let start = null;
+        let longTap = false;
+        let timer = null;
+
+        let actions = {
+            tap: GET_ACTION(binding.value, "tap"),
+            long: GET_ACTION(binding.value, "long"),
+            swipe: GET_ACTION(binding.value, "swipe"),
+        };
+
+        let clearTimer = () => {
+            if(timer){
+                clearTimeout(timer);
+                timer = null;
+            }
+        };
+
         let touchStart = (e) => {
             e.preventDefault();
-            start = {
-                x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY, t: new Date().getTime()
-            };
+            longTap = false;
+            start = {x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY};
+
+            if(actions.long){
+                timer = setTimeout(() => {
+                    longTap = true;
+                    actions.long();
+                }, 1000);
+            }
         };
 
         let touchEnd = (e) => {
             let end = {
-                x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY, t: new Date().getTime()
+                x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY
             };
             let disx = end.x - start.x;
             let disy = end.y - start.y;
-            let dist = end.t - start.t;
 
-            if(binding.modifiers.swipe && (Math.abs(disx) >= 10 || Math.abs(disy) >= 100)){
-                if(!binding.modifiers.direction){
-                    binding.value("swipe", start, end);
-                }
-                else{
+            if((Math.abs(disx) >= 10 || Math.abs(disy) >= 100)){
+                if(actions.swipe){
+
                     let direction = [];
                     if(disx >= 10){
                         direction.push("right");
@@ -36,27 +69,37 @@ export default {
                     else if(disy <= -100){
                         direction.push("up");
                     }
-
-                    binding.value(direction.join("-"), start, end);
+                    actions.swipe(direction.join("-"));
                 }
-
                 return;
             }
 
-            if(binding.modifiers.long && dist >= 500){
-                binding.value("long-tap", start, end);
-                return;
+            if(!actions.long || !longTap){
+                // 短按删除长按计时器
+                clearTimer();
+                actions.tap();
             }
-
-            binding.value("tap", start, end);
-
         };
-        el.TOUCH_EVENTS = {start: touchStart, end: touchEnd};
+
+        let touchMove = (e) => {
+            // 移动删除长按计时器
+            let disx = e.changedTouches[0].pageX - start.x;
+            let disy = e.changedTouches[0].pageY - start.y;
+            if(Math.abs(disx) >= 10 || Math.abs(disy) >= 100){
+                clearTimer();
+            }
+        };
+
+        el.TOUCH_EVENTS = {start: touchStart, end: touchEnd, move: touchMove};
+        el.addEventListener("contextmenu", CONTEXT_MENU);
         el.addEventListener("touchstart", el.TOUCH_EVENTS.start);
+        el.addEventListener("touchmove", el.TOUCH_EVENTS.move);
         el.addEventListener("touchend", el.TOUCH_EVENTS.end);
     },
-    unbind(el, binding){
+    unbind(el){
+        el.removeEventListener("contextmenu", CONTEXT_MENU);
         el.removeEventListener("touchstart", el.TOUCH_EVENTS.start);
+        el.removeEventListener("touchmove", el.TOUCH_EVENTS.move);
         el.removeEventListener("touchend", el.TOUCH_EVENTS.end);
     }
 };

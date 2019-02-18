@@ -1,9 +1,9 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li v-for="(m, i) in imgs" :key="i" class="__upload-img" @contextmenu.stop="()=>{}"
-                v-touch.swipe="(type)=>{onTouch(i, type)}">
-                <img :src="getPath(dict[m])"/>
+            <li v-for="(m, i) in imgs" :key="i" class="__upload-img">
+                <img :src="getPath(dict[m])"
+                     v-touch="{tap: () => {showPic(i);}, long: () => {removeImg(i);}}"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
@@ -277,13 +277,6 @@
                         this.uploading = false;
                     });
                 });
-            },
-            onTouch(i, type){
-                if(type === "swipe"){
-                    this.removeImg(i);
-                    return;
-                }
-                this.showPic(i);
             },
 
             showPic(i){
