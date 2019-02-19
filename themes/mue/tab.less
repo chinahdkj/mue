@@ -5,6 +5,7 @@
     @background-bar: %("%s-background-bar", @theme);
     @primary: %("%s-primary", @theme);
     @grey: %("%s-grey", @theme);
+    @split: %("%s-border-color-bar", @theme);
     @color-bar: %("%s-tabs-color", @theme);
     @pop-split: %("%s-border-color-pop", @theme);
     @border-color: %("%s-border-color-bar", @theme);
@@ -17,6 +18,16 @@
         > .van-tabs {
             height: 100%;
             box-sizing: border-box;
+
+            &.van-tabs--line .van-tab:after{
+                content: "";
+                position: absolute;
+                right: 0;
+                height: 20px;
+                top: 10px;
+                width: 1px;
+                background: @@split;
+            }
 
             > .van-tabs__wrap {
                 padding-right: 0;
