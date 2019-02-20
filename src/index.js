@@ -12,6 +12,7 @@ import Page from '../packages/Page/index.js';
 import Datatable from '../packages/Datatable/index.js';
 import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
+import Dvr from '../packages/Dvr/index.js';
 //direcives
 import resize from '../packages/directives/resize.js';
 import touch from '../packages/directives/touch.js';
@@ -29,7 +30,8 @@ Locale.use('zh-CN', zhCN);
 
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
-    Container, Header, Main, Footer, Datatable, ...Object.values(Form), LoadMore, Page
+    Container, Header, Main, Footer, Datatable, ...Object.values(Form), LoadMore, Page,
+    ...Object.values(Dvr)
 ];
 
 const install = function(Vue){

@@ -33,6 +33,7 @@
             <van-cell value="LOADING" @click="open('/mue/loading')"/>
             <van-cell value="LOADMORE" @click="open('/mue/loadmore')"/>
             <van-cell value="DATATABLE" @click="open('/mue/datatable')"/>
+            <van-cell value="DVR" @click="open('/mue/dvr')"/>
         </van-cell-group>
 
         <div class="night-switch" @click="toggleNight">

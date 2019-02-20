@@ -11,6 +11,10 @@ const proxy = {
             '^/list': '/'
         },
         changeOrigin: true
+    },
+    '/socket.io': {
+        target: "http://192.168.100.186:4000",
+        changeOrigin: true
     }
 };
 

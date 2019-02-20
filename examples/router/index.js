@@ -99,5 +99,10 @@ export default [
         path: '/mue/loadmore',
         name: 'mue_loadmore',
         component: () => import("../views/mue/loadmore")
+    },
+    {
+        path: '/mue/dvr',
+        name: 'mue_dvr',
+        component: () => import("../views/mue/dvr")
     }
 ];

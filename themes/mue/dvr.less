@@ -1,0 +1,89 @@
+@import "../var.less";
+
+.mue-dvr(@theme: light) {
+    @grey-sub: %("%s-grey-sub", @theme);
+    @grey: %("%s-grey", @theme);
+    @background: %("%s-background", @theme);
+    @color: %("%s-common", @theme);
+
+    .mue-dvr-video {
+        display: inline-block;
+
+        .mue-dvr-video__content {
+            background: @@grey-sub;
+            position: relative;
+            display: block;
+
+            > img {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            > .van-icon {
+                display: block;
+                width: 100%;
+                height: 100%;
+                color: @white;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 46px;
+                background: rgba(0, 0, 0, 0.1);
+
+                &:before {
+                    display: block;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate3d(-50%, -50%, 0);
+                }
+            }
+        }
+
+        .mue-dvr-video__bar {
+            display: block;
+            background: @@background;
+            color: @@color;
+            font-size: @font-size;
+            overflow: hidden;
+
+        }
+
+        .mue-dvr-video__bar-name {
+            display: block;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            width: calc(~"100% - 30px");
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            padding: 0 10px;
+            white-space: nowrap;
+
+            > i.iconfont {
+                display: inline-block;
+                height: 24px;
+                line-height: 24px;
+                text-align: center;
+                font-size: 24px;
+                color: @@grey-sub;
+                vertical-align: -4px;
+            }
+        }
+
+        .mue-dvr-video__bar-btn {
+            float: right;
+            display: block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: @@grey;
+        }
+    }
+
+    .mue-dvr {
+    }
+}
