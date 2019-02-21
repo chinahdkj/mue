@@ -48,39 +48,49 @@
             font-size: @font-size;
             overflow: hidden;
 
-        }
+            .mue-dvr-video__bar-name {
+                display: block;
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                box-sizing: border-box;
+                padding: 0 10px;
+                white-space: nowrap;
 
-        .mue-dvr-video__bar-name {
-            display: block;
-            float: left;
-            height: 30px;
-            line-height: 30px;
-            width: calc(~"100% - 30px");
-            overflow: hidden;
-            text-overflow: ellipsis;
-            box-sizing: border-box;
-            padding: 0 10px;
-            white-space: nowrap;
-
-            > i.iconfont {
-                display: inline-block;
-                height: 24px;
-                line-height: 24px;
-                text-align: center;
-                font-size: 24px;
-                color: @@grey-sub;
-                vertical-align: -4px;
+                > i.iconfont {
+                    display: inline-block;
+                    height: 24px;
+                    line-height: 24px;
+                    text-align: center;
+                    font-size: 24px;
+                    color: @@grey-sub;
+                    vertical-align: -4px;
+                }
             }
-        }
 
-        .mue-dvr-video__bar-btn {
-            float: right;
-            display: block;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            color: @@grey;
+            .mue-dvr-video__bar-btn {
+                float: right;
+                display: none;
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                color: @@grey;
+            }
+
+            &.mue-dvr-video__bar-selectable {
+                .mue-dvr-video__bar-name {
+                    width: calc(~"100% - 30px");
+                }
+
+                .mue-dvr-video__bar-btn {
+                    display: block;
+                }
+            }
+
         }
     }
 

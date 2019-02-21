@@ -5,7 +5,7 @@
              v-loading="loading" @click="Stop">
 
             <template v-if="!rtsp">
-                <van-icon name="add-o" @click="choose"></van-icon>
+                <van-icon v-if="$listeners.choose" name="add-o" @click="choose"/>
             </template>
 
             <template v-else>
@@ -19,7 +19,8 @@
 
         </div>
 
-        <div class="mue-dvr-video__bar" :style="{width: width + 'px'}">
+        <div class="mue-dvr-video__bar" :style="{width: width + 'px'}"
+             :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
             <span class="mue-dvr-video__bar-name">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
                 {{!rtsp ? '请添加视频' : name}}

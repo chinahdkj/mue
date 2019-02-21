@@ -10,17 +10,28 @@
 
         <mue-main v-resize="resize">
             <div :style="{'padding-left': gutter + 'px'}">
-                <div v-for="i in row * col" :key="i" style="float: left"
-                     :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
-                    <mue-dvr-video ref="video" :width="size.width" :height="size.height"
-                                   :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
-                                   :thumb="(videos[i] || {}).thumb" @choose="pickCamera(i)"/>
-                </div>
+                <template v-if="selectable">
+                    <div v-for="i in row * col" :key="i" style="float: left"
+                         :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
+                        <mue-dvr-video ref="video" :width="size.width" :height="size.height"
+                                       :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
+                                       :thumb="(videos[i] || {}).thumb" @choose="pickCamera(i)"/>
+                    </div>
+                </template>
+                <template v-else>
+                    <div v-for="(c, i) in cameras" :key="i" style="float: left"
+                         :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
+                        <mue-dvr-video :width="size.width" :height="size.height"
+                                       :name="c.name" :rtsp="c.rtsp" :thumb="c.thumb"/>
+                    </div>
+                </template>
+
                 <div :style="{height: gutter + 'px'}"></div>
             </div>
         </mue-main>
 
-        <van-popup ref="pop" v-model="pop.visible" position="bottom" get-container="body">
+        <van-popup v-if="selectable" ref="pop" v-model="pop.visible" position="bottom"
+                   get-container="body">
             <van-picker ref="picker" :columns="cameras" show-toolbar @confirm="setCamera"
                         @cancel="pop.visible = false" value-key="name"/>
         </van-popup>
@@ -32,7 +43,8 @@
         name: "MueDvr",
         components: {},
         props: {
-            cameras: {type: Array, default: []}
+            cameras: {type: Array, default: []},
+            selectable: {type: Boolean, default: false}
         },
         data(){
             return {
@@ -80,7 +92,7 @@
             },
             pickCamera(i){
                 this.pop.visible = true;
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.pop.index = i;
                     let checked = this.videos[this.pop.index];
                     let index = 0;
