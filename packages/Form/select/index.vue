@@ -1,6 +1,6 @@
 <template>
     <div class="mue-select">
-        <div class="mue-form-input has-suffix" @click="showPop">
+        <div class="mue-form-input has-suffix" @click="ShowPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
@@ -140,12 +140,6 @@
                 }
                 this.columns = cols;
             },
-            showPop(){
-                if(this.disabled || this.FORM_ITEM.readonly){
-                    return;
-                }
-                this.pop = true;
-            },
             onConfirm(){
                 this.pop = false;
                 let values = this.$refs.picker.getValues();
@@ -175,6 +169,12 @@
                 }));
             },
 
+            ShowPop(){
+                if(this.disabled || this.FORM_ITEM.readonly){
+                    return;
+                }
+                this.pop = true;
+            },
             GetOptionInfo(code){
                 return this.dict[code];
             }

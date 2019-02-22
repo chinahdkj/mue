@@ -1,7 +1,7 @@
 <template>
     <mue-container>
         <mue-header>
-            <van-tabs v-model="current">
+            <van-tabs v-model="layout">
                 <van-tab v-for="(t, i) in tabs" :key="i">
                     <i slot="title" class="iconfont" :class="t.icon" style="font-size: 28px;"/>
                 </van-tab>
@@ -28,13 +28,10 @@
 
                 <div :style="{height: gutter + 'px'}"></div>
             </div>
+            <mue-select style="display: none;" ref="pop" :data="cameras" v-model="pop.current"
+                        @change="setCamera"></mue-select>
         </mue-main>
 
-        <van-popup v-if="selectable" ref="pop" v-model="pop.visible" position="bottom"
-                   get-container="body">
-            <van-picker ref="picker" :columns="cameras" show-toolbar @confirm="setCamera"
-                        @cancel="pop.visible = false" value-key="name"/>
-        </van-popup>
     </mue-container>
 </template>
 
@@ -50,7 +47,7 @@
             return {
                 gutter: 6,
                 width: 0,
-                current: 0,
+                layout: 0,
                 tabs: [
                     {row: 2, col: 1, icon: "icon-danlie"},
                     {row: 2, col: 2, icon: "icon-lianglie"},
@@ -58,17 +55,16 @@
                 ],
                 videos: {},
                 pop: {
-                    visible: false, index: 0,
-                    columns: [],
+                    index: 0, current: null
                 }
             };
         },
         computed: {
             col(){
-                return this.tabs[this.current].col;
+                return this.tabs[this.layout].col;
             },
             row(){
-                return this.tabs[this.current].row;
+                return this.tabs[this.layout].row;
             },
             size(){
                 let width = this.width - (this.col - 1) * this.gutter;
@@ -78,7 +74,7 @@
             }
         },
         watch: {
-            current(){
+            layout(){
                 this.selectable && this.$nextTick(() => {
                     Object.keys(this.videos).forEach((k) => {
                         k > this.col * this.row && this.$delete(this.videos, k);
@@ -91,34 +87,25 @@
                 this.width = this.$el.clientWidth - 2 * this.gutter;
             },
             pickCamera(i){
-                this.pop.visible = true;
+                this.pop.index = i;
+                this.pop.current = (this.videos[i] || {}).code || null;
                 this.$nextTick(() => {
-                    this.pop.index = i;
-                    let checked = this.videos[this.pop.index];
-                    let index = 0;
-                    if(checked){
-                        index = this.cameras.findIndex((c) => {
-                            return c.code === checked.code;
-                        });
-                    }
-                    this.$refs.picker.setColumnIndex(0, index);
+                    this.$refs.pop.ShowPop();
                 });
             },
-            setCamera(){
-                this.pop.visible = false;
-
-                let value = this.$refs.picker.getColumnValue(0);
-                this.$set(this.videos, this.pop.index, {...value});
+            setCamera(v){
+                let opt = this.$refs.pop.GetOptionInfo(v);
+                this.$set(this.videos, this.pop.index, {...opt});
                 this.$nextTick(() => {
                     this.$refs.video[this.pop.index - 1].Play();
                 });
             },
 
             GetView(){
-                return {layout: this.current, videos: this.videos};
+                return {layout: this.layout, videos: this.videos};
             },
             SetView({layout, videos}, autoPlay = false){
-                this.current = layout;
+                this.layout = layout;
                 this.$set(this, "videos", {});
                 this.selectable && this.$nextTick(() => {
                     this.$set(this, "videos", videos);
