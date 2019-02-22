@@ -79,7 +79,7 @@
         },
         watch: {
             current(){
-                this.$nextTick(() => {
+                this.selectable && this.$nextTick(() => {
                     Object.keys(this.videos).forEach((k) => {
                         k > this.col * this.row && this.$delete(this.videos, k);
                     });
