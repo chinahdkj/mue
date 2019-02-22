@@ -112,6 +112,20 @@
                 this.$nextTick(() => {
                     this.$refs.video[this.pop.index - 1].Play();
                 });
+            },
+
+            GetView(){
+                return {layout: this.current, videos: this.videos};
+            },
+            SetView({layout, videos}, autoPlay = false){
+                this.current = layout;
+                this.$set(this, "videos", {});
+                this.selectable && this.$nextTick(() => {
+                    this.$set(this, "videos", videos);
+                    autoPlay && this.$refs.video.forEach(($v) => {
+                        $v.Play();
+                    });
+                });
             }
         }
     }
