@@ -152,6 +152,9 @@
         },
         beforeDestroy(){
             this.Stop();
+        },
+        deactivated(){
+            this.Stop();
         }
     }
 </script>
