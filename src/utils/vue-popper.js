@@ -2,6 +2,8 @@ import Vue from 'vue';
 import {PopupManager} from './popup';
 
 import Popper from './popper';
+import {addClass, setStyle} from './dom';
+
 const PopperJS = Vue.prototype.$isServer ? () => {
 } : Popper;
 
@@ -53,6 +55,9 @@ export default {
                     gpuAcceleration: false
                 };
             }
+        },
+        overlay: {
+            type: Boolean, default: false
         }
     },
 
@@ -60,7 +65,8 @@ export default {
         return {
             showPopper: false,
             currentPlacement: '',
-            reference: null
+            reference: null,
+            overlayElm: null
         };
     },
 
@@ -77,7 +83,12 @@ export default {
             if(this.disabled){
                 return;
             }
-            val ? this.updatePopper() : this.destroyPopper();
+            if(val){
+                this.updatePopper();
+            }
+            else{
+                this.destroyPopper();
+            }
             this.$emit('input', val);
         }
     },
@@ -111,6 +122,14 @@ export default {
             }
             if(this.appendToBody){
                 document.body.appendChild(this.popperElm);
+                if(this.overlay){
+                    let overlay = document.createElement("div");
+                    addClass(overlay, "van-overlay");
+                    setStyle(overlay, "display", "block");
+                    setStyle(overlay, "z-index", PopupManager.nextZIndex());
+                    document.body.appendChild(overlay);
+                    this.overlayElm = overlay;
+                }
             }
             if(this.popperJS && this.popperJS.destroy){
                 this.popperJS.destroy();
@@ -135,8 +154,10 @@ export default {
         updatePopper(){
             const popperJS = this.popperJS;
             if(popperJS){
+                setStyle(this.overlayElm, "display", "block");
                 popperJS.update();
                 if(popperJS._popper){
+                    setStyle(this.overlayElm, "z-index", PopupManager.nextZIndex());
                     popperJS._popper.style.zIndex = PopupManager.nextZIndex();
                 }
             }
@@ -150,6 +171,9 @@ export default {
             if(!this.popperJS || (this.showPopper && !forceDestroy)){
                 return;
             }
+            if(this.overlayElm){
+                this.overlayElm.parentNode.removeChild(this.overlayElm);
+            }
             this.popperJS.destroy();
             this.popperJS = null;
         },
@@ -161,6 +185,7 @@ export default {
         },
 
         resetTransformOrigin(){
+            setStyle(this.overlayElm, "display", "none");
             if(!this.transformOrigin){
                 return;
             }
@@ -175,8 +200,8 @@ export default {
             this.popperJS._popper.style.transformOrigin = typeof this.transformOrigin === 'string'
                                                           ? this.transformOrigin
                                                           : ['top', 'bottom'].indexOf(placement) >
-                                                            -1 ? `center ${ origin }`
-                                                               : `${ origin } center`;
+                                                            -1 ? `center ${origin}`
+                                                               : `${origin} center`;
         },
 
         appendArrow(element){

@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import {addClass, removeClass} from '../dom';
+import PopCtx from "vant/packages/mixins/popup/context";
+
 
 let hasModal = false;
 let hasInitZIndex = false;
-let zIndex = 2000;
+let zIndex = PopCtx.zIndex;
 
 const getModal = function(){
     if(Vue.prototype.$isServer){
@@ -54,7 +56,7 @@ const PopupManager = {
     },
 
     nextZIndex: function(){
-        return PopupManager.zIndex++;
+        return PopCtx.zIndex++;
     },
 
     modalStack: [],
@@ -168,12 +170,13 @@ Object.defineProperty(PopupManager, 'zIndex', {
     configurable: true,
     get(){
         if(!hasInitZIndex){
-            zIndex = (Vue.prototype.$ELEMENT || {}).zIndex || zIndex;
+            zIndex = PopCtx.zIndex;
             hasInitZIndex = true;
         }
         return zIndex;
     },
     set(value){
+        PopCtx.zIndex = value;
         zIndex = value;
     }
 });

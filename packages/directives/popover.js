@@ -1,22 +1,27 @@
-import {addClass, setStyle} from '../../src/utils/dom';
+import {addClass, setStyle, removeClass} from "../../src/utils/dom";
 
 export default {
     name: "popover",
     bind(el, binding, vnode){
-
-        let pop = binding.arg;
-        pop = vnode.context.$refs[pop];
-        if(Array.isArray(pop)){
-            pop = pop[0];
-        }
-        if(!pop){
-            return;
-        }
-
-        addClass(el, 'mue-popover__reference');
-        el.setAttribute('aria-describedby', pop.tooltipId);
+        addClass(el, "mue-popover__reference");
 
         el.POPOVER_EVENTS = (e) => {
+            let arg = binding.arg;
+            let pop = vnode.context.$refs[arg];
+
+            if(!pop && typeof vnode.context[arg] === "function"){
+                pop = vnode.context[arg]();
+            }
+
+            if(Array.isArray(pop)){
+                pop = pop[0];
+            }
+            if(!pop){
+                return;
+            }
+
+            el.setAttribute("aria-describedby", pop.tooltipId);
+
             if(pop.reference === el){
                 pop.handleClick();
                 pop.doToggle();
@@ -40,6 +45,8 @@ export default {
         el.addEventListener("click", el.POPOVER_EVENTS);
     },
     unbind(el){
+        removeClass(el, "mue-popover__reference");
+        el.removeAttribute("aria-describedby");
         el.removeEventListener("click", el.POPOVER_EVENTS);
     }
 };
