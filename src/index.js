@@ -14,6 +14,7 @@ import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
 import Dvr from '../packages/Dvr/index.js';
 //direcives
+import popover from '../packages/directives/popover.js';
 import resize from '../packages/directives/resize.js';
 import touch from '../packages/directives/touch.js';
 
@@ -41,6 +42,7 @@ const install = function(Vue){
         Vue.component(component.name, component);
     });
     Vue.use(Loading.directive);
+    Vue.directive(popover.name, popover);
     Vue.directive(resize.name, resize);
     Vue.directive(touch.name, touch);
 

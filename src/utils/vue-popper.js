@@ -31,7 +31,7 @@ export default {
             type: Number,
             default: 5
         },
-        reference: {},
+        // reference: {},
         popper: {},
         offset: {
             default: 0
@@ -59,7 +59,8 @@ export default {
     data(){
         return {
             showPopper: false,
-            currentPlacement: ''
+            currentPlacement: '',
+            reference: null
         };
     },
 
