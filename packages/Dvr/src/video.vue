@@ -44,8 +44,8 @@
         name: "MueDvrVideo",
         components: {},
         props: {
-            height: {type: Number, default: 180},
-            width: {type: Number, default: 240},
+            height: {type: Number, default: 0},
+            width: {type: Number, default: 0},
             name: {type: String, default: ""},
             rtsp: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false}
