@@ -46,7 +46,6 @@
         props: {
             height: {type: Number, default: 180},
             width: {type: Number, default: 240},
-            thumb: {type: String, default: ""},
             name: {type: String, default: ""},
             rtsp: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false}
