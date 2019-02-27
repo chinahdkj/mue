@@ -71,7 +71,8 @@
         },
         methods: {
             getThumb(){
-                return `/socket.io.thumb?p=${this.rtsp}&t=${uuid(8)}`;
+                let host = sessionStorage.getItem("host") || "";
+                return `${host}/socket.io.thumb?p=${this.rtsp}&t=${uuid(8)}`;
             },
             choose(){
                 this.$emit("choose");
@@ -112,7 +113,7 @@
                 this.loading = true;
                 let previous = 0;
 
-                this.client = socketIo("/ffmpeg", {
+                this.client = socketIo(`${sessionStorage.getItem("host") || ""}/ffmpeg`, {
                     query: {stream: this.rtsp, width: this.width, height: this.height}
                 });
 
@@ -147,7 +148,7 @@
                     this.Stop();
                 });
 
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.draw(this.getThumb());
                 });
 
