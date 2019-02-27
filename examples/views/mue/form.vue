@@ -93,6 +93,7 @@
 
             <mue-panel title="slot" hairline="normal">
                 prefix: 组标题 左侧插槽 此插槽覆盖prefix属性渲染 <br/>
+                subTitle: 副标题插槽 此插槽覆盖subTitle属性渲染 <br/>
                 help: 右侧图标点击弹出内容
             </mue-panel>
 

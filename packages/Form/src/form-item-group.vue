@@ -8,7 +8,9 @@
                 {{title}}
             </span>
             <span>
-                {{subTitle}}
+                <slot name="subTitle">
+                    {{subTitle}}
+                </slot>
 
                 <template v-if="$listeners['icon-click']">
                     <i class="__icon" :class="icon" aria-hidden="true"
