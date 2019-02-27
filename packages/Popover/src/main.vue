@@ -66,11 +66,11 @@
                     return;
                 }
                 if(val){
-                    setStyle(document.body, "cursor", "pointer");
+                    addClass(document.body, "mue-overlay-show");
                     this.$emit("show");
                 }
                 else{
-                    setStyle(document.body, "cursor", "default");
+                    removeClass(document.body, "mue-overlay-show");
                     this.$emit("hide");
                 }
                 // val ? this.$emit('show') : this.$emit('hide');
@@ -133,6 +133,7 @@
         destroyed(){
             const reference = this.reference;
 
+            off(reference, 'click', this.handleClick);
             off(reference, 'click', this.doToggle);
             off(document.body, 'click', this.handleDocumentClick);
         }

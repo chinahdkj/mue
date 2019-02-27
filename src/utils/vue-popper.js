@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {PopupManager} from './popup';
 
 import Popper from './popper';
-import {addClass, setStyle} from './dom';
+import {addClass, setStyle, on, off} from './dom';
 
 const PopperJS = Vue.prototype.$isServer ? () => {
 } : Popper;
@@ -19,6 +19,12 @@ const stop = e => e.stopPropagation();
  * @param {Boolean} [visible=false] Visibility of the popup element.
  * @param {Boolean} [visible-arrow=false] Visibility of the arrow, no style.
  */
+
+const DISABLE_TOUCH = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+};
+
 export default {
     props: {
         transformOrigin: {
@@ -128,6 +134,7 @@ export default {
                     setStyle(overlay, "display", "block");
                     setStyle(overlay, "z-index", PopupManager.nextZIndex());
                     document.body.appendChild(overlay);
+                    on(overlay, "touchmove", DISABLE_TOUCH);
                     this.overlayElm = overlay;
                 }
             }
@@ -172,7 +179,9 @@ export default {
                 return;
             }
             if(this.overlayElm){
+                off(this.overlayElm, "touchmove", DISABLE_TOUCH);
                 this.overlayElm.parentNode.removeChild(this.overlayElm);
+                this.overlayElm = null;
             }
             this.popperJS.destroy();
             this.popperJS = null;
@@ -235,6 +244,11 @@ export default {
         if(this.popperElm && this.popperElm.parentNode === document.body){
             this.popperElm.removeEventListener('click', stop);
             document.body.removeChild(this.popperElm);
+        }
+        if(this.overlayElm){
+            off(this.overlayElm, "touchmove", DISABLE_TOUCH);
+            this.overlayElm.parentNode.removeChild(this.overlayElm);
+            this.overlayElm = null;
         }
     },
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 1000px;">
         <mue-popover placement="bottom" v-model="vis">
             <van-button style="margin:50px;" slot="reference" type="primary">打开</van-button>
             <div style="padding: 10px 20px;">
