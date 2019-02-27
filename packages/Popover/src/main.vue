@@ -16,7 +16,7 @@
 </template>
 <script>
     import Popper from '../../../src/utils/vue-popper';
-    import {addClass, off, on, removeClass} from '../../../src/utils/dom';
+    import {addClass, off, on, removeClass, setStyle} from '../../../src/utils/dom';
     import uuid from '../../../src/utils/uuid';
 
     export default {
@@ -65,7 +65,15 @@
                 if(this.disabled){
                     return;
                 }
-                val ? this.$emit('show') : this.$emit('hide');
+                if(val){
+                    setStyle(document.body, "cursor", "pointer");
+                    this.$emit("show");
+                }
+                else{
+                    setStyle(document.body, "cursor", "default");
+                    this.$emit("hide");
+                }
+                // val ? this.$emit('show') : this.$emit('hide');
             }
         },
 
@@ -86,7 +94,7 @@
                 on(reference, 'click', this.handleClick);
                 on(reference, 'click', this.doToggle);
             }
-            on(document, 'click', this.handleDocumentClick);
+            on(document.body, 'click', this.handleDocumentClick);
         },
 
         methods: {
@@ -126,7 +134,7 @@
             const reference = this.reference;
 
             off(reference, 'click', this.doToggle);
-            off(document, 'click', this.handleDocumentClick);
+            off(document.body, 'click', this.handleDocumentClick);
         }
     };
 </script>
