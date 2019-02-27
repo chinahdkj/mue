@@ -5,7 +5,7 @@
              v-loading="client && loading" @click="Stop" v-resize="resize">
 
             <template v-if="needUpdate">
-                <span>视频服务版本太低，请联系服务器管理员！</span>
+                <span>视频服务需要升级，请联系服务器管理员！</span>
             </template>
 
             <template v-else-if="!rtsp">
