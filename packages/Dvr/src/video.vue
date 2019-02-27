@@ -79,6 +79,21 @@
             resize(){
                 this.client && this.Play();
             },
+            draw(src){
+                if(!this.$refs.canvas){
+                    return;
+                }
+                let img = new Image();
+                img.onload = () => {
+                    this.$refs.canvas.height = this.height;
+                    this.$refs.canvas.width = this.width;
+                    let ctx = this.$refs.canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0, this.width, this.height);
+                };
+                img.crossOrigin = "anonymous";
+                img.src = src;
+            },
+
             Stop(){
                 if(this.client){
                     this.client.close();
@@ -94,33 +109,48 @@
                 }
 
                 this.needUpdate = false;
+                this.loading = true;
+                let previous = 0;
+
                 this.client = socketIo("/ffmpeg", {
                     query: {stream: this.rtsp, width: this.width, height: this.height}
                 });
-                this.loading = true;
 
                 this.client.on("DATA", (data) => {
-                    if(!/^data:image\/.+;base64,/i.test(data)){
+                    let index, base64;
+                    try{
+                        let temp = JSON.parse(data);
+                        index = temp.index;
+                        base64 = temp.base64;
+                        if(!base64){
+                            this.needUpdate = true;
+                        }
+                    } catch(e){
                         this.needUpdate = true;
+                    }
+
+                    if(this.needUpdate){
                         this.Stop();
                         return;
                     }
-                    let img = new Image();
-                    img.onload = () => {
-                        this.loading = false;
-                        this.$refs.canvas.height = this.height;
-                        this.$refs.canvas.width = this.width;
-                        let ctx = this.$refs.canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0, this.width, this.height);
-                    };
-                    img.crossOrigin = "anonymous";
-                    img.src = data;
+
+                    if(index <= previous){
+                        return;
+                    }
+                    previous = index;
+                    this.loading = false;
+                    this.draw(base64);
                 });
 
                 this.client.on("ERROR", (data) => {
                     console.error(data);
                     this.Stop();
                 });
+
+                this.$nextTick(()=>{
+                    this.draw(this.getThumb());
+                });
+
             }
         },
         beforeDestroy(){
