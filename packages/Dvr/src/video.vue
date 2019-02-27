@@ -100,7 +100,7 @@
                 this.loading = true;
 
                 this.client.on("DATA", (data) => {
-                    if(typeof data != "string"){
+                    if(!/^data:image\/.+;base64,/i.test(data)){
                         this.needUpdate = true;
                         this.Stop();
                         return;
