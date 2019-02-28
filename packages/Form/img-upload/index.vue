@@ -49,7 +49,7 @@
         },
         watch: {
             value: {
-                immediate: true,
+                immediate: true, deep: true,
                 handler(v){
                     if(!this.multiple){
                         this.imgs = v ? [v] : [];
@@ -59,38 +59,41 @@
                     }
                 }
             },
-            imgs(v){
-                if(this.multiple){
-                    this.$emit("input", v);
-                }
-                else{
-                    this.$emit("input", v.length === 0 ? "" : v[0]);
-                }
+            imgs: {
+                deep: true, immediate: true,
+                handler(v){
+                    if(this.multiple){
+                        this.$emit("input", v);
+                    }
+                    else{
+                        this.$emit("input", v.length === 0 ? "" : v[0]);
+                    }
 
-                this.dict = {};
-                v.forEach((p) => {
-                    this.dict[p] = p;
-                });
-
-                if(this.base64){
-                    let prms = v.map((p) => {
-                        return this.queryLocal(p);
+                    this.dict = {};
+                    v.forEach((p) => {
+                        this.dict[p] = p;
                     });
 
-                    Promise.all(prms).then((datas) => {
-                        for(let i = 0; i < datas.length; i++){
-                            let {_id, data} = datas[i];
-                            if(!_id){
-                                continue;
+                    if(this.base64){
+                        let prms = v.map((p) => {
+                            return this.queryLocal(p);
+                        });
+
+                        Promise.all(prms).then((datas) => {
+                            for(let i = 0; i < datas.length; i++){
+                                let {_id, data} = datas[i];
+                                if(!_id){
+                                    continue;
+                                }
+                                data = JSON.parse(data);
+                                this.dict[_id] = data.base64;
                             }
-                            data = JSON.parse(data);
-                            this.dict[_id] = data.base64;
-                        }
+                            // this.createThumbs();
+                        });
+                    }
+                    else{
                         // this.createThumbs();
-                    });
-                }
-                else{
-                    // this.createThumbs();
+                    }
                 }
             }
         },
