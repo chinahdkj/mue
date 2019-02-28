@@ -1,23 +1,31 @@
 <template>
-    <div class="mue-tabs" :style="style"
-         :class="{'has-more': !pop || popTabs.length > 0, 'active-at-more': !pop && activeAtMore}">
+    <div class="mue-tabs" :style="style" v-resize="resize"
+         :class="{'active-at-more': !pop && activeAtMore}">
         <van-tabs class="no-flex" v-model="current" @click="onTabClick">
             <slot></slot>
         </van-tabs>
-        <a v-if="!pop" class="mue-tabs-more" :class="[icon, {'in-more': activeAtMore}]"
-           @click="onMoreClick"></a>
-        <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop"
-                     :append-to-body="false">
-            <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
-            <ul class="mue-tabs-pop-tabs">
-                <pop-tab v-for="(t, i) in popTabs" :key="i" @click.native="onPopTabClick(t)"
-                    :tab="t" :no-icon="popNoIcon" class="mue-tabs-pop-tab"
-                    :class="{'is-active': t.isActive, 'is-disabled':t.disabled}">
-                    <!--<i class="mue-tab-icon" v-if="!popNoIcon" :class="t.icon"></i>-->
-                    <!--<span class="mue-tab-title">{{t.title}}</span>-->
-                </pop-tab>
-            </ul>
-        </mue-popover>
+
+        <div class="mue-tabs-btns" v-resize="resize">
+            <a v-if="!pop" class="mue-tabs-more" :class="[icon, {'in-more': activeAtMore}]"
+               @click="onMoreClick"></a>
+            <mue-popover v-else placement="bottom-end" v-model="popVis" popper-class="mue-tabs-pop"
+                         :append-to-body="false">
+                <a slot="reference" class="mue-tabs-more" :class="[icon, {'in-more': inMore}]"></a>
+                <ul class="mue-tabs-pop-tabs">
+                    <pop-tab v-for="(t, i) in popTabs" :key="i" @click.native="onPopTabClick(t)"
+                             :tab="t" :no-icon="popNoIcon" class="mue-tabs-pop-tab"
+                             :class="{'is-active': t.isActive, 'is-disabled':t.disabled}">
+                        <!--<i class="mue-tab-icon" v-if="!popNoIcon" :class="t.icon"></i>-->
+                        <!--<span class="mue-tab-title">{{t.title}}</span>-->
+                    </pop-tab>
+                </ul>
+            </mue-popover>
+
+            <div v-if="$slots.suffix" class="mue-tabs-suffix">
+                <slot name="suffix"></slot>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -82,6 +90,14 @@
             },
         },
         methods: {
+            resize(){
+                let btns = this.$el.getElementsByClassName("mue-tabs-btns");
+                let btnsWidth = btns.length > 0 ? btns[0].offsetWidth : 0;
+                let tabsWrap = this.$el.getElementsByClassName("van-tabs__wrap");
+                if(tabsWrap.length > 0){
+                    tabsWrap[0].style.paddingRight = btnsWidth + "px";
+                }
+            },
             indexOfTab(tab){
                 let index = -1;
                 for(let i = 0; i < this.$slots.default.length; i++){

@@ -6,6 +6,7 @@
                      :icon="t.icon">
                 {{t}}
             </mue-tab>
+            <a slot="suffix" style="padding: 5px;">更多</a>
         </mue-tabs>
 
         <br/>
