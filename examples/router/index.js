@@ -104,5 +104,10 @@ export default [
         path: '/mue/dvr',
         name: 'mue_dvr',
         component: () => import("../views/mue/dvr")
+    },
+    {
+        path: '/mue/sortpicker',
+        name: 'sort_picker',
+        component: () => import("../views/mue/sortpicker")
     }
 ];

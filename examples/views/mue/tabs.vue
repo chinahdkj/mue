@@ -6,8 +6,15 @@
                      :icon="t.icon">
                 {{t}}
             </mue-tab>
-            <a slot="suffix" style="padding: 5px;">更多</a>
+
+            <a style="padding: 10px; font-size: 14px;" slot="suffix" v-popover:pop>排序</a>
+
         </mue-tabs>
+
+        <mue-popover ref="pop" v-model="sortVis" placement="bottom" :visible-arrow="false"
+                     :border-radius="false" popper-class="sort-pop">
+            <mue-sort-picker :data="sortData" @change="onSortChange"/>
+        </mue-popover>
 
         <br/>
         <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="moreClick"
@@ -41,8 +48,10 @@
 </template>
 
 <script>
+    import MueSelect from '../../../packages/Form/select/index';
+
     export default {
-        components: {},
+        components: {MueSelect},
         data(){
             return {
                 tabs: [
@@ -55,7 +64,16 @@
                 v: 2,
                 v2: 0,
                 popVis: false,
+                sortVis: false,
                 activeAtMore: false,
+                sortData: [
+                    {code: "price", name: "价格"},
+                    {code: "sate", name: "状态"},
+                    {code: "age", name: "新旧"},
+                    {code: "height", name: "高度"},
+                    {code: "width", name: "宽度"},
+                    {code: "power", name: "功耗"}
+                ]
             };
         },
         methods: {
@@ -65,6 +83,10 @@
             moreClick(){
                 this.popVis = true;
                 this.activeAtMore = true;
+            },
+            onSortChange(field, type){
+                this.sortVis = false;
+                console.info(field, type);
             }
         },
         mounted(){
@@ -75,5 +97,12 @@
     .tab-pop {
         height: 100%;
         width: 80%;
+    }
+
+    /deep/ .sort-pop {
+        width: 100%;
+        left: 0 !important;
+        padding: 0 10px;
+        box-sizing: border-box;
     }
 </style>
