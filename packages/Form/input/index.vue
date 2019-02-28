@@ -11,7 +11,8 @@
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()"/>
             <input v-else :type="type" class="input__inner" :disabled="disabled"
-                   v-model="ipt" :placeholder="placeholder"/>
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')"/>
 
             <span v-if="$slots.suffix" class="input__suffix">
                 <slot name="suffix"></slot>
