@@ -3,7 +3,7 @@
         <transition name="van-fade" @after-enter="handleAfterEnter"
                     @after-leave="handleAfterLeave">
             <div class="mue-popover"
-                 :class="popperClass"
+                 :class="[popperClass, {'mue-popover-radius': borderRadius}]"
                  ref="popper" v-show="!disabled && showPopper"
                  role="tooltip" :id="tooltipId"
                  :aria-hidden="(disabled || !showPopper) ? 'true' : 'false'">
@@ -16,7 +16,7 @@
 </template>
 <script>
     import Popper from '../../../src/utils/vue-popper';
-    import {addClass, off, on, removeClass, setStyle} from '../../../src/utils/dom';
+    import {addClass, off, on, removeClass} from '../../../src/utils/dom';
     import uuid from '../../../src/utils/uuid';
 
     export default {
@@ -40,6 +40,9 @@
             // reference: {},
             popperClass: String,
             visibleArrow: {
+                default: true
+            },
+            borderRadius: {
                 default: true
             },
             arrowOffset: {
