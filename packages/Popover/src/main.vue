@@ -4,6 +4,7 @@
                     @after-leave="handleAfterLeave">
             <div class="mue-popover"
                  :class="[popperClass, {'mue-popover-radius': borderRadius}]"
+                 :style="width ? {width: typeof width === 'string' ? width : (width + 'px')} : null"
                  ref="popper" v-show="!disabled && showPopper"
                  role="tooltip" :id="tooltipId"
                  :aria-hidden="(disabled || !showPopper) ? 'true' : 'false'">
@@ -36,6 +37,9 @@
             // },
             // title: String,
             // disabled: Boolean,
+            width: {
+                type: [Number, String], default: ""
+            },
             content: String,
             // reference: {},
             popperClass: String,
