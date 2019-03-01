@@ -7,7 +7,8 @@ const _cache2 = {};
 const fns = [
     "save", "delete", "query", "rotate", "startNavi", "getLocation", "isCollected", "sysInfo",
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
-    "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData"
+    "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
+    "bluetooth", "btDisConnected"
 ];
 
 const postMessage = ({cb, method, params}) => {
@@ -26,7 +27,7 @@ const postMessage = ({cb, method, params}) => {
 };
 window.response = ({msgid, params, method}) => {
     // 原生回调传入一个json对象
-    if(method === "search" || method === "collect"){ // 原生主动调用web
+    if(method === "search" || method === "collect" || method == "btDisConnected"){ // 原生主动调用web
         _cache2[method] = params;
         return;
     }
