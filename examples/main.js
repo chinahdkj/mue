@@ -23,9 +23,14 @@ let router = InitRouter(routes);
 new Vue({
     el: '#app',
     router,
-    render: h => h(App),
+    render(h){
+        if(this.unload){
+            return;
+        }
+        return h(App);
+    },
     data(){
-        return {theme: "day"};
+        return {theme: "day", unload: false};
     },
     watch: {
         "$route.query.theme": {
@@ -41,5 +46,8 @@ new Vue({
         }
     },
     mounted(){
+        window.addEventListener("beforeunload", ()=>{
+            this.unload = true;
+        });
     }
 });
