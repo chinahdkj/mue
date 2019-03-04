@@ -134,8 +134,14 @@
 
         &.no-flex.van-tabs--line {
             .van-tabs__nav--line {
-                display: -moz-box;
-                display: -webkit-box;
+                display: inline-block;
+                white-space: nowrap;
+                overflow: scroll;
+                width: 100%;
+                .van-tab{
+                    display: inline-block;
+                    flex: none;
+                }
             }
         }
 

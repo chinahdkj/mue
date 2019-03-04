@@ -17,7 +17,7 @@
         </mue-popover>
 
         <br/>
-        <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="moreClick"
+        <mue-tabs height="300px" v-model="v2" :pop="false" @more-click="moreClick" flex
                   @click="activeAtMore = false" :active-at-more="activeAtMore">
             <mue-tab title="报表1">
                 :pop="false"

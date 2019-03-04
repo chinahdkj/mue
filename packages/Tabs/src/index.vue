@@ -1,7 +1,8 @@
 <template>
     <div class="mue-tabs" :style="style" v-resize="resize"
          :class="{'active-at-more': !pop && activeAtMore}">
-        <van-tabs class="no-flex" v-model="current" @click="onTabClick">
+        <van-tabs :class="{'no-flex': !flex}" v-model="current" @click="onTabClick"
+                  :swipe-threshold="swipeThreshold">
             <slot></slot>
         </van-tabs>
 
@@ -40,6 +41,8 @@
             };
         },
         props: {
+            flex: {type: Boolean, default: false},
+            swipeThreshold: {type: Number, default: 4},
             value: {type: Number, default: 0},
             icon: {type: String, default: "iconfont icon-gengduo1"},
             height: {type: [String, Number], default: "100%"},
