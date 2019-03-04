@@ -80,6 +80,8 @@
                         k > this.col * this.row && this.$delete(this.videos, k);
                     });
                 });
+
+                this.$emit("change-layout", this.layout);
             }
         },
         methods: {
@@ -94,11 +96,12 @@
                 });
             },
             setCamera(v){
-                let opt = this.$refs.pop.GetOptionInfo(v);
-                this.$set(this.videos, this.pop.index, {...opt});
+                let opt = {...this.$refs.pop.GetOptionInfo(v)};
+                this.$set(this.videos, this.pop.index, opt);
                 this.$nextTick(() => {
                     this.$refs.video[this.pop.index - 1].Play();
                 });
+                this.$emit("choose-video", this.pop.index - 1, opt);
             },
 
             GetView(){
