@@ -11,6 +11,8 @@ const fns = [
     "bluetooth", "btDisConnected"
 ];
 
+const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver'] // 原生主动调用js的方法
+
 const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
     _cache[msgid] = cb;
@@ -27,10 +29,12 @@ const postMessage = ({cb, method, params}) => {
 };
 window.response = ({msgid, params, method}) => {
     // 原生回调传入一个json对象
-    if(method === "search" || method === "collect" || method == "btDisConnected"){ // 原生主动调用web
-        _cache2[method] = params;
-        return;
-    }
+    fns2.some(v => {
+        if (v === method) {
+            _cache2[method] = params;
+            return true
+        }
+    })
 
     const cb = _cache[msgid];
     cb && cb(params);
