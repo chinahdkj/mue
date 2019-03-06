@@ -2,7 +2,7 @@
     <div class="menus">
         <h3>ICON</h3>
         <van-cell-group border>
-            <van-cell value="HEDA" @click="open('/static/font/demo_fontclass.html', true)"/>
+            <van-cell value="HEDA" @click="open('/static/font/demo_index.html', true)"/>
             <van-cell value="AWESOME" @click="open('http://www.fontawesome.com.cn/faicons/',
             true)"/>
         </van-cell-group>

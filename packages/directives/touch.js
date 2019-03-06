@@ -37,7 +37,7 @@ export default {
             longTap = false;
             start = {x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY};
 
-            if(actions.long){
+            if(typeof actions.long === "function"){
                 timer = setTimeout(() => {
                     longTap = true;
                     actions.long();
@@ -53,7 +53,7 @@ export default {
             let disy = end.y - start.y;
 
             if((Math.abs(disx) >= 10 || Math.abs(disy) >= 100)){
-                if(actions.swipe){
+                if(typeof actions.swipe === "function"){
 
                     let direction = [];
                     if(disx >= 10){
@@ -74,10 +74,10 @@ export default {
                 return;
             }
 
-            if(!actions.long || !longTap){
+            if(typeof actions.long != "function" || !longTap){
                 // 短按删除长按计时器
                 clearTimer();
-                actions.tap();
+                typeof actions.tap === "function" && actions.tap();
             }
         };
 
