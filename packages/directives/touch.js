@@ -33,7 +33,6 @@ export default {
         };
 
         let touchStart = (e) => {
-            e.preventDefault();
             longTap = false;
             start = {x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY};
 
