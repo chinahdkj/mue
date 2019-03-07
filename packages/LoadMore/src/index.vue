@@ -1,7 +1,7 @@
 <template>
     <div class="mue-load-more">
         <div class="mue-load-more-box" @scroll.passive="scrollHandler.onScroll"
-             :class="{'is-reached': scrollHandler.reached}">
+             :class="{'is-reached': scrollHandler.position.top < 5}">
             <div class="mue-load-more-wrap"
                  @touchstart.passive="handleTouchStart($event)"
                  @touchmove.passive="touchHandler.onMove($event)"
