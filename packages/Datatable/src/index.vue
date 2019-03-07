@@ -31,7 +31,8 @@
 
             <div ref="top_table" class="mue-datatable-center" :style="[centerWidth]"
                  @touchstart="scrollTable = 'top_table'">
-                <table class="mue-datatable__inner-table" :style="{width: tableWidth + 'px'}">
+                <table class="mue-datatable__inner-table"
+                       :style="{width: tableWidth - fixedWidth + 'px'}">
 
                     <col-group :columns="colFields" filter/>
 
@@ -103,7 +104,8 @@
                     <div ref="main_table" class="mue-datatable-center"
                          @touchstart="scrollTable = 'main_table'" :style="[centerWidth]">
 
-                        <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
+                        <table class="mue-datatable__inner-table"
+                               :style="[{width: tableWidth - fixedWidth + 'px'},
                                 virtual ? {'margin-top': virtualBox.white} : null]">
                             <col-group :columns="colFields" filter/>
                             <tbody>
