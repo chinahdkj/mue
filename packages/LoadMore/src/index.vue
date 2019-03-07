@@ -1,7 +1,6 @@
 <template>
     <div class="mue-load-more">
-        <div class="mue-load-more-box" @scroll.passive="scrollHandler.onScroll"
-             :class="{'is-reached': scrollHandler.position.top < 5}">
+        <div class="mue-load-more-box" @scroll.passive="scrollHandler.onScroll">
             <div class="mue-load-more-wrap"
                  @touchstart.passive="handleTouchStart($event)"
                  @touchmove.passive="touchHandler.onMove($event)"
@@ -200,7 +199,7 @@
                     }
                     // 数据未填充满，再加载
                     if(!this.moreThenView){
-                        this.bottomStatus = "loading";
+                        this.bottom.state = "loading";
                         this.bottomMethod(true);
                     }
                 });
@@ -275,7 +274,7 @@
 
                 this.touchHandler.start = null;
                 this.translate = 0;
-                this.direction = "";
+                this.touchHandler.direction = "";
                 this.bottom.state = "pull";
                 this.top.state = "pull";
             },
