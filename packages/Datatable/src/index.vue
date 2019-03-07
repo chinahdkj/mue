@@ -6,7 +6,7 @@
                 <table class="mue-datatable__inner-table"
                        :style="{width: tableWidth + 'px'}">
 
-                    <col-group :columns="colFields" filter/>
+                    <col-group :columns="colFields"/>
 
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
