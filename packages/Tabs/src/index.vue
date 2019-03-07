@@ -162,6 +162,9 @@
                 this.$emit("more-click");
             }
         },
-        components: {popTab}
+        components: {popTab},
+        mounted(){
+            this.resize();
+        }
     }
 </script>
