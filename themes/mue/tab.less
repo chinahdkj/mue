@@ -100,7 +100,19 @@
             display: inline-block;
             //float: left;
             height: 100%;
-            border-left: 1px solid @@split;
+            //border-left: 1px solid @@split;
+            padding-left: 1px;
+            position: relative;
+            &:before{
+                display: block;
+                height: 20px;
+                top: 10px;
+                width: 1px;
+                left: 0;
+                background: @@split;
+                content: "";
+                position: absolute;
+            }
         }
 
         > .van-tabs > .van-tabs__wrap {
