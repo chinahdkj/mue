@@ -29,6 +29,9 @@ import comm from './lib/common';
 
 import {objectGet} from './utils/object';
 
+// svg 图标
+import "../themes/fonts/iconfont";
+
 Locale.use('zh-CN', zhCN);
 
 const components = [
