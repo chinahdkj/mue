@@ -1,4 +1,10 @@
-export default [
+import Vue from 'vue'
+import Router from 'vue-router'
+import {InitHook} from "../../src/router";
+
+Vue.use(Router);
+
+const routes = [
     {
         path: '/vant/button',
         name: 'vant_button',
@@ -111,3 +117,9 @@ export default [
         component: () => import("../views/mue/sortpicker")
     }
 ];
+
+const router = new Router({routes});
+
+InitHook(router);
+
+export default router;

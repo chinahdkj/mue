@@ -1,11 +1,4 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-
-Vue.use(Router);
-
-export const InitRouter = (routes) => {
-    let router = new Router({routes: routes});
-
+export const InitHook = (router) => {
     router.beforeEach((to, from, next) => {
 
         if(to.fullPath.indexOf('#') > -1){
@@ -25,6 +18,17 @@ export const InitRouter = (routes) => {
         });
         next();
     });
+};
+
+import Vue from 'vue';
+import Router from 'vue-router';
+
+Vue.use(Router);
+
+export const InitRouter = (routes) => {
+    let router = new Router({routes: routes});
+
+    InitHook(router);
 
     return router;
 };

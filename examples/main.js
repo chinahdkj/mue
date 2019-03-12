@@ -10,14 +10,12 @@ import App from './App';
 import Mue from '../src/index';
 import '../themes/index.less';
 import "../static/demo.less";
-import routes from './router/index';
+import router from './router/index';
 import {InitRouter} from '../src/router';
 
 Vue.use(Mue);
 
 Vue.config.productionTip = false;
-
-let router = InitRouter(routes);
 
 /* eslint-disable no-new */
 new Vue({
