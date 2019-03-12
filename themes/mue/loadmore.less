@@ -14,54 +14,44 @@
         width: 100%;
         position: relative;
 
-        .mue-load-more-box {
-            overflow: auto;
+        .mue-load-more__box {
             height: 100%;
             width: 100%;
-            padding-right: @scroll-size; // 隐藏右侧滚动条
-            box-sizing: content-box;
-            -webkit-overflow-scrolling: touch;
-
-            &.is-reached {
-                -webkit-overflow-scrolling: auto;
-            }
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .mue-load-more-wrap {
-            overflow: hidden;
+        .mue-load-more__wrap {
             width: 100%;
+            min-height: calc(~"100% + 1px");
+            box-sizing: border-box;
         }
 
-        .mue-load-more-content {
-            overflow: visible;
-
-            &.is-dropped {
-                transition: .2s;
-            }
-        }
-
-        .mue-load-more-end {
+        .mue-load-more__content {
             width: 100%;
-            display: block;
+            box-sizing: border-box;
         }
 
-        .mue-load-more-top, .mue-load-more-bottom {
-            text-align: center;
+        .mue-load-more__top, .mue-load-more__bottom {
+            z-index: 2;
             height: 50px;
             width: 100%;
-            display: block;
+
             color: @@grey;
             font-size: @font-size;
-            background: @@background;
-            position: relative;
+            position: absolute;
+            left: 0;
 
-            .mue-load-more-text {
-                z-index: 5;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                white-space: nowrap;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            align-content: center;
+
+            .mue-load-more__text {
+                display: inline-block;
+                width: 100%;
+                text-align: center;
             }
 
             i {
@@ -71,26 +61,14 @@
                 width: 16px;
                 text-align: center;
                 line-height: 16px;
+
+                &.is-drop {
+                    transform: rotate(180deg);
+                }
             }
         }
 
-        .mue-load-more-top {
-            margin-top: -50px;
-
-            i.is-drop {
-                transform: rotate(180deg) translate3d(0, 2px, 0);
-            }
-        }
-
-        .mue-load-more-bottom {
-            margin-bottom: -50px;
-
-            i.is-drop {
-                transform: rotate(180deg) translate3d(0, 0, 0);
-            }
-        }
-
-        .mue-load-more-pagination {
+        .mue-load-more__pagination {
             position: absolute;
             display: block;
             right: 10px;

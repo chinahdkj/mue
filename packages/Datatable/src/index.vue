@@ -6,7 +6,7 @@
                 <table class="mue-datatable__inner-table"
                        :style="{width: tableWidth + 'px'}">
 
-                    <col-group :columns="colFields" />
+                    <col-group :columns="colFields"/>
 
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
@@ -257,8 +257,8 @@
                     this.setCols();
                 }
             },
-            isActive:{
-                immediate:true,
+            isActive: {
+                immediate: true,
                 handler(v){
                     v && this.syncScrollX();
                 }
@@ -438,12 +438,11 @@
                 window.requestAnimationFrame(this.syncScrollX);
             },
 
-            onScrollY(box){
+            onScrollY(box, content){
                 if(!this.pageSize || !this.$refs.main_table){
                     this.pageNo = 0;
                     return;
                 }
-
                 if(!this.virtual){
                     let trs = this.$refs.main_table.querySelectorAll("tr");
                     let bottom = box.getBoundingClientRect().bottom;
@@ -461,12 +460,14 @@
                 }
 
                 // 按行号计算页码
-                let bottom = box.scrollTop + box.clientHeight;
+                let scrollTop = box.getBoundingClientRect().top -
+                    content.getBoundingClientRect().top;
+                let bottom = scrollTop + box.clientHeight;
                 let i = parseInt(bottom / this.rowHeight) - 2;
                 let rowNo = this.getRowNo(this.data[i], i);
                 this.pageNo = parseInt(rowNo / this.pageSize) + 1;
 
-                this.scrollBox.top = box.scrollTop;
+                this.scrollBox.top = scrollTop;
             },
 
             scrollResize(){
