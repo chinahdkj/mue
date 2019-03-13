@@ -2,7 +2,7 @@
     <div class="mue-dvr-video">
 
         <div class="mue-dvr-video__content" :style="{height: height + 'px', width: width + 'px'}"
-             v-loading="client && loading" @click="Stop" v-resize="resize">
+             v-loading="client && loading" @click="Stop">
 
             <template v-if="needUpdate">
                 <span>视频服务需要升级，请联系服务器管理员！</span>
@@ -55,6 +55,7 @@
                 client: null,
                 needUpdate: false,
                 loading: false,
+                src: ""
             };
         },
         watch: {
@@ -67,7 +68,12 @@
                         this.Play();
                     });
                 }
-            }
+            },
+            src(v, ov){
+                if(v && !ov){
+                    this.draw();
+                }
+            },
         },
         methods: {
             getThumb(){
@@ -77,22 +83,26 @@
             choose(){
                 this.$emit("choose");
             },
-            resize(){
-                this.client && this.Play();
-            },
-            draw(src){
+            draw(thumb){
                 if(!this.$refs.canvas){
                     return;
                 }
                 let img = new Image();
                 img.onload = () => {
-                    this.$refs.canvas.height = this.height;
-                    this.$refs.canvas.width = this.width;
-                    let ctx = this.$refs.canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0, this.width, this.height);
+                    try{
+                        this.$refs.canvas.height = this.height;
+                        this.$refs.canvas.width = this.width;
+                        let ctx = this.$refs.canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, this.width, this.height);
+                        !thumb && requestAnimationFrame(() => {
+                            this.draw();
+                        });
+                    } catch(e){
+
+                    }
                 };
                 img.crossOrigin = "anonymous";
-                img.src = src;
+                img.src = thumb || this.src;
             },
 
             Stop(){
@@ -100,6 +110,7 @@
                     this.client.close();
                     this.client = null;
                     this.loading = false;
+                    this.src = "";
                 }
             },
             Play(){
@@ -140,7 +151,7 @@
                     }
                     previous = index;
                     this.loading = false;
-                    this.draw(base64);
+                    this.src = base64;
                 });
 
                 this.client.on("ERROR", (data) => {
