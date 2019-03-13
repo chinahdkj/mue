@@ -23,7 +23,7 @@
 
         </div>
 
-        <div class="mue-dvr-video__bar" :style="{width: width + 'px'}"
+        <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px'}"
              :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
             <span class="mue-dvr-video__bar-name">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
@@ -46,6 +46,7 @@
         props: {
             height: {type: Number, default: 0},
             width: {type: Number, default: 0},
+            nobar: {type: Boolean, default: false},
             name: {type: String, default: ""},
             rtsp: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false}
