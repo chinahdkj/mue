@@ -19,6 +19,7 @@
 
 <script>
     import {ImagePreview} from "vant";
+    import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
 
     export default {
         name: "MueImgUpload",
@@ -103,7 +104,7 @@
                 let thumbs = [];
                 for(let i = 0; i < this.imgs.length; i++){
                     let src = this.getPath(this.imgs[i]);
-                    thumbs.push(this.zipImg(src, {type: "image/jpeg"}, 0.5, 50));
+                    thumbs.push(ZipImage(src, {type: "image/jpeg"}, 0.5, 50));
                 }
                 this.thumbs = [];
                 if(thumbs.length === 0){
@@ -166,63 +167,6 @@
                 return data;
             },
 
-            base64ToFile(base64, file){
-                let arr = base64.split(",");
-                let bytes = atob(arr[1].replace(/\s/g, ""));
-                let n = bytes.length;
-                let u8arr = new Uint8Array(n);
-                for(let i = 0; i < n; i++){
-                    u8arr[i] = bytes.charCodeAt(i);
-                }
-
-                let blob = new Blob([u8arr], {type: file.type});
-                blob.lastModifiedDate = new Date();
-                blob.name = file.name;
-                return blob;
-            },
-
-            zipImg(content, {type, name}, quality, maxWidth){
-                let zip = (img, resolve) => {
-                    let canvas = document.createElement("canvas");
-                    let height = img.height;
-                    let width = img.width;
-
-                    if(maxWidth && width > maxWidth){
-                        let hw = height / width;
-                        width = maxWidth;
-                        height = hw * width;
-                    }
-
-                    canvas.height = height;
-                    canvas.width = width;
-                    let ctx = canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0, width, height);
-                    resolve({
-                        content: canvas.toDataURL(type, quality), file: {type, name}
-                    });
-                };
-
-                return new Promise((resolve) => {
-                    if(quality === 1 && !maxWidth){
-                        resolve({content, file: {type, name}});
-                        return;
-                    }
-                    let img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.src = content;
-
-                    if(img.complete){
-                        zip(img, resolve);
-                    }
-                    else{
-                        img.onload = function(){
-                            zip(this, resolve);
-                            img.onload = null;
-                        }
-                    }
-                });
-            },
-
             upload(files){
                 this.uploading = true;
                 if(!Array.isArray(files)){
@@ -230,7 +174,7 @@
                 }
 
                 let datas = files.map(({content, file}) => {
-                    return this.zipImg(content, file, this.quality);
+                    return ZipImage(content, file, this.quality);
                 });
                 Promise.all(datas).then((rs) => {
                     // 图片本地保存
@@ -258,7 +202,7 @@
 
                     let posts = rs.map(({content, file}) => {
                         let form = new FormData();
-                        let f = this.base64ToFile(content, file);
+                        let f = Base64ToFile(content, file);
                         form.append("file", f, file.name);
 
                         return this.$http.post("/app/v1.0/upload.json", form, {
