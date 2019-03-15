@@ -1,3 +1,8 @@
+import native from "../lib/native";
+import {GetQueryString} from "../lib/common";
+import Vue from 'vue';
+import Router from 'vue-router';
+
 export const InitHook = (router) => {
     router.beforeEach((to, from, next) => {
 
@@ -6,9 +11,8 @@ export const InitHook = (router) => {
             return;
         }
 
-        let mid = Vue.prototype.$comm.GetQueryString('mid') ||
-            Vue.prototype.$comm.GetQueryString('mid', 'hash');
-        Vue.prototype.$native.userBehaviorRecord({ // 用户行为分析
+        let mid = GetQueryString('mid') || GetQueryString('mid', 'hash');
+        native.userBehaviorRecord({ // 用户行为分析
             params: {
                 "mid": mid,  //菜单ID
                 "name": to.meta.title, //功能名称
@@ -20,12 +24,10 @@ export const InitHook = (router) => {
     });
 };
 
-import Vue from 'vue';
-import Router from 'vue-router';
 
-Vue.use(Router);
 
 export const InitRouter = (routes) => {
+    Vue.use(Router);
     let router = new Router({routes: routes});
 
     InitHook(router);
