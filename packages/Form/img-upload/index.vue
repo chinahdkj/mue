@@ -55,13 +55,17 @@
                         this.imgs = v ? [v] : [];
                     }
                     else{
-                        this.imgs = v;
+                        this.imgs = v || [];
                     }
                 }
             },
             imgs: {
                 deep: true, immediate: true,
                 handler(v){
+                    if(!Array.isArray(v)){
+                        return
+                    }
+
                     if(this.multiple){
                         this.$emit("input", v);
                     }
