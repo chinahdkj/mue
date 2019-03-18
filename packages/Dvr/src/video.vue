@@ -95,9 +95,10 @@
                         this.$refs.canvas.width = this.width;
                         let ctx = this.$refs.canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0, this.width, this.height);
-                        !thumb && requestAnimationFrame(() => {
-                            this.draw();
-                        });
+                        // !thumb && requestAnimationFrame(() => {
+                        //     this.draw();
+                        // });
+                        !thumb && this.draw();
                     } catch(e){
 
                     }
