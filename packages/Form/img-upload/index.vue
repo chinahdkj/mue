@@ -1,9 +1,8 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li v-for="(m, i) in imgs" :key="i" class="__upload-img">
-                <img :src="getPath(dict[m])"
-                     v-touch="{tap: () => {showPic(i);}, long: () => {removeImg(i);}}"/>
+            <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
+                <img :src="m" v-touch="{tap: () => {showPic(i);}, long: () => {removeImg(i);}}"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
@@ -72,7 +71,7 @@
 
                     this.dict = {};
                     v.forEach((p) => {
-                        this.dict[p] = p;
+                        this.$set(this.dict, p, p);
                     });
 
                     if(this.base64){
@@ -87,13 +86,13 @@
                                     continue;
                                 }
                                 data = JSON.parse(data);
-                                this.dict[_id] = data.base64;
+                                this.$set(this.dict, _id, data.base64);
                             }
-                            // this.createThumbs();
+                            this.createThumbs();
                         });
                     }
                     else{
-                        // this.createThumbs();
+                        this.createThumbs();
                     }
                 }
             }
@@ -101,22 +100,25 @@
         methods: {
             createThumbs(){
                 // 生成缩略图
-                let thumbs = [];
-                for(let i = 0; i < this.imgs.length; i++){
-                    let src = this.getPath(this.imgs[i]);
-                    thumbs.push(ZipImage(src, {type: "image/jpeg"}, 0.5, 50));
-                }
-                this.thumbs = [];
-                if(thumbs.length === 0){
-                    return;
-                }
-                this.uploading = true;
-                Promise.all(thumbs).then((rs) => {
-                    this.thumbs = rs.map(({content}) => {
-                        return content;
-                    });
-                    this.uploading = false;
+                this.thumbs = this.imgs.map((m) => {
+                    return this.getPath(m);
                 });
+                // let thumbs = [];
+                // for(let i = 0; i < this.imgs.length; i++){
+                //     let src = this.getPath(this.imgs[i]);
+                //     thumbs.push(ZipImage(src, {type: "image/jpeg"}, 0.5, 50));
+                // }
+                // this.thumbs = [];
+                // if(thumbs.length === 0){
+                //     return;
+                // }
+                // this.uploading = true;
+                // Promise.all(thumbs).then((rs) => {
+                //     this.thumbs = rs.map(({content}) => {
+                //         return content;
+                //     });
+                //     this.uploading = false;
+                // });
             },
 
             queryLocal(id){
