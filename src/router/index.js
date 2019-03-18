@@ -24,6 +24,8 @@ export const InitHook = (router) => {
     });
 };
 
+
+
 export const InitRouter = (routes) => {
     Vue.use(Router);
     let router = new Router({routes: routes});

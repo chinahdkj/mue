@@ -8,7 +8,7 @@ const fns = [
     "save", "delete", "query", "rotate", "startNavi", "getLocation", "isCollected", "sysInfo",
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
     "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
-    "bluetooth", "btDisConnected"
+    "bluetooth", "btDisConnected", "manualPost"
 ];
 
 const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver'] // 原生主动调用js的方法
