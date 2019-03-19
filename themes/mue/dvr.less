@@ -4,13 +4,43 @@
     @grey-sub: %("%s-grey-sub", @theme);
     @grey: %("%s-grey", @theme);
     @background: %("%s-background", @theme);
+    @background-base: %("%s-background-base", @theme);
     @color: %("%s-common", @theme);
+    @border-color: %("%s-border-color", @theme);
 
     .mue-dvr-video {
         display: inline-block;
+        box-sizing: border-box;
+        border-top: 1px solid @@border-color;
+        border-bottom: 1px solid @@border-color;
+        position: relative;
+
+        &:before{
+            content: "";
+            height: 100%;
+            width: 1px;
+            display: block;
+            background: @@border-color;
+            left: 0;
+            top: 0;
+            z-index: 2;
+            position: absolute;
+        }
+
+        &:after{
+            content: "";
+            height: 100%;
+            width: 1px;
+            display: block;
+            background: @@border-color;
+            right: 0;
+            top: 0;
+            z-index: 2;
+            position: absolute;
+        }
 
         .mue-dvr-video__content {
-            background: @@grey-sub;
+            background: #bdbdbd;
             position: relative;
             display: block;
 
@@ -42,7 +72,7 @@
                 top: 0;
                 left: 0;
                 font-size: 46px;
-                background: rgba(0, 0, 0, 0.1);
+                //background: rgba(0, 0, 0, 0.1);
 
                 &:before {
                     display: block;
@@ -108,5 +138,8 @@
     }
 
     .mue-dvr {
+        .mue-main{
+            background: @background-base;
+        }
     }
 }

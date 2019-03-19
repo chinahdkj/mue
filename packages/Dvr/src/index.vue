@@ -1,5 +1,5 @@
 <template>
-    <mue-container>
+    <mue-container class="mue-dvr">
         <mue-header>
             <van-tabs v-model="layout">
                 <van-tab v-for="(t, i) in tabs" :key="i">
