@@ -42,6 +42,7 @@
         </mue-tabs>
 
         <van-popup class="tab-pop" v-model="popVis" position="right" :lazy-render="false">
+            <mue-search v-model="search" style="padding: 5px;"></mue-search>
         </van-popup>
     </div>
 
@@ -73,7 +74,8 @@
                     {code: "height", name: "高度"},
                     {code: "width", name: "宽度"},
                     {code: "power", name: "功耗"}
-                ]
+                ],
+                search: ""
             };
         },
         methods: {

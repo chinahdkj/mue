@@ -18,6 +18,10 @@
             overflow: hidden;
             color: @@color;
 
+            .van-search__content{
+                padding-left: 0;
+            }
+
             .van-cell {
                 height: @__height;
                 border-radius: 0;
@@ -25,9 +29,11 @@
                 padding: 7px 10px;
                 background: @@background;
 
-                .van-cell__left-icon {
+                .van-cell__left-icon,
+                .van-field__left-icon {
                     margin-right: 10px;
                     color: @@primary;
+                    text-align: left;
                 }
 
                 input.van-field__control {
