@@ -4,7 +4,7 @@
             <van-search v-model="q" background="transparent" show-action
                         :placeholder="placeholder"
                         @search="onSearch">
-                <div slot="action" @click="q = ''">取消</div>
+                <div slot="action" @click="onCancel">取消</div>
             </van-search>
         </form>
     </div>
@@ -41,6 +41,10 @@
         methods: {
             onSearch(){
                 this.$emit("search", this.q);
+            },
+            onCancel(){
+                this.q = "";
+                this.$emit("cancel");
             }
         }
     }
