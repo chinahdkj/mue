@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import {addClass, removeClass} from '../dom';
-import PopCtx from "vant/packages/mixins/popup/context";
+import {context as PopCtx} from "vant/es/mixins/popup/context";
 
 
 let hasModal = false;
