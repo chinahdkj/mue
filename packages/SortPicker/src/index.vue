@@ -1,16 +1,18 @@
 <template>
     <div class="mue-sort-picker">
-        <div v-for="item in data" class="mue-sort-picker__item" :key="item.code"
-             :style="{width: typeof itemWidth === 'string' ? itemWidth : (itemWidth + 'px')}"
-             @click="changeSort(item)" :class="{'is-active' : item.code === field}">
-            <div class="mue-sort-picker__item-name">{{item.name}}</div>
-            <van-icon class="mue-sort-picker__item-sort" name="ascending"
-                      :class="{'is-active' : item.code === field && 'asc' === type}"
-                      @click.stop="changeSort(item, 'asc')"/>
-            <van-icon class="mue-sort-picker__item-sort" name="descending"
-                      :class="{'is-active' : item.code === field && 'desc' === type}"
-                      @click.stop="changeSort(item, 'desc')"/>
-        </div>
+        <template v-for="item in data" >
+            <template v-for="ty in ['asc', 'desc']">
+                <div class="mue-sort-picker__item" :key="item.code + '---' + ty"
+                     :style="{width: typeof itemWidth === 'string' ? itemWidth : (itemWidth + 'px')}"
+                     :class="{'is-active' : item.code === field && ty === type}"
+                     @click="changeSort(item, ty)" >
+                    <div class="mue-sort-picker__item-name">
+                        {{item.name}}
+                    </div>
+                    <van-icon class="mue-sort-picker__item-sort" :name="ty + 'ending'"/>
+                </div>
+            </template>
+        </template>
     </div>
 </template>
 
@@ -51,16 +53,10 @@
             changeSort({code}, type){
                 let field = code, ty = "";
                 if(code === this.field){
-                    if(type == null){
-                        ty = SORT_TYPES.indexOf(this.type);
-                        ty = SORT_TYPES[ty + 1] || "";
-                    }
-                    else{
-                        ty = type === this.type ? "" : type;
-                    }
+                    ty = type === this.type ? "" : type;
                 }
                 else{
-                    ty = type || "asc";
+                    ty = type;
                 }
 
                 if(!ty){
