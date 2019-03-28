@@ -2,7 +2,7 @@
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
-                <img :src="m" v-touch="{tap: () => {showPic(i);}, long: () => {removeImg(i);}}"/>
+                <img :src="m" @click="showAction(i)" />
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
@@ -13,6 +13,9 @@
                 </van-uploader>
             </li>
         </ul>
+
+        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消" @select="onSelect"
+                         :actions="[{name: '查看原图', act: 'view'}, {name: '删除', act: 'delete'}]"/>
     </div>
 </template>
 
@@ -44,7 +47,8 @@
         },
         data(){
             return {
-                imgs: [], thumbs: [], uploading: false, dict: {}
+                imgs: [], thumbs: [], uploading: false, dict: {},
+                pop: {visible: false, current: -1}
             };
         },
         watch: {
@@ -232,18 +236,34 @@
                 });
             },
 
-            showPic(i){
+            showAction(i){
+                this.pop.visible = true;
+                this.pop.current = i;
+            },
+
+            onSelect({act}){
+                if(act === "view"){
+                    this.showPic();
+                }
+                else if(act === "delete"){
+                    this.removeImg();
+                }
+                this.pop.visible = false;
+            },
+
+            showPic(){
                 let images = this.imgs.map((m) => {
                     return this.getPath(m);
                 });
                 this.$native.hideHeader({params: {hide: 1}});
                 ImagePreview({
-                    images, startPosition: i, loop: true, onClose: () => {
+                    images, startPosition: this.pop.current, loop: true,
+                    onClose: () => {
                         this.$native.hideHeader({params: {hide: 0}});
                     }
                 });
             },
-            removeImg(i){
+            removeImg(){
                 if(this.disabled){
                     return;
                 }
@@ -251,7 +271,7 @@
                 this.$dialog.confirm({
                     title: "删除", message: "是否删除此图片!"
                 }).then(() => {
-                    this.imgs.splice(i, 1);
+                    this.imgs.splice(this.pop.current, 1);
                 }).catch(() => {
                 });
             }
