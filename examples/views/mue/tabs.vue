@@ -43,6 +43,8 @@
 
         <van-popup class="tab-pop" v-model="popVis" position="right" :lazy-render="false">
             <mue-search v-model="search" style="padding: 5px;"></mue-search>
+
+            <mue-date-picker/>
         </van-popup>
     </div>
 

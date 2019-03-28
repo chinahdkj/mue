@@ -16,7 +16,8 @@
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
-                   get-container="body">
+                   get-container="body" :close-on-click-overlay="false"
+                   @click-overlay="pop = false">
             <year-picker v-if="dtype == 'year'" v-model="val" @confirm="onConfirm"
                          @cancel="onCancel" :cancel-button-text="cancelText"></year-picker>
             <van-datetime-picker v-if="dtype != 'year'" :type="dtype" v-model="val"

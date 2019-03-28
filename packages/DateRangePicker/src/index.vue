@@ -10,7 +10,8 @@
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"
-                   get-container="body">
+                   get-container="body" :close-on-click-overlay="false"
+                   @click-overlay="pop = false">
             <van-datetime-picker v-if="step == 'begin'" :type="dtype" v-model="bv"
                                  title="起始" @confirm="onConfirmBegin"
                                  @cancel="onCancel" :cancel-button-text="cancelText"/>

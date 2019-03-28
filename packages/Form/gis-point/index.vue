@@ -6,7 +6,8 @@
             <i class="input__suffix input__suffix_icon iconfont icon-dingwei4"></i>
         </div>
         <van-popup ref="pop" class="mue-gis-point-pop" v-model="pop" position="bottom"
-                   :lazy-render="true" get-container="body">
+                   :lazy-render="true" get-container="body" :close-on-click-overlay="false"
+                   @click-overlay="pop = false">
             <div class="van-picker" v-loading="!pos">
                 <div v-if="!FORM_ITEM.readonly"
                      class="van-hairline--top-bottom van-picker__toolbar">
