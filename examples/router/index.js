@@ -30,6 +30,11 @@ const routes = [
         name: 'vant_tabbar',
         component: () => import("../views/vant/tabbar")
     },
+    {
+        path: '/vant/actionsheet',
+        name: 'vant_actionsheet',
+        component: () => import("../views/vant/actionsheet")
+    },
 
     {
         path: '/mue/page',

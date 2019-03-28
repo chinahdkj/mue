@@ -14,6 +14,7 @@
             <van-cell value="RADIO" @click="open('/vant/radio')"/>
             <van-cell value="TAB" @click="open('/vant/tab')"/>
             <van-cell value="TABBAR" @click="open('/vant/tabbar')"/>
+            <van-cell value="ACTIONSHEET" @click="open('/vant/actionsheet')"/>
         </van-cell-group>
 
         <h3>MUE</h3>

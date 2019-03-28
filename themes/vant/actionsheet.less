@@ -1,0 +1,37 @@
+@import "../var.less";
+
+.van-actionsheet(@theme: light){
+    @background: %("%s-background-pop", @theme);
+    @background-base: %("%s-background-base", @theme);
+    @color: %("%s-common", @theme);
+    @color-grey: %("%s-grey", @theme);
+    @color-disabled: %("%s-placeholder", @theme);
+
+    .van-actionsheet{
+        
+        color: @@color;
+
+        .van-actionsheet__item{
+            background: @@background;
+        }
+
+        .van-actionsheet__cancel{
+            background: @@background;
+            &:before{
+                background: @@background-base;
+            }
+        }
+
+        .van-actionsheet__subname{
+            color: @@color-grey;
+        }
+
+        .van-actionsheet__item--disabled{
+            color: @@color-disabled;
+
+            .van-actionsheet__subname{
+                color: @@color-disabled;
+            }
+        }
+    }
+}
