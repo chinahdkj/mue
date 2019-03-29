@@ -35,7 +35,7 @@
                 inner = [$scoped({row: this.row, col: this.col, value: this.value, no: this.no})];
             }
             else{
-                td.domProps = {innerHTML: this.value};
+                td.domProps = {innerHTML: this.value == null ? "" : this.value};
             }
             return h("td", td, inner);
         },
