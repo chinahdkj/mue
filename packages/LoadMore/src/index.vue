@@ -244,13 +244,13 @@
             },
 
             fillContainer(){
-                if(!this.autoFill || this.allLoaded){
-                    return;
-                }
                 this.$nextTick(() => {
                     let br = this.$refs.box.getBoundingClientRect();
                     let cr = this.$refs.content.getBoundingClientRect();
                     this.moreThenView = cr.height >= br.height;
+                    if(!this.autoFill || this.allLoaded){
+                        return;
+                    }
                     !this.moreThenView && this.bottomAction();
                 });
             },
