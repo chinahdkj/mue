@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {PopupManager} from './popup';
 
 import Popper from './popper';
-import {addClass, setStyle, on, off} from './dom';
+import {addClass, off, on, setStyle} from './dom';
 
 const PopperJS = Vue.prototype.$isServer ? () => {
 } : Popper;
@@ -128,15 +128,17 @@ export default {
             }
             if(this.appendToBody){
                 document.body.appendChild(this.popperElm);
-                if(this.overlay){
-                    let overlay = document.createElement("div");
-                    addClass(overlay, "van-overlay");
-                    setStyle(overlay, "display", "block");
-                    setStyle(overlay, "z-index", PopupManager.nextZIndex());
-                    document.body.appendChild(overlay);
-                    on(overlay, "touchmove", DISABLE_TOUCH);
-                    this.overlayElm = overlay;
+
+                let overlay = document.createElement("div");
+                addClass(overlay, "van-overlay");
+                setStyle(overlay, "display", "block");
+                setStyle(overlay, "z-index", PopupManager.nextZIndex());
+                if(!this.overlay){
+                    setStyle(overlay, "background", "transparent");
                 }
+                document.body.appendChild(overlay);
+                on(overlay, "touchmove", DISABLE_TOUCH);
+                this.overlayElm = overlay;
             }
             if(this.popperJS && this.popperJS.destroy){
                 this.popperJS.destroy();

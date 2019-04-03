@@ -12,7 +12,7 @@
         </mue-tabs>
 
         <mue-popover ref="pop" v-model="sortVis" placement="bottom" :visible-arrow="false"
-                     :border-radius="false" popper-class="sort-pop">
+                     :border-radius="false" popper-class="sort-pop" append-to-body>
             <mue-sort-picker :data="sortData" @change="onSortChange"/>
         </mue-popover>
 
