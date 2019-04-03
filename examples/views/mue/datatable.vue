@@ -1,6 +1,9 @@
 <template>
     <van-tabs class="no-flex">
         <van-tab title="demo">
+            <mue-popover ref="pop" placement="bottom">
+                <div style="padding: 10px;">99999</div>
+            </mue-popover>
             <div style="height: 400px;" v-loading="loading">
                 <mue-datatable ref="table" :columns="columns" :min-col-width="minColWidth"
                                :data="data" :sort="sort" :total="total" :row-class="rowClass"
@@ -17,7 +20,7 @@
                     <!--</template>-->
 
                     <template slot="aa" slot-scope="{row, col, value, no}">
-                        {{col.field}} -- {{value}}
+                        <a v-popover:pop>{{col.field}} -- {{value}}</a>
                     </template>
                 </mue-datatable>
             </div>

@@ -1,5 +1,6 @@
 @import "../var.less";
-.mue-popover(@theme: light){
+
+.mue-popover(@theme: light) {
     @color: %("%s-common", @theme);
     @background: %("%s-background-pop", @theme);
     //@border-color: %("%s-border-color", @theme);
@@ -15,7 +16,7 @@
         -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .2);
 
-        &.mue-popover-radius{
+        &.mue-popover-radius {
             border-radius: 6px;
         }
 
@@ -27,11 +28,13 @@
             height: 0;
             border: solid transparent;
         }
+
         .popper__arrow {
             border-width: 6px;
             -webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, .03));
             filter: drop-shadow(0 2px 12px rgba(0, 0, 0, .03));
         }
+
         .popper__arrow:after {
             content: " ";
             border-width: 6px;
@@ -43,6 +46,7 @@
             margin-right: 3px;
             border-top-color: @@background;
             border-bottom-width: 0;
+
             &:after {
                 bottom: 1px;
                 margin-left: -6px;
@@ -57,6 +61,7 @@
             margin-right: 3px;
             border-top-width: 0;
             border-bottom-color: @@background;
+
             &:after {
                 top: 1px;
                 margin-left: -6px;
@@ -71,6 +76,7 @@
             margin-bottom: 3px;
             border-right-color: @@background;
             border-left-width: 0;
+
             &:after {
                 bottom: -6px;
                 left: 1px;
@@ -85,6 +91,7 @@
             margin-bottom: 3px;
             border-right-width: 0;
             border-left-color: @@background;
+
             &:after {
                 right: 1px;
                 bottom: -6px;
@@ -93,10 +100,31 @@
                 border-left-color: @@background;
             }
         }
+
         &:focus,
         &:focus:active {
             outline-width: 0
         }
+    }
+
+    .mue-popover-modal {
+        position: fixed;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+    }
+
+    .mue-popover-modal-dark {
+        position: fixed;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);;
     }
 }
 

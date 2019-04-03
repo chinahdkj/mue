@@ -2,7 +2,8 @@ import Vue from 'vue';
 import {PopupManager} from './popup';
 
 import Popper from './popper';
-import {addClass, off, on, setStyle} from './dom';
+import uuid from './uuid';
+import {once, setStyle} from './dom';
 
 const PopperJS = Vue.prototype.$isServer ? () => {
 } : Popper;
@@ -72,7 +73,9 @@ export default {
             showPopper: false,
             currentPlacement: '',
             reference: null,
-            overlayElm: null
+            overlayElm: null,
+            tooltipId:`mue-popover-${uuid(10, 20)}`,
+            zindex: 0
         };
     },
 
@@ -129,17 +132,20 @@ export default {
             if(this.appendToBody){
                 document.body.appendChild(this.popperElm);
 
-                let overlay = document.createElement("div");
-                addClass(overlay, "van-overlay");
-                setStyle(overlay, "display", "block");
-                setStyle(overlay, "z-index", PopupManager.nextZIndex());
-                if(!this.overlay){
-                    setStyle(overlay, "background", "transparent");
-                }
-                document.body.appendChild(overlay);
-                on(overlay, "touchmove", DISABLE_TOUCH);
-                this.overlayElm = overlay;
+                // let overlay = document.createElement("div");
+                // addClass(overlay, "van-overlay");
+                // setStyle(overlay, "display", "block");
+                // setStyle(overlay, "z-index", PopupManager.nextZIndex());
+                // if(!this.overlay){
+                //     setStyle(overlay, "background", "transparent");
+                // }
+                // document.body.appendChild(overlay);
+                // on(overlay, "touchmove", DISABLE_TOUCH);
+                // this.overlayElm = overlay;
             }
+
+
+
             if(this.popperJS && this.popperJS.destroy){
                 this.popperJS.destroy();
             }
@@ -156,23 +162,41 @@ export default {
             if(typeof options.onUpdate === 'function'){
                 this.popperJS.onUpdate(options.onUpdate);
             }
-            this.popperJS._popper.style.zIndex = PopupManager.nextZIndex();
+            this.zindex = PopupManager.nextZIndex();
+            this.popperJS._popper.style.zIndex = this.zindex;
             this.popperElm.addEventListener('click', stop);
         },
 
         updatePopper(){
             const popperJS = this.popperJS;
             if(popperJS){
-                setStyle(this.overlayElm, "display", "block");
+                // setStyle(this.overlayElm, "display", "block");
                 popperJS.update();
                 if(popperJS._popper){
-                    setStyle(this.overlayElm, "z-index", PopupManager.nextZIndex());
-                    popperJS._popper.style.zIndex = PopupManager.nextZIndex();
+                    // setStyle(this.overlayElm, "z-index", PopupManager.nextZIndex());
+                    this.zindex = PopupManager.nextZIndex();
+                    popperJS._popper.style.zIndex = this.zindex;
                 }
             }
             else{
                 this.createPopper();
             }
+            let modal = PopupManager.openModal(this.tooltipId, this.zindex - 1,
+                this.appendToBody ? undefined : this.popperElm,
+                this.overlay ? "mue-popover-modal-dark" : "mue-popover-modal", false);
+
+            if(!this.appendToBody){
+                let bound = this.$el.parentElement.getBoundingClientRect();
+                setStyle(modal, "top", bound.top + "px");
+                setStyle(modal, "width", bound.width + "px");
+                setStyle(modal, "height", bound.height + "px");
+                setStyle(modal, "left", bound.left + "px");
+            }
+            setTimeout(()=>{
+                once(modal, "click", () => {
+                    this.showPopper = false;
+                });
+            }, 50);
         },
 
         doDestroy(forceDestroy){
@@ -180,11 +204,12 @@ export default {
             if(!this.popperJS || (this.showPopper && !forceDestroy)){
                 return;
             }
-            if(this.overlayElm){
-                off(this.overlayElm, "touchmove", DISABLE_TOUCH);
-                this.overlayElm.parentNode.removeChild(this.overlayElm);
-                this.overlayElm = null;
-            }
+            PopupManager.closeModal(this.tooltipId);
+            // if(this.overlayElm){
+            //     off(this.overlayElm, "touchmove", DISABLE_TOUCH);
+            //     this.overlayElm.parentNode.removeChild(this.overlayElm);
+            //     this.overlayElm = null;
+            // }
             this.popperJS.destroy();
             this.popperJS = null;
         },
@@ -196,7 +221,7 @@ export default {
         },
 
         resetTransformOrigin(){
-            setStyle(this.overlayElm, "display", "none");
+            // setStyle(this.overlayElm, "display", "none");
             if(!this.transformOrigin){
                 return;
             }
@@ -241,17 +266,23 @@ export default {
         }
     },
 
+    beforeMount(){
+        PopupManager.register(this.tooltipId, this);
+    },
+
     beforeDestroy(){
+        PopupManager.closeModal(this.tooltipId);
+        PopupManager.deregister(this.tooltipId);
         this.doDestroy(true);
         if(this.popperElm && this.popperElm.parentNode === document.body){
             this.popperElm.removeEventListener('click', stop);
             document.body.removeChild(this.popperElm);
         }
-        if(this.overlayElm){
-            off(this.overlayElm, "touchmove", DISABLE_TOUCH);
-            this.overlayElm.parentNode.removeChild(this.overlayElm);
-            this.overlayElm = null;
-        }
+        // if(this.overlayElm){
+        //     off(this.overlayElm, "touchmove", DISABLE_TOUCH);
+        //     this.overlayElm.parentNode.removeChild(this.overlayElm);
+        //     this.overlayElm = null;
+        // }
     },
 
     // call destroy in keep-alive mode

@@ -101,7 +101,7 @@ const PopupManager = {
             let classArr = modalClass.trim().split(/\s+/);
             classArr.forEach(item => addClass(modalDom, item));
         }
-        setTimeout(() => {
+        this.modalFade && setTimeout(() => {
             removeClass(modalDom, 'v-modal-enter');
         }, 200);
 
@@ -119,6 +119,7 @@ const PopupManager = {
         modalDom.style.display = '';
 
         this.modalStack.push({id: id, zIndex: zIndex, modalClass: modalClass});
+        return modalDom;
     },
 
     closeModal: function(id){
@@ -151,17 +152,24 @@ const PopupManager = {
         if(modalStack.length === 0){
             if(this.modalFade){
                 addClass(modalDom, 'v-modal-leave');
-            }
-            setTimeout(() => {
-                if(modalStack.length === 0){
-                    if(modalDom.parentNode){
-                        modalDom.parentNode.removeChild(modalDom);
+                setTimeout(() => {
+                    if(modalStack.length === 0){
+                        modalDom.style.display = 'none';
+                        if(modalDom.parentNode){
+                            modalDom.parentNode.removeChild(modalDom);
+                        }
+                        PopupManager.modalDom = undefined;
                     }
-                    modalDom.style.display = 'none';
-                    PopupManager.modalDom = undefined;
+                    removeClass(modalDom, 'v-modal-leave');
+                }, 200);
+            }
+            else{
+                modalDom.style.display = 'none';
+                if(modalDom.parentNode){
+                    modalDom.parentNode.removeChild(modalDom);
                 }
-                removeClass(modalDom, 'v-modal-leave');
-            }, 200);
+                PopupManager.modalDom = undefined;
+            }
         }
     }
 };

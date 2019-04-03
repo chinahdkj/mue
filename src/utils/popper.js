@@ -622,7 +622,7 @@ Popper.prototype.modifiers.applyStyle = function(data){
     };
 
     // round top and left to avoid blurry text
-    var left = Math.round(data.offsets.popper.left);
+    var left = Math.max(Math.round(data.offsets.popper.left), 0);
     var top = Math.round(data.offsets.popper.top);
 
     // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper

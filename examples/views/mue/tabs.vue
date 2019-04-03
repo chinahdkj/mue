@@ -12,7 +12,8 @@
         </mue-tabs>
 
         <mue-popover ref="pop" v-model="sortVis" placement="bottom" :visible-arrow="false"
-                     :border-radius="false" popper-class="sort-pop" append-to-body>
+                     :border-radius="false" popper-class="sort-pop" append-to-body
+                     :pop-style="{height: '60%', overflow: 'auto'}">
             <mue-sort-picker :data="sortData" @change="onSortChange"/>
         </mue-popover>
 
@@ -52,6 +53,7 @@
 
 <script>
     import MueSelect from '../../../packages/Form/select/index';
+    import {setStyle} from '../../../src/utils/dom';
 
     export default {
         components: {MueSelect},
@@ -103,10 +105,10 @@
         width: 80%;
     }
 
-    /deep/ .sort-pop {
-        width: 100%;
-        left: 0 !important;
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
+    /*/deep/ .sort-pop {*/
+        /*width: 100%;*/
+        /*left: 0 !important;*/
+        /*padding: 0 10px;*/
+        /*box-sizing: border-box;*/
+    /*}*/
 </style>

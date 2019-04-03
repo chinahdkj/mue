@@ -4,7 +4,11 @@
                     @after-leave="handleAfterLeave">
             <div class="mue-popover"
                  :class="[popperClass, {'mue-popover-radius': borderRadius}]"
-                 :style="width ? {width: typeof width === 'string' ? width : (width + 'px')} : null"
+                 :style="[width
+                 ? {width: typeof width === 'string' ? width : (width + 'px')}
+                 : null,
+                 popStyle
+                 ]"
                  ref="popper" v-show="!disabled && showPopper"
                  role="tooltip" :id="tooltipId"
                  :aria-hidden="(disabled || !showPopper) ? 'true' : 'false'">
@@ -18,7 +22,6 @@
 <script>
     import Popper from '../../../src/utils/vue-popper';
     import {addClass, off, on, removeClass} from '../../../src/utils/dom';
-    import uuid from '../../../src/utils/uuid';
 
     export default {
         name: 'MuePopover',
@@ -37,6 +40,7 @@
             // },
             // title: String,
             // disabled: Boolean,
+            popStyle: {type: [Object, String]},
             width: {
                 type: [Number, String], default: ""
             },
@@ -63,9 +67,6 @@
             };
         },
         computed: {
-            tooltipId(){
-                return `mue-popover-${uuid(10, 20)}`;
-            }
         },
         watch: {
             showPopper(val){
@@ -73,11 +74,11 @@
                     return;
                 }
                 if(val){
-                    addClass(document.body, "mue-overlay-show");
+                    // addClass(document.body, "mue-overlay-show");
                     this.$emit("show");
                 }
                 else{
-                    removeClass(document.body, "mue-overlay-show");
+                    // removeClass(document.body, "mue-overlay-show");
                     this.$emit("hide");
                 }
                 // val ? this.$emit('show') : this.$emit('hide');
@@ -129,7 +130,7 @@
                 this.showPopper = false;
             },
             handleAfterEnter(){
-                this.$emit('after-enter');
+                this.$emit('after-enter', this.$refs.popper);
             },
             handleAfterLeave(){
                 this.doDestroy();
