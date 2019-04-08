@@ -62,7 +62,7 @@
         <div class="mue-datatable-main" v-resize="scrollResize" style="overflow: auto"
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
-            <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
+            <mue-load-more ref="load_more" v-if="isActive" @refresh="onRefresh" @load-more="onLoad"
                            @scroll-change="onScrollY" :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
                            :all-loaded="data.length >= total" :all-loaded-text="allLoadedText"
@@ -181,8 +181,8 @@
                 headerRows: 0, // 表头行数
                 pageNo: 0,
                 scrollTable: null, // 操作横向滚动的表格
-                scrollBox: { // 竖向滚动高度，及可视区域高度
-                    top: 0, height: 0
+                scrollBox: { // 竖向滚动高度，及可视区域高度  滚动位置
+                    top: 0, height: 0, y: 0
                 },
                 isActive: false, // 是否被激活，不激活状态, 停用横向滚动同步
             };
@@ -260,7 +260,16 @@
             isActive: {
                 immediate: true,
                 handler(v){
-                    v && this.syncScrollX();
+                    if(v){
+                        this.syncScrollX();
+                        this.$nextTick(() => {
+                            this.$refs.load_more && this.$refs.load_more.scroller &&
+                            this.$refs.load_more.scroller.scrollTo(0, this.scrollBox.y, 0);
+                        });
+                    }
+                    else if(this.$refs.load_more && this.$refs.load_more.scroller){
+                        this.scrollBox.y = this.$refs.load_more.scroller.y;
+                    }
                 }
             }
         },

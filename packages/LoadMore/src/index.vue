@@ -58,7 +58,8 @@
                     </a>
                     <a class="__pager">
                         <ul ref="pager">
-                            <li v-for="i in pageTotal" :key="i">
+                            <li v-for="i in pageTotal" :key="i"
+                                :style="pageNoStyle">
                                 {{i}}
                             </li>
                         </ul>
@@ -97,7 +98,7 @@
             disLoadMore: {type: Boolean, default: false},
 
             pageNo: {type: Number, default: 0},
-            pageTotal: {type: Number, default: 0},
+            pageTotal: {type: Number, default: 0}
         },
         data(){
             return {
@@ -108,7 +109,8 @@
                 top: {state: "", style: {}},
                 bottom: {state: "", style: {}},
                 translate: 0,
-                moreThenView: false
+                moreThenView: false,
+                posY: 0
             };
         },
         computed: {
@@ -117,16 +119,12 @@
                     return {transform: `translateY(${-this.distance}px)`,};
                 }
                 return {transition: "0.6s"};
+            },
+            pageNoStyle(){
+                return {transform: `translateY(${-(this.pageNo - 1) * 22}px)`}
             }
         },
-        watch: {
-            pageNo(v){
-                if(!this.$refs.pager){
-                    return;
-                }
-                $(this.$refs.pager).animate({scrollTop: (v - 1) * 22}, 200);
-            }
-        },
+        watch: {},
         methods: {
             initScroll(){
                 let self = this;
@@ -148,7 +146,7 @@
                 });
 
                 this.scroller.on("scroll", ({y}) => {
-                    if(!self.scrolling){
+                    if(!self.scrolling || !self.$refs.box || !self.$refs.content){
                         return;
                     }
 
@@ -176,7 +174,7 @@
                     self.top.state === "drop" && self.topAction();
                 });
 
-                this.scroller.on("scrollEnd", () => {
+                this.scroller.on("scrollEnd", ({y}) => {
                     if(!self.loading){
                         self.scrolling = false;
                     }
@@ -276,10 +274,16 @@
             this.initScroll();
         },
         activated(){
-            this.scroller && this.scroller.enable();
+            if(this.scroller){
+                this.scroller.enable();
+                this.scroller.scrollTo(0, this.posY, 0);
+            }
         },
         deactivated(){
-            this.scroller && this.scroller.disable();
+            if(this.scroller){
+                this.posY = this.scroller.y;
+                this.scroller.disable();
+            }
         }
     };
 </script>
