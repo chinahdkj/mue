@@ -276,7 +276,9 @@
         activated(){
             if(this.scroller){
                 this.scroller.enable();
-                this.scroller.scrollTo(0, this.posY, 0);
+                this.$nextTick(()=>{
+                    this.scroller.scrollTo(0, this.posY, 1);
+                });
             }
         },
         deactivated(){

@@ -264,7 +264,7 @@
                         this.syncScrollX();
                         this.$nextTick(() => {
                             this.$refs.load_more && this.$refs.load_more.scroller &&
-                            this.$refs.load_more.scroller.scrollTo(0, this.scrollBox.y, 0);
+                            this.$refs.load_more.scroller.scrollTo(0, this.scrollBox.y, 1);
                         });
                     }
                     else if(this.$refs.load_more && this.$refs.load_more.scroller){
