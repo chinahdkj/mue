@@ -10,7 +10,8 @@
 
             <template v-else-if="version === 'hik-ys'">
                 <van-icon v-if="!client" name="play-circle-o" @click.stop="Play"></van-icon>
-                <video v-show="client" ref="ys_video" loop muted preload></video>
+                <video v-show="client" ref="ys_video" loop muted preload webkit-playsinline="true"
+                       playsinline="true" autoplay></video>
             </template>
 
             <template v-else>
@@ -112,10 +113,6 @@
                         src = src.replace(
                             "rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
                     }
-
-                    this.$refs.ys_video.oncanplay = () => {
-                        this.$refs.ys_video.play();
-                    };
 
                     this.$refs.ys_video.onplay = () => {
                         this.loading = false;
