@@ -4,21 +4,18 @@
         <div class="mue-dvr-video__content" :style="{height: height + 'px', width: width + 'px'}"
              v-loading="client && loading" @click="Stop">
 
-            <template v-if="needUpdate">
-                <span>视频服务需要升级，请联系服务器管理员！</span>
+            <template v-if="!rtsp">
+                <van-icon v-if="$listeners.choose" name="add-o" @click.stop="choose"/>
             </template>
 
-            <template v-else-if="!rtsp">
-                <van-icon v-if="$listeners.choose" name="add-o" @click="choose"/>
+            <template v-else-if="version === 'hik-ys'">
+                <van-icon v-if="!client" name="play-circle-o" @click.stop="Play"></van-icon>
+                <video v-show="client" ref="ys_video" loop muted preload></video>
             </template>
 
             <template v-else>
-                <template v-if="!client">
-                    <van-icon name="play-circle-o" @click.stop="Play"></van-icon>
-                    <img :src="getThumb()">
-                </template>
-
-                <canvas v-if="client" ref="canvas"></canvas>
+                <van-icon v-if="!client" name="play-circle-o" @click.stop="Play"></van-icon>
+                <canvas ref="canvas"></canvas>
             </template>
 
         </div>
@@ -54,27 +51,29 @@
         data(){
             return {
                 client: null,
-                needUpdate: false,
                 loading: false,
-                src: ""
             };
+        },
+        computed: {
+            version(){
+                if(this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1){
+                    return "hik-ys";
+                }
+                else{
+                    return "ffmpeg";
+                }
+            },
         },
         watch: {
             rtsp: {
                 immediate: true,
                 handler(){
                     this.Stop();
-                    this.src = "";
                     this.autoPlay && this.$nextTick(() => {
                         this.Play();
                     });
                 }
-            },
-            src(v, ov){
-                if(v && !ov){
-                    this.draw();
-                }
-            },
+            }
         },
         methods: {
             getThumb(){
@@ -84,36 +83,21 @@
             choose(){
                 this.$emit("choose");
             },
-            draw(thumb){
-                if(!this.$refs.canvas){
-                    return;
-                }
-                let img = new Image();
-                img.onload = () => {
-                    try{
-                        this.$refs.canvas.height = this.height;
-                        this.$refs.canvas.width = this.width;
-                        let ctx = this.$refs.canvas.getContext("2d");
-                        ctx.drawImage(img, 0, 0, this.width, this.height);
-                        // !thumb && requestAnimationFrame(() => {
-                        //     this.draw();
-                        // });
-                        !thumb && this.draw();
-                    } catch(e){
-
-                    }
-                };
-                img.crossOrigin = "anonymous";
-                img.src = thumb || this.src;
-            },
 
             Stop(){
-                if(this.client){
-                    this.client.close();
-                    this.client = null;
-                    this.loading = false;
-                    this.src = "";
+                if(!this.client){
+                    return;
                 }
+
+                if(this.version === "hik-ys"){
+                    this.client.pause();
+                    this.client.src = "";
+                }
+                else{
+                    this.client.close();
+                }
+                this.client = null;
+                this.loading = false;
             },
             Play(){
                 this.Stop();
@@ -122,47 +106,94 @@
                     return;
                 }
 
-                this.needUpdate = false;
+                if(this.version === "hik-ys"){
+                    let src = this.rtsp;
+                    if(src.startsWith("rtmp://")){
+                        src = src.replace(
+                            "rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
+                    }
+
+                    this.$refs.ys_video.oncanplay = () => {
+                        this.$refs.ys_video.play();
+                    };
+
+                    this.$refs.ys_video.onplay = () => {
+                        this.loading = false;
+                    };
+
+                    this.$refs.ys_video.src = src;
+
+                    this.client = this.$refs.ys_video;
+                    this.loading = true;
+                    return;
+                }
+
+
                 this.loading = true;
+                let needUpdate = false;
                 let previous = 0;
+
+                let draw = (loop = false) => {
+                    if(!this.$refs.canvas){
+                        return;
+                    }
+                    let img = new Image();
+                    img.onload = () => {
+                        try{
+                            this.$refs.canvas.height = this.height;
+                            this.$refs.canvas.width = this.width;
+                            let ctx = this.$refs.canvas.getContext("2d");
+                            ctx.drawImage(img, 0, 0, this.width, this.height);
+                        } catch(e){
+
+                        }
+                        loop && draw();
+                    };
+                    img.crossOrigin = "anonymous";
+                    img.src = src;
+                };
+                let src = this.getThumb();
 
                 this.client = socketIo(`${sessionStorage.getItem("host") || ""}/ffmpeg`, {
                     query: {stream: this.rtsp, width: this.width, height: this.height}
                 });
 
                 this.client.on("DATA", (data) => {
+                    this.loading = false;
                     let index, base64;
                     try{
                         let temp = JSON.parse(data);
                         index = temp.index;
                         base64 = temp.base64;
                         if(!base64){
-                            this.needUpdate = true;
+                            needUpdate = true;
                         }
                     } catch(e){
-                        this.needUpdate = true;
+                        needUpdate = true;
                     }
 
-                    if(this.needUpdate){
+                    if(needUpdate){
+                        let context = this.$refs.canvas.getContext("2d");
+                        context.font = "14px normal 黑体";
+                        context.fillStyle = "#fff";
+                        context.textAlign = "center";
+                        context.textBaseline = "middle";
+                        context.fillText("视频服务需要升级", this.width / 2, 10);
+
                         this.Stop();
                         return;
                     }
-
                     if(index <= previous){
                         return;
                     }
                     previous = index;
-                    this.loading = false;
-                    this.src = base64;
+                    src = base64;
+                    draw(true);
                 });
 
                 this.client.on("ERROR", (data) => {
                     console.error(data);
                     this.Stop();
-                });
-
-                this.$nextTick(() => {
-                    this.draw(this.getThumb());
                 });
 
             }
