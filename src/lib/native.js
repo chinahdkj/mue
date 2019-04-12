@@ -12,7 +12,7 @@ const fns = [
     "btScan", "shareFile"
 ];
 
-const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes','btSound','btScan'] // 原生主动调用js的方法
+const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes','btSound','btScan', 'handCollectResp'] // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
