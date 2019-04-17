@@ -102,7 +102,7 @@
                 on(reference, 'click', this.handleClick);
                 on(reference, 'click', this.doToggle);
             }
-            on(document.body, 'click', this.handleDocumentClick);
+            // on(document.body, 'click', this.handleDocumentClick);
         },
 
         methods: {
@@ -113,6 +113,7 @@
                 removeClass(this.referenceElm, 'focusing');
             },
             handleDocumentClick(e){
+                return
                 let reference = this.reference || this.$refs.reference;
                 const popper = this.popper || this.$refs.popper;
 
@@ -143,7 +144,7 @@
 
             off(reference, 'click', this.handleClick);
             off(reference, 'click', this.doToggle);
-            off(document.body, 'click', this.handleDocumentClick);
+            // off(document.body, 'click', this.handleDocumentClick);
         }
     };
 </script>
