@@ -4,6 +4,7 @@
     @background-base: %("%s-background-base", @theme);
     @background: %("%s-background", @theme);
     @color: %("%s-common", @theme);
+    @primary: %("%s-primary", @theme);
     @grey: %("%s-grey", @theme);
     @grey-sub: %("%s-grey-sub", @theme);
     @disabled: %("%s-button-disable-color", @theme);
@@ -161,6 +162,15 @@
 
     // gis-point
     .mue-gis-point-pop {
+        height: 60%;
+
+        > .van-picker {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            height: 100%;
+        }
+
         .mue-gis-point-pop--info {
             height: 30px;
             width: 100%;
@@ -193,7 +203,8 @@
 
         .mue-gis-point-pop--map {
             width: 100%;
-            height: 250px;
+            flex-grow: 1;
+            flex-shrink: 1;
             position: relative;
 
             > .mue-gis-point-pop--marker {
@@ -215,6 +226,20 @@
                     left: 4px;
                     top: 12px;
                     opacity: 0.85;
+                }
+            }
+
+            .leaflet-control-zoom {
+                border: 1px solid @@border-color;
+                > a, a:hover{
+                    background: @@background-pop;
+                    border-color: @@border-color;
+                    -webkit-tap-highlight-color: unset;
+                    color: @@primary;
+                    font-weight: normal;
+                    width: 26px;
+                    height: 26px;
+                    line-height: 26px;
                 }
             }
         }
