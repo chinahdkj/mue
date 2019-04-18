@@ -11,8 +11,8 @@ loadingDirective.install = Vue => {
         return;
     }
     const toggleLoading = (el, binding) => {
-        if(binding.value){
-            Vue.nextTick(() => {
+        Vue.nextTick(() => {
+            if(binding.value){
                 if(binding.modifiers.fullscreen){
                     el.originalPosition = getStyle(document.body, 'position');
                     el.originalOverflow = getStyle(document.body, 'overflow');
@@ -45,12 +45,13 @@ loadingDirective.install = Vue => {
                         insertDom(el, el, binding);
                     }
                 }
-            });
-        }
-        else{
-            el.instance.visible = false;
-            el.domVisible = false;
-        }
+
+            }
+            else{
+                el.instance.visible = false;
+                el.domVisible = false;
+            }
+        });
     };
     const insertDom = (parent, el, binding) => {
         if(!el.domVisible && getStyle(el, 'display') !== 'none' && getStyle(el, 'visibility') !==
