@@ -169,9 +169,16 @@
             flex-direction: column;
             flex-wrap: nowrap;
             height: 100%;
+
+            > .van-picker__toolbar{
+                flex-grow: 0;
+                flex-shrink: 0;
+            }
         }
 
         .mue-gis-point-pop--info {
+            flex-grow: 0;
+            flex-shrink: 0;
             height: 30px;
             width: 100%;
             font-size: @font-size;
