@@ -9,7 +9,7 @@ const fns = [
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
     "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
     "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
-    "btScan", "shareFile"
+    "btScan", "shareFile", "btUpdate"
 ];
 
 const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes','btSound','btScan', 'handCollectResp'] // 原生主动调用js的方法
@@ -39,7 +39,8 @@ window.response = ({msgid, params, method}) => {
 
     const cb = _cache[msgid];
     cb && cb(params);
-    delete _cache[msgid];
+    // 支持多次调用原生回调，所以要注释掉（对应固件升级页面需要多次回调）
+    // delete _cache[msgid];
 };
 
 window.response2 = ({method, cb}) => {
