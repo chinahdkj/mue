@@ -42,11 +42,11 @@ export default {
 
         };
 
-        el.addEventListener("click", el.POPOVER_EVENTS);
+        el.addEventListener("touchend", el.POPOVER_EVENTS);
     },
     unbind(el){
         removeClass(el, "mue-popover__reference");
         el.removeAttribute("aria-describedby");
-        el.removeEventListener("click", el.POPOVER_EVENTS);
+        el.removeEventListener("touchend", el.POPOVER_EVENTS);
     }
 };
