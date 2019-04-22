@@ -87,7 +87,7 @@
                     return ["string", "array", "object"].indexOf(v) > -1;
                 }
             },
-            zoom: {type: Number, default: 8}
+            zoom: {type: Number, default: 14}
         },
         data(){
             return {

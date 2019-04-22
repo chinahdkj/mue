@@ -170,7 +170,7 @@
             flex-wrap: nowrap;
             height: 100%;
 
-            > .van-picker__toolbar{
+            > .van-picker__toolbar {
                 flex-grow: 0;
                 flex-shrink: 0;
             }
@@ -213,7 +213,14 @@
             flex-grow: 1;
             flex-shrink: 1;
             position: relative;
-            height: 100%;
+
+            > .vue2leaflet-map {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                left: 0;
+                top: 0;
+            }
 
             > .mue-gis-point-pop--marker {
                 position: absolute;
@@ -239,7 +246,8 @@
 
             .leaflet-control-zoom {
                 border: 1px solid @@border-color;
-                > a, a:hover{
+
+                > a, a:hover {
                     background: @@background-pop;
                     border-color: @@border-color;
                     -webkit-tap-highlight-color: unset;
