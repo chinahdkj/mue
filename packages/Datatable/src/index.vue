@@ -1,6 +1,6 @@
 <template>
     <div class="mue-datatable" :class="{'no-border': noborder}">
-        <div class="mue-datatable-header" v-if="headerVisibel" :style="{height: headerHeight}">
+        <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                  :style="{width:fixedWidth + 'px' }">
                 <table class="mue-datatable__inner-table"
@@ -62,7 +62,7 @@
         <div class="mue-datatable-main" v-resize="scrollResize" style="overflow: auto"
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
-            <mue-load-more ref="load_more" v-if="isActive" @refresh="onRefresh" @load-more="onLoad"
+            <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
                            @scroll-change="onScrollY" :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
                            :all-loaded="data.length >= total" :all-loaded-text="allLoadedText"
@@ -138,23 +138,24 @@
 
     import colGroup from "./col-group";
     import cell from "./cell";
-    import {objectGet} from '../../../src/utils/object';
+    import {objectGet} from "../../../src/utils/object";
+    import BETTER_SCROLL from "better-scroll";
 
     export default {
         name: "MueDatatable",
         components: {colGroup, cell},
-        provide(){
+        provide() {
             return {TABLE: this};
         },
         props: {
             header: {type: Boolean, default: true},
             columns: {
-                type: Array, default(){
+                type: Array, default() {
                     return [];
                 }
             },
             data: {
-                type: Array, default(){
+                type: Array, default() {
                     return [];
                 }
             },
@@ -172,7 +173,7 @@
 
             virtual: {type: Boolean, default: true} // 虚拟渲染，可视区域之外不渲染
         },
-        data(){
+        data() {
             return {
                 tableWidth: 0, //表格宽度
                 fixedWidth: 0, // 固定列宽度
@@ -180,52 +181,52 @@
                 colFields: [], // 列属性
                 headerRows: 0, // 表头行数
                 pageNo: 0,
-                scrollTable: null, // 操作横向滚动的表格
+                scroller: {},
+                scrollTable: "", // 操作横向滚动的表格
                 scrollBox: { // 竖向滚动高度，及可视区域高度  滚动位置
                     top: 0, height: 0, y: 0
-                },
-                isActive: false, // 是否被激活，不激活状态, 停用横向滚动同步
+                }
             };
         },
         computed: {
-            centerWidth(){
-                if(this.fixedWidth === 0){
+            centerWidth() {
+                if (this.fixedWidth === 0) {
                     return {width: "100%"};
                 }
                 return {width: `calc(100% - ${this.fixedWidth}px)`};
             },
-            mainHeight(){
-                if(!this.virtual){
+            mainHeight() {
+                if (!this.virtual) {
                     return null;
                 }
                 return {height: `${this.data.length * this.rowHeight + Number(!this.border)}px`}
             },
-            headerVisibel(){
+            headerVisibel() {
                 return this.header && this.colFields.length > 0;
             },
-            headerHeight(){
+            headerHeight() {
                 return (this.headerVisibel ? (this.headerRows * 36 + 4) : 0) + "px";
             },
-            isNight(){
+            isNight() {
                 return this.$root.theme === "night";
             },
-            pageTotal(){
-                if(this.pageSize){
+            pageTotal() {
+                if (this.pageSize) {
                     return parseInt(this.total / this.pageSize) +
                         (this.total % this.pageSize === 0 ? 0 : 1);
                 }
                 return 0;
             },
-            cellHeight(){
+            cellHeight() {
                 let h = `${this.rowHeight - (this.noborder ? 0 : 1)}px`;
                 let style = {"line-height": h};
-                if(this.virtual){
+                if (this.virtual) {
                     style.height = `${this.rowHeight}px`;
                 }
                 return style;
             },
-            virtualBox(){
-                if(!this.virtual){
+            virtualBox() {
+                if (!this.virtual) {
                     return {
                         start: 0,
                         end: this.data.length, // 渲染数据范围
@@ -246,72 +247,62 @@
                     })
                 };
             },
-            allLoadedText(){
+            allLoadedText() {
                 return this.pageTotal > 1 ? `已加载${this.total}条数据，没有更多数据了` : "";
             }
         },
         watch: {
             columns: {
                 deep: true,
-                handler(){
+                handler() {
                     this.setCols();
                 }
             },
-            isActive: {
-                immediate: true,
-                handler(v){
-                    if(v){
-                        this.syncScrollX();
-                        this.$nextTick(() => {
-                            this.$refs.load_more && this.$refs.load_more.scroller &&
-                            this.$refs.load_more.scroller.scrollTo(0, this.scrollBox.y, 1);
-                        });
-                    }
-                    else if(this.$refs.load_more && this.$refs.load_more.scroller){
-                        this.scrollBox.y = this.$refs.load_more.scroller.y;
-                    }
+            scrollTable(v) {
+                if (v) {
+                    this.syncScrollX(v);
                 }
             }
         },
         methods: {
-            getRowNo(row, index){
-                if(typeof this.rowNo === "function"){
+            getRowNo(row, index) {
+                if (typeof this.rowNo === "function") {
                     return this.rowNo(row, index);
                 }
                 return this.rowNo ? row[this.rowNo] : (index + 1);
             },
-            getValue(row, field){
-                if(!field){
+            getValue(row, field) {
+                if (!field) {
                     return;
                 }
                 return objectGet(row || {}, field);
             },
-            rowCls(row, i){
+            rowCls(row, i) {
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
                     typeof this.rowClass === "function"
-                    ? this.rowClass(row, i) : (this.rowClass || "")
+                        ? this.rowClass(row, i) : (this.rowClass || "")
                 ];
             },
-            sortCls(col){
+            sortCls(col) {
                 let cls = "th-title ";
-                if(!col.sortable){
+                if (!col.sortable) {
                     return cls;
                 }
                 cls += "is-sortable ";
                 let sort = this.sort || {};
-                if(!col.field || sort.field !== col.field || !sort.order){
+                if (!col.field || sort.field !== col.field || !sort.order) {
                     return cls;
                 }
                 return cls + (sort.order === "desc" ? "is-desc" : "is-asc");
 
             },
-            onChangeSort(col){
-                if(!col.field || !col.sortable){
+            onChangeSort(col) {
+                if (!col.field || !col.sortable) {
                     return;
                 }
                 let current = this.sort || {};
-                if(col.field !== current.field){
+                if (col.field !== current.field) {
                     this.$emit("update:sort", {field: col.field, order: "asc"});
                     this.$emit("sort-change", {field: col.field, order: "asc"});
                     return;
@@ -322,23 +313,23 @@
                 this.$emit("update:sort", {field: col.field, order: sorts[i]});
                 this.$emit("sort-change", {field: col.field, order: sorts[i]});
             },
-            rowId(row, i){
-                if(!this.rowKey){
+            rowId(row, i) {
+                if (!this.rowKey) {
                     return i;
                 }
                 return `${this.getValue(row, this.rowKey)}${i}`;
             },
-            setCols(){
+            setCols() {
                 let tableWidth = this.$el.offsetWidth;
                 let headerRows = 0;
                 let colWidth = 0, width0s = 0;
                 let whole = [];
 
-                function _create(children, col, level, fixed){
-                    if(col.hide){
+                function _create(children, col, level, fixed) {
+                    if (col.hide) {
                         return;
                     }
-                    if(level >= headerRows){
+                    if (level >= headerRows) {
                         headerRows = level + 1;
                     }
 
@@ -350,21 +341,21 @@
                     };
 
                     let chs = col.children || [];
-                    for(let i = 0; i < chs.length; i++){
+                    for (let i = 0; i < chs.length; i++) {
                         let ch = chs[i];
                         _create(column.children, ch, level + 1, fixed);
                     }
 
-                    if(column.children.length > 0){
+                    if (column.children.length > 0) {
                         column.colspan = column.children.map((c) => Number(c.colspan))
                             .reduce((c, n) => c + n);
-                        if(column.colspan > 0){
+                        if (column.colspan > 0) {
                             children.push(column);
                             whole.push(column);
                         }
                         return;
                     }
-                    if(!col.field){
+                    if (!col.field) {
                         return;
                     }
                     column.field = col.field || "";
@@ -373,22 +364,21 @@
                     column.sortable = col.sortable;
                     column.tmpl = col.tmpl || null;
                     column.colspan = 1;
-                    if(column.width){
+                    if (column.width) {
                         colWidth += column.width;
-                    }
-                    else{
+                    } else {
                         width0s += 1;
                     }
                     children.push(column);
                     whole.push(column);
                 }
 
-                for(let i = 0; i < this.columns.length; i++){
+                for (let i = 0; i < this.columns.length; i++) {
                     _create([], this.columns[i], 0, !!this.columns[i].fixed);
                 }
 
                 let dftWidth = 0;
-                if(width0s > 0){
+                if (width0s > 0) {
                     dftWidth = (tableWidth - colWidth) / width0s;
                 }
                 dftWidth = Math.max(dftWidth, this.minColWidth);
@@ -400,27 +390,25 @@
                     }),
                     fwd = 0, wd = 0, ffields = [], fields = [];
 
-                for(let i = 0; i < whole.length; i++){
+                for (let i = 0; i < whole.length; i++) {
                     let c = whole[i];
-                    if(c.children.length === 0){
+                    if (c.children.length === 0) {
                         c.width = c.width || dftWidth;
                         c.rowspan = headerRows - c.level;
-                        if(c.fixed){
+                        if (c.fixed) {
                             ffields.push(c);
                             fwd += c.width;
-                        }
-                        else{
+                        } else {
                             fields.push(c);
                             wd += c.width;
                         }
-                    }
-                    else{
+                    } else {
                         c.rowspan = 1;
                     }
                     cols[c.level].push(c);
                 }
 
-                if(fwd >= tableWidth){
+                if (fwd >= tableWidth) {
                     ffields.forEach((c) => {
                         c.fixed = false;
                     });
@@ -433,32 +421,56 @@
                 this.cols = cols;
                 this.colFields = [...ffields, ...fields];
                 this.headerRows = headerRows;
+
+                this.$nextTick(() => {
+                    Object.values(this.scroller).forEach((sc) => {
+                        sc.refresh();
+                    });
+                });
             },
 
-            syncScrollX(){
-                if(!this.isActive){
-                    return;
-                }
-                let table = this.scrollTable;
-                if(table && this.$refs.top_table && this.$refs.main_table){
-                    let other = table === "top_table" ? "main_table" : "top_table";
-                    this.$refs[other].scrollLeft = this.$refs[table].scrollLeft;
-                }
-                window.requestAnimationFrame(this.syncScrollX);
+            initScrollX(table) {
+
+                let scroller = new BETTER_SCROLL(this.$refs[table], {
+                    click: true, probeType: 0, scrollbar: false, bounce: false, momentum: false,
+                    bounceTime: 600, scrollY: false, scrollX: true, bindToWrapper: true,
+                    observeDOM: false
+                });
+
+                scroller.on("touchEnd", () => {
+                    this.scrollTable = "";
+                });
+
+                this.$set(this.scroller, table, scroller);
+
             },
 
-            onScrollY(box, content){
-                if(!this.pageSize || !this.$refs.main_table){
+            syncScrollX(table) {
+                let x = this.scroller[table].x;
+                Object.entries(this.scroller).forEach(([k, sc]) => {
+                    if (table !== k) {
+                        sc.scrollTo(x, 0, 0);
+                    }
+                });
+                if (this.scrollTable === table) {
+                    window.requestAnimationFrame(() => {
+                        this.syncScrollX(table);
+                    });
+                }
+            },
+
+            onScrollY(box, content) {
+                if (!this.pageSize || !this.$refs.main_table) {
                     this.pageNo = 0;
                     return;
                 }
-                if(!this.virtual){
+                if (!this.virtual) {
                     let trs = this.$refs.main_table.querySelectorAll("tr");
                     let bottom = box.getBoundingClientRect().bottom;
                     let i = 0;
-                    for(i = 0; i < trs.length; i++){
+                    for (i = 0; i < trs.length; i++) {
                         let tr = trs[i];
-                        if(tr.getBoundingClientRect().bottom >= bottom){
+                        if (tr.getBoundingClientRect().bottom >= bottom) {
                             break;
                         }
                     }
@@ -479,17 +491,16 @@
                 this.scrollBox.top = scrollTop;
             },
 
-            scrollResize(){
+            scrollResize() {
                 let $lm = this.$refs.load_more;
-                if(!$lm){
+                if (!$lm) {
                     this.scrollBox.height = 0;
-                }
-                else{
+                } else {
                     this.scrollBox.height = $lm.$el.getBoundingClientRect().height;
                 }
             },
 
-            onRefresh(success){
+            onRefresh(success) {
                 let self = this;
                 let callback = () => {
                     self.ScrollLeft();
@@ -497,44 +508,37 @@
                 };
                 self.$emit("refresh", callback);
             },
-            onLoad(success){
+            onLoad(success) {
                 let self = this;
                 let callback = () => {
                     success();
                 };
                 self.$emit("load-more", callback);
             },
-            onRowClick(row, i){
+            onRowClick(row, i) {
                 this.$emit("row-click", row, i);
             },
 
-            ScrollLeft(l = 0, duration = 400){
+            ScrollLeft(l = 0, duration = 400) {
                 let refs = this.$refs;
-                refs.main_table && $(refs.main_table).animate({scrollLeft: l}, duration);
-                refs.top_table && $(refs.top_table).animate({scrollLeft: l}, duration);
+                Object.values(this.scroller).forEach((sc) => {
+                    sc.scrollTo(-l, 0, duration);
+                });
             },
-            ScrollTop(t = 0){
-                if(this.$refs.load_more){
+            ScrollTop(t = 0) {
+                if (this.$refs.load_more) {
                     this.$refs.load_more.ScrollTop(t);
                 }
             },
 
-            LoadSuccess(){
+            LoadSuccess() {
                 this.$refs.load_more.LoadSuccess();
             }
         },
-        mounted(){
+        mounted() {
+            this.initScrollX("top_table");
+            this.initScrollX("main_table");
             this.setCols();
-            this.isActive = true;
-        },
-        activated(){
-            this.isActive = true;
-        },
-        deactivated(){
-            this.isActive = false;
-        },
-        beforeDestroy(){
-            this.isActive = false;
         }
     };
 </script>

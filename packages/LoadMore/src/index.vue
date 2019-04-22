@@ -133,7 +133,8 @@
                     click: true, probeType: 1, scrollbar: false, bounce: true,
                     bounceTime: 600, scrollY: true, scrollX: false, bindToWrapper: false,
                     pullDownRefresh: {threshold: this.distance, stop: this.distance},
-                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal"
+                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal",
+                    observeDOM: false, stopPropagation: true
                 });
 
                 this.scroller.on("scrollStart", () => {
