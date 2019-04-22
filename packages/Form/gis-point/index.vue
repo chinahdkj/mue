@@ -21,7 +21,7 @@
                     <label>纬度</label><span>{{(pos || {}).lat | round}}</span>
                 </div>
                 <div class="mue-gis-point-pop--map">
-                    <l-map v-if="pos" :zoom="zoom" :min-zoom="5" :max-zoom="18"
+                    <l-map v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
                            :options="{zoomControl: false, attributionControl: false}"
                            :center="pos" @update:center="updateCenter">
                         <l-control-zoom position="topright"></l-control-zoom>
