@@ -1,9 +1,9 @@
 <template>
-    <div class="mue-search">
+    <div class="mue-search" @focus.native="focus = true" @blur.native="focus = false"
+         :class="{'mue-search__focus': focus}">
         <form action="/">
-            <van-search v-model="q" background="transparent" show-action
-                        :placeholder="placeholder"
-                        @search="onSearch">
+            <van-search v-model="q" background="transparent" :show-action="q.length > 0"
+                        :placeholder="placeholder" @search="onSearch">
                 <div slot="action" @click="onCancel">取消</div>
             </van-search>
         </form>
@@ -21,12 +21,13 @@
         data(){
             return {
                 q: "",
+                focus: false
             };
         },
         computed: {},
         watch: {
             q(v){
-                if(this.value == v){
+                if(this.value === v){
                     return;
                 }
                 this.$emit("input", v);

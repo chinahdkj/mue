@@ -10,7 +10,7 @@ const PopperJS = Vue.prototype.$isServer ? () => {
 
 // const PopperJS = Vue.prototype.$isServer ? () => {
 // } : require('./popper');
-const stop = e => e.stopPropagation();
+// const stop = e => e.stopPropagation();
 
 /**
  * @param {HTMLElement} [reference=$refs.reference] - The reference element used to position the popper.
@@ -164,7 +164,7 @@ export default {
             }
             this.zindex = PopupManager.nextZIndex();
             this.popperJS._popper.style.zIndex = this.zindex;
-            this.popperElm.addEventListener('click', stop);
+            // this.popperElm.addEventListener('click', stop);
         },
 
         updatePopper(){
@@ -193,8 +193,10 @@ export default {
                 setStyle(modal, "left", bound.left + "px");
             }
             setTimeout(()=>{
-                once(modal, "click", () => {
+                once(modal, "touchend", (e) => {
                     this.showPopper = false;
+                    e.stopPropagation();
+                    e.preventDefault();
                 });
             }, 50);
         },
@@ -275,7 +277,7 @@ export default {
         PopupManager.deregister(this.tooltipId);
         this.doDestroy(true);
         if(this.popperElm && this.popperElm.parentNode === document.body){
-            this.popperElm.removeEventListener('click', stop);
+            // this.popperElm.removeEventListener('click', stop);
             document.body.removeChild(this.popperElm);
         }
         // if(this.overlayElm){

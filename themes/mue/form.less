@@ -4,6 +4,7 @@
     @background-base: %("%s-background-base", @theme);
     @background: %("%s-background", @theme);
     @color: %("%s-common", @theme);
+    @primary: %("%s-primary", @theme);
     @grey: %("%s-grey", @theme);
     @grey-sub: %("%s-grey-sub", @theme);
     @disabled: %("%s-button-disable-color", @theme);
@@ -161,7 +162,23 @@
 
     // gis-point
     .mue-gis-point-pop {
+        height: 60%;
+
+        > .van-picker {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            height: 100%;
+
+            > .van-picker__toolbar {
+                flex-grow: 0;
+                flex-shrink: 0;
+            }
+        }
+
         .mue-gis-point-pop--info {
+            flex-grow: 0;
+            flex-shrink: 0;
             height: 30px;
             width: 100%;
             font-size: @font-size;
@@ -193,8 +210,17 @@
 
         .mue-gis-point-pop--map {
             width: 100%;
-            height: 250px;
+            flex-grow: 1;
+            flex-shrink: 1;
             position: relative;
+
+            > .vue2leaflet-map {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                left: 0;
+                top: 0;
+            }
 
             > .mue-gis-point-pop--marker {
                 position: absolute;
@@ -215,6 +241,24 @@
                     left: 4px;
                     top: 12px;
                     opacity: 0.85;
+                }
+            }
+
+            .leaflet-control-zoom {
+                border: 1px solid @@border-color;
+
+                > a, a:hover {
+                    background: @@background-pop;
+                    border-color: @@border-color;
+                    -webkit-tap-highlight-color: unset;
+                    color: @@primary;
+                    font-weight: normal;
+                    width: 26px;
+                    height: 26px;
+                    line-height: 26px;
+                    &.leaflet-disabled{
+                        color: @@disabled;
+                    }
                 }
             }
         }

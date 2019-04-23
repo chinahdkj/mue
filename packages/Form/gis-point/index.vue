@@ -21,9 +21,10 @@
                     <label>纬度</label><span>{{(pos || {}).lat | round}}</span>
                 </div>
                 <div class="mue-gis-point-pop--map">
-                    <l-map v-if="pos" :zoom="8" :min-zoom="5" :max-zoom="18"
+                    <l-map v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
                            :options="{zoomControl: false, attributionControl: false}"
                            :center="pos" @update:center="updateCenter">
+                        <l-control-zoom position="topright"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
                         <l-marker v-if="FORM_ITEM.readonly" :lat-lng="pos"/>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-    import {LMap, LMarker, LTileLayer} from "vue2-leaflet";
+    import {LMap, LMarker, LTileLayer, LControlZoom} from "vue2-leaflet";
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 
@@ -67,7 +68,7 @@
 
     export default {
         name: "MueGisPoint",
-        components: {LMap, LTileLayer, LMarker},
+        components: {LMap, LTileLayer, LMarker, LControlZoom},
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -85,7 +86,8 @@
                 type: String, default: "string", validator(v){
                     return ["string", "array", "object"].indexOf(v) > -1;
                 }
-            }
+            },
+            zoom: {type: Number, default: 14}
         },
         data(){
             return {

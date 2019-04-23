@@ -2,7 +2,7 @@
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
-                <img :src="m" @click="showAction(i)" />
+                <img :src="m" @click="showAction(i)"/>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
                 <van-loading v-if="uploading" color=""/>
@@ -14,7 +14,8 @@
             </li>
         </ul>
 
-        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消" @select="onSelect"
+        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+                         @select="onSelect"
                          :actions="[{name: '查看原图', act: 'view'}, {name: '删除', act: 'delete'}]"/>
     </div>
 </template>
@@ -237,8 +238,12 @@
             },
 
             showAction(i){
-                this.pop.visible = true;
                 this.pop.current = i;
+                if(this.FORM_ITEM.readonly){
+                    this.showPic();
+                    return;
+                }
+                this.pop.visible = true;
             },
 
             onSelect({act}){

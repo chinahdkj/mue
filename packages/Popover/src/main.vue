@@ -1,19 +1,16 @@
 <template>
-    <span>
+    <span @touchend.stop>
         <transition name="van-fade" @after-enter="handleAfterEnter"
                     @after-leave="handleAfterLeave">
             <div class="mue-popover"
-                 :class="[popperClass, {'mue-popover-radius': borderRadius}]"
-                 :style="[width
-                 ? {width: typeof width === 'string' ? width : (width + 'px')}
-                 : null,
-                 popStyle
-                 ]"
+                 :class="[popperClass]"
                  ref="popper" v-show="!disabled && showPopper"
-                 role="tooltip" :id="tooltipId"
-                 :aria-hidden="(disabled || !showPopper) ? 'true' : 'false'">
+                 role="tooltip" :id="tooltipId">
                 <!--<div class="el-popover__title" v-if="title" v-text="title"></div>-->
-                <slot>{{ content }}</slot>
+                <div class="mue-popover-content" :class="{'mue-popover-radius': borderRadius}"
+                     :style="[width ? {width: typeof width === 'string' ? width : (width + 'px')} : null, popStyle]">
+                    <slot>{{ content }}</slot>
+                </div>
             </div>
         </transition>
         <slot name="reference"></slot>
@@ -58,7 +55,7 @@
                 default: 0
             }
         },
-        data(){
+        data() {
             return {
                 trigger: "click",
                 openDelay: 0,
@@ -66,18 +63,16 @@
                 reference: null
             };
         },
-        computed: {
-        },
+        computed: {},
         watch: {
-            showPopper(val){
-                if(this.disabled){
+            showPopper(val) {
+                if (this.disabled) {
                     return;
                 }
-                if(val){
+                if (val) {
                     // addClass(document.body, "mue-overlay-show");
                     this.$emit("show");
-                }
-                else{
+                } else {
                     // removeClass(document.body, "mue-overlay-show");
                     this.$emit("hide");
                 }
@@ -85,65 +80,65 @@
             }
         },
 
-        mounted(){
+        mounted() {
             let reference = this.referenceElm = this.reference || this.$refs.reference;
             // const popper = this.popper || this.$refs.popper;
 
-            if(!reference && this.$slots.reference && this.$slots.reference[0]){
+            if (!reference && this.$slots.reference && this.$slots.reference[0]) {
                 reference = this.referenceElm = this.$slots.reference[0].elm;
             }
             // 可访问性
-            if(reference){
+            if (reference) {
                 addClass(reference, 'mue-popover__reference');
                 reference.setAttribute('aria-describedby', this.tooltipId);
                 // reference.setAttribute('tabindex', 0); // tab序列
                 // popper.setAttribute('tabindex', 0);
 
-                on(reference, 'click', this.handleClick);
-                on(reference, 'click', this.doToggle);
+                on(reference, 'touchend', this.handleClick);
+                on(reference, 'touchend', this.doToggle);
             }
-            on(document.body, 'click', this.handleDocumentClick);
+            on(document.body, 'touchend', this.handleDocumentClick);
         },
 
         methods: {
-            doToggle(){
+            doToggle() {
                 this.showPopper = !this.showPopper;
             },
-            handleClick(){
+            handleClick() {
                 removeClass(this.referenceElm, 'focusing');
             },
-            handleDocumentClick(e){
+            handleDocumentClick(e) {
                 let reference = this.reference || this.$refs.reference;
                 const popper = this.popper || this.$refs.popper;
 
-                if(!reference && this.$slots.reference && this.$slots.reference[0]){
+                if (!reference && this.$slots.reference && this.$slots.reference[0]) {
                     reference = this.referenceElm = this.$slots.reference[0].elm;
                 }
-                if(!this.$el ||
+                if (!this.$el ||
                     !reference ||
                     this.$el.contains(e.target) ||
                     reference.contains(e.target) ||
                     !popper ||
-                    popper.contains(e.target)){
+                    popper.contains(e.target)) {
                     return;
                 }
                 this.showPopper = false;
             },
-            handleAfterEnter(){
+            handleAfterEnter() {
                 this.$emit('after-enter', this.$refs.popper);
             },
-            handleAfterLeave(){
+            handleAfterLeave() {
                 this.doDestroy();
                 this.$emit('after-leave');
             }
         },
 
-        destroyed(){
+        destroyed() {
             const reference = this.reference;
 
-            off(reference, 'click', this.handleClick);
-            off(reference, 'click', this.doToggle);
-            off(document.body, 'click', this.handleDocumentClick);
+            off(reference, 'touchend', this.handleClick);
+            off(reference, 'touchend', this.doToggle);
+            off(document.body, 'touchend', this.handleDocumentClick);
         }
     };
 </script>
