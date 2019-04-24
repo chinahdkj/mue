@@ -433,8 +433,8 @@
 
                 let scroller = new BETTER_SCROLL(this.$refs[table], {
                     click: true, probeType: 0, scrollbar: false, bounce: false, momentum: false,
-                    bounceTime: 600, scrollY: false, scrollX: true, bindToWrapper: true,
-                    observeDOM: false
+                    scrollY: false, scrollX: true, bindToWrapper: true,
+                    observeDOM: false, HWCompositing: false
                 });
 
                 scroller.on("touchEnd", () => {

@@ -14,7 +14,6 @@ import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
 import Dvr from '../packages/Dvr/index.js';
 import SortPicker from '../packages/SortPicker/index.js';
-
 //direcives
 import popover from '../packages/directives/popover.js';
 import resize from '../packages/directives/resize.js';
@@ -28,11 +27,19 @@ import native from './lib/native';
 import comm from './lib/common';
 
 import {objectGet} from './utils/object';
-
 // svg 图标
 import "../themes/fonts/iconfont";
 
 Locale.use('zh-CN', zhCN);
+
+window.requestAnimFrame = (() => {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        ((callback) => {
+            window.setTimeout(callback, 6000 / 60);
+        });
+})();
 
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
