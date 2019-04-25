@@ -3,7 +3,7 @@
         <div class="panel-container">
             <div v-for="option in options" :key="option.code" :checked="(values || []).indexOf(option.code) > -1"
                  class="panel-item" :class="{current: value === option.code}" @click="onOpen(option)">
-                <a class="check-btn" @click="onCheck(option)" v-if="PICKER.multiple">
+                <a class="check-btn" @click.stop="onCheck(option)" v-if="PICKER.multiple">
                     <i v-if="option.$count === option.$checked" class="fa fa-check-square-o"></i>
                     <i v-else-if="option.$checked === 0" class="fa fa-square-o"></i>
                     <i v-else class="fa fa-minus-square-o"></i>

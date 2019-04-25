@@ -7,7 +7,7 @@
         </div>
         <van-popup class="mue-tree-picker-popup" v-model="isVisible" position="right" :overlay="true"
                    @opened="openedHandler" :lazy-render="false"><!--get-container="body"-->
-            <tree-picker-pop ref="treePicker" v-model="value" :data="data" @confirm="confirmHandler"
+            <tree-picker-pop ref="treePicker" v-model="value" :data="data" @confirm="confirmHandler" @select="selectHandler"
                              @cancel="cancelHandler" :close="hideTreePicker" :multiple="multiple"></tree-picker-pop>
         </van-popup>
     </div>
@@ -28,7 +28,7 @@
             }
         },
         props: {
-            data: {type: Array, default() {return []}},
+            // data: {type: Array, default() {return []}},
             value: {default: null},
             clearable: {type: Boolean, default: false},
             disabled: {type: Boolean, default: false},
@@ -39,7 +39,7 @@
             return {
                 text: '',
                 isVisible: false,
-                /*data: [
+                data: [
                     {
                         code: "c1", name: "选项1", children: [
                             {
@@ -70,7 +70,7 @@
                     },
                     {code: "c4", name: "选项4"},
                     {code: "c5", name: "选项5"}
-                ],*/
+                ],
             }
         },
         methods: {
@@ -104,10 +104,10 @@
                     }
                 }
             },
-            /*selectHandler(opt) {
-                // console.log(opt);
+            selectHandler(opt) {
+                console.log(opt);
                 this.$emit("select", opt);
-            },*/
+            },
             openedHandler() {
                 this.$emit("opened");
                 console.log('打开后触发');

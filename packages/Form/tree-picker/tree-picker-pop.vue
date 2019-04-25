@@ -55,7 +55,13 @@
                 currents: []
             }
         },
-        computed: {},
+        computed: {
+            checkeds() {
+                return Object.values(this.dict).filter((c) => {
+                    return c.$count === c.$checked;
+                });
+            }
+        },
         watch: {
             data: {
                 deep: true, immediate: true,
@@ -106,7 +112,7 @@
             updateCurrents(opt) {
                 let currents = [...this.currents];
                 this.currents.splice(opt.$lv, this.currents.length - opt.$lv, opt.code);
-                if (!(currents.length === opt.$lv + 1 && currents[currents.length - 1] === opt.code)) {
+                if (!(currents.length === opt.$lv + 1 && currents[currents.length - 1] === opt.code) && !this.multiple) {
                     this.$emit("select", opt);
                 }
             },
@@ -114,7 +120,7 @@
                 let getOptions = (flter) => {
                     let options = Object.values(this.dict).filter(flter);
                     options.sort((c, n) => {
-                        return c.$index > n.$index;
+                        return c.$index - n.$index;
                     });
                     return options;
                 };
@@ -186,7 +192,7 @@
                 };
 
                 updateParent(opt.$parent);
-
+                this.$emit('select',this.checkeds)
             }
         },
         mounted() {
