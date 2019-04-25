@@ -81,6 +81,11 @@
 
     .mue-select {
         display: inline-block;
+
+        .input__inner {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     .mue-textarea {
@@ -289,6 +294,21 @@
                 }
             }
         }
+    }
+
+    // tree-picker
+    .mue-tree-picker {
+        display: inline-block;
+
+        .input__inner {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .mue-tree-picker-pop {
+        width: 90%;
+        height: 100%;
     }
 
     .mue-form {
@@ -550,76 +570,7 @@
 
         // tree-picker
         .mue-tree-picker {
-            * {
-                box-sizing: border-box;
-            }
-            .input__suffix.icon-arrows-copy-copy {
-                transform: rotate(-90deg);
-            }
-            .mue-tree-picker-popup {
-                width: 90%;
-                height: 100%;
-                background-color: @@background;
-                box-sizing: border-box;
-                overflow: hidden;
-                .tree-picker-pop{
-                    height:100%;
-                }
-            }
-            .mue-tree-picker-title {
-                position: relative;
-                height: 44px;
-                line-height: 44px;
-                border-bottom: 1px solid #eee;
-                font-size: 14px;
-                background-color: @@background;
-                z-index: 9999;
-                text-align: left;
-                color: #4796e3;
-                .confirm-btn {
-                    float: right;
-                    color: #4796e3;
-                    padding: 0 15px;
-                }
-            }
-            .mue-tree-picker-panels {
-                height: 100%;
-                width: 100%;
-                display: flex;
-                .mue-tree-picker-panel {
-                    flex: 1;
-                    border-left: solid 1px #eaeaea;
-                    min-width: 100px;
-                    &:first-child {
-                        border-left: 0;
-                    }
-                    .panel-container {
-                        height: 100%;
-                        width: 100%;
-                        overflow-y: auto;
-                        .panel-item {
-                            height: 50px;
-                            line-height: 50px;
-                            padding: 0 15px;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            display: flex;
-                            font-size: 14px;
-                            .check-btn {
-                                display:inline-block;
-                                width:25px;
-                                text-align:left;
-                                i {
-                                    font-size: 16px;
-                                }
-                            }
-                        }
-                        .current {
-                            background: rgba(0, 0, 0, .04);
-                        }
-                    }
-                }
-            }
+            width: 100%;
         }
 
         // 只读

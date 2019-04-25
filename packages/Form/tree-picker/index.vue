@@ -1,24 +1,22 @@
 <template>
     <div class="mue-tree-picker">
-        <div class="mue-form-input has-suffix" @click="showTreePicker">
+        <div class="mue-form-input has-suffix" @click="ShowPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" onfocus="this.blur()"/>
-            <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
+            <i class="input__suffix input__suffix_icon iconfont icon-zhanlei"></i>
         </div>
-        <van-popup class="mue-tree-picker-popup" v-model="isVisible" position="right" :overlay="true"
-                   @opened="openedHandler" :lazy-render="false"><!--get-container="body"-->
-            <tree-picker-pop ref="treePicker" v-model="value" :data="data" @confirm="confirmHandler"
-                             @cancel="cancelHandler" :close="hideTreePicker" :multiple="multiple"></tree-picker-pop>
+        <van-popup class="mue-tree-picker-pop" v-model="isVisible" position="right"
+                   :lazy-render="false" get-container="body" :close-on-click-overlay="false"
+                   @click-overlay="isVisible = false">
+            <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText" @cancel="onCancel"
+                      @confirm="onConfirm" :multiple="multiple"/>
         </van-popup>
     </div>
 </template>
 
 <script>
-    import TreePickerPop from './tree-picker-pop.vue';
-
     export default {
-        name: 'MueTreePicker',
-        components: {TreePickerPop},
+        name: "MueTreePicker",
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -28,7 +26,11 @@
             }
         },
         props: {
-            data: {type: Array, default() {return []}},
+            data: {
+                type: Array, default() {
+                    return []
+                }
+            },
             value: {default: null},
             clearable: {type: Boolean, default: false},
             disabled: {type: Boolean, default: false},
@@ -37,94 +39,89 @@
         },
         data() {
             return {
-                text: '',
-                isVisible: false,
-                /*data: [
-                    {
-                        code: "c1", name: "选项1", children: [
-                            {
-                                code: "d1", name: "1-1", children: [
-                                    {code: "e1", name: "1-1-1"},
-                                    {code: "e2", name: "1-1-2"},
-                                    {code: "e3", name: "1-1-3"},
-                                    {code: "e4", name: "1-1-4"},
-                                    {code: "e5", name: "1-1-5"},
-                                ]
-                            },
-                            {code: "d2", name: "1-2"},
-                            {code: "d3", name: "1-3"},
-                            {code: "d4", name: "1-4", disabled: true},
-                            {code: "d5", name: "1-5"},
-                        ]
-                    },
-                    {code: "c2", name: "选项2"},
-                    {
-                        code: "c3", name: "选项3", disabled: true,
-                        children: [
-                            {code: "cd1", name: "3-1"},
-                            {code: "cd2", name: "3-2"},
-                            {code: "cd3", name: "3-3"},
-                            {code: "cd4", name: "3-4"},
-                            {code: "cd5", name: "3-5"},
-                        ]
-                    },
-                    {code: "c4", name: "选项4"},
-                    {code: "c5", name: "选项5"}
-                ],*/
+                isVisible: false, text: ""
+            }
+        },
+        computed: {
+            cancelButtonText() {
+                return this.clearable ? "清空" : "取消";
+            }
+        },
+        watch: {
+            value: {
+                deep: true, immediate: true,
+                handler(v) {
+                    this.$nextTick(() => {
+                        if (v == null || !this.$refs.tree) {
+                            this.text = "";
+                            return;
+                        }
+
+                        let getName = (code) => {
+                            let node = this.GetOptionInfo(code);
+                            return node == null ? "" : node.name;
+                        };
+
+                        if (!this.multiple) {
+                            this.text = getName(v);
+                        } else {
+                            let t = [];
+                            v.forEach((c) => {
+                                let n = getName(c);
+                                if (n) {
+                                    t.push(n);
+                                }
+                            });
+                            this.text = t.join(",");
+                        }
+
+                    });
+                }
+            },
+            isVisible(v) {
+                if (!v) {
+                    return;
+                }
+                if (this.multiple) {
+                    // 设置勾选
+                    // this.$refs.tree.CheckAll(false);
+                    Object.keys(this.$refs.tree.leaves).forEach((k) => {
+                        this.$refs.tree.leaves[k] = (this.value || []).indexOf(k) > -1;
+                    });
+                    this.$refs.tree.SetCurrent(null);
+                } else {
+                    // 当前节点
+                    this.$refs.tree.SetCurrent(this.value);
+                }
             }
         },
         methods: {
-            showTreePicker() {
+            onConfirm() {
+                this.isVisible = false;
+                if (this.multiple) {
+                    let checks = this.$refs.tree.GetChecks();
+                    this.$emit("input", checks.length === 0 ? null : checks);
+                } else {
+                    let current = this.$refs.tree.GetCurrent();
+                    this.$emit("input", current == null ? null : current);
+                }
+            },
+
+            onCancel() {
+                this.isVisible = false;
+                if (this.clearable) {
+                    this.$emit("input", null);
+                }
+            },
+
+            ShowPop() {
                 if (this.disabled || this.FORM_ITEM.readonly) {
                     return;
                 }
                 this.isVisible = true;
             },
-            hideTreePicker() {
-                this.isVisible = false;
-            },
-            confirmHandler(opt) {
-                console.log('提交后触发');
-                if (opt instanceof Array && opt.length) {
-                    this.text = opt.length > 1 ? `${opt[0].name}...` : opt[0].name;
-                    let codes = opt.map((v) => {
-                        return v.code;
-                    });
-                    this.$emit("confirm", {
-                        checkedKeys: codes,
-                        checkedOpts: opt
-                    });
-                } else {
-                    if(opt) {
-                        this.text = opt.name;
-                        this.$emit("confirm", {
-                            checkedKeys: opt.code,
-                            checkedOpts: opt
-                        });
-                    }
-                }
-            },
-            /*selectHandler(opt) {
-                // console.log(opt);
-                this.$emit("select", opt);
-            },*/
-            openedHandler() {
-                this.$emit("opened");
-                console.log('打开后触发');
-            },
-            cancelHandler() {
-                this.$emit("cancel");
-                console.log('取消后触发');
-            },
-        },
-        mounted() {
-            if (this.value) {
-                if (!this.multiple) {
-                    this.text = this.$refs.treePicker.dict[this.value].name;
-                } else {
-                    this.text = `${this.$refs.treePicker.dict[this.value[0]].name}...`;
-                }
-
+            GetOptionInfo(code) {
+                return this.$refs.tree.GetNode(code);
             }
         }
     };
