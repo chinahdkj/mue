@@ -7,9 +7,10 @@ import Select from './select/index';
 import Textarea from './textarea/index';
 import ImgUpload from './img-upload/index'
 import Upload from './upload/index'
+import TreePicker from './tree-picker/index'
 
 import GisPoint from './gis-point/index'
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, Upload, GisPoint];
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, Upload, GisPoint, TreePicker];
 
 cmps.forEach((cmp) => {
     cmp.install = (Vue) => {

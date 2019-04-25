@@ -14,10 +14,12 @@ import Form from '../packages/Form/index.js';
 import LoadMore from '../packages/LoadMore/index.js';
 import Dvr from '../packages/Dvr/index.js';
 import SortPicker from '../packages/SortPicker/index.js';
+import Tree from "../packages/Tree/index.js";
 //direcives
 import popover from '../packages/directives/popover.js';
 import resize from '../packages/directives/resize.js';
 import touch from '../packages/directives/touch.js';
+
 
 import Vant, {Locale} from 'vant';
 import zhCN from 'vant/lib/locale/lang/zh-CN';
@@ -44,7 +46,7 @@ window.requestAnimFrame = (() => {
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
     Container, Header, Main, Footer, Datatable, ...Object.values(Form), LoadMore, Page,
-    ...Object.values(Dvr), SortPicker
+    ...Object.values(Dvr), SortPicker, Tree
 ];
 
 const install = function(Vue){
