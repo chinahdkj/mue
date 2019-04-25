@@ -39,8 +39,8 @@
             return {
                 text: '',
                 isVisible: false,
-                data: [
-                    /*{
+                /*data: [
+                    {
                         code: "c1", name: "选项1", children: [
                             {
                                 code: "d1", name: "1-1", children: [
@@ -69,8 +69,8 @@
                         ]
                     },
                     {code: "c4", name: "选项4"},
-                    {code: "c5", name: "选项5"}*/
-                ],
+                    {code: "c5", name: "选项5"}
+                ],*/
             }
         },
         methods: {
