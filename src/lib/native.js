@@ -9,7 +9,7 @@ const fns = [
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
     "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
     "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
-    "btScan", "shareFile", "btUpdate", "spectrum"
+    "btScan", "shareFile", "btUpdate", "spectrum", "trace"
 ];
 
 const fns2 = ['search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes','btSound','btScan', 'handCollectResp', 'bluetooth'] // 原生主动调用js的方法
