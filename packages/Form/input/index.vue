@@ -19,6 +19,17 @@
             </span>
             <i class="input__suffix input__suffix_icon" :class="icon"
                v-if="icon" @click="$emit('icon-click')"></i>
+            <template v-if="templates.length > 0">
+                <a class="mue-input__pop-button" @click.stop="pop = true">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                </a>
+                <van-popup ref="pop" class="mue-input__pop" v-model="pop" position="bottom"
+                           get-container="body" :close-on-click-overlay="false"
+                           @click-overlay="pop = false">
+                    <van-picker ref="picker" :columns="templates" show-toolbar @confirm="onConfirm"
+                                @cancel="pop = false" value-key="name"/>
+                </van-popup>
+            </template>
         </div>
     </div>
 </template>
@@ -33,7 +44,12 @@
             readonly: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
             icon: {type: String, default: ""},
-            type: {type: String, default: "text"}
+            type: {type: String, default: "text"},
+            templates: {
+                type: Array, default(){
+                    return [];
+                }
+            }
         },
         inject: {
             FORM_ITEM: {
@@ -45,7 +61,8 @@
         },
         data(){
             return {
-                ipt: ""
+                ipt: "",
+                pop: false
             };
         },
         watch: {
@@ -60,7 +77,14 @@
                 this.$emit("change", v, ov);
             }
         },
-        methods: {},
+        methods: {
+            onConfirm(){
+                this.pop = false;
+                let index = this.$refs.picker.getColumnIndex(0);
+                let tmpl = this.templates[index] || {};
+                this.ipt = tmpl.code || "";
+            }
+        },
         mounted(){
 
         }

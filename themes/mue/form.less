@@ -17,7 +17,7 @@
 
     .mue-form-input {
         background: @@background;
-        display: inline-block;
+        display: flex;
         font-size: @font-size;
         border: 1px solid @@border-color;
         border-radius: 2px;
@@ -26,7 +26,9 @@
         min-width: 50px;
         width: 100%;
         padding: 0 5px;
-        position: relative;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
 
         .input__inner {
             border: 0;
@@ -39,6 +41,8 @@
             width: 100%;
             padding: 6px 0;
             vertical-align: middle;
+
+            flex: 0 1 auto;
         }
 
         .input__inner::-webkit-input-placeholder {
@@ -46,21 +50,28 @@
         }
 
         .input__suffix {
-            position: absolute;
-            right: 5px;
             width: 20px;
             text-align: center;
             height: 20px;
             line-height: 20px;
-            top: 50%;
-            margin-top: -10px;
             color: @@grey;
+            margin-left: 5px;
+
+            flex: 0 0 auto;
         }
 
-        &.has-suffix {
-            .input__inner {
-                padding-right: 25px;
-            }
+        .mue-input__pop-button {
+            font-size: 14px;
+            color: @@grey;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 20px;
+            margin-left: 5px;
+
+            flex: 0 0 auto;
         }
     }
 
@@ -75,6 +86,7 @@
     .mue-textarea {
         display: inline-block;
         line-height: 0;
+        position: relative;
 
         .textarea__inner {
             font-size: @font-size;
@@ -92,6 +104,20 @@
 
         .textarea__inner::-webkit-input-placeholder {
             color: @@placeholder;
+        }
+
+        .mue-textarea__pop-button {
+            font-size: 14px;
+            color: @@grey;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 20px;
         }
     }
 
@@ -256,7 +282,8 @@
                     width: 26px;
                     height: 26px;
                     line-height: 26px;
-                    &.leaflet-disabled{
+
+                    &.leaflet-disabled {
                         color: @@disabled;
                     }
                 }
@@ -481,7 +508,8 @@
             .input__inner {
                 text-align: right;
                 padding-left: 5px;
-                padding-right: 25px;
+                width: calc(~"100% - 25px");
+                //padding-right: 25px;
             }
 
             .input__suffix {

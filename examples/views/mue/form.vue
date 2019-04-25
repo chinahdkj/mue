@@ -31,7 +31,8 @@
                     </mue-form-item>
 
                     <mue-form-item label="备注" field="remark">
-                        <mue-textarea placeholder="请输入备注" v-model="model.remark"></mue-textarea>
+                        <mue-textarea placeholder="请输入备注" v-model="model.remark"
+                        :templates="[{code: '模板内容1', name: '模板1'}, {code: '模板内容2', name: '模板2'}]"/>
                     </mue-form-item>
                 </mue-form-item-group>
 

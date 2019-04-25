@@ -8,6 +8,18 @@
                       unselectable="on" onfocus="this.blur()"/>
             <textarea v-else class="textarea__inner" v-model="ipt" :readonly="readonly"
                       :disabled="disabled" :placeholder="placeholder" :rows="rows"/>
+
+            <template v-if="templates.length > 0">
+                <a class="mue-textarea__pop-button" @click.stop="pop = true">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                </a>
+                <van-popup ref="pop" class="mue-textarea__pop" v-model="pop" position="bottom"
+                           get-container="body" :close-on-click-overlay="false"
+                           @click-overlay="pop = false">
+                    <van-picker ref="picker" :columns="templates" show-toolbar @confirm="onConfirm"
+                                @cancel="pop = false" value-key="name"/>
+                </van-popup>
+            </template>
         </template>
     </div>
 </template>
@@ -21,11 +33,17 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
-            rows: {type: [Number, String], default: 2}
+            rows: {type: [Number, String], default: 2},
+            templates: {
+                type: Array, default(){
+                    return [];
+                }
+            }
         },
         data(){
             return {
-                ipt: ""
+                ipt: "",
+                pop: false,
             };
         },
         inject: {
@@ -48,7 +66,14 @@
                 this.$emit("change", v, ov);
             }
         },
-        methods: {},
+        methods: {
+            onConfirm(){
+                this.pop = false;
+                let index = this.$refs.picker.getColumnIndex(0);
+                let tmpl = this.templates[index] || {};
+                this.ipt = tmpl.code || "";
+            }
+        },
         mounted(){
 
         }
