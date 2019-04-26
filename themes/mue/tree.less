@@ -1,0 +1,96 @@
+@import "../var.less";
+
+.mue-tree(@theme: light) {
+    @border-color: %("%s-border-color", @theme);
+    @color: %("%s-common", @theme);
+    @grey: %("%s-grey", @theme);
+    @primary: %("%s-primary", @theme);
+
+    .mue-tree {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        .mue-tree__toolbar {
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        .mue-tree__panels {
+            flex-grow: 1;
+            flex-shrink: 1;
+            position: relative;
+
+            .mue-tree__panels-content {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                display: flex;
+            }
+        }
+
+        .mue-tree__panel {
+            flex: 1;
+            min-width: 100px;
+            box-sizing: border-box;
+            overflow: auto;
+            overflow-x: hidden;
+
+
+            &:first-child:after {
+                content: none;
+            }
+
+            .mue-tree__item {
+                height: 44px;
+                line-height: 44px;
+                padding: 0 10px;
+                box-sizing: border-box;
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                display: flex;
+                font-size: 14px;
+                color: @@grey;
+
+                &.opened {
+                    color: @@color;
+
+                    &.current {
+                        color: @@primary;
+                    }
+                }
+
+                &.current {
+                    color: @@primary;
+                }
+            }
+
+            .mue-tree__checkbox {
+                display: inline-block;
+                width: 20px;
+                text-align: left;
+                flex-grow: 0;
+                flex-shrink: 0;
+                color: @@grey;
+
+                i {
+                    font-size: 14px;
+                }
+            }
+
+            .mue-tree__label {
+                flex: auto;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+        }
+
+    }
+
+}

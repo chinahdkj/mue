@@ -18,7 +18,7 @@
                     </mue-form-item>
 
                     <mue-form-item label="人员选择" field="div">
-                        <mue-tree-picker placeholder="请选择"></mue-tree-picker>
+                        <mue-tree-picker placeholder="请选择" multiple :data="users" v-model="model.user" clearable/>
                     </mue-form-item>
 
                     <mue-form-item label="安装时间" required field="date">
@@ -135,6 +135,39 @@
                 readonly: false,
                 confirming: false,
 
+                users: [
+                    {
+                        code: "c1", name: "选项1", children: [
+                            {
+                                code: "d1", name: "1-1", children: [
+                                    {code: "e1", name: "1-1-1"},
+                                    {code: "e2", name: "1-1-2"},
+                                    {code: "e3", name: "1-1-3"},
+                                    {code: "e4", name: "1-1-4"},
+                                    {code: "e5", name: "1-1-5"},
+                                ]
+                            },
+                            {code: "d2", name: "1-2"},
+                            {code: "d3", name: "1-3"},
+                            {code: "d4", name: "1-4", disabled: true},
+                            {code: "d5", name: "1-5"},
+                        ]
+                    },
+                    {code: "c2", name: "选项2"},
+                    {
+                        code: "c3", name: "选项3", disabled: true,
+                        children: [
+                            {code: "cd1", name: "3-1"},
+                            {code: "cd2", name: "3-2"},
+                            {code: "cd3", name: "3-3"},
+                            {code: "cd4", name: "3-4"},
+                            {code: "cd5", name: "3-5"},
+                        ]
+                    },
+                    {code: "c4", name: "选项4"},
+                    {code: "c5", name: "选项5"}
+                ],
+
                 rules: {
                     custom(rule, value, callback){
                         if(value === "xx"){
@@ -158,6 +191,7 @@
                         pics: []
                     },
                     pos: "120,30",
+                    user: null,
                     remark: "",
                     valid: {
                         number: 0,
