@@ -526,13 +526,14 @@
             .input__inner {
                 text-align: right;
                 padding-left: 5px;
-                width: calc(~"100% - 25px");
+                flex-basis: calc(~"100% - 25px");
+                //width: calc(~"100% - 25px");
                 //padding-right: 25px;
             }
 
-            .input__suffix {
-                right: 0;
-            }
+            //.input__suffix {
+            //    right: 0;
+            //}
         }
 
         // input
@@ -620,6 +621,7 @@
             .mue-form-input {
                 .input__inner {
                     padding-right: 5px;
+                    flex-grow: 1;
                 }
 
                 .input__suffix_icon {

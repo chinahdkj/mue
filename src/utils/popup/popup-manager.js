@@ -2,6 +2,9 @@ import Vue from 'vue';
 import {addClass, removeClass} from '../dom';
 // import {context as PopCtx} from "vant/es/mixins/popup/context";
 
+const PopCtx = {
+    zIndex: 4000,
+};
 
 let hasModal = false;
 let hasInitZIndex = false;

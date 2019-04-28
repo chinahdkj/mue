@@ -177,6 +177,7 @@
             },
 
             onRowClick(row, index){
+                console.info([JSON.stringify(row), index]);
                 // alert([JSON.stringify(row), index]);
             },
 
@@ -185,6 +186,7 @@
             },
 
             onCellClick(value, row, col, no, event){
+                console.info(value);
                 // alert(value);
             }
         },
