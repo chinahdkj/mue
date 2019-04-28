@@ -12,16 +12,20 @@
                                @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
                                @row-click="onRowClick" @cell-click="onCellClick">
                     <!--<template slot="row" slot-scope="{row, cols, no}">-->
-                        <!--<tr>-->
-                            <!--<td v-for="c in cols" :key="c.field">-->
-                                <!--{{no}}{{row[c.field]}}-->
-                            <!--</td>-->
-                        <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td v-for="c in cols" :key="c.field">-->
+                    <!--{{no}}{{row[c.field]}}-->
+                    <!--</td>-->
+                    <!--</tr>-->
                     <!--</template>-->
 
                     <template slot="aa" slot-scope="{row, col, value, no}">
                         <a v-popover:pop>{{col.field}} -- {{value}}</a>
                     </template>
+
+                    <div slot="toast" slot-scope="{row, col, value, no}" @click="$toast(value)">
+                        toast-{{value}}
+                    </div>
                 </mue-datatable>
             </div>
             <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
@@ -92,7 +96,7 @@
                 columns: [ // 列定义
                     {field: "a", title: "列1", width: 120, fixed: true, align: "left"},
                     {field: "b", title: "列2", width: 120, tmpl: "aa"},
-                    {field: "c", title: "列3", width: 120, sortable: true},
+                    {field: "c", title: "列3", width: 120, tmpl: "toast", sortable: true},
                     {
                         title: "合并", children: [
                             {field: "d", title: "列4", width: 120},
