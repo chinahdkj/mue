@@ -185,7 +185,8 @@
                 scrollTable: "", // 操作横向滚动的表格
                 scrollBox: { // 竖向滚动高度，及可视区域高度  滚动位置
                     top: 0, height: 0, y: 0
-                }
+                },
+                isActive: false
             };
         },
         computed: {
@@ -258,9 +259,9 @@
                     this.setCols();
                 }
             },
-            scrollTable(v) {
+            isActive(v) {
                 if (v) {
-                    this.syncScrollX(v);
+                    this.syncScrollX();
                 }
             }
         },
@@ -437,24 +438,23 @@
                     observeDOM: false, HWCompositing: false
                 });
 
-                scroller.on("touchEnd", () => {
-                    this.scrollTable = "";
-                });
-
                 this.$set(this.scroller, table, scroller);
 
             },
 
-            syncScrollX(table) {
-                let x = this.scroller[table].x;
-                Object.entries(this.scroller).forEach(([k, sc]) => {
-                    if (table !== k) {
-                        sc.scrollTo(x, 0, 0);
-                    }
-                });
-                if (this.scrollTable === table) {
+            syncScrollX() {
+                if(this.scroller[this.scrollTable]){
+                    let x = this.scroller[this.scrollTable].x;
+                    Object.entries(this.scroller).forEach(([k, sc]) => {
+                        if (this.scrollTable !== k) {
+                            sc.scrollTo(x, 0, 1);
+                        }
+                    });
+                }
+
+                if (this.isActive) {
                     window.requestAnimationFrame(() => {
-                        this.syncScrollX(table);
+                        this.syncScrollX();
                     });
                 }
             },
@@ -522,7 +522,7 @@
             ScrollLeft(l = 0, duration = 400) {
                 let refs = this.$refs;
                 Object.values(this.scroller).forEach((sc) => {
-                    sc.scrollTo(-l, 0, duration);
+                    sc.scrollTo(-l, 0, duration || 1);
                 });
             },
             ScrollTop(t = 0) {
@@ -539,6 +539,16 @@
             this.initScrollX("top_table");
             this.initScrollX("main_table");
             this.setCols();
+            this.isActive = true;
+        },
+        activated() {
+            this.isActive = true;
+        },
+        deactivated() {
+            this.isActive = false;
+        },
+        beforeDestroy() {
+            this.isActive = false;
         }
     };
 </script>

@@ -77,6 +77,8 @@ if(typeof window !== 'undefined' && window.Vue){
     install(window.Vue);
 }
 
+window.MUE_VERSION = require("../package").version;
+
 export default {
     version: '0.1.0',
     install,
