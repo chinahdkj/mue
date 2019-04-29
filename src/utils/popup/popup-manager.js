@@ -1,11 +1,14 @@
 import Vue from 'vue';
 import {addClass, removeClass} from '../dom';
-import {context as PopCtx} from "vant/es/mixins/popup/context";
+// import {context as PopCtx} from "vant/es/mixins/popup/context";
 
+const PopCtx = {
+    zIndex: 4000,
+};
 
 let hasModal = false;
 let hasInitZIndex = false;
-let zIndex = PopCtx.zIndex;
+let zIndex = 4000;
 
 const getModal = function(){
     if(Vue.prototype.$isServer){

@@ -432,8 +432,8 @@
             initScrollX(table) {
 
                 let scroller = new BETTER_SCROLL(this.$refs[table], {
-                    click: true, probeType: 0, scrollbar: false, bounce: false, momentum: false,
-                    scrollY: false, scrollX: true, bindToWrapper: true,
+                    click: table !== "main_table", probeType: 0, scrollbar: false, bounce: false,
+                    momentum: false, scrollY: false, scrollX: true, bindToWrapper: true,
                     observeDOM: false, HWCompositing: false
                 });
 
