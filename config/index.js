@@ -15,6 +15,11 @@ const proxy = {
     '/socket.io': {
         target: "http://192.168.100.186:4000",
         changeOrigin: true
+    },
+    '/app/redirect': {
+        target: server,
+        changeOrigin: true,
+        pathRewrite: {'^/app/redirect': '/'}
     }
 };
 
