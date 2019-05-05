@@ -15,7 +15,7 @@ export const InitHook = (router) => {
         native.userBehaviorRecord({ // 用户行为分析
             params: {
                 "mid": mid,  //菜单ID
-                "name": to.meta.title, //功能名称
+                "name": (to.meta || {}).title || "", //功能名称
                 "time": new Date().getTime(),   //时间戳，必须唯一
                 "url": window.location.href,  //链接地址
             }
