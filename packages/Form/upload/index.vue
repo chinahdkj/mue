@@ -1,18 +1,25 @@
 <template>
     <div class="mue-img-upload">
         <ul class="mue-img-upload-list">
-            <li class="__upload-btn" v-if="!FORM_ITEM.readonly">
+            <li v-for="(file, i) in thumbs" :key="i" class="__upload-file">
+                <div class="box" @click="showAction(i)">
+                    <i class="iconfont icon-baobiao-weixuanzhong"></i>
+                    <span class="text">{{file.name}}</span>
+                </div>
+            </li>
+            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && isLimit">
                 <van-loading v-if="uploading" color=""/>
-                <van-uploader v-else :disabled="disabled" :after-read="upload" accept="*/*"
-                              result-type="dataUrl">
+                <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
+                              accept="*/*" result-type="dataUrl" :multiple="multiple">
                               <!-- :multiple="multiple" -->
-                    <i v-if="imgs&&imgs.length>0" class="iconfont icon-baobiao-weixuanzhong" style="font-size: 30px; display: block;  height: 46px;  width: 46px;  line-height: 46px;  text-align: center;" :class="{'is-disabled': disabled}"  
-                       aria-hidden="true"></i>
-                    <i v-else class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                    <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                        aria-hidden="true"></i>
                 </van-uploader>
             </li>
         </ul>
+        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+                         @select="onSelect"
+                         :actions="[{name: '删除', act: 'delete'}]"/>
     </div>
 </template>
 
@@ -31,36 +38,107 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
-            // multiple: {type: Boolean, default: false}
+            multiple: {type: Boolean, default: false},
+            limit: {type: Number, default: 0}
         },
         data(){
             return {
-                imgs: [], uploading: false
+                files: [], thumbs: [], uploading: false, dict: {},
+                pop: {visible: false, current: -1}
             };
+        },
+        computed: {
+            isLimit() {
+                return this.limit <= 0 ? true : this.files.length < this.limit
+            }
         },
         watch: {
             value: {
                 immediate: true,
                 handler(v){
                     if(!this.multiple){
-                        this.imgs = v ? [v] : [];
+                        this.files = v ? [v] : [];
                     }
                     else{
-                        this.imgs = v;
+                        this.files = v;
                     }
                 }
             },
-            imgs(v){
-                if(this.multiple){
-                    this.$emit("input", v);
+            files: {
+                deep: true, immediate: true,
+                handler(v) {
+                    if(this.multiple){
+                        this.$emit("input", v);
+                    }
+                    else{
+                        this.$emit("input", v.length === 0 ? "" : v[0]);
+                    }
+                    this.dict = {};
+                    this.$http.post('/app/redirect/upload/infos',{ids: Object.values(v)}).then((res)=>{
+                        console.log(res);
+                        v.forEach((p) => {
+                            this.$set(this.dict, p, {
+                                url: p,
+                                name: res[p].name
+                            });
+                        });
+                        this.createThumbs();
+                    });
                 }
-                else{
-                    this.$emit("input", v.length === 0 ? "" : v[0]);
-                }
-
             }
         },
         methods: {
+            createThumbs() {
+                this.thumbs = this.files.map((p) => {
+                    return this.getFile(p);
+                })
+            },
+            getFile(p) {
+                let url = this.dict[p].url;
+                return {url: this.getPath(url), name: this.dict[p].name}
+            },
+            getPath(m) {
+                if (!m) {
+                    return "";
+                }
+                if (m.startsWith("/upload")) {
+                    return `${sessionStorage.getItem("host") || ""}${m}`;
+                }
+                return m;
+            },
+            showAction(i) {
+                this.pop.current = i;
+                if (this.FORM_ITEM.readonly) {
+                    return;
+                }
+                this.pop.visible = true;
+            },
+            onSelect({act}) {
+                if (act === "delete") {
+                    this.removeImg();
+                }
+                this.pop.visible = false;
+            },
+            removeImg() {
+                if (this.disabled) {
+                    return;
+                }
+
+                this.$dialog.confirm({
+                    title: "删除", message: `是否删除此文件 ${'<span style="color:#fcb100">'+this.dict[this.files[this.pop.current]].name+'</span>'}`
+                }).then(() => {
+                    this.files.splice(this.pop.current, 1);
+                }).catch(() => {
+                });
+            },
+            beforeRead(files) {
+                let fileArr = [...files];
+                if(this.limit <= 0 || (fileArr.length <= this.limit && (this.files.length + fileArr.length <= this.limit))) {
+                    return true
+                } else {
+                    this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                }
+            },
             base64ToFile(base64, file){
 
                 let arr = base64.split(",");
@@ -77,7 +155,6 @@
                 blob.name = file.name;
                 return blob;
             },
-
             upload(files){
                 this.uploading = true;
                 if(!Array.isArray(files)){
@@ -96,11 +173,11 @@
                 this.$ajax.all(posts).then((rs) => {
                     if(this.multiple){
                         rs.forEach(({url}) => {
-                            this.imgs.push(url);
+                            this.files.push(url);
                         });
                     }
                     else{
-                        this.imgs = rs.length > 0 ? [rs[0].url] : [];
+                        this.files = rs.length > 0 ? [rs[0].url] : [];
                     }
                     this.uploading = false;
                 }).catch(()=>{
