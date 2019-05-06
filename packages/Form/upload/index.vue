@@ -1,13 +1,13 @@
 <template>
-    <div class="mue-img-upload">
-        <ul class="mue-img-upload-list">
+    <div class="mue-upload">
+        <ul class="mue-upload-list">
             <li v-for="(file, i) in thumbs" :key="i" class="__upload-file">
                 <div class="box" @click="showAction(i)">
                     <i class="iconfont icon-baobiao-weixuanzhong"></i>
                     <span class="text">{{file.name}}</span>
                 </div>
             </li>
-            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && isLimit">
+            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
                               accept="*/*" result-type="dataUrl" :multiple="multiple">
@@ -48,8 +48,11 @@
             };
         },
         computed: {
-            isLimit() {
-                return this.limit <= 0 ? true : this.files.length < this.limit
+            uploadAble() {
+                if(!this.multiple){
+                    return this.files.length < 1;
+                }
+                return this.limit > 0 ? this.files.length < this.limit : true;
             }
         },
         watch: {
@@ -125,19 +128,23 @@
                 }
 
                 this.$dialog.confirm({
-                    title: "删除", message: `是否删除此文件 ${'<span style="color:#fcb100">'+this.dict[this.files[this.pop.current]].name+'</span>'}`
+                    title: "删除", message: `是否删除此文件？`
                 }).then(() => {
                     this.files.splice(this.pop.current, 1);
                 }).catch(() => {
                 });
             },
             beforeRead(files) {
-                let fileArr = [...files];
-                if(this.limit <= 0 || (fileArr.length <= this.limit && (this.files.length + fileArr.length <= this.limit))) {
-                    return true
-                } else {
-                    this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                let fileArr = Array.isArray(files) ? [...files] : [files];
+                if(this.limit <= 0){
+                    return true;
                 }
+                let limit = this.multiple ? this.limit : 1;
+                if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
+                    return true
+                }
+                this.$toast.fail(`上传文件不能超过${this.limit}张`);
+                return false;
             },
             base64ToFile(base64, file){
 
