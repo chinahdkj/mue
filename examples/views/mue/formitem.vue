@@ -16,7 +16,7 @@
         </mue-panel>
 
         <mue-panel hairline="normal" title="图片单张上传" style="height:120px;">
-            <mue-img-upload style="margin-left: 5px;" v-model="img.single" :quality="0.5"/>
+            <mue-img-upload style="margin-left: 5px;" v-model="img.single" base64 :quality="0.5"/>
         </mue-panel>
 
         <mue-panel hairline="normal" title="图片批量上传" style="height:120px;">
