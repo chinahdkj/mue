@@ -4,9 +4,10 @@
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
                 <img :src="m" @click="showAction(i)"/>
             </li>
-            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && isLimit">
+            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
-                <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
+                <van-uploader v-else :disabled="disabled" :after-read="upload"
+                              :before-read="beforeRead"
                               result-type="dataUrl" :multiple="multiple">
                     <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                        aria-hidden="true"></i>
@@ -30,7 +31,7 @@
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
-                default() {
+                default(){
                     return {};
                 }
             }
@@ -41,46 +42,49 @@
             multiple: {type: Boolean, default: false},
             base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
             quality: { // 新图片压缩比例
-                type: Number, default: 1, validator(v) {
+                type: Number, default: 1, validator(v){
                     return v > 0 && v <= 1;
                 }
             },
             limit: {type: Number, default: 5}
         },
-        data() {
+        data(){
             return {
                 imgs: [], thumbs: [], uploading: false, dict: {},
                 pop: {visible: false, current: -1}
             };
         },
         computed: {
-            isLimit() {
-                return this.imgs.length < this.limit
+            uploadAble(){
+                if(!this.multiple){
+                    return this.imgs.length < 1;
+                }
+                return this.multiple > 0 ? this.imgs.length < this.limit : true;
             }
         },
         watch: {
             value: {
                 immediate: true, deep: true,
-                handler(v) {
-                    if (!this.multiple) {
+                handler(v){
+                    if(!this.multiple){
                         this.imgs = v ? [v] : [];
                     }
-                    else {
+                    else{
                         this.imgs = v || [];
                     }
                 }
             },
             imgs: {
                 deep: true, immediate: true,
-                handler(v) {
-                    if (!Array.isArray(v)) {
+                handler(v){
+                    if(!Array.isArray(v)){
                         return
                     }
 
-                    if (this.multiple) {
+                    if(this.multiple){
                         this.$emit("input", v);
                     }
-                    else {
+                    else{
                         this.$emit("input", v.length === 0 ? "" : v[0]);
                     }
 
@@ -89,15 +93,15 @@
                         this.$set(this.dict, p, p);
                     });
 
-                    if (this.base64) {
+                    if(this.base64){
                         let prms = v.map((p) => {
                             return this.queryLocal(p);
                         });
 
                         Promise.all(prms).then((datas) => {
-                            for (let i = 0; i < datas.length; i++) {
+                            for(let i = 0; i < datas.length; i++){
                                 let {_id, data} = datas[i];
-                                if (!_id) {
+                                if(!_id){
                                     continue;
                                 }
                                 data = JSON.parse(data);
@@ -106,14 +110,14 @@
                             this.createThumbs();
                         });
                     }
-                    else {
+                    else{
                         this.createThumbs();
                     }
                 }
             }
         },
         methods: {
-            createThumbs() {
+            createThumbs(){
                 // 生成缩略图
                 this.thumbs = this.imgs.map((m) => {
                     return this.getPath(m);
@@ -136,7 +140,7 @@
                 // });
             },
 
-            queryLocal(id) {
+            queryLocal(id){
                 return new Promise((resolve) => {
                     return this.$native.queryLocalData({
                         params: {datas: [{key: "_id", value: id}]},
@@ -147,9 +151,9 @@
                 })
             },
 
-            saveLocal(rs, callback) {
+            saveLocal(rs, callback){
                 let imgs = rs;
-                if (!this.multiple) {
+                if(!this.multiple){
                     imgs = rs.length > 0 ? [rs[0]] : [];
                 }
                 imgs = imgs.map(({content, file}) => {
@@ -173,20 +177,20 @@
                 });
             },
 
-            getPath(m) {
+            getPath(m){
                 let data = this.dict[m];
-                if (!data) {
+                if(!data){
                     return "";
                 }
-                if (data.startsWith("/upload")) {
+                if(data.startsWith("/upload")){
                     return `${sessionStorage.getItem("host") || ""}${data}`;
                 }
                 return data;
             },
 
-            upload(files) {
+            upload(files){
                 this.uploading = true;
-                if (!Array.isArray(files)) {
+                if(!Array.isArray(files)){
                     files = [files];
                 }
 
@@ -195,21 +199,21 @@
                 });
                 Promise.all(datas).then((rs) => {
                     // 图片本地保存
-                    if (this.base64) {
-                        if (rs.length === 0) {
+                    if(this.base64){
+                        if(rs.length === 0){
                             this.uploading = false;
                             return;
                         }
                         this.saveLocal(rs, (result, images) => {
-                            if (result.state === 0) {
-                                if (!this.multiple) {
+                            if(result.state === 0){
+                                if(!this.multiple){
                                     this.imgs = [];
                                 }
                                 images.forEach(({_id}) => {
                                     this.imgs.push(_id);
                                 });
                             }
-                            else {
+                            else{
                                 console.error(result.msg);
                             }
                             this.uploading = false;
@@ -228,12 +232,12 @@
                     });
 
                     this.$ajax.all(posts).then((rs) => {
-                        if (this.multiple) {
+                        if(this.multiple){
                             rs.forEach(({url}) => {
                                 this.imgs.push(url);
                             });
                         }
-                        else {
+                        else{
                             this.imgs = rs.length > 0 ? [rs[0].url] : [];
                         }
                         this.uploading = false;
@@ -243,26 +247,26 @@
                 });
             },
 
-            showAction(i) {
+            showAction(i){
                 this.pop.current = i;
-                if (this.FORM_ITEM.readonly) {
+                if(this.FORM_ITEM.readonly){
                     this.showPic();
                     return;
                 }
                 this.pop.visible = true;
             },
 
-            onSelect({act}) {
-                if (act === "view") {
+            onSelect({act}){
+                if(act === "view"){
                     this.showPic();
                 }
-                else if (act === "delete") {
+                else if(act === "delete"){
                     this.removeImg();
                 }
                 this.pop.visible = false;
             },
 
-            showPic() {
+            showPic(){
                 let images = this.imgs.map((m) => {
                     return this.getPath(m);
                 });
@@ -274,8 +278,8 @@
                     }
                 });
             },
-            removeImg() {
-                if (this.disabled) {
+            removeImg(){
+                if(this.disabled){
                     return;
                 }
 
@@ -286,13 +290,17 @@
                 }).catch(() => {
                 });
             },
-            beforeRead(files) {
-                let fileArr = [...files];
-                if(fileArr.length <= this.limit && ((this.imgs.length + fileArr.length) <= this.limit)) {
-                    return true
-                } else {
-                    this.$toast.fail(`上传图片不能超过${this.limit}张`);
+            beforeRead(files){
+                let fileArr = Array.isArray(files) ? [...files] : [files];
+                if(this.limit <= 0){
+                    return true;
                 }
+                let limit = this.multiple ? this.limit : 1;
+                if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
+                    return true
+                }
+                this.$toast.fail(`上传图片不能超过${this.limit}张`);
+                return false;
             }
         }
     }
