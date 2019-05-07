@@ -140,10 +140,10 @@
                     return true;
                 }
                 let limit = this.multiple ? this.limit : 1;
-                if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
+                if(fileArr.length <= limit && ((this.files.length + fileArr.length) <= limit)){
                     return true
                 }
-                this.$toast.fail(`上传文件不能超过${this.limit}张`);
+                this.$toast.fail(`上传文件不能超过${this.limit}个`);
                 return false;
             },
             base64ToFile(base64, file){

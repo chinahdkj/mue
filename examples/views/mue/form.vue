@@ -35,7 +35,7 @@
                     </mue-form-item>
 
                     <mue-form-item label="文件上传" field="files">
-                        <mue-upload multiple v-model="model.files"/>
+                        <mue-upload multiple v-model="model.files" :limit="2"/>
                     </mue-form-item>
 
                     <mue-form-item label="备注" field="remark">
