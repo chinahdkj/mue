@@ -139,6 +139,7 @@
     import colGroup from "./col-group";
     import cell from "./cell";
     import {objectGet} from "../../../src/utils/object";
+    import BETTER_SCROLL from "better-scroll";
 
     export default {
         name: "MueDatatable",
@@ -180,6 +181,7 @@
                 colFields: [], // 列属性
                 headerRows: 0, // 表头行数
                 pageNo: 0,
+                scroller: {},
                 scrollTable: "", // 操作横向滚动的表格
                 scrollBox: { // 竖向滚动高度，及可视区域高度  滚动位置
                     top: 0, height: 0, y: 0
@@ -280,7 +282,7 @@
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
                     typeof this.rowClass === "function"
-                        ? this.rowClass(row, i) : (this.rowClass || "")
+                    ? this.rowClass(row, i) : (this.rowClass || "")
                 ];
             },
             sortCls(col) {
@@ -420,13 +422,34 @@
                 this.cols = cols;
                 this.colFields = [...ffields, ...fields];
                 this.headerRows = headerRows;
+
+                this.$nextTick(() => {
+                    Object.values(this.scroller).forEach((sc) => {
+                        sc.refresh();
+                    });
+                });
+            },
+
+            initScrollX(table) {
+
+                let scroller = new BETTER_SCROLL(this.$refs[table], {
+                    click: table !== "main_table", probeType: 0, scrollbar: false, bounce: false,
+                    momentum: false, scrollY: false, scrollX: true, bindToWrapper: true,
+                    observeDOM: false, HWCompositing: false
+                });
+
+                this.$set(this.scroller, table, scroller);
+
             },
 
             syncScrollX() {
-                let table = this.scrollTable;
-                if(table && this.$refs.top_table && this.$refs.main_table){
-                    let other = table === "top_table" ? "main_table" : "top_table";
-                    this.$refs[other].scrollLeft = this.$refs[table].scrollLeft;
+                if(this.scroller[this.scrollTable]){
+                    let x = this.scroller[this.scrollTable].x;
+                    Object.entries(this.scroller).forEach(([k, sc]) => {
+                        if (this.scrollTable !== k) {
+                            sc.scrollTo(x, 0, 1);
+                        }
+                    });
                 }
 
                 if (this.isActive) {
@@ -498,8 +521,9 @@
 
             ScrollLeft(l = 0, duration = 400) {
                 let refs = this.$refs;
-                refs.main_table && $(refs.main_table).animate({scrollLeft: l}, duration);
-                refs.top_table && $(refs.top_table).animate({scrollLeft: l}, duration);
+                Object.values(this.scroller).forEach((sc) => {
+                    sc.scrollTo(-l, 0, duration || 1);
+                });
             },
             ScrollTop(t = 0) {
                 if (this.$refs.load_more) {
@@ -512,6 +536,8 @@
             }
         },
         mounted() {
+            this.initScrollX("top_table");
+            this.initScrollX("main_table");
             this.setCols();
             this.isActive = true;
         },

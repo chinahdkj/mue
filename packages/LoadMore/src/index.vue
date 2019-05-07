@@ -134,7 +134,7 @@
                     bounceTime: 600, scrollY: true, scrollX: false, bindToWrapper: false,
                     pullDownRefresh: {threshold: this.distance, stop: this.distance},
                     pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal",
-                    observeDOM: false, stopPropagation: true,  HWCompositing: false
+                    observeDOM: false, HWCompositing: false
                 });
 
                 this.scroller.on("scrollStart", () => {
