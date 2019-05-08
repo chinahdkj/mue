@@ -74,8 +74,8 @@
                     <span>暂无数据</span>
                 </div>
 
-                <div v-else class="mue-datatable-scroller" :class="{'is-virtual': virtual}"
-                     :style="mainHeight">
+                <div v-show="total > 0" class="mue-datatable-scroller"
+                     :class="{'is-virtual': virtual}" :style="mainHeight">
                     <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                          :style="[{width: fixedWidth + 'px' }]">
 
