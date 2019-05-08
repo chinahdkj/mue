@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {InitHook} from "../../src/router";
+// import {InitHook} from "../../src/router";
 
 Vue.use(Router);
 
@@ -96,16 +96,7 @@ const routes = [
         name: 'mue_datatable',
         component: () => import("../views/mue/datatable")
     },
-    {
-        path: '/mue/form',
-        name: 'mue_form',
-        component: () => import("../views/mue/form")
-    },
-    {
-        path: '/mue/formitem',
-        name: 'mue_formitem',
-        component: () => import("../views/mue/formitem")
-    },
+
     {
         path: '/mue/loadmore',
         name: 'mue_loadmore',
@@ -120,11 +111,28 @@ const routes = [
         path: '/mue/sortpicker',
         name: 'sort_picker',
         component: () => import("../views/mue/sortpicker")
-    }
+    },
+
+
+    {
+        path: '/form/form',
+        name: 'form_form',
+        component: () => import("../views/form/form")
+    },
+    {
+        path: '/form/formitem',
+        name: 'form_formitem',
+        component: () => import("../views/form/formitem")
+    },
+    {
+        path: '/form/treepicker',
+        name: 'form_treepicker',
+        component: () => import("../views/form/treepicker")
+    },
 ];
 
 const router = new Router({routes});
 
-InitHook(router);
+// InitHook(router);
 
 export default router;

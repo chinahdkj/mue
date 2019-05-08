@@ -22,8 +22,6 @@
             <!--<van-cell value="PAGE" @click="open('/mue/page')"/>-->
             <van-cell value="CONTAINER" @click="open('/mue/container')"/>
             <van-cell value="PANEL" @click="open('/mue/panel')"/>
-            <van-cell value="FORM" @click="open('/mue/form')"/>
-            <van-cell value="FORM-ITEM" @click="open('/mue/formitem')"/>
             <van-cell value="CHART" @click="open('/mue/chart')"/>
             <van-cell value="ROLL-DATA" @click="open('/mue/rolldata')"/>
             <van-cell value="DATE-PICKER" @click="open('/mue/datepicker')"/>
@@ -36,6 +34,13 @@
             <van-cell value="DATATABLE" @click="open('/mue/datatable')"/>
             <van-cell value="DVR" @click="open('/mue/dvr')"/>
             <van-cell value="SORT-PICKER" @click="open('/mue/sortpicker')"/>
+        </van-cell-group>
+
+        <h3>FORM</h3>
+        <van-cell-group border>
+            <van-cell value="FORM" @click="open('/form/form')"/>
+            <van-cell value="FORM-ITEM" @click="open('/form/formitem')"/>
+            <van-cell value="TREE-PICKER" @click="open('/form/treepicker')"/>
         </van-cell-group>
 
         <div class="night-switch" @click="toggleNight">

@@ -23,7 +23,7 @@
     export default {
         name: "MueTree",
         components: {panel},
-        provide() {
+        provide(){
             return {TREE: this};
         },
         props: {
@@ -33,12 +33,13 @@
             cancelButtonText: {type: String, default: "取消"},
             multiple: {type: Boolean, default: false},
             data: {
-                type: Array, default() {
+                type: Array, default(){
                     return [];
                 }
-            }
+            },
+            selectable: {type: Function, default: null}
         },
-        data() {
+        data(){
             return {
                 columns: [], // 渲染内容
                 dict: {}, // 节点属性字典
@@ -50,7 +51,7 @@
         watch: {
             data: {
                 deep: true, immediate: true,
-                handler(v) {
+                handler(v){
                     let dict = {}, checks = {};
 
                     let initNode = (opts, road) => {
@@ -59,10 +60,11 @@
 
                             let node = new TreeNode(opt, road, i);
                             dict[opt.code] = node;
-                            if ((opt.children || []).length === 0) {
+                            if((opt.children || []).length === 0){
                                 node.AddLeaves([node.code]);
                                 checks[node.code] = false;
-                            } else {
+                            }
+                            else{
                                 node.AddLeaves(initNode(opt.children, node.$road));
                             }
                             leaves = leaves.concat(node.$leaves);
@@ -79,30 +81,35 @@
             },
             opens: {
                 deep: true,
-                handler() {
+                handler(){
                     this.initColumns();
                 }
             }
         },
         methods: {
-            onCancelClick() {
+            onCancelClick(){
                 this.$emit("cancel");
             },
-            onConfirmClick() {
+            onConfirmClick(){
                 this.$emit("confirm");
             },
 
-            selectNode(node) {
+            selectNode(node){
                 let currents = [...this.opens];
                 this.opens.splice(node.$lv, this.opens.length - node.$lv, node.code);
+
+                if(typeof this.selectable === "function" && !this.selectable(node.data, node)){
+                    return;
+                }
+
                 this.current = node.code;
-                if (currents.length !== node.$lv + 1 ||
-                    currents[currents.length - 1] !== node.code) {
+                if((currents.length !== node.$lv + 1 ||
+                    currents[currents.length - 1] !== node.code)){
                     this.$emit("select", node);
                 }
             },
 
-            initColumns() {
+            initColumns(){
                 let getOptions = (f) => {
                     let options = Object.values(this.dict).filter(f);
                     options.sort((c, n) => {
@@ -117,7 +124,7 @@
                     })
                 ];
 
-                for (let i = 0; i < this.opens.length; i++) {
+                for(let i = 0; i < this.opens.length; i++){
                     let cnt = this.opens[i];
                     let opts = getOptions((v) => {
                         return v.$parent === cnt;
@@ -126,25 +133,25 @@
                 }
                 this.columns = columns;
             },
-            updateCheck(node, state) {
+            updateCheck(node, state){
                 let checked = state < 1;
                 this.CheckNode(node.code, checked);
                 this.$emit("check", node, checked);
             },
 
-            GetNode(code) {
+            GetNode(code){
                 return this.dict[code];
             },
 
-            CheckAll(state) {
+            CheckAll(state){
                 Object.keys(this.leaves).forEach((k) => {
                     this.leaves[k] = state;
                 });
             },
 
-            CheckNode(code, state) {
+            CheckNode(code, state){
                 let node = this.dict[code];
-                if (!node) {
+                if(!node){
                     return;
                 }
                 node.$leaves.forEach((k) => {
@@ -152,20 +159,39 @@
                 });
             },
 
-            SetCurrent(c) {
-                let node = this.dict[c] || {code: null, $road : []};
+            SetCurrent(c){
+                let node = this.dict[c];
+                if(!node){
+                    this.current = null;
+                    this.opens = [];
+                    return;
+                }
+                if(typeof this.selectable === "function" && !this.selectable(node.data, node)){
+                    this.current = null;
+                    this.opens = [];
+                    return;
+                }
                 this.current = node.code;
-                this.opens = [...node.$road];
+                this.opens = node.$road;
             },
 
-            GetCurrent() {
-                return (this.dict[this.current] || {}).code;
+            GetCurrent(){
+                let node = this.dict[this.current];
+                if(!node){
+                    return null;
+                }
+                if(typeof this.selectable === "function" && !this.selectable(node.data, node)){
+                    return null;
+                }
+                return node.code;
             },
 
-            GetChecks() {
+            GetChecks(){
                 let result = [];
                 Object.entries(this.dict).forEach(([k, v]) => {
-                    v.GetCheckState(this.leaves) > 0 && result.push(k);
+                    v.GetCheckState(this.leaves) > 0 &&
+                    (typeof this.selectable === "function" || this.selectable(v.data, v)) &&
+                    result.push(k);
                 });
                 return result;
             }

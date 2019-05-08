@@ -8,8 +8,9 @@
         <van-popup class="mue-tree-picker-pop" v-model="isVisible" position="right"
                    :lazy-render="false" get-container="body" :close-on-click-overlay="false"
                    @click-overlay="isVisible = false">
-            <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText" @cancel="onCancel"
-                      @confirm="onConfirm" :multiple="multiple"/>
+            <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText"
+                      @cancel="onCancel"
+                      @confirm="onConfirm" :multiple="multiple" :selectable="selectable"/>
         </van-popup>
     </div>
 </template>
@@ -20,14 +21,14 @@
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
-                default() {
+                default(){
                     return {};
                 }
             }
         },
         props: {
             data: {
-                type: Array, default() {
+                type: Array, default(){
                     return []
                 }
             },
@@ -35,92 +36,106 @@
             clearable: {type: Boolean, default: false},
             disabled: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
-            multiple: {type: Boolean, default: false}
+            multiple: {type: Boolean, default: false},
+            selectable: {type: Function, default: null}
         },
-        data() {
+        data(){
             return {
                 isVisible: false, text: ""
             }
         },
         computed: {
-            cancelButtonText() {
+            cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
             }
         },
         watch: {
             value: {
                 deep: true, immediate: true,
-                handler(v) {
-                    this.$nextTick(() => {
-                        if (v == null || !this.$refs.tree) {
-                            this.text = "";
-                            return;
-                        }
-
-                        let getName = (code) => {
-                            let node = this.GetOptionInfo(code);
-                            return node == null ? "" : node.name;
-                        };
-
-                        if (!this.multiple) {
-                            this.text = getName(v);
-                        } else {
-                            let t = [];
-                            v.forEach((c) => {
-                                let n = getName(c);
-                                if (n) {
-                                    t.push(n);
-                                }
-                            });
-                            this.text = t.join(",");
-                        }
-
-                    });
+                handler(){
+                    this.getText();
                 }
             },
-            isVisible(v) {
-                if (!v) {
+            data: {
+                deep: true, immediate: true,
+                handler(){
+                    this.getText();
+                }
+            },
+            isVisible(v){
+                if(!v){
                     return;
                 }
-                if (this.multiple) {
+                if(this.multiple){
                     // 设置勾选
                     // this.$refs.tree.CheckAll(false);
                     Object.keys(this.$refs.tree.leaves).forEach((k) => {
                         this.$refs.tree.leaves[k] = (this.value || []).indexOf(k) > -1;
                     });
                     this.$refs.tree.SetCurrent(null);
-                } else {
+                }
+                else{
                     // 当前节点
                     this.$refs.tree.SetCurrent(this.value);
                 }
             }
         },
         methods: {
-            onConfirm() {
+            getText(){
+                this.$nextTick(() => {
+                    if(this.value == null || !this.$refs.tree){
+                        this.text = "";
+                        return;
+                    }
+
+                    let getName = (code) => {
+                        let node = this.GetOptionInfo(code);
+                        return node == null || (typeof this.selectable === "function"
+                            && !this.selectable(node.data, node)) ? "" : node.name;
+                    };
+
+                    if(!this.multiple){
+                        this.text = getName(this.value);
+                    }
+                    else{
+                        let t = [];
+                        (this.value || []).forEach((c) => {
+                            let n = getName(c);
+                            if(n){
+                                t.push(n);
+                            }
+                        });
+                        this.text = t.join(",");
+                    }
+
+                });
+            },
+            onConfirm(){
                 this.isVisible = false;
-                if (this.multiple) {
+                if(this.multiple){
                     let checks = this.$refs.tree.GetChecks();
                     this.$emit("input", checks.length === 0 ? null : checks);
-                } else {
+                }
+                else{
                     let current = this.$refs.tree.GetCurrent();
                     this.$emit("input", current == null ? null : current);
                 }
             },
 
-            onCancel() {
+            onCancel(){
                 this.isVisible = false;
-                if (this.clearable) {
+                if(this.clearable){
                     this.$emit("input", null);
                 }
             },
 
-            ShowPop() {
-                if (this.disabled || this.FORM_ITEM.readonly) {
+            ShowPop(){
+                if(this.disabled || this.FORM_ITEM.readonly){
                     return;
                 }
                 this.isVisible = true;
             },
-            GetOptionInfo(code) {
+            GetOptionInfo(code){
                 return this.$refs.tree.GetNode(code);
             }
         }

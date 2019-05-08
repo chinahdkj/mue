@@ -1,7 +1,7 @@
 class TreeNode {
     constructor(data, road, index){
         this.data = {...data};
-        this.data.children = undefined;
+        // this.data.children = undefined;
         this.code = data.code;
         this.name = data.name;
         this.$lv = road.length;
