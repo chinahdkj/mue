@@ -190,7 +190,7 @@
                 let result = [];
                 Object.entries(this.dict).forEach(([k, v]) => {
                     v.GetCheckState(this.leaves) > 0 &&
-                    (typeof this.selectable === "function" && this.selectable(v.data, v)) &&
+                    (typeof this.selectable !== "function" || this.selectable(v.data, v)) &&
                     result.push(k);
                 });
                 return result;
