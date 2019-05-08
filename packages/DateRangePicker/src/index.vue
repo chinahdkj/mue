@@ -1,12 +1,10 @@
 <template>
     <div :class="bar ? 'mue-date-range-picker' : 'mue-date-range-picker-input'">
 
-        <div class="pick-bar" @click="pop = true" v-if="bar">
-            <span class="pick-bar-content">
-                <a v-html="begin + '&nbsp;~&nbsp;' + end"></a>
-                <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
-                <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
-            </span>
+        <div class="pick-bar" v-if="bar">
+            <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
+            <a @click="pop = true" v-html="begin + '&nbsp;~&nbsp;' + end"></a>
+            <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
         </div>
 
         <van-popup ref="pop" class="mue-date-picker-pop" v-model="pop" position="bottom"

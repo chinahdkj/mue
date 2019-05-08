@@ -1,12 +1,10 @@
 <template>
     <div :class="bar ? 'mue-date-picker' : 'mue-date-picker-input'">
 
-        <div class="pick-bar" @click="showPop" v-if="bar">
-            <span class="pick-bar-content" :class="{'is-disabled': disabled}">
-                <a v-html="value || '&nbsp;&nbsp;&nbsp;&nbsp;'"></a>
-                <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
-                <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
-            </span>
+        <div class="pick-bar" v-if="bar">
+            <van-icon name="arrow-left" @click.stop="onClickArrow('previous')"/>
+            <a @click="showPop" v-html="value || '&nbsp;&nbsp;&nbsp;&nbsp;'"></a>
+            <van-icon name="arrow" @click.stop="onClickArrow('next')"/>
         </div>
 
         <div class="mue-form-input has-suffix" v-else @click="showPop">
