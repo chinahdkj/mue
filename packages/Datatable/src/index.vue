@@ -460,7 +460,7 @@
             },
 
             onScrollY(box, content) {
-                if (!this.pageSize || !this.$refs.main_table) {
+                if (!this.$refs.main_table) {
                     this.pageNo = 0;
                     return;
                 }
@@ -476,7 +476,7 @@
                     }
                     i = Math.max(i - 2, 0);
                     let rowNo = this.getRowNo(this.data[i], i);
-                    this.pageNo = parseInt(rowNo / this.pageSize) + 1;
+                    this.pageNo = this.pageSize ? (parseInt(rowNo / this.pageSize) + 1) : 0;
                     return;
                 }
 
@@ -486,7 +486,7 @@
                 let bottom = scrollTop + box.clientHeight;
                 let i = parseInt(bottom / this.rowHeight) - 2;
                 let rowNo = this.getRowNo(this.data[i], i);
-                this.pageNo = parseInt(rowNo / this.pageSize) + 1;
+                this.pageNo = this.pageSize ? (parseInt(rowNo / this.pageSize) + 1) : 0;
 
                 this.scrollBox.top = scrollTop;
             },
