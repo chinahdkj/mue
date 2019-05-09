@@ -14,7 +14,7 @@ const fns = [
 
 const fns2 = [
     'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes',
-    'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack'
+    'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi"
 ] // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
