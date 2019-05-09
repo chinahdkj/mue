@@ -66,17 +66,20 @@
             value: {
                 immediate: true, deep: true,
                 handler(v){
-                    if(!this.multiple){
-                        this.imgs = v ? [v] : [];
+                    let temp = [];
+                    if(!v){
                     }
-                    else{
-                        this.imgs = v || [];
+                    else if(Array.isArray(v)){
+                        temp = v;
+                    }else{
+                        temp = [v];
                     }
+                    this.imgs = temp;
                 }
             },
             imgs: {
                 deep: true, immediate: true,
-                handler(v){
+                handler(v, ov){
                     if(!Array.isArray(v)){
                         return
                     }

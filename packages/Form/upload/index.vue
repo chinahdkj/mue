@@ -59,12 +59,15 @@
             value: {
                 immediate: true,
                 handler(v){
-                    if(!this.multiple){
-                        this.files = v ? [v] : [];
+                    let temp = [];
+                    if(!v){
                     }
-                    else{
-                        this.files = v;
+                    else if(Array.isArray(v)){
+                        temp = v;
+                    }else{
+                        temp = [v];
                     }
+                    this.files = temp;
                 }
             },
             files: {
