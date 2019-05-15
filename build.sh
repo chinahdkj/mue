@@ -1,6 +1,7 @@
 #!/bin/bash
 
+rm -rf node_modules/**
 rm -rf dist/**
 
-cnpm i
+npm i
 NODE_ENV=production npm run build
