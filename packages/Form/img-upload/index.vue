@@ -1,23 +1,42 @@
 <template>
     <div class="mue-img-upload">
+
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
-                <img :src="m" @click="showAction(i)"/>
+                <div class="box" @click="showAction(i)">
+                    <img :src="m.url"/>
+                    <div v-if="m.type === 'video'" class="box-shadow">
+                        <i class="fa fa-video-camera"></i>
+                    </div>
+                </div>
             </li>
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
-                <van-uploader v-else :disabled="disabled" :after-read="upload"
-                              :before-read="beforeRead"
-                              result-type="dataUrl" :multiple="multiple">
-                    <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                <div v-else>
+                    <i v-if="accept !== 'image'" @click="uploadhadVideo()" class="iconfont icon-tianjia"
+                       :class="{'is-disabled': disabled}"
                        aria-hidden="true"></i>
-                </van-uploader>
+                    <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload" :before-read="beforeRead"
+                                  result-type="dataUrl" :multiple="multiple" accept="image/*">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </van-uploader>
+                </div>
             </li>
         </ul>
 
         <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
                          @select="onSelect"
-                         :actions="[{name: '查看原图', act: 'view'}, {name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: '预览文件', act: 'view'}, {name: '删除', act: 'delete'}]"/>
+
+        <van-actionsheet v-model="uploadPop.visible" get-container="body" cancel-text="取消"
+                         @select="typeSelect"
+                         :actions="[{name: '上传图片', act: 'image'}, {name: '拍摄视频', act: 'video'}]"/>
+
+        <!--<van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
+            <video :src="videoPop.src" style="width:100%;height:300px;" controls></video>
+        </van-popup>-->
+
     </div>
 </template>
 
@@ -25,13 +44,16 @@
     import {ImagePreview} from "vant";
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
 
+    const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
+    const VIDEO = 'video/mp4,video/rmvb,video/avi,video/mov,video/flv,video/3gp';
+
     export default {
         name: "MueImgUpload",
         components: {},
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
-                default(){
+                default() {
                     return {};
                 }
             }
@@ -42,21 +64,44 @@
             multiple: {type: Boolean, default: false},
             base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
             quality: { // 新图片压缩比例
-                type: Number, default: 1, validator(v){
+                type: Number, default: 1, validator(v) {
                     return v > 0 && v <= 1;
                 }
             },
-            limit: {type: Number, default: 5}
+            limit: {type: Number, default: 5},
+            accept: {
+                type: String, default: "image"
+            }
         },
-        data(){
+        data() {
             return {
                 imgs: [], thumbs: [], uploading: false, dict: {},
-                pop: {visible: false, current: -1}
+                pop: {visible: false},
+                uploadPop: {visible: false},
+                // videoPop: {visible: false, src: ''},
+                current: -1
             };
         },
         computed: {
-            uploadAble(){
-                if(!this.multiple){
+            type() {
+                let type = '';
+                switch (this.accept) {
+                    case 'image':
+                        type = IMG;
+                        break;
+                    case 'video':
+                        type = VIDEO;
+                        break;
+                    case 'all':
+                        type = `${IMG},${VIDEO}`;
+                        break;
+                    default:
+                        type = IMG;
+                }
+                return type;
+            },
+            uploadAble() {
+                if (!this.multiple) {
                     return this.imgs.length < 1;
                 }
                 return this.limit > 0 ? this.imgs.length < this.limit : true;
@@ -65,13 +110,13 @@
         watch: {
             value: {
                 immediate: true, deep: true,
-                handler(v){
+                handler(v) {
                     let temp = [];
-                    if(!v){
+                    if (!v) {
                     }
-                    else if(Array.isArray(v)){
+                    else if (Array.isArray(v)) {
                         temp = v;
-                    }else{
+                    } else {
                         temp = [v];
                     }
                     this.imgs = temp;
@@ -79,51 +124,80 @@
             },
             imgs: {
                 deep: true, immediate: true,
-                handler(v, ov){
-                    if(!Array.isArray(v)){
+                handler(v, ov) {
+                    if (!Array.isArray(v)) {
                         return
                     }
 
-                    if(this.multiple){
+                    if (this.multiple) {
                         this.$emit("input", v);
                     }
-                    else{
+                    else {
                         this.$emit("input", v.length === 0 ? "" : v[0]);
                     }
 
                     this.dict = {};
                     v.forEach((p) => {
-                        this.$set(this.dict, p, p);
+                        // this.$set(this.dict, p, p);
+                        let type = this.fileType(p);
+                        this.$set(this.dict, p, {
+                            url: type === "video" ? `${p}.jpg` : p, // 图片，缩略图
+                            type,
+                            path: this.getPath(p) //完整路径
+                        });
                     });
 
-                    if(this.base64){
-                        let prms = v.map((p) => {
+                    if (this.base64 || this.accept !== "image") {
+                        let prms = v.filter((p) => {
+                            return this.base64 || this.fileType(p) === "video";
+                        }).map((p) => {
                             return this.queryLocal(p);
                         });
 
                         Promise.all(prms).then((datas) => {
-                            for(let i = 0; i < datas.length; i++){
+                            for (let i = 0; i < datas.length; i++) {
                                 let {_id, data} = datas[i];
-                                if(!_id){
+                                if (!_id) {
                                     continue;
                                 }
+                                let type = this.fileType(_id);
                                 data = JSON.parse(data);
-                                this.$set(this.dict, _id, data.base64);
+                                this.$set(this.dict, _id, {
+                                    url: type === "video" ? data.thumb : data.base64,
+                                    type,
+                                    path: data.path
+                                })
                             }
                             this.createThumbs();
                         });
                     }
-                    else{
+                    else {
                         this.createThumbs();
                     }
                 }
             }
         },
         methods: {
-            createThumbs(){
+            uploadhadVideo() {
+                this.accept === 'video' ? this.videoUpload() : this.uploadPop.visible = true;
+            },
+            typeSelect({act}) {
+                if (act === "image") {
+                    this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
+                }
+                else if (act === "video") {
+                    this.videoUpload();
+                }
+                this.uploadPop.visible = false;
+            },
+            fileType(url) {
+                let suffix = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
+                return IMG.includes(suffix) ? 'image' : 'video'
+            },
+            createThumbs() {
                 // 生成缩略图
-                this.thumbs = this.imgs.map((m) => {
-                    return this.getPath(m);
+                this.thumbs = this.imgs.map((p) => {
+                    return this.getFile(p);
                 });
                 // let thumbs = [];
                 // for(let i = 0; i < this.imgs.length; i++){
@@ -143,7 +217,7 @@
                 // });
             },
 
-            queryLocal(id){
+            queryLocal(id) {
                 return new Promise((resolve) => {
                     return this.$native.queryLocalData({
                         params: {datas: [{key: "_id", value: id}]},
@@ -154,9 +228,9 @@
                 })
             },
 
-            saveLocal(rs, callback){
+            saveLocal(rs, callback) {
                 let imgs = rs;
-                if(!this.multiple){
+                if (!this.multiple) {
                     imgs = rs.length > 0 ? [rs[0]] : [];
                 }
                 imgs = imgs.map(({content, file}) => {
@@ -180,20 +254,24 @@
                 });
             },
 
-            getPath(m){
-                let data = this.dict[m];
-                if(!data){
+            getFile(p) {
+                let url = this.dict[p].url;
+                return {url: this.getPath(url), type: this.dict[p].type}
+            },
+            //获取完整路径
+            getPath(whole) {
+                if (!whole) {
                     return "";
                 }
-                if(data.startsWith("/upload")){
-                    return `${sessionStorage.getItem("host") || ""}${data}`;
+                if (whole.startsWith("/upload")) {
+                    return `${sessionStorage.getItem("host") || ""}${whole}`;
                 }
-                return data;
+                return whole;
             },
 
-            upload(files){
+            upload(files) {
                 this.uploading = true;
-                if(!Array.isArray(files)){
+                if (!Array.isArray(files)) {
                     files = [files];
                 }
 
@@ -202,21 +280,21 @@
                 });
                 Promise.all(datas).then((rs) => {
                     // 图片本地保存
-                    if(this.base64){
-                        if(rs.length === 0){
+                    if (this.base64) {
+                        if (rs.length === 0) {
                             this.uploading = false;
                             return;
                         }
                         this.saveLocal(rs, (result, images) => {
-                            if(result.state === 0){
-                                if(!this.multiple){
+                            if (result.state === 0) {
+                                if (!this.multiple) {
                                     this.imgs = [];
                                 }
                                 images.forEach(({_id}) => {
                                     this.imgs.push(_id);
                                 });
                             }
-                            else{
+                            else {
                                 console.error(result.msg);
                             }
                             this.uploading = false;
@@ -235,12 +313,12 @@
                     });
 
                     this.$ajax.all(posts).then((rs) => {
-                        if(this.multiple){
+                        if (this.multiple) {
                             rs.forEach(({url}) => {
                                 this.imgs.push(url);
                             });
                         }
-                        else{
+                        else {
                             this.imgs = rs.length > 0 ? [rs[0].url] : [];
                         }
                         this.uploading = false;
@@ -250,60 +328,99 @@
                 });
             },
 
-            showAction(i){
-                this.pop.current = i;
-                if(this.FORM_ITEM.readonly){
-                    this.showPic();
+            videoUpload() {
+                this.uploading = true;
+
+
+                let id = this.$comm.newFilePath('mp4');
+                this.$native.video({
+                        params: {id: id, local: this.base64},
+                        cb: ({code}) => {
+                            if (code === 0) {
+                                this.imgs.push(id);
+                            } else if (code === 1) {
+                            } else {
+                                this.$toast.fail('上传失败');
+                            }
+                            this.uploading = false;
+                        }
+                    },
+                );
+            },
+
+            showAction(i) {
+                this.current = i;
+                if (this.FORM_ITEM.readonly) {
+                    this.showFile();
                     return;
                 }
                 this.pop.visible = true;
             },
 
-            onSelect({act}){
-                if(act === "view"){
-                    this.showPic();
+            onSelect({act}) {
+                if (act === "view") {
+                    this.showFile();
                 }
-                else if(act === "delete"){
-                    this.removeImg();
+                else if (act === "delete") {
+                    this.removeFile();
                 }
                 this.pop.visible = false;
             },
 
-            showPic(){
-                let images = this.imgs.map((m) => {
-                    return this.getPath(m);
-                });
-                this.$native.hideHeader({params: {hide: 1}});
-                ImagePreview({
-                    images, startPosition: this.pop.current, loop: true,
-                    onClose: () => {
-                        this.$native.hideHeader({params: {hide: 0}});
-                    }
-                });
+            showFile() {
+                let type = this.fileType(this.imgs[this.current]);
+                if (type === 'image') {
+                    let images = this.imgs.filter((f) => {
+                        return this.fileType(f) === 'image'
+                    }).map((p) => {
+                        return this.getPath(p);
+                    });
+                    this.$native.hideHeader({params: {hide: 1}});
+                    ImagePreview({
+                        images, startPosition: this.current, loop: true,
+                        onClose: () => {
+                            this.$native.hideHeader({params: {hide: 0}});
+                        }
+                    });
+                } else {
+                    // this.videoPop.visible = true;
+                    let videoPath = this.dict[this.imgs[this.current]].path;
+                    this.$native.showVideo({params: {path: videoPath}});
+                }
             },
-            removeImg(){
-                if(this.disabled){
+            removeFile() {
+                if (this.disabled) {
                     return;
                 }
 
                 this.$dialog.confirm({
-                    title: "删除", message: "是否删除此图片？"
+                    title: "删除", message: "是否删除此文件!"
                 }).then(() => {
-                    this.imgs.splice(this.pop.current, 1);
+                    let id = this.imgs[this.current], path = this.dict[this.imgs[this.current]].path;
+                    this.imgs.splice(this.current, 1);
+                    // 删除原生本地数据库数据
+                    this.$native.deleteLocalData({
+                        params: {datas: [{key: '_id', value: id}]}
+                    });
+                    // 删除原生本地文件
+                    this.$native.delFile({
+                        params: {path: path}
+                    })
+
                 }).catch(() => {
                 });
             },
-            beforeRead(files){
+            beforeRead(files) {
                 let fileArr = Array.isArray(files) ? [...files] : [files];
-                if(this.limit <= 0){
+                if (this.limit <= 0) {
                     return true;
                 }
                 let limit = this.multiple ? this.limit : 1;
-                if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
+                if (fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)) {
                     return true
+                } else {
+                    this.$toast.fail(`上传文件不能超过${this.limit}个`);
                 }
-                this.$toast.fail(`上传图片不能超过${this.limit}张`);
-                return false;
             }
         }
     }

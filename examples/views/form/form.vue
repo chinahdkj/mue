@@ -31,7 +31,7 @@
 
                     <mue-form-item label="站点图片" field="station.pics"
                                    required :rules="[{type:'array'}]">
-                        <mue-img-upload multiple v-model="model.station.pics" :quality="0.6"/>
+                        <mue-img-upload multiple v-model="model.station.pics" :quality="0.6" accept="all"/>
                     </mue-form-item>
 
                     <mue-form-item label="文件上传" field="files">

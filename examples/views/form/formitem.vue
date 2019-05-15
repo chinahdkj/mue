@@ -23,6 +23,10 @@
             <mue-img-upload style="margin-left: 5px;" v-model="img.multiple" multiple/>
         </mue-panel>
 
+        <mue-panel hairline="normal" title="短视频" style="height:120px;">
+            <mue-img-upload style="margin-left: 5px;" v-model="img.video" multiple accept="all"/>
+        </mue-panel>
+
     </div>
 </template>
 
@@ -62,7 +66,8 @@
                 input: {number: 0, value: ""},
                 img: {
                     single: "",
-                    multiple: []
+                    multiple: [],
+                    video: []
                 }
             };
         },
