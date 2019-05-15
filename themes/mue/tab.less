@@ -120,9 +120,12 @@
         }
 
         .mue-tab {
-            height: 40px;
-            display: block;
-            overflow: hidden;
+            display: inline-flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            justify-content: center;
+            justify-items: center;
+            //overflow: hidden;
             //margin-top: 10px;
 
             > .mue-tab-icon {
@@ -133,7 +136,8 @@
                 text-align: center;
                 width: 20px;
                 margin-right: 2px;
-                margin-top: 10px;
+                flex-shrink: 0;
+                flex-grow: 0;
             }
 
             > .mue-tab-title {
@@ -141,7 +145,9 @@
                 //float: left;
                 height: 20px;
                 line-height: 20px;
-                margin-top: 10px;
+                flex-shrink: 1;
+                flex-grow: 0;
+                white-space: nowrap;
             }
         }
 
