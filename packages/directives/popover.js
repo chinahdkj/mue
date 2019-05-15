@@ -23,6 +23,8 @@ export default {
             el.setAttribute("aria-describedby", pop.tooltipId);
 
             if(pop.reference === el){
+                let func = binding.value;
+                typeof func === "function" && func(el);
                 pop.handleClick();
                 pop.doToggle();
                 return;
