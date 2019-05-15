@@ -9,9 +9,8 @@ import Vue from 'vue';
 import App from './App';
 import Mue from '../src/index';
 import '../themes/index.less';
-import "../static/demo.less";
+import "./assets/demo.less";
 import router from './router/index';
-import {InitRouter} from '../src/router';
 
 Vue.use(Mue);
 

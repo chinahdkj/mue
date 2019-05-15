@@ -3,11 +3,6 @@
 ## 快速上手
 
 + MUE 安装
-git submodule
-```
-git submodule add https://hub.hddznet.com/uniplatform/mue.git ./node_modules/mue
-```
-
 cnpm
 ```
 cnpm i git+https://hub.hddznet.com/uniplatform/mue.git --save
@@ -21,7 +16,7 @@ import Mue from 'mue/src/index.js';
 // 引入CUE的同时，已全局引用vant-ui。
 Vue.use(Mue);
 ```
-+ CUE 样式引入
++ MUE 样式引入
 ```
 /*
 引入的CUE样式包含：
