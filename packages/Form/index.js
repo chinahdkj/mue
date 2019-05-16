@@ -10,7 +10,9 @@ import Upload from './upload/index'
 import TreePicker from './tree-picker/index'
 
 import GisPoint from './gis-point/index'
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, Upload, GisPoint, TreePicker];
+import SoundRecord from './sound-record/index'
+
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, Upload, GisPoint, TreePicker, SoundRecord];
 
 cmps.forEach((cmp) => {
     cmp.install = (Vue) => {
