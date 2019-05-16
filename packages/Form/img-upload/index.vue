@@ -143,7 +143,8 @@
                         this.$set(this.dict, p, {
                             url: type === "video" ? `${p}.jpg` : p, // 图片，缩略图
                             type,
-                            path: this.getPath(p) //完整路径
+                            path: this.getPath(p), //完整路径
+                            local: false // 是否本地文件
                         });
                     });
 
@@ -165,8 +166,9 @@
                                 this.$set(this.dict, _id, {
                                     url: type === "video" ? data.thumb : data.base64,
                                     type,
-                                    path: data.path
-                                })
+                                    path: data.path,
+                                    local: true
+                                });
                             }
                             this.createThumbs();
                         });
@@ -396,16 +398,19 @@
                 this.$dialog.confirm({
                     title: "删除", message: "是否删除此文件!"
                 }).then(() => {
-                    let id = this.imgs[this.current], path = this.dict[this.imgs[this.current]].path;
+                    let id = this.imgs[this.current], info = this.dict[id] || {};
                     this.imgs.splice(this.current, 1);
-                    // 删除原生本地数据库数据
-                    this.$native.deleteLocalData({
-                        params: {datas: [{key: '_id', value: id}]}
-                    });
-                    // 删除原生本地文件
-                    this.$native.delFile({
-                        params: {path: path}
-                    })
+
+                    if(info.local){
+                        // 删除原生本地数据库数据
+                        this.$native.deleteLocalData({
+                            params: {datas: [{key: '_id', value: id}]}
+                        });
+                        // 删除原生本地文件
+                        this.$native.delFile({
+                            params: {path: info.path}
+                        });
+                    }
 
                 }).catch(() => {
                 });
