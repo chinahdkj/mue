@@ -13,9 +13,9 @@
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <i v-if="accept !== 'image'" @click="uploadhadVideo()" class="iconfont icon-tianjia"
-                       :class="{'is-disabled': disabled}"
-                       aria-hidden="true"></i>
+                    <button v-if="accept !== 'image'" class="upload-btn" :disabled="disabled" @click="uploadhadVideo()">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </button>
                     <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload" :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
@@ -332,8 +332,6 @@
 
             videoUpload() {
                 this.uploading = true;
-
-
                 let id = this.$comm.newFilePath('mp4');
                 this.$native.video({
                         params: {id: id, local: this.base64},
@@ -401,7 +399,7 @@
                     let id = this.imgs[this.current], info = this.dict[id] || {};
                     this.imgs.splice(this.current, 1);
 
-                    if(info.local){
+                    if (info.local) {
                         // 删除原生本地数据库数据
                         this.$native.deleteLocalData({
                             params: {datas: [{key: '_id', value: id}]}

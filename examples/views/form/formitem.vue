@@ -27,6 +27,10 @@
             <mue-img-upload style="margin-left: 5px;" v-model="img.video" multiple accept="all"/>
         </mue-panel>
 
+        <mue-panel hairline="normal" title="音频" style="height:120px;">
+            <mue-sound-record style="margin-left: 5px;" v-model="audio" multiple/>
+        </mue-panel>
+
     </div>
 </template>
 
@@ -68,7 +72,8 @@
                     single: "",
                     multiple: [],
                     video: []
-                }
+                },
+                audio: []
             };
         },
         methods: {
