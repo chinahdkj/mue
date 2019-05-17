@@ -38,7 +38,7 @@
                         <mue-upload multiple v-model="model.files" :limit="2"/>
                     </mue-form-item>
 
-                    <mue-form-item label="录制音频" field="files">
+                    <mue-form-item label="录制音频" field="audios">
                         <mue-sound-record v-model="model.audio" multiple/>
                     </mue-form-item>
 
