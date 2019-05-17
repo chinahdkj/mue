@@ -38,6 +38,10 @@
                         <mue-upload multiple v-model="model.files" :limit="2"/>
                     </mue-form-item>
 
+                    <mue-form-item label="录制音频" field="files">
+                        <mue-sound-record v-model="model.audio" multiple/>
+                    </mue-form-item>
+
                     <mue-form-item label="备注" field="remark">
                         <mue-textarea placeholder="请输入备注" v-model="model.remark"
                         :templates="[{code: '模板内容1', name: '模板1'}, {code: '模板内容2', name: '模板2'}]"/>
@@ -202,7 +206,8 @@
                         custom: "xx",
                         sync: "qq"
                     },
-                    files: []
+                    files: [],
+                    audio: []
                 }
             };
         },
