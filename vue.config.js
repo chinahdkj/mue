@@ -2,33 +2,26 @@ var webpack = require("webpack");
 const debug = process.env.NODE_ENV !== "production";
 const less = require("./config/config.less");
 
-const proxy = {
-    '/upload': {
-        target: "http://192.168.100.150:47006",
-        changeOrigin: true
-    },
-    '/list': {
-        target: "http://192.168.100.150:47006",
-        pathRewrite: {
-            '^/list': '/'
-        },
-        changeOrigin: true
-    },
-    '/socket.io': {
-        target: "http://192.168.100.186:4000",
-        changeOrigin: true
-    },
-    '/app/redirect': {
-        target: "http://192.168.100.150:47006",
-        changeOrigin: true,
-        pathRewrite: {'^/app/redirect': '/'}
-    }
-};
+let server = "http://192.168.100.150:47006";
 
 module.exports = {
     lintOnSave: false,
     devServer: {
-        proxy
+        proxy: {
+            "^/upload": {
+                target: server,
+                changeOrigin: true
+            },
+            "^/list": {
+                target: server,
+                pathRewrite: {'^/list': ''},
+                changeOrigin: true
+            },
+            '^/socket.io': {
+                target: "http://192.168.100.186:4000",
+                changeOrigin: true
+            }
+        }
     },
 
     pages: {

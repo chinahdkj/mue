@@ -80,7 +80,12 @@
                         this.$emit("input", v.length === 0 ? "" : v[0]);
                     }
                     this.dict = {};
-                    this.$http.post('/app/redirect/upload/infos',{ids: Object.values(v)}).then((res)=>{
+                    let ids = Object.values(v);
+                    if(ids.length === 0){
+                        this.createThumbs();
+                        return;
+                    }
+                    this.$http.post('/app/redirect/upload/infos',{ids}).then((res)=>{
                         console.log(res);
                         v.forEach((p) => {
                             this.$set(this.dict, p, {
