@@ -10,12 +10,12 @@ const fns = [
     "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
     "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
-    "video", "showVideo", "sound", "screenshot"
+    "video", "showVideo", "sound", "screenshot", "screenoff"
 ];
 
 const fns2 = [
     'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes', 'handPostResp',
-    'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi", "getLocation"
+    'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi", "getLocation", "btUpdate"
 ] // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
