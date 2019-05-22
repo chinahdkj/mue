@@ -14,7 +14,7 @@ const fns = [
 ];
 
 const fns2 = [
-    'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes', 'handPostResp',
+    'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes', 'handPostResp', "screenoff"
     'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi", "getLocation", "btUpdate"
 ] // 原生主动调用js的方法
 
