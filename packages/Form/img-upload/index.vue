@@ -13,7 +13,8 @@
             <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <button v-if="accept !== 'image'" class="upload-btn" :disabled="disabled" @click="uploadhadVideo()">
+                    <button v-if="accept !== 'image'" class="upload-btn" type="button"
+                            :disabled="disabled" @click="uploadhadVideo()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </button>
                     <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload" :before-read="beforeRead"
