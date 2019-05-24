@@ -377,8 +377,13 @@
                         return this.getPath(p);
                     });
                     this.$native.hideHeader({params: {hide: 1}});
+                    let tempArr = this.imgs.slice(0,this.current);
+                    let videoNum = tempArr.filter((v) => {
+                        return this.fileType(v) === 'video'
+                    }).length;
+                    let newIndex =  this.current - videoNum;
                     ImagePreview({
-                        images, startPosition: this.current, loop: true,
+                        images, startPosition: newIndex, loop: true,
                         onClose: () => {
                             this.$native.hideHeader({params: {hide: 0}});
                         }
