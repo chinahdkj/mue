@@ -68,11 +68,7 @@
                            :all-loaded="data.length >= total" :all-loaded-text="allLoadedText"
                            :page-no="pageNo" :page-total="pageTotal">
 
-                <div v-if="total === 0" class="mue-datatable-nodata">
-                    <img v-if="!isNight" src="../assets/no-data.png"/>
-                    <img v-else src="../assets/no-data-dark.png"/>
-                    <span>暂无数据</span>
-                </div>
+                <mue-empty v-if="total === 0"></mue-empty>
 
                 <div v-show="total !== 0" class="mue-datatable-scroller"
                      :class="{'is-virtual': virtual}" :style="mainHeight">
