@@ -5,10 +5,10 @@
             <!--<li class="record_audio" @click="showAction(0)">
                 <i class="play iconfont icon-xiangzuo"></i>
             </li>-->
-            <li class="upload_audio" v-for="(a,i) in audios" :key="i" @click="showAction(i)">
+            <li class="record_audio" v-for="(a,i) in audios" :key="i" @click="showAction(i)">
                 <i class="play iconfont icon-xiangzuo"></i>
             </li>
-            <li class="_record-btn" v-if="!FORM_ITEM.readonly || recordAble">
+            <li class="_record-btn" v-if="!isReadonly || recordAble">
                 <i v-if="recording" class="recording"></i>
                 <button v-else class="record-btn" :disabled="disabled" @click="recordAudio()" :class="{'is-disabled': disabled}">
                 </button>
@@ -36,6 +36,7 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
+            readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
             local: {type: Boolean, default: false},
             limit: {type: Number, default: 5}
@@ -55,6 +56,9 @@
                     return this.audios.length < 1;
                 }
                 return this.limit > 0 ? this.audios.length < this.limit : true;
+            },
+            isReadonly(){
+                return this.FORM_ITEM.readonly || this.readonly;
             }
         },
         watch: {
@@ -121,7 +125,7 @@
         methods: {
             showAction(i) {
                 this.current = i;
-                if (this.FORM_ITEM.readonly) {
+                if (this.isReadonly) {
                     this.play();
                     return;
                 }

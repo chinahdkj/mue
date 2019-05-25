@@ -7,7 +7,7 @@
                     <span class="text">{{file.name}}</span>
                 </div>
             </li>
-            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
+            <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
                               accept="*/*" result-type="dataUrl" :multiple="multiple">
@@ -38,6 +38,7 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
+            readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
             limit: {type: Number, default: 0}
         },
@@ -53,6 +54,9 @@
                     return this.files.length < 1;
                 }
                 return this.limit > 0 ? this.files.length < this.limit : true;
+            },
+            isReadonly(){
+                return this.FORM_ITEM.readonly || this.readonly;
             }
         },
         watch: {
@@ -119,7 +123,8 @@
             },
             showAction(i) {
                 this.pop.current = i;
-                if (this.FORM_ITEM.readonly) {
+                if (this.isReadonly) {
+                    window.open(`${this.getPath(this.files[i])}?origname=1`); //下载
                     return;
                 }
                 this.pop.visible = true;
