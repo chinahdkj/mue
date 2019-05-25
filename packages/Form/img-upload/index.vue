@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </li>
-            <li class="__upload-btn" v-if="!FORM_ITEM.readonly && uploadAble">
+            <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
                     <button v-if="accept !== 'image'" class="upload-btn" type="button"
@@ -62,6 +62,7 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
+            readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
             base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
             quality: { // 新图片压缩比例
@@ -106,6 +107,9 @@
                     return this.imgs.length < 1;
                 }
                 return this.limit > 0 ? this.imgs.length < this.limit : true;
+            },
+            isReadonly(){
+                return this.FORM_ITEM.readonly || this.readonly;
             }
         },
         watch: {
@@ -351,7 +355,7 @@
 
             showAction(i) {
                 this.current = i;
-                if (this.FORM_ITEM.readonly) {
+                if (this.isReadonly) {
                     this.showFile();
                     return;
                 }
