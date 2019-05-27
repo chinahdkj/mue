@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 // 开发环境设置tooken
 if(process.env.NODE_ENV === "development"){
     sessionStorage.setItem("authortoken",

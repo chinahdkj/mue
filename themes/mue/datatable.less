@@ -64,12 +64,22 @@
         }
 
         .mue-datatable-center {
-            box-sizing: border-box;
-            overflow-x: auto;
-            overflow-y: hidden;
+            //box-sizing: border-box;
+            //overflow-x: auto;
+            //overflow-y: hidden;
             float: left;
             padding-bottom: @scroll-size;
-            margin-bottom:  -@scroll-size;
+            margin-bottom: -@scroll-size;
+
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+
+            > .mue-datatable__inner-table {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
 
             //&:after {
             //    content: "";

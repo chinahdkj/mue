@@ -32,7 +32,7 @@ const CREATE_ACTIONS = (el, binding) => {
 
     let touchStart = (e) => {
         longTap = false;
-        start = {x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY};
+        start = {x: e.touches[0].pageX, y: e.touches[0].pageY};
 
         if(typeof actions.long === "function"){
             timer = setTimeout(() => {
@@ -44,7 +44,7 @@ const CREATE_ACTIONS = (el, binding) => {
 
     let touchEnd = (e) => {
         let end = {
-            x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY
+            x: e.touches[0].pageX, y: e.touches[0].pageY
         };
         let disx = end.x - start.x;
         let disy = end.y - start.y;
@@ -80,8 +80,8 @@ const CREATE_ACTIONS = (el, binding) => {
 
     let touchMove = (e) => {
         // 移动删除长按计时器
-        let disx = e.changedTouches[0].pageX - start.x;
-        let disy = e.changedTouches[0].pageY - start.y;
+        let disx = e.touches[0].pageX - start.x;
+        let disy = e.touches[0].pageY - start.y;
         if(Math.abs(disx) >= 10 || Math.abs(disy) >= 100){
             clearTimer();
         }

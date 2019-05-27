@@ -19,13 +19,6 @@ html, body, #app {
 * {
     -webkit-overflow-scrolling: touch;
 
-    //-webkit-touch-callout: none; /*系统默认菜单被禁用*/
-    //-webkit-user-select: none; /*webkit浏览器*/
-    //-khtml-user-select: none; /*早期浏览器*/
-    //-moz-user-select: none; /*火狐*/
-    //-ms-user-select: none; /*IE10*/
-    //user-select: none;
-
     //隐藏滚动条
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
@@ -42,6 +35,18 @@ html, body, #app {
     &::-webkit-scrollbar-thumb {
         background: transparent;
     }
+
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+*:not(textarea):not(input) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 @import "./var.less";
