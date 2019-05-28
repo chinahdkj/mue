@@ -1,0 +1,32 @@
+@import '../var.less';
+
+.van-switch(@theme:light) {
+
+    @border-color: %("%s-grey", @theme);
+    @label-color: %("%s-common", @theme);
+    @primary: %("%s-primary", @theme);
+
+    @disable-color: %("%s-radio-disable-color", @theme);
+    @disable-background: %("%s-radio-disable-background", @theme);
+    @background: %("%s-background", @theme);
+
+    .van-switch {
+        font-size: 24px !important;
+        margin-top: 1px;
+        border-color: fade(@@border-color, 50%);
+
+        .van-switch__node {
+            background: fade(@@background, 90%);
+            box-shadow: 0 3px 1px 0 fade(@@border-color, 30%), 0 2px 2px 0 fade(@@border-color, 60%), 0 3px 3px 0 fade(@@border-color, 30%);
+        }
+
+        &.van-switch--on {
+            background: @@primary;
+            border-color: @@primary;
+        }
+
+        &.van-switch--disabled{
+            opacity: 0.8;
+        }
+    }
+}

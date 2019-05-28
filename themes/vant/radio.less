@@ -12,6 +12,53 @@
     .van-radio {
         line-height: 0;
 
+        .van-radio__icon {
+            line-height: @radio-size;
+
+            .van-icon {
+                height: @checkbox-size;
+                width: @checkbox-size;
+                border-radius: @checkbox-size / 2;
+                border-color: @@border-color;
+                overflow: hidden;
+
+                &:before {
+                    display: none;
+                }
+            }
+
+            &.van-radio__icon--checked .van-icon {
+                background: @@primary;
+                border-color: @@primary;
+
+                &:before {
+                    display: block;
+                    content: "";
+                    float: left;
+                    width: calc(@radio-size / 2 + 2px);
+                    height: calc(@radio-size / 2 - 4px);
+                    border: 2px solid @white;
+                    border-top: 0;
+                    border-right: 0;
+                    margin-top: calc(@radio-size / 4 - 1px);
+                    margin-left: calc(@radio-size / 4 - 3px);
+                    transform: rotate(-45deg);
+                }
+            }
+
+            &.van-radio__icon--disabled {
+                &.van-radio__icon--checked .van-icon:before {
+                    border-color: @@disable-color;
+                }
+
+
+                .van-icon {
+                    border-color: @@disable-color;
+                    background: @@disable-background;
+                }
+            }
+        }
+
         .van-radio__input {
             font-size: @radio-size;
             width: @radio-size;
@@ -53,19 +100,8 @@
         .van-radio__label {
             line-height: @radio-size;
             font-size: @radio-font-size;
+            margin-top: -2px;
             color: @@label-color;
-        }
-
-        &.van-radio--disabled {
-            .van-radio__input > .van-icon {
-                background: @@disable-background;
-                border-color: @@disable-color;
-            }
-
-            .van-icon-checked:before {
-                border-color: @@disable-color;
-            }
-
         }
     }
 }
