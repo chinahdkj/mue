@@ -430,7 +430,7 @@
             onScrollXStart(e){
                 this.scrollBase.x = e.touches[0].pageX;
                 this.scrollBase.left = Number(
-                    getStyle(this.$refs.top_table, "left").replace("px", ""));
+                    getStyle(this.$refs.top_table, "margin-left").replace("px", ""));
             },
 
             onScrollXMove(e){
@@ -448,8 +448,8 @@
                 if(left < -width){
                     left = -width;
                 }
-                this.$refs.top_table && setStyle(this.$refs.top_table, "left", `${left}px`);
-                this.$refs.main_table && setStyle(this.$refs.main_table, "left", `${left}px`);
+                this.$refs.top_table && setStyle(this.$refs.top_table, "margin-left", `${left}px`);
+                this.$refs.main_table && setStyle(this.$refs.main_table, "margin-left", `${left}px`);
             },
 
             onScrollXEnd(){
@@ -519,8 +519,8 @@
             },
 
             ScrollLeft(l = 0){
-                this.$refs.top_table && setStyle(this.$refs.top_table, "left", `0`);
-                this.$refs.main_table && setStyle(this.$refs.main_table, "left", `0`);
+                this.$refs.top_table && setStyle(this.$refs.top_table, "margin-left", `0`);
+                this.$refs.main_table && setStyle(this.$refs.main_table, "margin-left", `0`);
             },
             ScrollTop(t = 0){
                 if(this.$refs.load_more){
