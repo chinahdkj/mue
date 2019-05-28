@@ -9,14 +9,16 @@
     @disable-color: %("%s-radio-disable-color", @theme);
     @disable-background: %("%s-radio-disable-background", @theme);
     @background: %("%s-background", @theme);
+    @background-base: %("%s-background-base", @theme);
 
     .van-switch {
         font-size: 24px !important;
         margin-top: 1px;
         border-color: fade(@@border-color, 50%);
+        background: @@background;
 
         .van-switch__node {
-            background: fade(@@background, 90%);
+            background: fade(@@background-base, 90%);
             box-shadow: 2px 1px 2px 0 fade(@@border-color, 30%), 2px 1px 2px 0 fade(@@border-color, 60%), 2px 1px 2px 0 fade(@@border-color, 30%);
         }
 
