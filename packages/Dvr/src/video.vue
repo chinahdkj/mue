@@ -1,8 +1,7 @@
 <template>
     <div class="mue-dvr-video">
 
-        <div class="mue-dvr-video__content" :style="{height: height + 'px', width: width + 'px'}"
-             @click="Stop">
+        <div class="mue-dvr-video__content" :style="{height: height + 'px', width: width + 'px'}">
 
             <template v-if="!rtsp">
                 <van-icon v-if="$listeners.choose" name="add-o" @click.stop="choose"/>
@@ -17,6 +16,7 @@
                        playsinline="true" autoplay :src="src"></video>
 
                 <iframe v-else frameborder="0" scrolling="no" :src="src"></iframe>
+                <i class="mue-dvr-video__masker" @click="Stop"></i>
             </template>
 
         </div>
@@ -70,9 +70,6 @@
                     }
                     return rtsp;
                 }
-
-                // return "http://192.168.100.179:8081/fstatic/" + this.version
-                //     + "/index.html?stream=" + encodeURIComponent(rtsp);
 
                 return (sessionStorage.getItem("host") || "") + "/fstatic/" + this.version
                     + "/index.html?stream=" + encodeURIComponent(rtsp);

@@ -17,8 +17,16 @@ module.exports = {
                 pathRewrite: {'^/list': ''},
                 changeOrigin: true
             },
-            '^/socket.io': {
-                target: "http://192.168.100.186:4000",
+            '^/fstatic': {
+                target: "http://10.18.40.226:7000",
+                changeOrigin: true
+            },
+            '^/fvideo': {
+                target: "http://10.18.40.226:7000",
+                changeOrigin: true
+            },
+            '^/nvr': {
+                target: "http://192.168.100.186:4001",
                 changeOrigin: true
             }
         }
