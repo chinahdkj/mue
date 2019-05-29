@@ -9,7 +9,7 @@
             return {
                 cameras: [
                     {
-                        code: "1", name: "rtsp摄像头",
+                        code: "1", name: "rtsp摄像头", type: "",
                         rtsp: "rtsp://admin:admin12345@192.168.100.101:554/Streaming/Channels/001"
                     },
                     {
