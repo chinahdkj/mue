@@ -428,7 +428,7 @@
             },
 
             onScrollXStart(e){
-                this.scrollBase.x = e.touches[0].pageX;
+                this.scrollBase.x = e.changedTouches[0].pageX;
                 this.scrollBase.left = Number(
                     getStyle(this.$refs.top_table, "margin-left").replace("px", ""));
             },
@@ -437,7 +437,7 @@
                 if(this.scrollBase.x == null){
                     return;
                 }
-                let x = e.touches[0].pageX;
+                let x = e.changedTouches[0].pageX;
                 let diff = x - this.scrollBase.x;
                 let left = parseInt(this.scrollBase.left + diff);
                 if(left > 0){
