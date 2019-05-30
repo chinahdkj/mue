@@ -71,8 +71,13 @@
                     return rtsp;
                 }
 
-                return (sessionStorage.getItem("host") || "") + "/fstatic/" + this.version
-                    + "/index.html?stream=" + encodeURIComponent(rtsp);
+                let ver = this.version;
+                if(this.$comm.isIos() && ver !== "img"){
+                    ver = "hls";
+                }
+
+                return (sessionStorage.getItem("host") || "") + "/fstatic/" + ver +
+                    "/index.html?stream=" + encodeURIComponent(rtsp);
             }
         },
         watch: {
