@@ -38,7 +38,7 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            local: {type: Boolean, default: false},
+            local: {type: Boolean, default: true},
             limit: {type: Number, default: 5}
         },
         data() {
