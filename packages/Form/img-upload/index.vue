@@ -64,7 +64,7 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            base64: {type: Boolean, default: true}, // 以base64格式将图片保存手机数据库
+            base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
             quality: { // 新图片压缩比例
                 type: Number, default: 1, validator(v) {
                     return v > 0 && v <= 1;
