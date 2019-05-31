@@ -5,6 +5,7 @@
     flex-direction: row;
     box-sizing: border-box;
     overflow: hidden;
+    flex-wrap: nowrap;
 
     &.is-vertical {
         flex-direction: column;
@@ -14,11 +15,15 @@
 .mue-footer {
     box-sizing: border-box;
     overflow: hidden;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .mue-header {
     box-sizing: border-box;
     overflow: hidden;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .mue-main {
