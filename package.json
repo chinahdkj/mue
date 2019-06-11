@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.102",
+  "version": "1.0.103",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": true,
@@ -26,6 +26,7 @@
     "moment": "^2.22.2",
     "resize-observer-polyfill": "^1.5.0",
     "socket.io-client": "^2.2.0",
+    "uuid": "^3.3.2",
     "vant": "^1.4.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

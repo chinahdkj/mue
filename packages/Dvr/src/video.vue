@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-dvr-video">
+    <div class="mue-dvr-video" v-loading.fullscreen="fullLoading">
 
         <div class="mue-dvr-video__content" :style="{height: height + 'px', width: width + 'px'}">
 
@@ -7,16 +7,20 @@
                 <van-icon v-if="$listeners.choose" name="add-o" @click.stop="choose"/>
             </template>
 
-            <template v-else-if="!playing">
-                <van-icon name="play-circle-o" @click.stop="Play"></van-icon>
-            </template>
-
             <template v-else>
                 <video v-if="version === 'hik-ys'" loop muted preload webkit-playsinline="true"
                        playsinline="true" autoplay :src="src"></video>
 
-                <iframe v-else frameborder="0" scrolling="no" :src="src"></iframe>
-                <i class="mue-dvr-video__masker" @click="Stop"></i>
+                <template v-else>
+                    <iframe frameborder="0" scrolling="no" :src="src"></iframe>
+
+                    <van-icon v-if="!playing" name="play-circle-o" @click.stop="Play"></van-icon>
+
+                    <i v-else class="mue-dvr-video__masker" @click="Stop">
+                        <i class="fa fa-arrows-alt" @click.stop="Full"></i>
+                    </i>
+                </template>
+
             </template>
 
         </div>
@@ -34,6 +38,8 @@
 </template>
 
 <script>
+    import uuid from "../../../src/utils/uuid";
+
     export default {
         name: "MueDvrVideo",
         components: {},
@@ -48,7 +54,8 @@
         },
         data(){
             return {
-                playing: false
+                playing: false,
+                fullLoading: false,
             };
         },
         computed: {
@@ -71,13 +78,9 @@
                     return rtsp;
                 }
 
-                let ver = this.version;
-                if(this.$comm.isIos() && ver !== "img"){
-                    ver = "hls";
-                }
-
-                return (sessionStorage.getItem("host") || "") + "/fstatic/" + ver +
-                    "/index.html?stream=" + encodeURIComponent(rtsp);
+                let host = sessionStorage.getItem("host") || "";
+                // host = "http://10.18.40.226:7000";
+                return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
         watch: {
@@ -95,7 +98,51 @@
             choose(){
                 this.$emit("choose");
             },
+            Full(){
+                let mid = uuid();
+                this.fullLoading = true;
+                // 添加iframe 获得直播源
+                let host = sessionStorage.getItem("host") || "";
+                // host = "http://10.18.40.226:7000";
+                let src = `${host}/fstatic/${
+                    this.$comm.isIos() ? "hls" : "flv"}/message.html?stream=${
+                    encodeURIComponent(this.rtsp)}&mid=${mid}`;
 
+                let receive = (e) => {
+                    try{
+                        if(typeof e.data !== "string" || !e.data.startsWith("*#LIVE-MSG#*")){
+                            return;
+                        }
+                        let msg = JSON.parse(e.data.substring(12));
+                        if(msg.mid === mid){
+
+                            window.removeEventListener("message", receive, false);
+                            this.fullLoading = false;
+                            console.info(msg.url);
+                            setTimeout(() => {
+                                $iframe.remove();
+                            }, 10000);
+                            $iframe.remove();
+                            // // todo 直播
+                            // this.$native.showVideo({
+                            //     params: {path: host + msg.url},
+                            //     cb: ({code}) => {
+                            //         $iframe.remove();
+                            //     }
+                            // });
+                        }
+
+                    } catch(error){
+                        console.error("接收直播消息指令失败", error);
+                    }
+                };
+                window.addEventListener("message", receive, false);
+
+                let $iframe = $(`<iframe src="${src}"></iframe>`).css({
+                    height: 0, width: 0, display: "none"
+                }).appendTo(this.$el);
+
+            },
             Stop(){
                 this.playing = false;
             },
@@ -115,6 +162,11 @@
         },
         deactivated(){
             this.Stop();
+        },
+        activated(){
+            if(this.rtsp && this.autoPlay && !this.playing){
+                this.Play();
+            }
         }
     }
 </script>

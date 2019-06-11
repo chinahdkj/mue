@@ -15,14 +15,14 @@
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video ref="video" :width="size.width" :height="size.height"
                                        :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
-                                       :type="(videos[i] || {}).type" @choose="pickCamera(i)"/>
+                                       @choose="pickCamera(i)"/>
                     </div>
                 </template>
                 <template v-else>
                     <div v-for="(c, i) in cameras" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video :width="size.width" :height="size.height"
-                                       :name="c.name" :rtsp="c.rtsp" :type="c.type"/>
+                                       :name="c.name" :rtsp="c.rtsp"/>
                     </div>
                 </template>
 

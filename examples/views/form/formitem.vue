@@ -23,12 +23,21 @@
             <mue-img-upload style="margin-left: 5px;" v-model="img.multiple" multiple/>
         </mue-panel>
 
-        <mue-panel hairline="normal" title="短视频" style="height:120px;">
+        <mue-panel hairline="normal" title="短视频(在线)" style="height:120px;">
             <mue-img-upload style="margin-left: 5px;" v-model="img.video" multiple accept="all"/>
         </mue-panel>
 
-        <mue-panel hairline="normal" title="音频" style="height:120px;">
+        <mue-panel hairline="normal" title="短视频(离线)" style="height:120px;">
+            <mue-img-upload style="margin-left: 5px;" v-model="img.video1" base64 multiple
+                            accept="all"/>
+        </mue-panel>
+
+        <mue-panel hairline="normal" title="音频(在线)" style="height:120px;">
             <mue-sound-record style="margin-left: 5px;" v-model="audio" multiple/>
+        </mue-panel>
+
+        <mue-panel hairline="normal" title="音频(离线)" style="height:120px;">
+            <mue-sound-record style="margin-left: 5px;" v-model="audio1" local multiple/>
         </mue-panel>
 
     </div>
@@ -71,9 +80,11 @@
                 img: {
                     single: "",
                     multiple: [],
-                    video: []
+                    video: [],
+                    video1: []
                 },
-                audio: []
+                audio: [],
+                audio1: []
             };
         },
         methods: {
