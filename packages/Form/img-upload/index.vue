@@ -339,18 +339,19 @@
                 this.uploading = true;
                 let id = this.$comm.newFilePath('mp4');
                 this.$native.video({
-                        params: {id: id, local: this.base64},
-                        cb: ({code}) => {
-                            if (code === 0) {
-                                this.imgs.push(id);
-                            } else if (code === 1) {
-                            } else {
-                                this.$toast.fail('上传失败');
-                            }
-                            this.uploading = false;
+                    params: {id: id, local: this.base64},
+                    cb: ({code}) => {
+                        if(code === 0){
+                            this.imgs.push(id);
                         }
-                    },
-                );
+                        else if(code === 1){
+                        }
+                        else{
+                            this.$toast.fail('上传失败');
+                        }
+                        this.uploading = false;
+                    }
+                });
             },
 
             showAction(i) {

@@ -146,7 +146,7 @@
                 let values = this.$refs.picker.getValues();
                 let last = null;
                 for(let i = 0; i < values.length; i++){
-                    if(values[i] == null || values[i].code == null){
+                    if(values[i] == null || values[i].code === undefined){
                         break;
                     }
                     last = values[i];
