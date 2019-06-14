@@ -12,13 +12,14 @@
                        playsinline="true" autoplay :src="src"></video>
 
                 <template v-else>
-                    <iframe frameborder="0" scrolling="no" :src="src"></iframe>
-
                     <van-icon v-if="!playing" name="play-circle-o" @click.stop="Play"></van-icon>
 
-                    <i v-else class="mue-dvr-video__masker" @click="Stop">
-                        <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
-                    </i>
+                    <template v-else>
+                        <iframe frameborder="0" scrolling="no" :src="src"></iframe>
+                        <i class="mue-dvr-video__masker" @click="Stop">
+                            <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
+                        </i>
+                    </template>
                 </template>
 
             </template>
