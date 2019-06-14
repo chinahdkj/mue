@@ -2,7 +2,7 @@ var webpack = require("webpack");
 const debug = process.env.NODE_ENV !== "production";
 const less = require("./config/config.less");
 
-let server = "http://192.168.100.150:47006";
+let server = 'http://192.168.100.150:40018'; // 9023
 
 module.exports = {
     lintOnSave: false,
