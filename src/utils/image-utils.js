@@ -116,9 +116,17 @@ export const ZipImage = (base64, file, quality, maxWidth) => {
         EXIF.getData(file, function () {
             EXIF.getAllTags(this);
             let orientation = EXIF.getTag(this, 'Orientation'); // 1:0° 6:90° 8:-90° 3:180°
-
             if (quality === 1 && !maxWidth) {
-                resolve({content: base64, file: {type: file.type, name: file.name}});
+                if (isIos()) {
+                    let mp = new MegaPixImage(Base64ToFile(base64, {type: file.type, name: file.name}));
+                    let canvas = document.createElement("canvas");
+                    mp.render(canvas, {quality, orientation}, () => {
+                        let content = canvas.toDataURL(file.type, quality);
+                        resolve({content, file: {type: file.type, name: file.name}});
+                    });
+                } else {
+                    resolve({content: base64, file: {type: file.type, name: file.name}});
+                }
                 return;
             }
 
@@ -129,18 +137,6 @@ export const ZipImage = (base64, file, quality, maxWidth) => {
                     let content = canvas.toDataURL(file.type, quality);
                     resolve({content, file: {type: file.type, name: file.name}});
                 });
-                /*if (orientation && orientation !== 1) { //需矫正方向
-                    zipImg(base64, file, quality, maxWidth, orientation, (content) => {
-                        resolve({content, file: {type: file.type, name: file.name}})
-                    });
-                } else {
-                    let mp = new MegaPixImage(Base64ToFile(base64, {type: file.type, name: file.name}));
-                    let canvas = document.createElement("canvas");
-                    mp.render(canvas, {maxWidth, quality, Orientation}, () => {
-                        let content = canvas.toDataURL(file.type, quality);
-                        resolve({content, file: {type: file.type, name: file.name}});
-                    });
-                }*/
             }
             else {
                 zipImg(base64, file, quality, maxWidth, orientation, (content) => {
