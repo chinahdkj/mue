@@ -9,7 +9,8 @@ module.exports = {
     devServer: {
         proxy: {
             "^/upload": {
-                target: server,
+                // target: server,
+                target: "http://192.168.100.179:8081",
                 changeOrigin: true
             },
             "^/list": {
