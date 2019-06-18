@@ -1,6 +1,7 @@
 <template>
     <div class="mue-select">
-        <div class="mue-form-input has-suffix" @click="ShowPop">
+        <div class="mue-form-input has-suffix" @click="ShowPop"
+             :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
@@ -67,7 +68,7 @@
                 }
                 let text = [];
                 while(temp.code != null){
-                    text.splice(0,0, temp.name);
+                    text.splice(0, 0, temp.name);
                     temp = this.dict[temp.$parent] || {};
                 }
                 return text.join(",");

@@ -1,6 +1,7 @@
 <template>
     <div class="mue-gis-point">
-        <div class="mue-form-input has-suffix" @click="showPop">
+        <div class="mue-form-input has-suffix" @click="showPop"
+             :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix input__suffix_icon iconfont icon-dingwei4"></i>
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-    import {LMap, LMarker, LTileLayer, LControlZoom} from "vue2-leaflet";
+    import {LControlZoom, LMap, LMarker, LTileLayer} from "vue2-leaflet";
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 

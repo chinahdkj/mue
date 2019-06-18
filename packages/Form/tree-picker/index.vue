@@ -1,6 +1,7 @@
 <template>
     <div class="mue-tree-picker">
-        <div class="mue-form-input has-suffix" @click="ShowPop">
+        <div class="mue-form-input has-suffix" @click="ShowPop"
+             :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" onfocus="this.blur()"/>
             <i class="input__suffix input__suffix_icon iconfont icon-zhanlei"></i>
