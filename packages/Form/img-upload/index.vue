@@ -284,6 +284,7 @@
 
                 let datas = files.map(({content, file}) => {
                     return ZipImage(content, file, this.quality);
+
                 });
                 Promise.all(datas).then((rs) => {
                     // 图片本地保存
