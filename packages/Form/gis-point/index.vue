@@ -157,11 +157,10 @@
                         return;
                     }
 
-                    let latlng1 = L.latLng(v.lat, v.lng);
-                    let latlng2 = L.latLng(this.limit.center[0], this.limit.center[1]);
-                    this.distance = L.CRS.Earth.distance(latlng1, latlng2);
+                    let posCenter = L.latLng(v.lat, v.lng);
+                    let limitCenter = L.latLng(this.limit.center[0], this.limit.center[1]);
+                    this.distance = L.CRS.Earth.distance(posCenter, limitCenter);
                     this.exceedArea = this.distance > this.limit.radius;
-
                 }
             }
         },
