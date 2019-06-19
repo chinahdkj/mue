@@ -158,7 +158,7 @@
                     }
 
                     let posCenter = L.latLng(v.lat, v.lng);
-                    let limitCenter = L.latLng(this.limit.center[0], this.limit.center[1]);
+                    let limitCenter = L.latLng(this.limit.center.lat, this.limit.center.lng);
                     this.distance = L.CRS.Earth.distance(posCenter, limitCenter);
                     this.exceedArea = this.distance > this.limit.radius;
                 }
