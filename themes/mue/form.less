@@ -469,7 +469,7 @@
 
             > .mue-gis-point-pop--marker {
                 position: absolute;
-                overflow: hidden;
+                //overflow: hidden;
                 z-index: 1000;
                 left: 50%;
                 top: 50%;
@@ -486,6 +486,29 @@
                     left: 4px;
                     top: 12px;
                     opacity: 0.85;
+                }
+
+                > .exceed-area {
+                    width: 26px;
+                    height: 26px;
+                    position: absolute;
+                    left: -6px;
+                    top: 0;
+                    z-index: 1;
+                    border: solid 2px #ed6d69;
+                    background-color: #eeeeee;
+                    border-radius: 50%;
+                    &:before {
+                        content: '';
+                        display:block;
+                        position:absolute;
+                        width:2px;
+                        height:26px;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%) rotate(45deg);
+                        background-color:#ed6d69;
+                    }
                 }
             }
 
