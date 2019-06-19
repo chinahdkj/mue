@@ -1,6 +1,7 @@
 <template>
     <div class="mue-gis-point">
-        <div class="mue-form-input has-suffix" @click="showPop">
+        <div class="mue-form-input has-suffix" @click="showPop"
+             :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
             <i class="input__suffix input__suffix_icon iconfont icon-dingwei4"></i>

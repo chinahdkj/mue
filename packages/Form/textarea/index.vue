@@ -9,7 +9,7 @@
             <textarea v-else class="textarea__inner" v-model="ipt" :readonly="readonly"
                       :disabled="disabled" :placeholder="placeholder" :rows="rows"/>
 
-            <template v-if="templates.length > 0">
+            <template v-if="templates.length > 0 && !disabled">
                 <a class="mue-textarea__pop-button" @click.stop="pop = true">
                     <i class="fa fa-file-text-o" aria-hidden="true"></i>
                 </a>

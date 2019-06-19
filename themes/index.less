@@ -12,7 +12,7 @@ html, body, #app {
     overflow: hidden;
 }
 
-#app{
+#app {
     overflow-y: auto;
 }
 
@@ -54,6 +54,12 @@ html, body, #app {
 @import "./mue/index.less";
 // day
 body {
+
+    input:disabled,
+    textarea:disabled {
+        opacity: 1;
+    }
+
     color: @light-common;
     background: @light-background-base; //灰色
 

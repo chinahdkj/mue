@@ -6,7 +6,8 @@
             </span>
         </span>
 
-        <div class="mue-form-input" :class="{'has-suffix': icon || $slots.suffix}" v-else>
+        <div class="mue-form-input" v-else
+             :class="{'has-suffix': icon || $slots.suffix, 'mue-form-input__is-disabled': disabled}">
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()"/>
@@ -19,7 +20,7 @@
             </span>
             <i class="input__suffix input__suffix_icon" :class="icon"
                v-if="icon" @click="$emit('icon-click')"></i>
-            <template v-if="templates.length > 0">
+            <template v-if="templates.length > 0 && !disabled">
                 <a class="mue-input__pop-button" @click.stop="pop = true">
                     <i class="fa fa-file-text-o" aria-hidden="true"></i>
                 </a>

@@ -8,6 +8,8 @@
     @grey: %("%s-grey", @theme);
     @grey-sub: %("%s-grey-sub", @theme);
     @disabled: %("%s-button-disable-color", @theme);
+    @disabled-text: %("%s-grey", @theme);
+    @disabled-icon: %("%s-button-disable-color", @theme);
     @border-color: %("%s-border-color", @theme);
     @border-color-item: %("%s-form-border-color", @theme);
     @border-color-title: %("%s-form-title-border-color", @theme);
@@ -60,6 +62,18 @@
             flex: 0 0 auto;
         }
 
+        &.mue-form-input__is-disabled {
+            .input__inner:disabled {
+                opacity: 1;
+                color: @@disabled-text;
+                -webkit-text-fill-color: @@disabled-text;
+            }
+
+            .input__suffix {
+                color: @@disabled-icon
+            }
+        }
+
         .mue-input__pop-button {
             font-size: 14px;
             color: @@grey;
@@ -109,6 +123,12 @@
 
         .textarea__inner::-webkit-input-placeholder {
             color: @@placeholder;
+        }
+
+        .textarea__inner:disabled {
+            opacity: 1;
+            color: @@disabled-text;
+            -webkit-text-fill-color: @@disabled-text;
         }
 
         .mue-textarea__pop-button {
