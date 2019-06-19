@@ -211,7 +211,7 @@
                 },
 
                 limit: {
-                    center: [30, 120],
+                    center: {lng: 120, lat: 30},
                     radius: 500
                 }
             };
