@@ -63,8 +63,11 @@
         }
 
         &.mue-form-input__is-disabled {
-            .input__inner {
+            .input__inner:disabled, .input__inner[disabled] {
+                opacity: 1;
+                -webkit-opacity:1;
                 color: @@disabled-text;
+                -webkit-text-fill-color: @@disabled-text;
             }
 
             .input__suffix {
@@ -123,8 +126,11 @@
             color: @@placeholder;
         }
 
-        .textarea__inner:disabled{
+        .textarea__inner:disabled, .textarea__inner[disabled] {
+            opacity: 1;
+            -webkit-opacity:1;
             color: @@disabled-text;
+            -webkit-text-fill-color: @@disabled-text;
         }
 
         .mue-textarea__pop-button {

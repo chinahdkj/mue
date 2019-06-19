@@ -17,7 +17,7 @@
                     <template v-else>
                         <iframe frameborder="0" scrolling="no" :src="src"></iframe>
                         <i class="mue-dvr-video__masker" @click="Stop">
-                            <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
+                            <i class="fa fa-arrows-alt" @click.stop="Full"></i>
                         </i>
                     </template>
                 </template>
@@ -35,18 +35,20 @@
             <a class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
         </div>
 
-        <van-popup v-model="video.visible" @closed="onVideoClosed" get-container="body">
-            <div :style="{height: video.height + 'px', width: video.width + 'px'}"
-                 style="overflow: hidden">
-                <iframe v-if="video.path" :src="video.path" frameborder="0" scrolling="no"
-                        style="width: 100%;height: 100%;"></iframe>
-            </div>
-        </van-popup>
+        <!--        <van-popup v-model="video.visible" @closed="onVideoClosed" get-container="body">-->
+        <!--            <div :style="{height: video.height + 'px', width: video.width + 'px'}"-->
+        <!--                 style="overflow: hidden">-->
+        <!--                <iframe v-if="video.path" :src="video.path" frameborder="0" scrolling="no"-->
+        <!--                        style="width: 100%;height: 100%;"></iframe>-->
+        <!--            </div>-->
+        <!--        </van-popup>-->
 
     </div>
 </template>
 
 <script>
+
+    import uuid from "../../../src/utils/uuid";
 
     export default {
         name: "MueDvrVideo",
@@ -64,12 +66,12 @@
             return {
                 playing: false,
                 fullLoading: false,
-                video: {
-                    visible: false,
-                    path: null,
-                    height: 0,
-                    width: 0
-                }
+                // video: {
+                //     visible: false,
+                //     path: null,
+                //     height: 0,
+                //     width: 0
+                // }
             };
         },
         computed: {
@@ -112,63 +114,57 @@
             choose(){
                 this.$emit("choose");
             },
-            // Full(){
-            //     let mid = uuid();
-            //     this.fullLoading = true;
-            //     // 添加iframe 获得直播源
-            //     let host = sessionStorage.getItem("host") || "";
-            //     // host = "http://10.18.40.226:7000";
-            //     let src = `${host}/fstatic/${
-            //         this.$comm.isIos() ? "hls" : "flv"}/message.html?stream=${
-            //         encodeURIComponent(this.rtsp)}&mid=${mid}`;
-            //
-            //     let receive = (e) => {
-            //         try{
-            //             if(typeof e.data !== "string" || !e.data.startsWith("*#LIVE-MSG#*")){
-            //                 return;
-            //             }
-            //             let msg = JSON.parse(e.data.substring(12));
-            //             if(msg.mid === mid){
-            //
-            //                 window.removeEventListener("message", receive, false);
-            //                 this.fullLoading = false;
-            //                 console.info(msg.url);
-            //                 setTimeout(() => {
-            //                     $iframe.remove();
-            //                 }, 10000);
-            //                 $iframe.remove();
-            //                 // // todo 直播
-            //                 // this.$native.showVideo({
-            //                 //     params: {path: host + msg.url},
-            //                 //     cb: ({code}) => {
-            //                 //         $iframe.remove();
-            //                 //     }
-            //                 // });
-            //             }
-            //
-            //         } catch(error){
-            //             console.error("接收直播消息指令失败", error);
-            //         }
-            //     };
-            //     window.addEventListener("message", receive, false);
-            //
-            //     let $iframe = $(`<iframe src="${src}"></iframe>`).css({
-            //         height: 0, width: 0, display: "none"
-            //     }).appendTo(this.$el);
-            //
-            // },
-            onVideoClosed(){
-                this.video.path = null;
-                this.$native.hideHeader({params: {hide: 0}});
-            },
-            onVideoOpen(){
-                this.video.visible = true;
-                this.$native.hideHeader({params: {hide: 1}});
+            Full(){
+                let mid = uuid();
+                this.fullLoading = true;
+                // 添加iframe 获得直播源
                 let host = sessionStorage.getItem("host") || "";
                 // host = "http://10.18.40.226:7000";
-                this.video.path = `${host}/fstatic/${this.$comm.isIos() ? "hls" : "flv"
-                    }/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                let src = `${host}/fstatic/hls/message.html?stream=${
+                    encodeURIComponent(this.rtsp)}&mid=${mid}`;
+
+                let receive = (e) => {
+                    try{
+                        if(typeof e.data !== "string" || !e.data.startsWith("*#LIVE-MSG#*")){
+                            return;
+                        }
+                        let msg = JSON.parse(e.data.substring(12));
+                        if(msg.mid === mid){
+
+                            window.removeEventListener("message", receive, false);
+                            this.fullLoading = false;
+
+                            this.$native.showVideo({
+                                params: {path: host + msg.url, isTbs: true},
+                                cb: ({code}) => {
+                                    code !== 0 && $iframe.remove();
+                                }
+                            });
+                        }
+
+                    } catch(error){
+                        console.error("接收直播消息指令失败", error);
+                    }
+                };
+                window.addEventListener("message", receive, false);
+
+                let $iframe = $(`<iframe src="${src}"></iframe>`).css({
+                    height: 0, width: 0, display: "none"
+                }).appendTo(this.$el);
+
             },
+            // onVideoClosed(){
+            //     this.video.path = null;
+            //     this.$native.hideHeader({params: {hide: 0}});
+            // },
+            // onVideoOpen(){
+            //     this.video.visible = true;
+            //     this.$native.hideHeader({params: {hide: 1}});
+            //     let host = sessionStorage.getItem("host") || "";
+            //     // host = "http://10.18.40.226:7000";
+            //     this.video.path = `${host}/fstatic/${this.$comm.isIos() ? "hls" : "flv"
+            //         }/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+            // },
             Stop(){
                 this.playing = false;
             },
@@ -184,17 +180,17 @@
             }
         },
         mounted(){
-            let width = document.body.clientWidth;
-            let height = width * 0.75;
-            this.video.width = width;
-            this.video.height = Math.min(document.body.clientHeight, height);
+            // let width = document.body.clientWidth;
+            // let height = width * 0.75;
+            // this.video.width = width;
+            // this.video.height = Math.min(document.body.clientHeight, height);
         },
         beforeDestroy(){
             this.Stop();
         },
         deactivated(){
-            this.video.visible = false;
-            this.video.path = null;
+            // this.video.visible = false;
+            // this.video.path = null;
             this.Stop();
         },
         activated(){

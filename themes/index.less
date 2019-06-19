@@ -12,7 +12,7 @@ html, body, #app {
     overflow: hidden;
 }
 
-#app{
+#app {
     overflow-y: auto;
 }
 
@@ -55,9 +55,10 @@ html, body, #app {
 // day
 body {
 
-    input:disabled,
-    textarea:disabled {
+    input:disabled, input[disabled],
+    textarea:disabled, textarea[disabled] {
         opacity: 1;
+        -webkit-opacity: 1;
     }
 
     color: @light-common;
