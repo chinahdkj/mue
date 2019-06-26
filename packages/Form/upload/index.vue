@@ -185,6 +185,7 @@
                     let form = new FormData();
                     let f = this.base64ToFile(content, file);
                     form.append("file", file);
+                    form.append("id", file.name);
 
                     return this.$http.post("/app/v1.0/upload.json", form, {
                         processData: false, contentType: false
