@@ -176,9 +176,9 @@
                 });
 
                 this.scroller.on("scrollEnd", ({y}) => {
-                    if(!self.loading){
+                    // if(!self.loading){
                         self.scrolling = false;
-                    }
+                    // }
                 });
 
                 this.scroller.on("touchEnd", () => {
