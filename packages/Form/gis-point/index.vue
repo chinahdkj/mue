@@ -4,7 +4,8 @@
              :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
-            <i class="input__suffix input__suffix_icon iconfont icon-dingwei4"></i>
+            <i class="input__suffix input__suffix_icon iconfont icon-dingwei4"
+               @click.stop="rePos"/>
         </div>
         <van-popup ref="pop" class="mue-gis-point-pop" v-model="pop" position="bottom"
                    :lazy-render="true" get-container="body" :close-on-click-overlay="false"
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-    import {LMap, LMarker, LTileLayer, LControlZoom, LCircle} from "vue2-leaflet";
+    import {LCircle, LControlZoom, LMap, LMarker, LTileLayer} from "vue2-leaflet";
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 
@@ -170,6 +171,13 @@
             }
         },
         methods: {
+            rePos(){
+                this.$native.getLocation({
+                    cb: ({lat, lng}) => {
+                        this.pos = {lat, lng};
+                    }
+                });
+            },
             updateCenter(v) {
                 if (!this.FORM_ITEM.readonly) {
                     this.pos = v;
