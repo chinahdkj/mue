@@ -3,10 +3,10 @@
         <slot></slot>
 
         <div class="mue-form-buttons" v-if="!readonly">
-            <van-button size="large" plain @click="cancel">
+            <van-button size="large" plain @click.native="cancel">
                 {{cancelText}}
             </van-button>
-            <van-button size="large" type="primary" @click="confirm">
+            <van-button size="large" type="primary" @click.native="confirm">
                 {{confirmText}}
             </van-button>
         </div>
