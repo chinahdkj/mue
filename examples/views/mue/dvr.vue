@@ -15,7 +15,11 @@
                     {
                         code: "2", name: "萤石摄像头",
                         rtsp: "rtmp://rtmp.open.ys7.com/openlive/4816b8e1421340898d01d1272a9f54fd"
-                    }
+                    },
+                    // {
+                    //     code: "4", name: "桐乡",
+                    //     rtsp: "trans://10.38.253.10#hik.isecure/28680530/AfiYhMIgPZjPLUca5s9k/6da332ea79a944cb898be595ed5ab7c5/1/rtsp/1"
+                    // }
                 ]
             };
         },
