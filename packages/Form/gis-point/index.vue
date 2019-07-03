@@ -30,7 +30,8 @@
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
                         <l-marker v-if="FORM_ITEM.readonly" :lat-lng="pos"/>
-                        <l-circle v-if="limit" :lat-lng="limit.center" :radius="limit.radius" color="#4796e3"/>
+                        <l-circle v-if="limit" :lat-lng="limit.center" :radius="limit.radius"
+                                  color="#4796e3"/>
                     </l-map>
                     <div class="mue-gis-point-pop--marker" v-if="!FORM_ITEM.readonly"
                          :style="markerOpt.style">
@@ -57,13 +58,13 @@
     };
 
     const VALID_POS = (v) => {
-        if (!v) {
+        if(!v){
             return null;
         }
-        if (typeof v === "string") {
+        if(typeof v === "string"){
             v = v.split(",");
         }
-        if (Array.isArray(v)) {
+        if(Array.isArray(v)){
             return v.length === 2 ? {lng: Number(v[0]), lat: Number(v[1])} : null;
         }
         return typeof v === "object" && v.lng != null && v.lat != null
@@ -76,7 +77,7 @@
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
-                default() {
+                default(){
                     return {};
                 }
             }
@@ -87,14 +88,14 @@
             disabled: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
             datatype: {
-                type: String, default: "string", validator(v) {
+                type: String, default: "string", validator(v){
                     return ["string", "array", "object"].indexOf(v) > -1;
                 }
             },
             zoom: {type: Number, default: 14},
             limit: {type: Object, default: null}
         },
-        data() {
+        data(){
             return {
                 pop: false,
                 pos: null,
@@ -103,14 +104,14 @@
             };
         },
         computed: {
-            text() {
+            text(){
                 let pos = VALID_POS(this.value);
                 return !pos ? "" : `${ROUND(pos.lng)},${ROUND(pos.lat)}`;
             },
-            cancelButtonText() {
+            cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
             },
-            markerOpt() {
+            markerOpt(){
                 return {
                     src: MarkerIcon.iconRetinaUrl,
                     style: {
@@ -119,9 +120,9 @@
                         transform:
                             `translate3d(-${MarkerIcon.iconAnchor[0]}px, -${MarkerIcon.iconAnchor[1]}px, 0)`
                     }
-                }
+                };
             },
-            shandowOpt() {
+            shandowOpt(){
                 return {
                     src: MarkerIcon.shadowUrl,
                     style: {
@@ -130,16 +131,16 @@
                         right: `${MarkerIcon.shadowAnchor[0]}px`,
                         bottom: `${MarkerIcon.shadowAnchor[1]}px`
                     }
-                }
+                };
             }
         },
         watch: {
-            pop(v) {
-                if (!v) {
+            pop(v){
+                if(!v){
                     return;
                 }
                 let pos = VALID_POS(this.value);
-                if (!pos) {
+                if(!pos){
                     this.pos = null;
                     this.$native.getLocation({
                         cb: ({lat, lng}) => {
@@ -153,8 +154,8 @@
             },
             pos: {
                 immediate: true,
-                handler(v) {
-                    if (!this.limit || !this.pos) {
+                handler(v){
+                    if(!this.limit || !this.pos){
                         return;
                     }
 
@@ -166,7 +167,7 @@
             }
         },
         filters: {
-            round(v) {
+            round(v){
                 return v == null ? "" : ROUND(v);
             }
         },
@@ -175,52 +176,55 @@
                 this.$native.getLocation({
                     cb: ({lat, lng}) => {
                         this.pos = {lat, lng};
+                        this.$nextTick(() => {
+                            this.onConfirm();
+                        });
                     }
                 });
             },
-            updateCenter(v) {
-                if (!this.FORM_ITEM.readonly) {
+            updateCenter(v){
+                if(!this.FORM_ITEM.readonly){
                     this.pos = v;
                 }
             },
-            showPop() {
-                if (this.disabled || (this.FORM_ITEM.readonly && !this.pos)) {
+            showPop(){
+                if(this.disabled || (this.FORM_ITEM.readonly && !this.pos)){
                     return;
                 }
                 this.pop = true;
             },
-            onConfirm() {
-                if (this.distance && this.exceedArea) {
-                    this.$toast.fail('超出范围');
+            onConfirm(){
+                if(this.distance && this.exceedArea){
+                    this.$toast.fail("超出范围");
                     return;
                 }
 
                 this.pop = false;
-                if (!this.pos) {
+                if(!this.pos){
                     this.$emit("input", null);
                     this.$emit("change", null);
                     return;
                 }
                 let value;
-                if (this.datatype === "string") {
+                if(this.datatype === "string"){
                     value = `${ROUND(this.pos.lng)},${ROUND(this.pos.lat)}`;
                 }
-                else if (this.datatype === "array") {
+                else if(this.datatype === "array"){
                     value = [ROUND(this.pos.lng), ROUND(this.pos.lat)];
                 }
-                else {
-                    value = {lat: ROUND(this.pos.lat), lng: ROUND(this.pos.lng)}
+                else{
+                    value = {lat: ROUND(this.pos.lat), lng: ROUND(this.pos.lng)};
                 }
                 this.$emit("input", value);
                 this.$emit("change", value);
             },
-            onCancel() {
+            onCancel(){
                 this.pop = false;
-                if (this.clearable) {
+                if(this.clearable){
                     this.$emit("input", null);
                     this.$emit("change", null);
                 }
             }
         }
-    }
+    };
 </script>

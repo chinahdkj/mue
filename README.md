@@ -3,16 +3,16 @@
 ## 快速上手
 
 + MUE 安装
-cnpm
+npm
 ```
-cnpm i git+https://hub.hddznet.com/uniplatform/mue.git --save
+npm i git+https://hub.hddznet.com/uniplatform/mue.git --save
 ```
 
 
 + MUE 引入
 ```
 import Vue from 'vue'; 
-import Mue from 'mue/src/index.js';
+import Mue from 'mue';
 // 引入CUE的同时，已全局引用vant-ui。
 Vue.use(Mue);
 ```
