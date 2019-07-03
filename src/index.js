@@ -61,9 +61,9 @@ const install = function(Vue){
     Vue.directive(resize.name, resize);
     Vue.directive(touch.name, touch);
 
-    if(Vue.prototype.$toast){
-        Vue.prototype.$toast.setDefaultOptions({position: "top"});
-    }
+    // if(Vue.prototype.$toast){
+    //     Vue.prototype.$toast.setDefaultOptions({position: "top"});
+    // }
 
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;
