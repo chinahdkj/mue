@@ -43,6 +43,9 @@ const CREATE_ACTIONS = (el, binding) => {
     };
 
     let touchEnd = (e) => {
+        if(!start){
+            return;
+        }
         let end = {
             x: e.changedTouches[0].pageX, y: e.changedTouches[0].pageY
         };

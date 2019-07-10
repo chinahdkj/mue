@@ -1,3 +1,6 @@
+import FastClick from "fastclick";
+FastClick.attach(document.body);
+
 import Chart from "../packages/Chart/index.js";
 import Panel from "../packages/Panel/index.js";
 import {RollData, RollDataGroup} from "../packages/RollData/index.js";

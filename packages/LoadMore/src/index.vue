@@ -121,7 +121,7 @@
                 return {transition: "0.6s"};
             },
             pageNoStyle(){
-                return {transform: `translateY(${-(this.pageNo - 1) * 22}px)`}
+                return {transform: `translateY(${-(this.pageNo - 1) * 22}px)`};
             }
         },
         watch: {},
@@ -130,11 +130,10 @@
                 let self = this;
                 self.resetStates();
                 self.scroller = new BETTER_SCROLL(this.$refs.box, {
-                    click: true, probeType: 1, scrollbar: false, bounce: true,
-                    bounceTime: 600, scrollY: true, scrollX: false, bindToWrapper: false,
+                    click: true, probeType: 1, scrollbar: false, bounce: true, momentum: false,
+                    scrollY: true, scrollX: false, bindToWrapper: false,
                     pullDownRefresh: {threshold: this.distance, stop: this.distance},
-                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal",
-                    observeDOM: false, HWCompositing: false
+                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal"
                 });
 
                 this.scroller.on("scrollStart", () => {
@@ -177,7 +176,7 @@
 
                 this.scroller.on("scrollEnd", ({y}) => {
                     // if(!self.loading){
-                        self.scrolling = false;
+                    self.scrolling = false;
                     // }
                 });
 
@@ -276,8 +275,7 @@
         },
         activated(){
             if(this.scroller){
-                this.scroller.enable();
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.scroller.scrollTo(0, this.posY, 1);
                 });
             }
@@ -285,7 +283,6 @@
         deactivated(){
             if(this.scroller){
                 this.posY = this.scroller.y;
-                this.scroller.disable();
             }
         }
     };
