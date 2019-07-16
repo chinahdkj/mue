@@ -23,9 +23,12 @@
                     <label>纬度</label><span>{{(pos || {}).lat | round}}</span>
                 </div>
                 <div class="mue-gis-point-pop--map">
-                    <l-map v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
+                    <l-map ref="Lmap" v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
                            :options="{zoomControl: false, attributionControl: false}"
                            :center="pos" @update:center="updateCenter">
+                        <l-control position="topright" class="get-location">
+                            <i class="iconfont icon-dingwei1" @click="getLocation"></i>
+                        </l-control>
                         <l-control-zoom position="topright"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
@@ -46,7 +49,7 @@
 </template>
 
 <script>
-    import {LCircle, LControlZoom, LMap, LMarker, LTileLayer} from "vue2-leaflet";
+    import {LCircle, LControlZoom, LControl, LMap, LMarker, LTileLayer} from "vue2-leaflet";
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 
@@ -73,7 +76,7 @@
 
     export default {
         name: "MueGisPoint",
-        components: {LMap, LTileLayer, LMarker, LControlZoom, LCircle},
+        components: {LMap, LTileLayer, LMarker, LControlZoom, LCircle, LControl},
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -172,6 +175,19 @@
             }
         },
         methods: {
+            getLocation() {
+                let pos = VALID_POS(this.value);
+                if(!pos){
+                    this.pos = null;
+                    this.$native.getLocation({
+                        cb: ({lat, lng}) => {
+                            this.pos = {lat, lng};
+                        }
+                    });
+                    return;
+                }
+                this.pos = pos;
+            },
             rePos(){
                 this.$native.getLocation({
                     cb: ({lat, lng}) => {
