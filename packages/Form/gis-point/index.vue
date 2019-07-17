@@ -30,7 +30,7 @@
                             <i class="iconfont icon-dingwei1" @click="getLocation"></i>
                             <span class="title">定位</span>
                         </l-control>
-                        <l-control-zoom position="topright" :zoomInText="zoomInIcon" :zoomOutText="zoomOutIcon" zoomInTitle="11"></l-control-zoom>
+                        <l-control-zoom position="topright" :zoomInText="zoomInIcon" :zoomOutText="zoomOutIcon"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
                         <l-marker v-if="FORM_ITEM.readonly" :lat-lng="pos"/>
