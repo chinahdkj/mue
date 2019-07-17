@@ -28,8 +28,9 @@
                            :center="pos" @update:center="updateCenter">
                         <l-control position="topright" class="get-location">
                             <i class="iconfont icon-dingwei1" @click="getLocation"></i>
+                            <span class="title">定位</span>
                         </l-control>
-                        <l-control-zoom position="topright"></l-control-zoom>
+                        <l-control-zoom position="topright" :zoomInText="zoomInIcon" :zoomOutText="zoomOutIcon" zoomInTitle="11"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
                         <l-marker v-if="FORM_ITEM.readonly" :lat-lng="pos"/>
@@ -95,7 +96,7 @@
                     return ["string", "array", "object"].indexOf(v) > -1;
                 }
             },
-            zoom: {type: Number, default: 14},
+            zoom: {type: Number, default: 18},
             limit: {type: Object, default: null}
         },
         data(){
@@ -103,7 +104,9 @@
                 pop: false,
                 pos: null,
                 distance: null,
-                exceedArea: false
+                exceedArea: false,
+                zoomInIcon: '<i class="iconfont icon-tianjia1-copy"></i><span class="title">放大</span>',
+                zoomOutIcon: '<i class="iconfont icon-jianquminus25-copy"></i><span class="title">缩小</span>',
             };
         },
         computed: {
