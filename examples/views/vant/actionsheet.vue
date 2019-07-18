@@ -1,8 +1,8 @@
 <template>
     <div>
         已将vant actionsheet 取消按钮的样式修改。
-        由于vant dom结构的原因，如果底部没有取消按钮，需要添加no-cancel样式
-        如果需要恢复原来vant默认样式，请添加is-square样式
+        由于vant dom结构的原因，如果底部没有取消按钮，需要添加no-cancel样式。
+        如果需要恢复原来vant默认样式，请添加is-square样式。
         <br/>
 
         <van-button size="small" @click="vis.normal = true" type="primary">默认圆角</van-button>
