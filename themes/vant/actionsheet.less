@@ -1,36 +1,91 @@
 @import "../var.less";
 
-.van-actionsheet(@theme: light){
+.van-actionsheet(@theme: light) {
     @background: %("%s-background-pop", @theme);
     @background-base: %("%s-background-base", @theme);
     @color: %("%s-common", @theme);
     @color-grey: %("%s-grey", @theme);
     @color-disabled: %("%s-placeholder", @theme);
 
-    .van-actionsheet{
-        
+    .van-actionsheet {
+
         color: @@color;
 
-        .van-actionsheet__item{
+        .van-actionsheet__item {
             background: @@background;
         }
 
-        .van-actionsheet__cancel{
+        .van-actionsheet__header {
             background: @@background;
-            &:before{
+        }
+
+        .van-actionsheet__cancel {
+            background: @@background;
+
+            &:before {
                 background: @@background-base;
             }
         }
 
-        .van-actionsheet__subname{
+        .van-actionsheet__subname {
             color: @@color-grey;
         }
 
-        .van-actionsheet__item--disabled{
+        .van-actionsheet__item--disabled {
             color: @@color-disabled;
 
-            .van-actionsheet__subname{
+            .van-actionsheet__subname {
                 color: @@color-disabled;
+            }
+        }
+    }
+
+    .van-actionsheet:not(.is-square) {
+        background: transparent;
+        color: @@color;
+        width: calc(~"100% - 20px");
+        margin-bottom: 10px;
+        overflow: hidden;
+
+        .van-actionsheet__item {
+            //background: @@background;
+        }
+
+        > div:nth-child(1) {
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+
+            &:after {
+                content: none;
+            }
+        }
+
+        > div:nth-last-child(2) {
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        &.no-cancel {
+            > div:nth-last-child(2) {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            > div:nth-last-child(1) {
+                border-bottom-left-radius: 16px;
+                border-bottom-right-radius: 16px;
+            }
+        }
+
+
+        .van-actionsheet__cancel {
+            //background: @@background;
+            border-radius: 16px;
+            margin-top: 10px;
+
+            &:before {
+                content: none;
+                //background: @@background-base;
             }
         }
     }
