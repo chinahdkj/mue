@@ -2,6 +2,9 @@ import {addClass, removeClass, setStyle} from "../../src/utils/dom";
 
 const createPopEvent = (el, binding, vnode) => {
     return function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
         let arg = binding.arg;
         let pop = vnode.context.$refs[arg];
 
@@ -19,10 +22,12 @@ const createPopEvent = (el, binding, vnode) => {
         el.setAttribute("aria-describedby", pop.tooltipId);
 
         if(pop.reference === el){
-            let func = binding.value;
-            typeof func === "function" && func(el);
             pop.handleClick();
             pop.doToggle();
+            vnode.context.$nextTick(() => {
+                let func = binding.value;
+                typeof func === "function" && func(el);
+            });
             return;
         }
 
@@ -31,11 +36,11 @@ const createPopEvent = (el, binding, vnode) => {
             pop.showPopper = false;
             pop.doDestroy();
         }
+        pop.reference = pop.referenceElm = el;
+        pop.showPopper = true;
         vnode.context.$nextTick(() => {
             let func = binding.value;
             typeof func === "function" && func(el);
-            pop.reference = pop.referenceElm = el;
-            pop.showPopper = true;
         });
     };
 
