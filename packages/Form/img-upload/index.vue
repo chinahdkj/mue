@@ -13,7 +13,12 @@
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <button v-if="accept !== 'image'" class="upload-btn" type="button"
+                    <button v-if="accept === 'watermark'" class="upload-btn" type="button"
+                            :disabled="disabled" @click="uploadWatermark()">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </button>
+                    <button v-if="accept === 'video' || accept === 'all'" class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadhadVideo()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
@@ -75,6 +80,12 @@
             limit: {type: Number, default: 5},
             accept: {
                 type: String, default: "image"
+            },
+            watermarkParams: {
+                type: Object,
+                default() {
+                    return null
+                }
             }
         },
         data(){
@@ -95,6 +106,9 @@
                         break;
                     case 'video':
                         type = VIDEO;
+                        break;
+                    case 'watermark':
+                        type = IMG;
                         break;
                     case 'all':
                         type = `${IMG},${VIDEO}`;
@@ -156,7 +170,7 @@
                         });
                     });
 
-                    if(this.base64 || this.accept !== "image"){
+                    if(this.base64 || this.accept === "video" || this.accpet === 'all'){
                         let prms = v.filter((p) => {
                             return this.base64 || this.fileType(p) === "video";
                         }).map((p) => {
@@ -193,8 +207,7 @@
             },
             typeSelect({act}){
                 if(act === "image"){
-                    this.$refs.uploadbtn.$el.getElementsByClassName(
-                        "van-uploader__input")[0].click();
+                    this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
                 }
                 else if(act === "video"){
                     this.videoUpload();
@@ -280,6 +293,32 @@
                 return whole;
             },
 
+            getWatermark() {
+                return new Promise(resolve => {
+                    this.$native.watermarkCamera({
+                        params: {...this.watermarkParams},
+                        cb: ({code, base64Img}) => {
+                            if(code === 0){
+                                resolve(base64Img);
+                            }
+                        }
+                    });
+                });
+            },
+
+            //调用原生水印相机
+            async uploadWatermark() {
+                let base64 = await this.getWatermark();
+                if(!base64) {
+                    return
+                }
+                let type = base64.substring(base64.indexOf(':') + 1, base64.indexOf(';'));
+                let name = `Watermark.${type.substring(type.lastIndexOf('/') + 1)}`;
+                let blob = Base64ToFile(base64, {type: 'image/jpeg', name});
+                let file = {content: base64, file: blob};
+                this.upload(file);
+            },
+
             upload(files){
                 this.uploading = true;
                 if(!Array.isArray(files)){
@@ -318,7 +357,7 @@
                         let form = new FormData();
                         let f = Base64ToFile(content, file);
                         form.append("file", f, file.name);
-                        form.append("id", file.name);
+                        // form.append("id", file.name);
 
                         return this.$http.post("/app/v1.0/upload.json", form, {
                             processData: false, contentType: false
