@@ -27,8 +27,11 @@
                            :options="{zoomControl: false, attributionControl: false}"
                            :center="pos" @update:center="updateCenter">
                         <l-control position="topright" class="get-location">
-                            <i class="iconfont icon-dingwei1" @click="getLocation"></i>
-                            <span class="title">定位</span>
+                            <div class="btn-con" @click.stop="getLocation">
+                                <van-loading type="spinner" size="24px" v-if="loading" />
+                                <i v-else class="iconfont icon-dingwei1"></i>
+                                <span class="title">定位</span>
+                            </div>
                         </l-control>
                         <l-control-zoom position="topright" :zoomInText="zoomInIcon" :zoomOutText="zoomOutIcon"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
@@ -101,6 +104,7 @@
         },
         data(){
             return {
+                loading: false,
                 pop: false,
                 pos: null,
                 distance: null,
@@ -117,7 +121,7 @@
             cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
             },
-            markerOpt(){
+             markerOpt(){
                 return {
                     src: MarkerIcon.iconRetinaUrl,
                     style: {
@@ -179,17 +183,13 @@
         },
         methods: {
             getLocation() {
-                let pos = VALID_POS(this.value);
-                if(!pos){
-                    this.pos = null;
-                    this.$native.getLocation({
-                        cb: ({lat, lng}) => {
-                            this.pos = {lat, lng};
-                        }
-                    });
-                    return;
-                }
-                this.pos = pos;
+                this.loading = true;
+                this.$native.getLocation({
+                    cb: ({lat, lng}) => {
+                        this.pos = {lat, lng};
+                        this.loading = false;
+                    }
+                });
             },
             rePos(){
                 this.$native.getLocation({
