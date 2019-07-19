@@ -3,7 +3,6 @@
         components: {},
         props: {
             hstyle: {type: Object},
-            fixed: {type: Boolean, default: false},
             no: {type: Number},
             col: {type: Object},
             row: {type: Object},
@@ -14,9 +13,6 @@
         },
         inject:["TABLE"],
         render(h){
-            if(!!this.col.fixed !== this.fixed){
-                return h("td", {style: this.hstyle, domProps: {innerHTML: "&nbsp;"}});
-            }
             let td = {
                 style: [this.hstyle, {"text-align": this.col.align || "center"}]
             };

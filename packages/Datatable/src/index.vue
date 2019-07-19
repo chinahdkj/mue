@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="mue-datatable-main" v-resize="scrollResize" style="overflow: auto"
+        <div class="mue-datatable-main" style="overflow: auto"
              :style="headerVisibel ? {'border-top-width': headerHeight} : {}">
 
             <mue-load-more ref="load_more" @refresh="onRefresh" @load-more="onLoad"
@@ -73,58 +73,59 @@
 
                 <div v-show="total !== 0" class="mue-datatable-scroller"
                      :class="{'is-virtual': virtual}" :style="mainHeight">
-                    <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
-                         :style="[{width: fixedWidth + 'px' }]">
 
-                        <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
-                                virtual ? {'margin-top': virtualBox.white} : null]">
-                            <col-group :columns="colFields"/>
-                            <tbody>
-                            <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
-                                  :row="d" :no="i + virtualBox.start">
+                    <template v-if="!virtual">
+                        <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
+                             :style="[{width: fixedWidth + 'px' }]">
 
-                                <tr class="__row" :key="rowId(d, i + virtualBox.start)"
-                                    :class="rowCls(d, i + virtualBox.start)"
-                                    @click="onRowClick(d, i + virtualBox.start)">
+                            <table class="mue-datatable__inner-table"
+                                   :style="[{width: tableWidth + 'px'}]">
+                                <col-group :columns="colFields"/>
+                                <table-body :rows="data" :is-fixed="true" :start="0"/>
+                            </table>
+                        </div>
 
-                                    <cell v-for="c in colFields" :key="c.field" :col="c"
-                                          :row="d" :fixed="true" :value="getValue(d, c.field)"
-                                          :hstyle="cellHeight" :no="i + virtualBox.start"/>
+                        <div class="mue-datatable-center" :style="[centerWidth]"
+                             @touchstart="onScrollXStart($event)" @touchmove="onScrollXMove($event)"
+                             @touchend="onScrollXEnd()">
 
-                                </tr>
+                            <table class="mue-datatable__inner-table" ref="main_table"
+                                   :style="[{width: tableWidth - fixedWidth + 'px'}]">
+                                <col-group :columns="colFields" filter/>
+                                <table-body :rows="data" :is-fixed="false" :start="0"/>
+                            </table>
 
-                            </slot>
-                            </tbody>
-                        </table>
-                    </div>
+                        </div>
+                    </template>
 
-                    <div class="mue-datatable-center" :style="[centerWidth]"
-                         @touchstart="onScrollXStart($event)" @touchmove="onScrollXMove($event)"
-                         @touchend="onScrollXEnd()">
+                    <template v-else>
+                        <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
+                             :style="[{width: fixedWidth + 'px' }]">
 
-                        <table class="mue-datatable__inner-table" ref="main_table"
-                               :style="[{width: tableWidth - fixedWidth + 'px'},
-                                virtual ? {'margin-top': virtualBox.white} : null]">
-                            <col-group :columns="colFields" filter/>
-                            <tbody>
-                            <slot v-for="(d, i) in virtualBox.rows" name="row" :cols="colFields"
-                                  :row="d" :no="virtualBox.start + i">
+                            <table class="mue-datatable__inner-table" :style="[{width: tableWidth + 'px'},
+                                {'margin-top': yScroller.marginTop}]">
+                                <col-group :columns="colFields"/>
+                                <table-body :rows="vrows" :is-fixed="true"
+                                            :start="yScroller.start"/>
+                            </table>
+                        </div>
 
-                                <tr class="__row" :key="rowId(d, virtualBox.start + i)"
-                                    :class="rowCls(d, virtualBox.start + i)"
-                                    @click="onRowClick(d, virtualBox.start  + i)">
+                        <div class="mue-datatable-center" :style="[centerWidth]"
+                             @touchstart="onScrollXStart($event)" @touchmove="onScrollXMove($event)"
+                             @touchend="onScrollXEnd()">
 
-                                    <cell v-for="c in colFields" :key="c.field" v-if="!c.fixed"
-                                          :hstyle="cellHeight" :col="c" :row="d" :fixed="false"
-                                          :value="getValue(d, c.field)" :no="virtualBox.start +i"/>
+                            <table class="mue-datatable__inner-table" ref="main_table"
+                                   :style="[{width: tableWidth - fixedWidth + 'px'},
+                                   {'margin-top': yScroller.marginTop}]">
+                                <col-group :columns="colFields" filter/>
+                                <table-body :rows="vrows" :is-fixed="false"
+                                            :start="yScroller.start"/>
+                            </table>
 
-                                </tr>
+                        </div>
+                    </template>
 
-                            </slot>
-                            </tbody>
-                        </table>
 
-                    </div>
                 </div>
 
             </mue-load-more>
@@ -135,14 +136,15 @@
 <script>
 
     import colGroup from "./col-group";
-    import cell from "./cell";
+    // import cell from "./cell";
+    import tableBody from "./table-body";
     import {objectGet} from "../../../src/utils/object";
     import {getStyle, setStyle} from "../../../src/utils/dom";
     // import BETTER_SCROLL from "better-scroll";
 
     export default {
         name: "MueDatatable",
-        components: {colGroup, cell},
+        components: {colGroup, tableBody},
         provide(){
             return {TABLE: this};
         },
@@ -180,13 +182,16 @@
                 colFields: [], // 列属性
                 headerRows: 0, // 表头行数
                 pageNo: 0,
-                // scroller: {},
-                scrollBox: { // 竖向滚动高度，及可视区域高度  滚动位置
-                    top: 0, height: 0, y: 0
-                },
-                scrollBase: {
+                xScroller: {
                     x: null,
                     left: null
+                },
+                yScroller: {
+                    top: 0,
+                    timer: null,
+                    start: 0,
+                    end: 0,
+                    marginTop: "0px"
                 }
             };
         },
@@ -201,7 +206,7 @@
                 if(!this.virtual){
                     return null;
                 }
-                return {height: `${this.data.length * this.rowHeight + Number(!this.border)}px`}
+                return {height: `${this.data.length * this.rowHeight + Number(!this.border)}px`};
             },
             headerVisibel(){
                 return this.header && this.colFields.length > 0;
@@ -227,30 +232,11 @@
                 }
                 return style;
             },
-            virtualBox(){
-                if(!this.virtual){
-                    return {
-                        start: 0,
-                        end: this.data.length, // 渲染数据范围
-                        white: null,
-                        rows: this.data
-                    };
-                }
-
-                let half = Math.ceil(this.scrollBox.height / this.rowHeight / 2);
-                let start = Math.floor(this.scrollBox.top / this.rowHeight);
-                start = Math.max(start - half, 0);
-                let end = Math.min(start + 4 * half, this.data.length);
-                return {
-                    start, end,
-                    white: `${this.rowHeight * start}px`,
-                    rows: this.data.filter((r, i) => {
-                        return i >= start && i < end;
-                    })
-                };
-            },
             allLoadedText(){
                 return this.pageTotal > 1 ? `已加载${this.total}条数据，没有更多数据了` : "";
+            },
+            vrows(){
+                return this.data.slice(this.yScroller.start, this.yScroller.end);
             }
         },
         watch: {
@@ -258,6 +244,20 @@
                 deep: true,
                 handler(){
                     this.setCols();
+                }
+            },
+            "yScroller.top": {
+                immediate: true, handler(v){
+                    if(!this.virtual){
+                        return;
+                    }
+                    if(this.yScroller.timer){
+                        clearTimeout(this.yScroller.timer);
+                        this.yScroller.timer = null;
+                    }
+                    this.yScroller.timer = setTimeout(() => {
+                        this.calcYScroller();
+                    }, 100);
                 }
             }
         },
@@ -278,7 +278,7 @@
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
                     typeof this.rowClass === "function"
-                    ? this.rowClass(row, i) : (this.rowClass || "")
+                        ? this.rowClass(row, i) : (this.rowClass || "")
                 ];
             },
             sortCls(col){
@@ -428,18 +428,18 @@
             },
 
             onScrollXStart(e){
-                this.scrollBase.x = e.changedTouches[0].pageX;
-                this.scrollBase.left = Number(
+                this.xScroller.x = e.changedTouches[0].pageX;
+                this.xScroller.left = Number(
                     getStyle(this.$refs.top_table, "margin-left").replace("px", ""));
             },
 
             onScrollXMove(e){
-                if(this.scrollBase.x == null){
+                if(this.xScroller.x == null){
                     return;
                 }
                 let x = e.changedTouches[0].pageX;
-                let diff = x - this.scrollBase.x;
-                let left = parseInt(this.scrollBase.left + diff);
+                let diff = x - this.xScroller.x;
+                let left = parseInt(this.xScroller.left + diff);
                 if(left > 0){
                     left = 0;
                 }
@@ -449,12 +449,13 @@
                     left = -width;
                 }
                 this.$refs.top_table && setStyle(this.$refs.top_table, "margin-left", `${left}px`);
-                this.$refs.main_table && setStyle(this.$refs.main_table, "margin-left", `${left}px`);
+                this.$refs.main_table &&
+                setStyle(this.$refs.main_table, "margin-left", `${left}px`);
             },
 
             onScrollXEnd(){
-                this.scrollBase.x = null;
-                this.scrollBase.left = 0;
+                this.xScroller.x = null;
+                this.xScroller.left = 0;
             },
 
             onScrollY(box, content){
@@ -486,17 +487,16 @@
                 let rowNo = this.getRowNo(this.data[i], i);
                 this.pageNo = this.pageSize ? (parseInt(rowNo / this.pageSize) + 1) : 0;
 
-                this.scrollBox.top = scrollTop;
+                this.yScroller.top = scrollTop;
             },
 
-            scrollResize(){
-                let $lm = this.$refs.load_more;
-                if(!$lm){
-                    this.scrollBox.height = 0;
-                }
-                else{
-                    this.scrollBox.height = $lm.$el.getBoundingClientRect().height;
-                }
+            calcYScroller(){
+                let vheight = this.$el.getBoundingClientRect().height;
+                let vhalf = parseInt(vheight / this.rowHeight / 2) + 1;
+                let start = Math.max(parseInt(this.yScroller.top / this.rowHeight) - vhalf, 0);
+                this.yScroller.start = start;
+                this.yScroller.end = start + vhalf * 4;
+                this.yScroller.marginTop = `${this.rowHeight * start}px`;
             },
 
             onRefresh(success){
