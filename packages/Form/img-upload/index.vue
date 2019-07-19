@@ -314,7 +314,7 @@
                 }
                 let type = base64.substring(base64.indexOf(':') + 1, base64.indexOf(';'));
                 let name = `Watermark.${type.substring(type.lastIndexOf('/') + 1)}`;
-                let blob = Base64ToFile(base64, {type: 'image/jpeg', name});
+                let blob = Base64ToFile(base64, {type, name});
                 let file = {content: base64, file: blob};
                 this.upload(file);
             },
