@@ -50,7 +50,7 @@
                 this.$emit("cancel");
             },
             Focus(){
-                let input = this.$refs.search.$el.querySelector("input.van-field__control");
+                let input = this.$refs.search.querySelector("input.van-field__control");
                 input.focus();
             },
         }
