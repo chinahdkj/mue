@@ -2,7 +2,7 @@
     <div class="mue-search" @focus.native="focus = true" @blur.native="focus = false"
          :class="{'mue-search__focus': focus}">
         <form action="/">
-            <van-search v-model="q" background="transparent"
+            <van-search ref="search" v-model="q" background="transparent"
                         :show-action="showAction || q.length > 0"
                         :placeholder="placeholder" @search="onSearch">
                 <div slot="action" @click="onCancel">取消</div>
@@ -48,7 +48,11 @@
             onCancel(){
                 this.q = "";
                 this.$emit("cancel");
-            }
+            },
+            Focus(){
+                let input = this.$refs.search.$el.querySelector("input.van-field__control");
+                input.focus();
+            },
         }
-    }
+    };
 </script>

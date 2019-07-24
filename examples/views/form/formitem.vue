@@ -23,6 +23,10 @@
             <mue-img-upload style="margin-left: 5px;" v-model="img.multiple" multiple/>
         </mue-panel>
 
+        <mue-panel hairline="normal" title="水印相机" style="height:120px;">
+            <mue-img-upload style="margin-left: 5px;" v-model="img.watermark" accept="watermark"/>
+        </mue-panel>
+
         <mue-panel hairline="normal" title="短视频(在线)" style="height:120px;">
             <mue-img-upload style="margin-left: 5px;" v-model="img.video" multiple accept="all"/>
         </mue-panel>
@@ -79,6 +83,7 @@
                 input: {number: 0, value: ""},
                 img: {
                     single: "",
+                    watermark: "",
                     multiple: [],
                     video: [],
                     video1: []
