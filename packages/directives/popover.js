@@ -54,21 +54,21 @@ export default {
 
         el.POPOVER_EVENTS = createPopEvent(el, binding, vnode);
 
-        el.addEventListener("touchend", el.POPOVER_EVENTS);
+        el.addEventListener("click", el.POPOVER_EVENTS);
     },
 
     componentUpdated(el, binding, vnode){
         el.removeAttribute("aria-describedby");
-        el.removeEventListener("touchend", el.POPOVER_EVENTS);
+        el.removeEventListener("click", el.POPOVER_EVENTS);
 
         el.POPOVER_EVENTS = createPopEvent(el, binding, vnode);
 
-        el.addEventListener("touchend", el.POPOVER_EVENTS);
+        el.addEventListener("click", el.POPOVER_EVENTS);
     },
 
     unbind(el){
         removeClass(el, "mue-popover__reference");
         el.removeAttribute("aria-describedby");
-        el.removeEventListener("touchend", el.POPOVER_EVENTS);
+        el.removeEventListener("click", el.POPOVER_EVENTS);
     }
 };
