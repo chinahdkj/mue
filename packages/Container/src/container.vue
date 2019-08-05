@@ -60,10 +60,10 @@
                 this.main = null;
             },
             resize(){
-                if(!this.main){
-                    return;
-                }
                 this.$nextTick(() => {
+                    if(!this.main){
+                        return;
+                    }
                     let ch = this.$el.getBoundingClientRect().height;
                     let hh = this.header ? this.header.$el.getBoundingClientRect().height : 0;
                     let fh = this.footer ? this.footer.$el.getBoundingClientRect().height : 0;
