@@ -23,7 +23,11 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                    <android-upload v-if="isAd && multiple" ref="androidUpload" :disabled="disabled"
+                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </android-upload>
+                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
@@ -51,13 +55,17 @@
 <script>
     import {ImagePreview} from "vant";
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
+    import {isAndroid} from "../../../src/lib/common";
+    import androidUpload from "./androidUpload";
 
     const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
     const VIDEO = 'video/mp4,video/rmvb,video/avi,video/mov,video/flv,video/3gp';
 
     export default {
         name: "MueImgUpload",
-        components: {},
+        components: {
+            androidUpload
+        },
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -126,6 +134,10 @@
             },
             isReadonly(){
                 return this.FORM_ITEM.readonly || this.readonly;
+            },
+            isAd() {
+                // return false;
+                return isAndroid();
             }
         },
         watch: {
@@ -207,7 +219,11 @@
             },
             typeSelect({act}){
                 if(act === "image"){
-                    this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
+                    if(this.isAd) {
+                        this.$refs.androidUpload.Upload();
+                    } else {
+                        this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
+                    }
                 }
                 else if(act === "video"){
                     this.videoUpload();
@@ -473,14 +489,15 @@
             beforeRead(files){
                 let fileArr = Array.isArray(files) ? [...files] : [files];
                 if(this.limit <= 0){
-                    return true;
+                    return fileArr;
                 }
                 let limit = this.multiple ? this.limit : 1;
                 if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
-                    return true
+                    return fileArr
                 }
                 else{
                     this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                    return false;
                 }
             }
         }

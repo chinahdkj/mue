@@ -11,7 +11,7 @@ const fns = [
     "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
-    "download", "delFile", "sqlite_execsql", "sqlite_query"
+    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file"
 ];
 
 const fns2 = [
