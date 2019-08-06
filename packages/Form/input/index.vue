@@ -10,10 +10,10 @@
              :class="{'has-suffix': icon || $slots.suffix, 'mue-form-input__is-disabled': disabled}">
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
-                   onfocus="this.blur()"/>
+                   onfocus="this.blur()" :maxlength="maxlength"/>
             <input v-else :type="type" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
-                   @blur="$emit('blur')"/>
+                   @blur="$emit('blur')" :maxlength="maxlength"/>
 
             <span v-if="$slots.suffix" class="input__suffix">
                 <slot name="suffix"></slot>
@@ -50,7 +50,8 @@
                 type: Array, default(){
                     return [];
                 }
-            }
+            },
+            maxlength: {type: [String, Number], default: null}
         },
         inject: {
             FORM_ITEM: {
