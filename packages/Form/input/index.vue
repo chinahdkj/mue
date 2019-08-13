@@ -11,6 +11,11 @@
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
+
+            <input v-else-if="type=='number'||type=='tel'" :type="type" inputmode="numeric" pattern="[0-9]*" oninput="ipt=ipt.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+
             <input v-else :type="type" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
                    @blur="$emit('blur')" :maxlength="maxlength"/>
@@ -51,7 +56,9 @@
                     return [];
                 }
             },
-            maxlength: {type: [String, Number], default: null}
+            maxlength: {type: [String, Number], default: null},
+            max: {type: [String, Number], default: null},
+            min: {type: [String, Number], default: null}
         },
         inject: {
             FORM_ITEM: {
@@ -75,6 +82,13 @@
                 }
             },
             ipt(v, ov){
+                if(this.max&&v>this.max){
+                    v=this.max
+                    this.ipt=this.max
+                }else if(this.min&&v<this.min){
+                    v=this.min
+                    this.ipt=this.min
+                }
                 this.$emit("input", v);
                 this.$emit("change", v, ov);
             }
