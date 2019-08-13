@@ -165,9 +165,22 @@ export function newFilePath(filetype){
     return `/upload/${first}/${second}/${id}.${filetype}`;
 }
 
+export function makeCall(no){
+    let $frm = document.createElement("iframe");
+    $frm.style.display = "none";
+    document.body.appendChild($frm);
+
+    let $tel = document.createElement("a");
+    $tel.setAttribute("href", `tel:${no}`);
+    $frm.contentDocument.body.appendChild($tel);
+    $tel.click();
+
+    document.body.removeChild($frm);
+}
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath,
+    newFixed, newFilePath, makeCall,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
