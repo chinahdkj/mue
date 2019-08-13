@@ -12,7 +12,7 @@
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
-            <input v-else-if="type=='number'||type=='tel'" :type="type" inputmode="numeric" pattern="[0-9]*" oninput="ipt=ipt.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+            <input v-else-if="type=='number'||type=='tel'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
@@ -82,10 +82,10 @@
                 }
             },
             ipt(v, ov){
-                if(this.max&&v>this.max){
+                if(this.max!=null&&v>this.max){
                     v=this.max
                     this.ipt=this.max
-                }else if(this.min&&v<this.min){
+                }else if(this.min!=null&&v<this.min){
                     v=this.min
                     this.ipt=this.min
                 }
