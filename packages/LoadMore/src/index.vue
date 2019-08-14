@@ -56,15 +56,7 @@
                     <a class="__backtop">
                         <i class="iconfont icon-zhiding"></i>
                     </a>
-                    <a class="__pager">
-                        <ul ref="pager">
-                            <li v-for="i in pageTotal" :key="i"
-                                :style="pageNoStyle">
-                                {{i}}
-                            </li>
-                        </ul>
-                        <span>{{pageTotal}}</span>
-                    </a>
+                    <pager :total="pageTotal" :current="pageNo"></pager>
                 </div>
             </div>
         </transition>
@@ -74,10 +66,11 @@
 <script>
 
     import BETTER_SCROLL from "better-scroll";
+    import Pager from "./pager";
 
     export default {
         name: "MueLoadMore",
-        components: {},
+        components: {Pager},
 
         props: {
             autoFill: {type: Boolean, default: true},
@@ -119,9 +112,6 @@
                     return {transform: `translateY(${-this.distance}px)`,};
                 }
                 return {transition: "0.6s"};
-            },
-            pageNoStyle(){
-                return {transform: `translateY(${-(this.pageNo - 1) * 22}px)`};
             }
         },
         watch: {},
