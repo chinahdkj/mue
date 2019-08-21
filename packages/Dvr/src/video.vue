@@ -172,8 +172,8 @@
                 this.video.width = w;
                 this.video.height = h;
 
-                this.video.path = `${host}/fstatic/${this.$comm.isIos() ? "img" : "h264"
-                }/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                this.video.path = `${host}/fstatic/img/index.html?stream=${
+                    encodeURIComponent(this.rtsp)}`;
             },
             Stop(){
                 this.playing = false;
