@@ -12,7 +12,11 @@
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
-            <input v-else-if="type=='number'||type=='tel'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+            <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+
+            <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
@@ -51,6 +55,7 @@
             placeholder: {type: String, default: ""},
             icon: {type: String, default: ""},
             type: {type: String, default: "text"},
+            numberType: {type: String, default: ""},
             templates: {
                 type: Array, default(){
                     return [];
