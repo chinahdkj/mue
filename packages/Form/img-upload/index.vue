@@ -45,6 +45,8 @@
                          @select="typeSelect"
                          :actions="[{name: '上传图片', act: 'image'}, {name: '拍摄视频', act: 'video'}]"/>
 
+        <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
+
         <!--<van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
             <video :src="videoPop.src" style="width:100%;height:300px;" controls></video>
         </van-popup>-->
@@ -102,7 +104,12 @@
                 pop: {visible: false},
                 uploadPop: {visible: false},
                 // videoPop: {visible: false, src: ''},
-                current: -1
+                current: -1,
+                preview: {
+                    visible: false,
+                    images: [],
+                    start: 0
+                }
             };
         },
         computed: {
@@ -437,7 +444,7 @@
             showFile(){
                 let type = this.fileType(this.imgs[this.current]);
                 if(type === 'image'){
-                    let images = this.imgs.filter((f) => {
+                    this.preview.images = this.imgs.filter((f) => {
                         return this.fileType(f) === 'image'
                     }).map((p) => {
                         return this.getPath(p);
@@ -447,13 +454,17 @@
                     let videoNum = tempArr.filter((v) => {
                         return this.fileType(v) === 'video'
                     }).length;
-                    let newIndex = this.current - videoNum;
-                    ImagePreview({
+                    // let newIndex = this.current - videoNum;
+
+                    this.preview.start = this.current - videoNum;
+                    this.preview.visible = true;
+
+                    /*ImagePreview({
                         images, startPosition: newIndex, loop: true,
                         onClose: () => {
                             this.$native.hideHeader({params: {hide: 0}});
                         }
-                    });
+                    });*/
                 }
                 else{
                     // this.videoPop.visible = true;
