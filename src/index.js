@@ -17,6 +17,7 @@ import Dvr from "../packages/Dvr/index.js";
 import SortPicker from "../packages/SortPicker/index.js";
 import Tree from "../packages/Tree/index.js";
 import Empty from "../packages/Empty/index.js";
+import ImgPreview from "../packages/ImgPreview/index.js";
 //direcives
 import popover from "../packages/directives/popover.js";
 import resize from "../packages/directives/resize.js";
@@ -48,7 +49,7 @@ window.requestAnimFrame = (() => {
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
     Container, Header, Main, Footer, Datatable, ...Object.values(Form), LoadMore, Page,
-    ...Object.values(Dvr), SortPicker, Tree, Empty
+    ...Object.values(Dvr), SortPicker, Tree, Empty, ImgPreview
 ];
 
 const install = function(Vue){
