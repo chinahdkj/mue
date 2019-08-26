@@ -12,7 +12,11 @@
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
-            <input v-else-if="type=='number'||type=='tel'" :type="type" inputmode="numeric" pattern="[0-9]*" oninput="ipt=ipt.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+            <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+
+            <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
@@ -51,6 +55,7 @@
             placeholder: {type: String, default: ""},
             icon: {type: String, default: ""},
             type: {type: String, default: "text"},
+            numberType: {type: String, default: ""},
             templates: {
                 type: Array, default(){
                     return [];
@@ -82,10 +87,10 @@
                 }
             },
             ipt(v, ov){
-                if(this.max&&v>this.max){
+                if(this.max!=null&&v>this.max){
                     v=this.max
                     this.ipt=this.max
-                }else if(this.min&&v<this.min){
+                }else if(this.min!=null&&v<this.min){
                     v=this.min
                     this.ipt=this.min
                 }
