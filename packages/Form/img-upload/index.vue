@@ -189,7 +189,7 @@
                         });
                     });
 
-                    if(this.base64 || this.accept === "video" || this.accpet === 'all'){
+                    if(this.base64 || this.accept === "video" || this.accept === 'all'){
                         let prms = v.filter((p) => {
                             return this.base64 || this.fileType(p) === "video";
                         }).map((p) => {
@@ -447,7 +447,8 @@
                     this.preview.images = this.imgs.filter((f) => {
                         return this.fileType(f) === 'image'
                     }).map((p) => {
-                        return this.getPath(p);
+                        // return this.getPath(p);
+                        return this.getPath(this.dict[p].url)
                     });
                     this.$native.hideHeader({params: {hide: 1}});
                     let tempArr = this.imgs.slice(0, this.current);
@@ -458,6 +459,8 @@
 
                     this.preview.start = this.current - videoNum;
                     this.preview.visible = true;
+
+                    console.log('预览图', this.preview.images);
 
                     /*ImagePreview({
                         images, startPosition: newIndex, loop: true,
