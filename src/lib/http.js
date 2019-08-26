@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetQueryString } from './common';
+import { GetQueryString, getHost } from './common';
 import { CloseLoading } from '../../packages/Loading/src';
 import Vue from 'vue';
 
@@ -52,8 +52,7 @@ export default {
     post(url, data, failed = false) {
         return axios({
             method: 'post',
-            baseURL: process.env.NODE_ENV === 'production'
-                ? sessionStorage.getItem('host') : '/list',
+            baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             data: data,
             timeout: 30000
@@ -76,8 +75,7 @@ export default {
     get(url, params, failed = false) {
         return axios({
             method: 'get',
-            baseURL: process.env.NODE_ENV === 'production'
-                ? sessionStorage.getItem('host') : '/list',
+            baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             params, // get 请求时带的参数
             timeout: 30000

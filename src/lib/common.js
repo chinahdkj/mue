@@ -178,9 +178,22 @@ export function makeCall(no){
     document.body.removeChild($frm);
 }
 
+export const getHost = () => {
+    let location = window.location;
+    if(location.origin.toLowerCase() === "file://"){
+        return sessionStorage.getItem("host") || "";
+    }
+    let code = location.port.substring(1);
+    let regex = new RegExp(`^${location.origin}/packages/${code}/`, "i");
+    if(regex.test(location.href)){
+        return sessionStorage.getItem("host") || "";
+    }
+    return "";
+};
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall,
+    newFixed, newFilePath, makeCall, getHost,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }

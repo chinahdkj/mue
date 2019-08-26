@@ -117,7 +117,7 @@
                     return "";
                 }
                 if (m.startsWith("/upload")) {
-                    return `${sessionStorage.getItem("host") || ""}${m}`;
+                    return `${this.$comm.getHost()}${m}`;
                 }
                 return m;
             },

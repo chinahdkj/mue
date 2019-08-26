@@ -311,7 +311,7 @@
                     return "";
                 }
                 if(whole.startsWith("/upload")){
-                    return `${sessionStorage.getItem("host") || ""}${whole}`;
+                    return `${this.$comm.getHost()}${whole}`;
                 }
                 return whole;
             },

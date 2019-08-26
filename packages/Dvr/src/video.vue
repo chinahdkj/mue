@@ -95,8 +95,7 @@
                     return rtsp;
                 }
 
-                let host = sessionStorage.getItem("host") || "";
-                // host = "http://10.18.40.226:7000";
+                let host = this.$comm.getHost();
                 return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
@@ -161,8 +160,7 @@
             onVideoOpen(){
                 this.video.visible = true;
                 this.$native.hideHeader({params: {hide: 1}});
-                let host = sessionStorage.getItem("host") || "";
-                // host = "http://10.18.40.226:7000";
+                let host = this.$comm.getHost();
                 let cw = document.body.clientWidth, ch = document.body.clientHeight;
                 let w = cw, h = cw * 0.75;
                 if(h > ch - 80){
