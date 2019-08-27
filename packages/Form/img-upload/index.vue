@@ -447,7 +447,6 @@
                     this.preview.images = this.imgs.filter((f) => {
                         return this.fileType(f) === 'image'
                     }).map((p) => {
-                        // return this.getPath(p);
                         return this.getPath(this.dict[p].url)
                     });
                     this.$native.hideHeader({params: {hide: 1}});
@@ -459,8 +458,6 @@
 
                     this.preview.start = this.current - videoNum;
                     this.preview.visible = true;
-
-                    console.log('预览图', this.preview.images);
 
                     /*ImagePreview({
                         images, startPosition: newIndex, loop: true,

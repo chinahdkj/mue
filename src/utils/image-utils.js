@@ -46,7 +46,7 @@ function zipImg(base64, file, quality, maxWidth, orientation, callback) {
     };
 }
 
-function rotateImg(img, direction, canvas) {
+export const rotateImg = (img, direction, canvas) => {
     //最小与最大旋转方向，图片旋转4次后回到原方向
     let min_step = 0, max_step = 3;
     if (img == null)

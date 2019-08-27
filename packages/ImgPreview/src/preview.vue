@@ -1,18 +1,19 @@
 <template>
     <div class="mue-img-preview" v-show="isShow">
-        <van-image-preview ref="preview" v-model="isShow" :images="images" :startPosition="startPosition" :loop="loop" v-bind="$attrs"
-                           v-on="$listeners" @close="onClose"
+        <van-image-preview ref="preview" v-model="isShow" :images="images" :startPosition="startPosition"
+                           :loop="loop" v-bind="$attrs" v-on="$listeners" @close="onClose"
                            @change="onChange">
         </van-image-preview>
         <div class="handle-btn">
-            <van-icon name="replay" @click="rotateLeft"/>
-            <van-icon name="replay" @click="rotateRight" />
+            <van-icon name="replay" @click="handleRotate('right')"/>
+            <van-icon name="replay" @click="handleRotate('left')" />
         </div>
 
     </div>
 </template>
 
 <script>
+    import { rotateImg } from "../../../src/utils/image-utils";
     export default {
         name: 'MueImgPreview',
         inheritAttrs: false,
@@ -57,28 +58,40 @@
         },
         data() {
             return {
-                current: -1,
-                angles: [],
+                current: -1
             }
         },
         methods: {
             onClose() {
-                this.angles = [];
                 this.$emit('update:visible', false);
                 this.$native.hideHeader({params: {hide: 0}});
             },
             onChange(index) {
                 this.current = index;
             },
-            rotateRight() {
-                let dom = this.$refs.preview.$el.getElementsByClassName('van-image-preview__image')[this.current];
-                this.$set(this.angles, this.current, (this.angles[this.current] || 0) + 90)
-                dom.style.transform = `rotate(${this.angles[this.current]}deg)`
+            async handleRotate(direction) {
+                let loading = this.$loading();
+                let base64 = await this.getBase64(this.images[this.current], direction);
+                this.$set(this.images, this.current, base64);
+                loading.close();
             },
-            rotateLeft() {
-                let dom = this.$refs.preview.$el.getElementsByClassName('van-image-preview__image')[this.current];
-                this.$set(this.angles, this.current, (this.angles[this.current] || 0) - 90)
-                dom.style.transform = `rotate(${this.angles[this.current]}deg)`
+            getBase64(url, direction) {
+                return new Promise((resolve) => {
+                    let image = new Image();
+                    image.crossOrigin = '';
+                    image.src = url;
+                    if(url) {
+                        image.onload = () => {
+                            let canvas = document.createElement('canvas');
+                            canvas.width = image.width;
+                            canvas.height = image.height;
+                            let ctx = canvas.getContext('2d');
+                            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                            rotateImg(image, direction, canvas);
+                            resolve(canvas.toDataURL())
+                        }
+                    }
+                })
             }
         },
         mounted(){
