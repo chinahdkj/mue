@@ -12,14 +12,14 @@
                 <span class="mue-load-more__text">
                     <i v-show="top.state != 'loading'" class="iconfont icon-xiangxiajiantou"
                        :class="{'is-drop': top.state === 'drop'}" aria-hidden="true"/>
-                    <template v-if="top.state === 'pull'">
+                    <template v-if="top.state === 'loading' || loading">
+                        {{topLoadingText}}
+                    </template>
+                    <template v-else-if="top.state === 'pull'">
                         {{topPullText}}
                     </template>
                     <template v-else-if="top.state === 'drop'">
                         {{topDropText}}
-                    </template>
-                    <template v-else-if="top.state === 'loading'">
-                        {{topLoadingText}}
                     </template>
                 </span>
             </div>
@@ -35,14 +35,14 @@
                     <i v-if="bottom.state != 'loading'" aria-hidden="true"
                        class="iconfont icon-xiangxiajiantou-copy"
                        :class="{'is-drop': bottom.state === 'drop'}"/>
-                    <template v-if="bottom.state === 'pull'">
+                    <template v-if="bottom.state === 'loading' || loading">
+                        {{bottomLoadingText}}
+                    </template>
+                    <template v-else-if="bottom.state === 'pull'">
                         {{bottomPullText}}
                     </template>
                     <template v-else-if="bottom.state === 'drop'">
                         {{bottomDropText}}
-                    </template>
-                    <template v-else-if="bottom.state === 'loading'">
-                        {{bottomLoadingText}}
                     </template>
                 </span>
             </div>
@@ -128,15 +128,15 @@
 
                 this.scroller.on("scrollStart", () => {
                     self.scrolling = true;
-                    self.loading = false;
-                    self.top.state = "";
-                    self.top.style = {};
-                    self.bottom.state = "";
-                    self.bottom.style = {};
+                    // self.loading = false;
+                    // self.top.state = "";
+                    // self.top.style = {};
+                    // self.bottom.state = "";
+                    // self.bottom.style = {};
                 });
 
                 this.scroller.on("scroll", ({y}) => {
-                    if(!self.scrolling || !self.$refs.box || !self.$refs.content){
+                    if(self.loading || !self.scrolling || !self.$refs.box || !self.$refs.content){
                         return;
                     }
 
@@ -161,7 +161,7 @@
                 });
 
                 this.scroller.on("pullingDown", () => {
-                    self.top.state === "drop" && self.topAction();
+                    !self.loading && self.top.state === "drop" && self.topAction();
                 });
 
                 this.scroller.on("scrollEnd", ({y}) => {
@@ -171,7 +171,7 @@
                 });
 
                 this.scroller.on("touchEnd", () => {
-                    self.bottom.state === "drop" && self.bottomAction();
+                    !self.loading && self.bottom.state === "drop" && self.bottomAction();
                 });
 
                 this.LoadSuccess();
@@ -181,38 +181,42 @@
             },
 
             topPulling(){
-                if(this.top.state === "loading" || this.disRefresh || !this.$listeners["refresh"]){
+                if(this.loading || this.top.state === "loading" || this.disRefresh
+                    || !this.$listeners["refresh"]){
                     return;
                 }
-                this.loading = true;
                 let y = Math.min(parseInt(this.translate), this.distance);
                 this.top.style = {top: `${-this.distance + y}px`};
                 this.top.state = y < this.distance ? "pull" : "drop";
             },
 
             topAction(){
+                if(this.loading){
+                    return;
+                }
                 this.top.state = "loading";
+                this.loading = true;
                 this.$emit("refresh", () => {
                     this.LoadSuccess();
                 });
             },
 
             bottomPulling(){
-                if(this.bottom.state === "loading" || this.disLoadMore ||
-                    !this.$listeners["load-more"]){
+                if(this.loading || this.bottom.state === "loading" || this.disLoadMore
+                    || !this.$listeners["load-more"]){
                     return;
                 }
-                this.loading = true;
                 let y = Math.min(parseInt(this.translate), this.distance);
                 this.bottom.style = {bottom: `${-this.distance + y}px`};
                 this.bottom.state = y < this.distance ? "pull" : "drop";
             },
 
             bottomAction(){
-                if(this.allLoaded){
+                if(this.loading || this.allLoaded){
                     return;
                 }
                 this.bottom.state = "loading";
+                this.loading = true;
                 this.$emit("load-more", () => {
                     this.LoadSuccess();
                 });
