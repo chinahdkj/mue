@@ -46,9 +46,23 @@ function zipImg(base64, file, quality, maxWidth, orientation, callback) {
     };
 }
 
-export const rotateImg = (img, direction, canvas) => {
+export const rotateImg = (img, angle, canvas) => {
+    if (img == null)
+        return;
+    let height = img.height, width = img.width;
+    let step;
+    let rotateAngle = angle % 360;
+    if(rotateAngle === 0) {
+        step = 0
+    } else if(rotateAngle === 90 || rotateAngle === -270) {
+        step = 1
+    } else if(Math.abs(rotateAngle) === 180) {
+        step = 2
+    } else {
+        step = 3
+    }
     //最小与最大旋转方向，图片旋转4次后回到原方向
-    let min_step = 0, max_step = 3;
+    /*let min_step = 0, max_step = 3;
     if (img == null)
         return;
     let height = img.height, width = img.width;
@@ -63,7 +77,7 @@ export const rotateImg = (img, direction, canvas) => {
     } else {
         step--;
         step < min_step && (step = max_step);
-    }
+    }*/
     //旋转角度以弧度值为参数
     let degree = step * 90 * Math.PI / 180;
     let ctx = canvas.getContext('2d');
@@ -73,6 +87,7 @@ export const rotateImg = (img, direction, canvas) => {
             canvas.height = height;
             ctx.drawImage(img, 0, 0);
             break;
+
         case 1:
             canvas.width = height;
             canvas.height = width;

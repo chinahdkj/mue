@@ -1,6 +1,6 @@
 <template>
     <div class="mue-img-preview" v-show="isShow">
-        <van-image-preview ref="preview" v-model="isShow" :images="images" :startPosition="startPosition"
+        <van-image-preview ref="preview" v-model="isShow" :images="imgs" :startPosition="startPosition"
                            :loop="loop" v-bind="$attrs" v-on="$listeners" @close="onClose"
                            @change="onChange">
         </van-image-preview>
@@ -54,15 +54,24 @@
                 handler(v) {
                     this.current = v;
                 }
+            },
+            images:{
+                immediate: true,
+                handler(v){
+                    this.imgs = [...v];
+                }
             }
         },
         data() {
             return {
-                current: -1
+                current: -1,
+                imgs: [],
+                angles: []
             }
         },
         methods: {
             onClose() {
+                this.angles = [];
                 this.$emit('update:visible', false);
                 this.$native.hideHeader({params: {hide: 0}});
             },
@@ -71,11 +80,17 @@
             },
             async handleRotate(direction) {
                 let loading = this.$loading();
-                let base64 = await this.getBase64(this.images[this.current], direction);
-                this.$set(this.images, this.current, base64);
+                let angle = this.angles[this.current] || 0, img = this.images[this.current];
+                if(direction === 'left') {
+                    this.$set(this.angles, this.current, angle + 90);
+                } else {
+                    this.$set(this.angles, this.current, angle - 90);
+                }
+                let base64 = await this.getBase64(img, this.angles[this.current]);
+                this.$set(this.imgs, this.current, base64);
                 loading.close();
             },
-            getBase64(url, direction) {
+            getBase64(url, angle) {
                 return new Promise((resolve) => {
                     let image = new Image();
                     image.crossOrigin = '';
@@ -83,11 +98,11 @@
                     if(url) {
                         image.onload = () => {
                             let canvas = document.createElement('canvas');
-                            canvas.width = image.width;
+                            /*canvas.width = image.width;
                             canvas.height = image.height;
                             let ctx = canvas.getContext('2d');
-                            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-                            rotateImg(image, direction, canvas);
+                            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);*/
+                            rotateImg(image, angle, canvas);
                             resolve(canvas.toDataURL())
                         }
                     }
