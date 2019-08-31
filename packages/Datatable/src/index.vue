@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-datatable" :class="{'no-border': noborder}">
+    <div class="mue-datatable" :class="{'no-border': noborder}" v-resize="onResize">
         <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                  :style="{width:fixedWidth + 'px' }">
@@ -262,6 +262,18 @@
             }
         },
         methods: {
+            onResize(){
+                this.setCols();
+                this.$nextTick(() => {
+                    if(!this.$refs.main_table){
+                        this.pageNo = 0;
+                        return;
+                    }
+                    if(this.virtual){
+                        this.calcYScroller();
+                    }
+                });
+            },
             getRowNo(row, index){
                 if(typeof this.rowNo === "function"){
                     return this.rowNo(row, index);

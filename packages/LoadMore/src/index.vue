@@ -2,7 +2,7 @@
     <div class="mue-load-more">
         <div class="mue-load-more__box" ref="box" :style="boxStyle">
             <div class="mue-load-more__wrap">
-                <div class="mue-load-more__content" ref="content" v-resize="refScroll">
+                <div class="mue-load-more__content" ref="content">
                     <slot></slot>
                 </div>
             </div>
@@ -176,9 +176,6 @@
 
                 this.LoadSuccess();
             },
-            refScroll(){
-                this.scroller && this.scroller.refresh();
-            },
 
             topPulling(){
                 if(this.loading || this.top.state === "loading" || this.disRefresh
@@ -260,7 +257,6 @@
                 if(!this.scroller){
                     return;
                 }
-                this.scrolling = true;
                 this.scroller.scrollTo(0, -t, 600);
             }
         },
@@ -271,6 +267,7 @@
             if(this.scroller){
                 this.$nextTick(() => {
                     this.scroller.scrollTo(0, this.posY, 1);
+                    this.$emit("scroll-change", this.$refs.box, this.$refs.content);
                 });
             }
         },
