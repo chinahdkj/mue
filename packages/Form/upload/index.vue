@@ -117,7 +117,7 @@
                     return "";
                 }
                 if (m.startsWith("/upload")) {
-                    return `${sessionStorage.getItem("host") || ""}${m}`;
+                    return `${this.$comm.getHost()}${m}`;
                 }
                 return m;
             },
@@ -185,7 +185,7 @@
                     let form = new FormData();
                     let f = this.base64ToFile(content, file);
                     form.append("file", file);
-                    form.append("id", file.name);
+                    // form.append("id", file.name);
 
                     return this.$http.post("/app/v1.0/upload.json", form, {
                         processData: false, contentType: false

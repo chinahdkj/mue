@@ -10,10 +10,19 @@
              :class="{'has-suffix': icon || $slots.suffix, 'mue-form-input__is-disabled': disabled}">
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
-                   onfocus="this.blur()"/>
+                   onfocus="this.blur()" :maxlength="maxlength"/>
+
+            <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+
+            <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+
             <input v-else :type="type" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
-                   @blur="$emit('blur')"/>
+                   @blur="$emit('blur')" :maxlength="maxlength"/>
 
             <span v-if="$slots.suffix" class="input__suffix">
                 <slot name="suffix"></slot>
@@ -46,11 +55,15 @@
             placeholder: {type: String, default: ""},
             icon: {type: String, default: ""},
             type: {type: String, default: "text"},
+            numberType: {type: String, default: ""},
             templates: {
                 type: Array, default(){
                     return [];
                 }
-            }
+            },
+            maxlength: {type: [String, Number], default: null},
+            max: {type: [String, Number], default: null},
+            min: {type: [String, Number], default: null}
         },
         inject: {
             FORM_ITEM: {
@@ -74,6 +87,13 @@
                 }
             },
             ipt(v, ov){
+                if(this.max!=null&&v>this.max){
+                    v=this.max
+                    this.ipt=this.max
+                }else if(this.min!=null&&v<this.min){
+                    v=this.min
+                    this.ipt=this.min
+                }
                 this.$emit("input", v);
                 this.$emit("change", v, ov);
             }

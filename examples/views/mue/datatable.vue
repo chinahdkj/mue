@@ -11,13 +11,13 @@
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
                                @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
                                @row-click="onRowClick" @cell-click="onCellClick">
-                    <!--<template slot="row" slot-scope="{row, cols, no}">-->
-                    <!--<tr>-->
-                    <!--<td v-for="c in cols" :key="c.field">-->
-                    <!--{{no}}{{row[c.field]}}-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--</template>-->
+<!--                    <template slot="row" slot-scope="{row, cols, no}">-->
+<!--                        <tr>-->
+<!--                            <td v-for="c in cols" :key="c.field">-->
+<!--                                {{no}}{{row[c.field]}}-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </template>-->
 
                     <template slot="aa" slot-scope="{row, col, value, no}">
                         <a v-popover:pop>{{col.field}} -- {{value}}</a>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-    import uuid from '../../../src/utils/uuid';
+    import uuid from "../../../src/utils/uuid";
 
     export default {
         data(){
@@ -130,7 +130,7 @@
                     };
                 });
 
-                return {rows: rows, total: 180};
+                return {rows: rows, total: 1000};
 
 
             },

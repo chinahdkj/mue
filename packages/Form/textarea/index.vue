@@ -5,9 +5,10 @@
         <template v-else>
             <textarea v-if="readonly" class="textarea__inner" v-model="ipt" readonly
                       :disabled="disabled" :placeholder="placeholder" :rows="rows"
-                      unselectable="on" onfocus="this.blur()"/>
+                      unselectable="on" onfocus="this.blur()" :maxlength="maxlength"/>
             <textarea v-else class="textarea__inner" v-model="ipt" :readonly="readonly"
-                      :disabled="disabled" :placeholder="placeholder" :rows="rows"/>
+                      :disabled="disabled" :placeholder="placeholder" :rows="rows"
+                      :maxlength="maxlength"/>
 
             <template v-if="templates.length > 0 && !disabled">
                 <a class="mue-textarea__pop-button" @click.stop="pop = true">
@@ -38,7 +39,8 @@
                 type: Array, default(){
                     return [];
                 }
-            }
+            },
+            maxlength: {type: [String, Number], default: null}
         },
         data(){
             return {

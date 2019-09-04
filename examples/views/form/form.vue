@@ -26,7 +26,7 @@
                     </mue-form-item>
 
                     <mue-form-item label="经纬度" required field="pos">
-                        <mue-gis-point placeholder="请选择" v-model="model.pos" :limit="limit"></mue-gis-point>
+                        <mue-gis-point placeholder="请选择" v-model="model.pos"></mue-gis-point>
                     </mue-form-item>
 
                     <mue-form-item label="站点图片" field="station.pics"

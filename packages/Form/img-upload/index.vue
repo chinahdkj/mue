@@ -13,12 +13,21 @@
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <button v-if="accept !== 'image'" class="upload-btn" type="button"
+                    <button v-if="accept === 'watermark'" class="upload-btn" type="button"
+                            :disabled="disabled" @click="uploadWatermark()">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </button>
+                    <button v-if="accept === 'video' || accept === 'all'" class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadhadVideo()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                    <android-upload v-if="isAd && multiple" ref="androidUpload" :disabled="disabled"
+                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </android-upload>
+                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
@@ -36,6 +45,8 @@
                          @select="typeSelect"
                          :actions="[{name: '上传图片', act: 'image'}, {name: '拍摄视频', act: 'video'}]"/>
 
+        <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
+
         <!--<van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
             <video :src="videoPop.src" style="width:100%;height:300px;" controls></video>
         </van-popup>-->
@@ -46,13 +57,17 @@
 <script>
     import {ImagePreview} from "vant";
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
+    import {isAndroid} from "../../../src/lib/common";
+    import androidUpload from "./androidUpload";
 
     const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
     const VIDEO = 'video/mp4,video/rmvb,video/avi,video/mov,video/flv,video/3gp';
 
     export default {
         name: "MueImgUpload",
-        components: {},
+        components: {
+            androidUpload
+        },
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -75,6 +90,12 @@
             limit: {type: Number, default: 5},
             accept: {
                 type: String, default: "image"
+            },
+            watermarkParams: {
+                type: Object,
+                default() {
+                    return null
+                }
             }
         },
         data(){
@@ -83,7 +104,12 @@
                 pop: {visible: false},
                 uploadPop: {visible: false},
                 // videoPop: {visible: false, src: ''},
-                current: -1
+                current: -1,
+                preview: {
+                    visible: false,
+                    images: [],
+                    start: 0
+                }
             };
         },
         computed: {
@@ -95,6 +121,9 @@
                         break;
                     case 'video':
                         type = VIDEO;
+                        break;
+                    case 'watermark':
+                        type = IMG;
                         break;
                     case 'all':
                         type = `${IMG},${VIDEO}`;
@@ -112,6 +141,10 @@
             },
             isReadonly(){
                 return this.FORM_ITEM.readonly || this.readonly;
+            },
+            isAd() {
+                // return false;
+                return isAndroid();
             }
         },
         watch: {
@@ -156,7 +189,7 @@
                         });
                     });
 
-                    if(this.base64 || this.accept !== "image"){
+                    if(this.base64 || this.accept === "video" || this.accept === 'all'){
                         let prms = v.filter((p) => {
                             return this.base64 || this.fileType(p) === "video";
                         }).map((p) => {
@@ -193,8 +226,11 @@
             },
             typeSelect({act}){
                 if(act === "image"){
-                    this.$refs.uploadbtn.$el.getElementsByClassName(
-                        "van-uploader__input")[0].click();
+                    if(this.isAd && this.multiple) {
+                        this.$refs.androidUpload.Upload();
+                    } else {
+                        this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
+                    }
                 }
                 else if(act === "video"){
                     this.videoUpload();
@@ -275,9 +311,35 @@
                     return "";
                 }
                 if(whole.startsWith("/upload")){
-                    return `${sessionStorage.getItem("host") || ""}${whole}`;
+                    return `${this.$comm.getHost()}${whole}`;
                 }
                 return whole;
+            },
+
+            getWatermark() {
+                return new Promise(resolve => {
+                    this.$native.watermarkCamera({
+                        params: {...this.watermarkParams},
+                        cb: ({code, base64Img}) => {
+                            if(code === 0){
+                                resolve(base64Img);
+                            }
+                        }
+                    });
+                });
+            },
+
+            //调用原生水印相机
+            async uploadWatermark() {
+                let base64 = await this.getWatermark();
+                if(!base64) {
+                    return
+                }
+                let type = base64.substring(base64.indexOf(':') + 1, base64.indexOf(';'));
+                let name = `Watermark.${type.substring(type.lastIndexOf('/') + 1)}`;
+                let blob = Base64ToFile(base64, {type, name});
+                let file = {content: base64, file: blob};
+                this.upload(file);
             },
 
             upload(files){
@@ -318,7 +380,7 @@
                         let form = new FormData();
                         let f = Base64ToFile(content, file);
                         form.append("file", f, file.name);
-                        form.append("id", file.name);
+                        // form.append("id", file.name);
 
                         return this.$http.post("/app/v1.0/upload.json", form, {
                             processData: false, contentType: false
@@ -382,23 +444,27 @@
             showFile(){
                 let type = this.fileType(this.imgs[this.current]);
                 if(type === 'image'){
-                    let images = this.imgs.filter((f) => {
+                    this.preview.images = this.imgs.filter((f) => {
                         return this.fileType(f) === 'image'
                     }).map((p) => {
-                        return this.getPath(p);
+                        return this.getPath(this.dict[p].url)
                     });
                     this.$native.hideHeader({params: {hide: 1}});
                     let tempArr = this.imgs.slice(0, this.current);
                     let videoNum = tempArr.filter((v) => {
                         return this.fileType(v) === 'video'
                     }).length;
-                    let newIndex = this.current - videoNum;
-                    ImagePreview({
+                    // let newIndex = this.current - videoNum;
+
+                    this.preview.start = this.current - videoNum;
+                    this.preview.visible = true;
+
+                    /*ImagePreview({
                         images, startPosition: newIndex, loop: true,
                         onClose: () => {
                             this.$native.hideHeader({params: {hide: 0}});
                         }
-                    });
+                    });*/
                 }
                 else{
                     // this.videoPop.visible = true;
@@ -434,14 +500,15 @@
             beforeRead(files){
                 let fileArr = Array.isArray(files) ? [...files] : [files];
                 if(this.limit <= 0){
-                    return true;
+                    return fileArr;
                 }
                 let limit = this.multiple ? this.limit : 1;
                 if(fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)){
-                    return true
+                    return fileArr
                 }
                 else{
                     this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                    return false;
                 }
             }
         }

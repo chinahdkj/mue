@@ -11,7 +11,7 @@
                    :lazy-render="true" get-container="body" :close-on-click-overlay="false"
                    @click-overlay="pop = false">
             <div class="van-picker" v-loading="!pos">
-                <div v-if="!FORM_ITEM.readonly"
+                <div v-if="!isReadonly"
                      class="van-hairline--top-bottom van-picker__toolbar">
                     <div class="van-picker__cancel" @click="onCancel">
                         {{cancelButtonText}}
@@ -23,17 +23,25 @@
                     <label>纬度</label><span>{{(pos || {}).lat | round}}</span>
                 </div>
                 <div class="mue-gis-point-pop--map">
-                    <l-map v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
+                    <l-map ref="Lmap" v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
                            :options="{zoomControl: false, attributionControl: false}"
                            :center="pos" @update:center="updateCenter">
-                        <l-control-zoom position="topright"></l-control-zoom>
+                        <l-control position="topright" class="get-location" v-if="!isReadonly">
+                            <div class="btn-con" @click.stop="getLocation">
+                                <van-loading type="spinner" size="24px" v-if="loading"/>
+                                <i v-else class="iconfont icon-dingwei1"></i>
+                                <span class="title">定位</span>
+                            </div>
+                        </l-control>
+                        <l-control-zoom position="topright" :zoomInText="zoomInIcon"
+                                        :zoomOutText="zoomOutIcon"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
                                       url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
-                        <l-marker v-if="FORM_ITEM.readonly" :lat-lng="pos"/>
+                        <l-marker v-if="isReadonly" :lat-lng="pos"/>
                         <l-circle v-if="limit" :lat-lng="limit.center" :radius="limit.radius"
                                   color="#4796e3"/>
                     </l-map>
-                    <div class="mue-gis-point-pop--marker" v-if="!FORM_ITEM.readonly"
+                    <div class="mue-gis-point-pop--marker" v-if="!isReadonly"
                          :style="markerOpt.style">
                         <img class="--shadow" v-bind="shandowOpt"/>
                         <img :src="markerOpt.src"/>
@@ -46,7 +54,7 @@
 </template>
 
 <script>
-    import {LCircle, LControlZoom, LMap, LMarker, LTileLayer} from "vue2-leaflet";
+    import {LCircle, LControl, LControlZoom, LMap, LMarker, LTileLayer} from "vue2-leaflet";
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 
@@ -73,7 +81,7 @@
 
     export default {
         name: "MueGisPoint",
-        components: {LMap, LTileLayer, LMarker, LControlZoom, LCircle},
+        components: {LMap, LTileLayer, LMarker, LControlZoom, LCircle, LControl},
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -86,21 +94,25 @@
             value: {default: null},
             clearable: {default: false, type: Boolean},
             disabled: {type: Boolean, default: false},
+            readonly: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
             datatype: {
                 type: String, default: "string", validator(v){
                     return ["string", "array", "object"].indexOf(v) > -1;
                 }
             },
-            zoom: {type: Number, default: 14},
+            zoom: {type: Number, default: 18},
             limit: {type: Object, default: null}
         },
         data(){
             return {
+                loading: false,
                 pop: false,
                 pos: null,
                 distance: null,
-                exceedArea: false
+                exceedArea: false,
+                zoomInIcon: "<i class=\"iconfont icon-tianjia1-copy\"></i><span class=\"title\">放大</span>",
+                zoomOutIcon: "<i class=\"iconfont icon-jianquminus25-copy\"></i><span class=\"title\">缩小</span>",
             };
         },
         computed: {
@@ -110,6 +122,9 @@
             },
             cancelButtonText(){
                 return this.clearable ? "清空" : "取消";
+            },
+            isReadonly(){
+                return this.FORM_ITEM.readonly || this.readonly;
             },
             markerOpt(){
                 return {
@@ -172,7 +187,19 @@
             }
         },
         methods: {
+            getLocation(){
+                this.loading = true;
+                this.$native.getLocation({
+                    cb: ({lat, lng}) => {
+                        this.pos = {lat, lng};
+                        this.loading = false;
+                    }
+                });
+            },
             rePos(){
+                if(this.isReadonly){
+                    return;
+                }
                 this.$native.getLocation({
                     cb: ({lat, lng}) => {
                         this.pos = {lat, lng};
@@ -183,12 +210,12 @@
                 });
             },
             updateCenter(v){
-                if(!this.FORM_ITEM.readonly){
+                if(!this.isReadonly){
                     this.pos = v;
                 }
             },
             showPop(){
-                if(this.disabled || (this.FORM_ITEM.readonly && !this.pos)){
+                if(this.disabled){
                     return;
                 }
                 this.pop = true;
