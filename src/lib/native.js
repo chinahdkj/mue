@@ -11,13 +11,13 @@ const fns = [
     "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
-    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file","v88s_zdsjcx","v88s_params","v88s_tc", "logger"
+    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file","v88s_zdsjcx","v88s_params","v88s_tc", "logger", "singleDownload"
 ];
 
 const fns2 = [
     'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes', 'handPostResp', 
     'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi", "getLocation", "btUpdate", 
-    "screenoff", "screenon", "bgNaviClose", "btRawData"
+    "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload"
 ] // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
