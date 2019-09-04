@@ -19,32 +19,39 @@
             afterRead: {type: Function, default: null}
         },
         data() {
-            return {}
+            return {
+                values: []
+            }
         },
         methods: {
             Upload() {
+                this.values = [];
                 this.$native.multi_file({
                     params: {
                         maxNum: this.limit,
                         mType: this.accept
                     },
-                    cb: ({values}) => {
-                        if (!values.length) {
-                            return;
-                        }
-                        if (typeof this.beforeRead === 'function') {
-                            let res = this.beforeRead(values);
-                            if (res === false) {
-
-                            } else if (res instanceof Promise) {
-                                res.then((vals) => {
-                                    this.onAfterRead(vals);
-                                })
-                            } else {
-                                this.onAfterRead(res);
-                            }
+                    cb: ({value}) => {
+                        if(value !== null) {
+                            this.values.push(value);
                         } else {
-                            this.onAfterRead(values);
+                            if (!this.values.length) {
+                                return;
+                            }
+                            if (typeof this.beforeRead === 'function') {
+                                let res = this.beforeRead(this.values);
+                                if (res === false) {
+
+                                } else if (res instanceof Promise) {
+                                    res.then((vals) => {
+                                        this.onAfterRead(vals);
+                                    })
+                                } else {
+                                    this.onAfterRead(res);
+                                }
+                            } else {
+                                this.onAfterRead(this.values);
+                            }
                         }
                     }
                 });
