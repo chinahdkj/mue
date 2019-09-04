@@ -32,7 +32,6 @@
                         mType: this.accept
                     },
                     cb: ({value}) => {
-                        console.log(value);
                         if(value !== null) {
                             this.values.push(value);
                         } else {
