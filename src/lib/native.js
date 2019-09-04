@@ -8,7 +8,7 @@ const fns = [
     "save", "delete", "query", "rotate", "startNavi", "getLocation", "isCollected", "sysInfo",
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
     "collect", "nfcData", "goback", "refreshBadge", "signature","saveLocalData","queryLocalData","deleteLocalData",
-    "bluetooth", "btDisConnected", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
+    "bluetooth", "btDisConnected",  "bluetoothState", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
     "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file","v88s_zdsjcx","v88s_params","v88s_tc", "logger", "singleDownload"
@@ -16,7 +16,7 @@ const fns = [
 
 const fns2 = [
     'search', 'collect', 'btDisConnected', 'btReceiver', 'btGetParams', 'manualPostRes', 'handPostResp', 
-    'btSound','btScan', 'handCollectResp', 'bluetooth', 'interceptBack', "bgNavi", "getLocation", "btUpdate", 
+    'btSound','btScan', 'handCollectResp', 'bluetooth', "onBtState", 'interceptBack', "bgNavi", "getLocation", "btUpdate", 
     "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload"
 ] // 原生主动调用js的方法
 
