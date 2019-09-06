@@ -120,10 +120,16 @@
                 let self = this;
                 self.resetStates();
                 self.scroller = new BETTER_SCROLL(this.$refs.box, {
-                    click: true, probeType: 1, scrollbar: false, bounce: true, momentum: false,
+                    click: true, probeType: 1, scrollbar: false, momentum: false,
                     scrollY: true, scrollX: false, bindToWrapper: false, startY: this.posY,
+                    bounce: {
+                        left: false, right: false,
+                        top: this.$listeners["refresh"] && !this.disRefresh,
+                        bottom: this.$listeners["load-more"] && !this.disLoadMore
+                    },
                     pullDownRefresh: {threshold: this.distance, stop: this.distance},
-                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal"
+                    pullUpLoad: {threshold: this.distance},
+                    eventPassthrough: "horizontal"
                 });
 
                 this.scroller.on("scrollStart", () => {
