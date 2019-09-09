@@ -11,7 +11,7 @@ const fns = [
     "bluetooth", "btDisConnected",  "bluetoothState", "manualPost", "btGetParams", "manualPostRes","btSound","soundPlay","vibratorSound","dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
-    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file","v88s_zdsjcx","v88s_params","v88s_tc", "logger", "singleDownload"
+    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file","v88s_zdsjcx","v88s_params","v88s_tc", "logger", "singleDownload", "clearCache"
 ];
 
 const fns2 = [
