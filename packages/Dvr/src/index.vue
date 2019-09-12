@@ -29,7 +29,7 @@
                 <div :style="{height: gutter + 'px'}"></div>
             </div>
             <mue-select style="display: none;" ref="pop" :data="cameras" v-model="pop.current"
-                        @change="setCamera"></mue-select>
+                        @change="setCamera" searchable></mue-select>
         </mue-main>
 
     </mue-container>
