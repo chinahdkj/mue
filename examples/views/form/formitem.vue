@@ -1,8 +1,10 @@
 <template>
     <div>
         <mue-panel hairline="normal" title="select">
-            <mue-select style="margin: 10px;" :data="select.data" v-model="select.value"
+            <mue-select style="margin: 10px" :data="select.data" v-model="select.value"
                         @change="selectChange"></mue-select>
+            <mue-select style="margin: 10px" :data="searchSelect.data" v-model="searchSelect.value"
+                        searchable></mue-select>
         </mue-panel>
 
 
@@ -78,6 +80,19 @@
                         },
                         {code: "c4", name: "选项4"},
                         {code: "c5", name: "选项5"},
+                    ]
+                },
+                searchSelect: {
+                    value: '',
+                    data: [
+                        {code: 'c1', name: "选项1"},
+                        {code: 'c2', name: "选项2"},
+                        {code: 'c3', name: "选项3"},
+                        {code: 'c4', name: "选项4"},
+                        {code: 'c5', name: "选项5"},
+                        {code: 'c6', name: "选项11"},
+                        {code: 'c7', name: "选项222"},
+                        {code: 'c8', name: "选项3333"},
                     ]
                 },
                 input: {number: 0, value: ""},
