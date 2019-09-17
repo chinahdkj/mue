@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-img-preview" v-show="isShow">
+    <div class="mue-img-preview" v-show="isShow" v-loading.fullscreen="loading">
         <van-image-preview ref="preview" v-model="isShow" :images="imgs" :startPosition="startPosition"
                            :loop="loop" v-bind="$attrs" v-on="$listeners" @close="onClose"
                            @change="onChange">
@@ -68,7 +68,8 @@
             return {
                 current: -1,
                 imgs: [],
-                angles: []
+                angles: [],
+                loading: false
             }
         },
         methods: {
@@ -81,7 +82,7 @@
                 this.current = index;
             },
             async handleRotate(direction) {
-                let loading = this.$loading();
+                this.loading = true
                 let angle = this.angles[this.current] || 0, img = this.images[this.current];
                 if (direction === 'left') {
                     this.$set(this.angles, this.current, angle + 90);
@@ -90,7 +91,7 @@
                 }
                 let base64 = await this.getBase64(img, this.angles[this.current]);
                 this.$set(this.imgs, this.current, base64);
-                loading.close();
+                this.loading = false;
             },
             getBase64(url, angle) {
                 return new Promise((resolve) => {
@@ -125,7 +126,7 @@
                 return path;
             },
             download() {
-                let loading = this.$loading();
+                this.loading = true;
                 let value = this.images[this.current];
                 let type = this.isBase64(value) ? 'img_base64' : 'img_url';
                 if (this.isBase64(value)) {
@@ -137,7 +138,7 @@
                 this.$native.resSave({
                     params: {type, value},
                     cb: (res) => {
-                        loading.close();
+                        this.loading = false;
                         if(res.code === 0) {
                             this.$toast.success('已下载至手机相册')
                         } else {
