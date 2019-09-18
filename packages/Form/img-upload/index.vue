@@ -387,7 +387,7 @@
                         });
                     });
 
-                    this.$ajax.all([...posts]).then((rs) => {
+                    this.$ajax.all(posts).then((rs) => {
                         if (this.multiple) {
                             rs.forEach(({url}) => {
                                 this.imgs.push(url);
