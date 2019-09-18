@@ -131,6 +131,8 @@
                 let type = this.isBase64(value) ? 'img_base64' : 'img_url';
                 if (this.isBase64(value)) {
                     type = 'img_base64';
+                    let prefix = value.match(/^data:image\/[a-z]+;base64,/)[0];
+                    value = value.substring(prefix.length);
                 } else {
                     type = 'img_url'
                     value = this.wholePath(value);
