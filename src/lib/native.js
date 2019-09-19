@@ -43,10 +43,15 @@ window.response = ({msgid, params, method}) => {
             return true
         }
     })
-
     const cb = _cache[msgid];
-    cb && cb(params);
-    delete _cache[msgid];
+    if(cb){
+        let gon = cb(params);
+        // 如果多次回调，返回true 不删除回调入口
+        gon !== true && delete _cache[msgid];
+    }
+    else{
+        delete _cache[msgid];
+    }
 };
 
 window.response2 = ({method, cb}) => {

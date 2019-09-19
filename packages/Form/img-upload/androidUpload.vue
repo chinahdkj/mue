@@ -34,6 +34,7 @@
                     cb: ({value}) => {
                         if(value !== null) {
                             this.values.push(value);
+                            return true;
                         } else {
                             if (!this.values.length) {
                                 return;
