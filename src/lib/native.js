@@ -46,8 +46,7 @@ window.response = ({msgid, params, method}) => {
 
     const cb = _cache[msgid];
     cb && cb(params);
-    // 支持多次调用原生回调，所以要注释掉（对应固件升级页面需要多次回调）
-    // delete _cache[msgid];
+    delete _cache[msgid];
 };
 
 window.response2 = ({method, cb}) => {
