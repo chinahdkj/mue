@@ -8,10 +8,14 @@
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
                    get-container="body" :close-on-click-overlay="false"
-                   @click-overlay="pop = false">
+                   @click-overlay="pop = false" @close="onPopupClose">
             <van-picker ref="picker" :columns="columns" show-toolbar @confirm="onConfirm"
                         @cancel="onCancel" :cancel-button-text="cancelButtonText"
-                        value-key="name" @change="onChange"/>
+                        value-key="name" @change="onChange">
+                <template #title v-if="searchable">
+                    <input class="input__search" type="text" v-model="searchValue" placeholder="输入选项关键字">
+                </template>
+            </van-picker>
         </van-popup>
     </div>
 </template>
@@ -47,6 +51,10 @@
                 type: String, default: "last", validator(v){
                     return ["last", "all"].indexOf(v) > -1;
                 }
+            },
+            searchable: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -54,7 +62,9 @@
                 pop: false,
                 depth: 0,
                 dict: {},
-                columns: []
+                columns: [],
+                searchDict: {},
+                searchValue: ''
             };
         },
         computed: {
@@ -110,10 +120,20 @@
                     this.depth = depth;
                     this.dict = dict;
                 }
+            },
+            searchValue(val) {
+                this.searchDict = {};
+                for (let [key, col] of Object.entries(this.dict)) {
+                    let isChildren = col.$parent ? String(this.dict[col.$parent].name).includes(val) : false;
+                    if (col.$lv === 0 && String(col.name).includes(val) || isChildren) {
+                        this.searchDict[key] = col;
+                    }
+                }
+                this.initCols(null, val);
             }
         },
         methods: {
-            initCols(road){
+            initCols(road, searchVal){
                 road = road || [];
                 let cols = [];
                 for(let i = 0; i < this.depth; i++){
@@ -123,7 +143,8 @@
                         parent = (values[defaultIndex] || {}).code;
 
                     }
-                    let values = Object.values(this.dict).filter((o) => {
+                    let dict = searchVal ? this.searchDict : this.dict;
+                    let values = Object.values(dict).filter((o) => {
                         return o.$parent === parent && o.$lv === i;
                     });
 
@@ -168,7 +189,10 @@
                 let road = picker.getValues();
                 this.initCols(road.map((r) => {
                     return (r || {}).code;
-                }));
+                }), this.searchValue);
+            },
+            onPopupClose() {
+                this.searchValue = '';
             },
 
             ShowPop(){
@@ -179,7 +203,7 @@
             },
             GetOptionInfo(code){
                 return this.dict[code];
-            }
+            },
         }
     }
 </script>

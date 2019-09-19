@@ -24,7 +24,7 @@
                 </span>
             </div>
 
-            <div v-show="scrolling && $listeners['load-more'] && !disLoadMore && bottom.state"
+            <div v-show="scrolling > 0 && $listeners['load-more'] && !disLoadMore && bottom.state"
                  class="mue-load-more__bottom"
                  :style="bottom.state != 'loading' ? bottom.style : {bottom: -distance + 'px'}">
                 <span v-if="allLoaded" class="mue-load-more__text">
@@ -97,7 +97,7 @@
             return {
                 distance: 50,
                 scroller: null,
-                scrolling: false,
+                scrolling: 0, // 0：不滚动， 1：操作触发的滚动， -1：api 触发的滚动
                 loading: false,
                 top: {state: "", style: {}},
                 bottom: {state: "", style: {}},
@@ -108,7 +108,7 @@
         },
         computed: {
             boxStyle(){
-                if(this.bottom.state === "loading" && this.scrolling){
+                if(this.bottom.state === "loading" && this.scrolling > 0){
                     return {transform: `translateY(${-this.distance}px)`,};
                 }
                 return {transition: "0.6s"};
@@ -120,14 +120,20 @@
                 let self = this;
                 self.resetStates();
                 self.scroller = new BETTER_SCROLL(this.$refs.box, {
-                    click: true, probeType: 1, scrollbar: false, bounce: true, momentum: false,
-                    scrollY: true, scrollX: false, bindToWrapper: false,
+                    click: true, probeType: 1, scrollbar: false, momentum: false,
+                    scrollY: true, scrollX: false, bindToWrapper: false, startY: this.posY,
+                    bounce: {
+                        left: false, right: false,
+                        top: this.$listeners["refresh"] && !this.disRefresh,
+                        bottom: this.$listeners["load-more"] && !this.disLoadMore
+                    },
                     pullDownRefresh: {threshold: this.distance, stop: this.distance},
-                    pullUpLoad: {threshold: this.distance}, eventPassthrough: "horizontal"
+                    pullUpLoad: {threshold: this.distance},
+                    eventPassthrough: "horizontal"
                 });
 
                 this.scroller.on("scrollStart", () => {
-                    self.scrolling = true;
+                    self.scrolling = 1;
                     // self.loading = false;
                     // self.top.state = "";
                     // self.top.style = {};
@@ -150,7 +156,7 @@
                     let cr = self.$refs.content.getBoundingClientRect();
                     let t = br.bottom - (cr.top + Math.max(cr.height, br.height));
 
-                    if(y < 0 && t > 0){
+                    if(y < 0 && t > 0 && this.scrolling > 0){
                         self.translate = t;
                         self.bottomPulling();
                         return;
@@ -166,12 +172,21 @@
 
                 this.scroller.on("scrollEnd", ({y}) => {
                     // if(!self.loading){
-                    self.scrolling = false;
+                    self.scrolling = 0;
                     // }
                 });
 
                 this.scroller.on("touchEnd", () => {
                     !self.loading && self.bottom.state === "drop" && self.bottomAction();
+                });
+
+                this.scroller.on("refresh", () => {
+                    if(self.scrolling){
+                        return;
+                    }
+                    if(self.scroller.y < self.scroller.maxScrollY){
+                        self.ScrollTop(0);
+                    }
                 });
 
                 this.LoadSuccess();
@@ -229,7 +244,7 @@
                 this.loading = false;
                 this.top.state = "";
                 this.bottom.state = "";
-                this.scrolling = false;
+                this.scrolling = 0;
             },
 
             fillContainer(){
@@ -257,23 +272,23 @@
                 if(!this.scroller){
                     return;
                 }
-                this.scroller.scrollTo(0, -t, 600);
+                this.scrolling = -1;
+                this.scroller.scrollTo(0, -t, 300);
             }
         },
         mounted(){
             this.initScroll();
         },
         activated(){
-            if(this.scroller){
-                this.$nextTick(() => {
-                    this.scroller.scrollTo(0, this.posY, 1);
-                    this.$emit("scroll-change", this.$refs.box, this.$refs.content);
-                });
+            if(!this.scroller){
+                this.initScroll();
             }
         },
         deactivated(){
             if(this.scroller){
                 this.posY = this.scroller.y;
+                this.scroller.destroy();
+                this.scroller = null;
             }
         }
     };
