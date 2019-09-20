@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { GetQueryString, getHost } from './common';
-import { CloseLoading } from '../../packages/Loading/src';
-import Vue from 'vue';
+import axios from "axios";
+import {getHost, GetQueryString} from "./common";
+import {CloseLoading} from "../../packages/Loading/src";
+import Vue from "vue";
 
 let token = GetQueryString('token') || GetQueryString('token', 'hash');
 if (token) {
@@ -16,6 +16,11 @@ if (host) {
     host = decodeURIComponent(host);
     sessionStorage.setItem('host', host);
 }
+
+let getAid = () => {
+    return GetQueryString("aid") || GetQueryString("aid", "hash")
+        || sessionStorage.getItem("aid") || 'scada';
+};
 
 export function InitHttp() {
     axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
@@ -49,13 +54,14 @@ export function InitHttp() {
 }
 
 export default {
-    post(url, data, failed = false) {
+    post(url, data, failed = false, aid = null) {
         return axios({
             method: 'post',
             baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             data: data,
-            timeout: 30000
+            timeout: 30000,
+            headers: {aid: aid || getAid()}
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
@@ -72,13 +78,14 @@ export default {
             return Promise.reject(e);
         })
     },
-    get(url, params, failed = false) {
+    get(url, params, failed = false, aid = null) {
         return axios({
             method: 'get',
             baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             params, // get 请求时带的参数
-            timeout: 30000
+            timeout: 30000,
+            headers: {aid: aid || getAid()}
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
