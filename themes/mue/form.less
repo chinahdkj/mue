@@ -112,7 +112,7 @@
             border: 0;
             padding: 0 15px;
             border-radius: 2px;
-            text-align:center;
+            text-align: center;
             background: none;
         }
     }
@@ -187,14 +187,15 @@
                 position: relative;
 
                 &.__upload-btn {
-                    .upload-btn{
+                    .upload-btn {
                         position: relative;
                         display: inline-block;
-                        background:none;
-                        border:0;
-                        padding:0;
-                        margin:0;
+                        background: none;
+                        border: 0;
+                        padding: 0;
+                        margin: 0;
                     }
+
                     i.icon-tianjia {
                         font-size: @item-size - 20px;
                         color: @@grey;
@@ -225,6 +226,7 @@
                         width: 100%;
                         height: 100%;
                         position: relative;
+
                         > img {
                             width: @item-size - 4px;
                             position: absolute;
@@ -232,6 +234,7 @@
                             transform: translateY(-50%);
                             left: 0;
                         }
+
                         .box-shadow {
                             position: absolute;
                             width: 100%;
@@ -239,6 +242,7 @@
                             z-index: 1;
                             background: rgba(0, 0, 0, .4);
                         }
+
                         i {
                             position: absolute;
                             left: 50%;
@@ -251,7 +255,7 @@
                             line-height: 24px;
                             border-radius: 50%;
                             font-size: 12px;
-                            background: rgba(255,255,255,.6);
+                            background: rgba(255, 255, 255, .6);
                         }
                     }
 
@@ -267,11 +271,13 @@
         min-width: 55px;
         max-width: 100%;
         background: @@background;
+
         ul.mue-sound-record-list {
             display: block;
             width: 100%;
             overflow: hidden;
             @item-size: 50px;
+
             > li {
                 display: block;
                 float: left;
@@ -282,37 +288,41 @@
                 margin: 2px 5px 2px 0;
                 overflow: hidden;
                 position: relative;
-                border-radius:50%;
+                border-radius: 50%;
+
                 &._record-btn {
                     border: 2px solid #f3b4b2;
+
                     .record-btn {
-                        width:78%;
-                        height:78%;
-                        background-color:#ed6d69;
-                        border:0;
-                        border-radius:50%;
-                        position:absolute;
-                        left:50%;
-                        top:50%;
-                        transform: translate(-50%,-50%);
+                        width: 78%;
+                        height: 78%;
+                        background-color: #ed6d69;
+                        border: 0;
+                        border-radius: 50%;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
                     }
-                    .recording{
-                        width:50%;
-                        height:50%;
-                        background-color:#ed6d69;
-                        border:0;
-                        position:absolute;
-                        left:50%;
-                        top:50%;
-                        transform: translate(-50%,-50%);
+
+                    .recording {
+                        width: 50%;
+                        height: 50%;
+                        background-color: #ed6d69;
+                        border: 0;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
                     }
                 }
+
                 &.record_audio {
-                    .play{
-                        position:absolute;
-                        left:50%;
-                        top:50%;
-                        transform: translate(-50%,-50%);
+                    .play {
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
                         font-size: @item-size - 26px;
                         color: @@grey;
                     }
@@ -408,10 +418,12 @@
                 }
             }
         }
+
         .mue-img-upload-pop {
             background-color: #333333;
             width: 100%;
             text-align: center;
+
             video {
                 width: 100%;
                 min-height: 300px;
@@ -512,16 +524,17 @@
                     border: solid 2px #ed6d69;
                     background-color: #eeeeee;
                     border-radius: 50%;
+
                     &:before {
                         content: '';
-                        display:block;
-                        position:absolute;
-                        width:2px;
-                        height:26px;
+                        display: block;
+                        position: absolute;
+                        width: 2px;
+                        height: 26px;
                         left: 50%;
                         top: 50%;
                         transform: translate(-50%, -50%) rotate(45deg);
-                        background-color:#ed6d69;
+                        background-color: #ed6d69;
                     }
                 }
             }
@@ -529,7 +542,7 @@
             .leaflet-control-zoom {
                 border: 1px solid @@border-color;
                 box-shadow: 0 0 6px rgba(0, 0, 0, 0.75);
-                width:40px;
+                width: 40px;
                 box-sizing: border-box;
 
                 > a, a:hover {
@@ -539,14 +552,16 @@
                     width: 40px;
                     height: 40px;
                     line-height: 28px;
-                    border:0;
+                    border: 0;
+
                     i {
-                        font-size:28px;
+                        font-size: 28px;
                         color: @@primary;
                     }
+
                     .title {
-                        display:block;
-                        font-size:10px;
+                        display: block;
+                        font-size: 10px;
                         color: @@color;
                         line-height: 0;
                         font-weight: 600;
@@ -561,7 +576,7 @@
                     &:first-child {
                         border-top-left-radius: 4px;
                         border-top-right-radius: 4px;
-                        border-bottom:solid 1px @@border-color
+                        border-bottom: solid 1px @@border-color
                     }
 
                     &:last-child {
@@ -584,18 +599,22 @@
                 border-radius: 4px;
                 box-shadow: 0 0 6px rgba(0, 0, 0, 0.75);
                 box-sizing: border-box;
+
                 .btn-con {
                     width: 100%;
                     height: 100%;
+
                     .van-loading {
                         margin: 0 auto;
-                        margin-top:1px;
-                        margin-bottom:7px;
+                        margin-top: 1px;
+                        margin-bottom: 7px;
                         color: @@primary !important;
                     }
+
                     i {
                         font-size: 28px
                     }
+
                     .title {
                         display: block;
                         font-size: 10px;
@@ -972,6 +991,13 @@
                 box-sizing: border-box;
                 font-size: @font-size;
 
+                -webkit-touch-callout: unset;
+                -webkit-user-select: text;
+                -khtml-user-select: unset;
+                -moz-user-select: text;
+                -ms-user-select: text;
+                user-select: text;
+
                 .input__suffix {
                     display: inline-block;
                     margin-left: 5px;
@@ -988,6 +1014,15 @@
             .mue-form-item-content .mue-form-text {
                 text-align: left;
             }
+        }
+
+        textarea, input[type='text'] {
+            -webkit-touch-callout: unset;
+            -webkit-user-select: text;
+            -khtml-user-select: unset;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
     }
 }
