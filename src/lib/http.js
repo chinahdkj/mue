@@ -17,9 +17,9 @@ if (host) {
     sessionStorage.setItem('host', host);
 }
 
-let getAid = () => {
-    return GetQueryString("aid") || GetQueryString("aid", "hash")
-        || sessionStorage.getItem("aid") || 'scada';
+let getAppId = () => {
+    return GetQueryString("appid") || GetQueryString("appid", "hash")
+        || sessionStorage.getItem("appid") || 'scada';
 };
 
 export function InitHttp() {
@@ -54,14 +54,14 @@ export function InitHttp() {
 }
 
 export default {
-    post(url, data, failed = false, aid = null) {
+    post(url, data, failed = false, appid = null) {
         return axios({
             method: 'post',
             baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             data: data,
             timeout: 30000,
-            headers: {aid: aid || getAid()}
+            headers: {appid: appid || getAppId()}
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
@@ -78,14 +78,14 @@ export default {
             return Promise.reject(e);
         })
     },
-    get(url, params, failed = false, aid = null) {
+    get(url, params, failed = false, appid = null) {
         return axios({
             method: 'get',
             baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
             url,
             params, // get 请求时带的参数
             timeout: 30000,
-            headers: {aid: aid || getAid()}
+            headers: {appid: appid || getAppId()}
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
