@@ -97,7 +97,7 @@ window.changeTheme = (t) => {
     hash[1] = Object.entries(params).map(([k, v]) => {
         return `${k}=${v}`;
     }).join("&");
-    location.hash = hash.join("?");
+    location.replace(hash.join("?"));
 };
 
 export default methods;
