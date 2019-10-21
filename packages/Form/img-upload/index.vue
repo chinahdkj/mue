@@ -23,8 +23,9 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload v-if="isAd && multiple" ref="androidUpload" :disabled="disabled"
-                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
+                    <android-upload v-if="isAd" ref="androidUpload" :disabled="disabled"
+                                    :limit="multiple ? limit : 1" :before-read="beforeRead"
+                                    :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
                     <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"

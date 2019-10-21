@@ -77,7 +77,7 @@
         },
         computed: {
             version(){
-                if(this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1){
+                if(this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()){
                     return "hik-ys";
                 }
                 return {ffmpeg: "img", flv: "flv"}[String(this.type).toLowerCase()] || "h264";

@@ -22,7 +22,7 @@
                         children: [
                             {
                                 code: "2", name: "萤石摄像头",
-                                rtsp: "rtmp://rtmp.open.ys7.com/openlive/4816b8e1421340898d01d1272a9f54fd"
+                                rtsp: "rtmp://rtmp.open.ys7.com/openlive/4314e2a1dee64f12aa392186f2a9acc7"
                             }
                         ]
                     }

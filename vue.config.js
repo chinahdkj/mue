@@ -19,17 +19,13 @@ module.exports = {
                 changeOrigin: true
             },
             '^/fstatic': {
-                target: "http://10.18.40.226:7000",
+                target: "http://192.168.100.179:8081",
                 changeOrigin: true
             },
             '^/fvideo': {
-                target: "http://10.18.40.226:7000",
+                target: "http://192.168.100.179:8081",
                 changeOrigin: true
             },
-            '^/nvr': {
-                target: "http://192.168.100.186:4001",
-                changeOrigin: true
-            }
         }
     },
 
