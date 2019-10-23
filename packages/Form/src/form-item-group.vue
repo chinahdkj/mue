@@ -1,6 +1,6 @@
 <template>
     <div class="mue-form-item-group">
-        <div class="mue-form-item-group-title">
+        <div class="mue-form-item-group-title" v-if="headerVis">
             <span>
                 <slot name="prefix">
                     <i v-if="prefix" class="__icon" :class="prefix" aria-hidden="true"></i>
@@ -45,9 +45,15 @@
                 GROUP: this
             };
         },
+        computed: {
+            headerVis(){
+                return this.title || this.subTitle || this.$slots.prefix || this.$slots.help ||
+                    this.$listeners["icon-click"];
+            }
+        },
         data(){
             return {};
         },
         methods: {}
-    }
+    };
 </script>
