@@ -223,7 +223,7 @@
             },
             typeSelect({act}) {
                 if (act === "image") {
-                    if (this.isAd && this.multiple) {
+                    if (this.isAd) {
                         this.$refs.androidUpload.Upload();
                     } else {
                         this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
@@ -379,7 +379,7 @@
                         // form.append("id", file.name);
 
                         //保存到本地相册
-                        if(!(this.isAd && this.multiple)) {
+                        if(!(this.isAd)) {
                             this.saveAlbum(content, file)
                         }
 
