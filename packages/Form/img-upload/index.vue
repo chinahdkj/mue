@@ -23,17 +23,16 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload v-if="isAd" ref="androidUpload" :disabled="disabled"
-                                    :limit="multiple ? limit : 1" :before-read="beforeRead"
-                                    :after-read="upload">
+                    <android-upload ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
-                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                    <!--<van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
-                    </van-uploader>
+                    </van-uploader>-->
                 </div>
             </li>
         </ul>
@@ -223,11 +222,14 @@
             },
             typeSelect({act}) {
                 if (act === "image") {
-                    if (this.isAd) {
+                    this.$nextTick(() => {
+                        this.$refs.androidUpload.Upload();
+                    })
+                    /*if (this.isAd && this.multiple) {
                         this.$refs.androidUpload.Upload();
                     } else {
                         this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
-                    }
+                    }*/
                 } else if (act === "video") {
                     this.videoUpload();
                 }
@@ -377,11 +379,10 @@
                         let f = Base64ToFile(content, file);
                         form.append("file", f, file.name);
                         // form.append("id", file.name);
-
                         //保存到本地相册
-                        if(!(this.isAd)) {
+                        /*if(!(this.isAd && this.multiple)) {
                             this.saveAlbum(content, file)
-                        }
+                        }*/
 
                         return this.$http.post("/app/v1.0/upload.json", form, {
                             processData: false, contentType: false
