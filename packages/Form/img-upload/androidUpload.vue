@@ -12,7 +12,7 @@
     export default {
         props: {
             disabled: {type: Boolean, default: false},
-            // multiple: {type: Boolean, default: false},
+            multiple: {type: Boolean, default: false},
             accept: {type: Number, default: 0}, //0:图片, 1:文件
             limit: {type: Number, default: 5},
             beforeRead: {type: Function, default: null},
@@ -23,12 +23,17 @@
                 values: []
             }
         },
+        computed: {
+            limitNum() {
+                return this.multiple ? this.limit : 1
+            }
+        },
         methods: {
             Upload() {
                 this.values = [];
                 this.$native.multi_file({
                     params: {
-                        maxNum: this.limit,
+                        maxNum: this.limitNum,
                         mType: this.accept
                     },
                     cb: ({value}) => {
