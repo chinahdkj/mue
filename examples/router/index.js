@@ -112,6 +112,11 @@ const routes = [
         name: 'sort_picker',
         component: () => import("../views/mue/sortpicker")
     },
+    {
+        path: '/mue/actionsheet',
+        name: 'mue_actionsheet',
+        component: () => import("../views/mue/actionsheet")
+    },
 
 
     {
