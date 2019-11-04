@@ -34,7 +34,7 @@
                     box-sizing: border-box;
 
                     &.disabled {
-                        opacity: .5;
+                        opacity: .25;
                     }
 
                     .icon-box {
@@ -43,7 +43,8 @@
                         position: relative;
                         border-radius: 10px;
                         display: block;
-                        margin: 0 auto 10px;
+                        margin: 0 auto 8px;
+                        overflow:hidden;
 
                         i {
                             color: #ffffff;
@@ -58,6 +59,7 @@
                     .name {
                         font-size: 12px;
                         color: @@color;
+                        line-height: 16px;
                     }
                 }
             }
