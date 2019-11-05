@@ -11,20 +11,21 @@
                    get-container="body" :close-on-click-overlay="false"
                    @click-overlay="pop = false">
             <van-datetime-picker v-if="step == 'begin'" :type="dtype" v-model="bv"
-                                 title="起始" @confirm="onConfirmBegin"
+                                 title="起始" @confirm="onConfirmBegin" v-bind="pickerOps"
                                  @cancel="onCancel" :cancel-button-text="cancelText"/>
             <van-datetime-picker v-if="step == 'end'" :type="dtype" v-model="ev"
-                                 title="截止" v-bind="pickOpt2" @confirm="onConfirmEnd"
+                                 title="截止" v-bind="pickerOpts2" @confirm="onConfirmEnd"
                                  @cancel="onCancel" :cancel-button-text="cancelText"/>
         </van-popup>
     </div>
 </template>
 
 <script>
-    import {GetType} from '../../DatePicker/src/utils';
+    import {GetType} from "../../DatePicker/src/utils";
 
     export default {
         name: "MueDateRangePicker",
+        inheritAttrs: false,
         components: {},
         props: {
             format: {
@@ -35,7 +36,9 @@
             },
             begin: {type: String, default: ""},
             end: {type: String, default: ""},
-            clearable: {type: Boolean, default: false}
+            clearable: {type: Boolean, default: false},
+            minDate: {default: null},
+            maxDate: {default: null}
         },
         data(){
             return {
@@ -52,13 +55,24 @@
             cancelText(){
                 return !this.bar && this.clearable ? "清空" : "取消";
             },
-            pickOpt2(){
-                if(this.dtype === "time"){
-                    return {};
+            pickerOps(){
+                let opts = {};
+                if(this.minDate instanceof Date){
+                    opts.minDate = this.minDate;
+                }else if(typeof this.minDate === "string"){
+                    opts.minDate = moment(this.minDate, this.format).toDate();
                 }
-                return {
-                    minDate: this.bv
-                };
+
+                if(this.maxDate instanceof Date){
+                    opts.maxDate = this.maxDate;
+                }else if(typeof this.maxDate === "string"){
+                    opts.maxDate = moment(this.maxDate, this.format).toDate();
+                }
+
+                return {...this.$attrs, ...opts};
+            },
+            pickerOpts2(){
+                return {...this.pickerOps, minDate: this.bv};
             }
         },
         watch: {

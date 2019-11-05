@@ -9,17 +9,23 @@
             title: {type: String, default: ""},
             value: {type: String},
             cancelButtonText: {type: String, default: "取消"},
+            minDate: {default: null},
+            maxDate: {default: null}
         },
         components: {},
         data(){
-            let n = new Date().getFullYear();
-            let vs = [];
-            for(let i = n - 10; i <= n + 10; i++){
-                vs.push(String(i));
+            return {};
+        },
+        computed: {
+            columns(){
+                let s = this.minDate ? this.minDate.getFullYear() : (new Date().getFullYear() - 10);
+                let e = this.maxDate ? this.maxDate.getFullYear() : (new Date().getFullYear() + 10);
+                let vs = [];
+                for(let i = s; i <= e; i++){
+                    vs.push(String(i));
+                }
+                return vs;
             }
-            return {
-                columns: vs
-            };
         },
         watch: {
             value: {
@@ -43,5 +49,5 @@
         mounted(){
             this.setVal(this.value);
         }
-    }
+    };
 </script>

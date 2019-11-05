@@ -17,21 +17,22 @@
                    get-container="body" :close-on-click-overlay="false"
                    @click-overlay="pop = false">
             <year-picker v-if="dtype == 'year'" v-model="val" @confirm="onConfirm"
-                         @cancel="onCancel" :cancel-button-text="cancelText"></year-picker>
+                         @cancel="onCancel" :cancel-button-text="cancelText" v-bind="pickerOps"/>
             <van-datetime-picker v-if="dtype != 'year'" :type="dtype" v-model="val"
-                                 @confirm="onConfirm" @cancel="onCancel"
+                                 @confirm="onConfirm" @cancel="onCancel" v-bind="pickerOps"
                                  :cancel-button-text="cancelText"/>
         </van-popup>
     </div>
 </template>
 
 <script>
-    import {GetType} from './utils';
-    import yearPicker from './year-picker';
+    import {GetType} from "./utils";
+    import yearPicker from "./year-picker";
 
     export default {
         name: "MueDatePicker",
         components: {yearPicker},
+        inheritAttrs: false,
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -50,7 +51,9 @@
             value: {type: String, default: ""},
             clearable: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
-            disabled: {type: Boolean, default: false}
+            disabled: {type: Boolean, default: false},
+            minDate: {default: null},
+            maxDate: {default: null}
         },
         data(){
             return {
@@ -64,6 +67,22 @@
             },
             cancelText(){
                 return !this.bar && this.clearable ? "清空" : "取消";
+            },
+            pickerOps(){
+                let opts = {};
+                if(this.minDate instanceof Date){
+                    opts.minDate = this.minDate;
+                }else if(typeof this.minDate === "string"){
+                    opts.minDate = moment(this.minDate, this.format).toDate();
+                }
+
+                if(this.maxDate instanceof Date){
+                    opts.maxDate = this.maxDate;
+                }else if(typeof this.maxDate === "string"){
+                    opts.maxDate = moment(this.maxDate, this.format).toDate();
+                }
+
+                return {...this.$attrs, ...opts};
             }
         },
         watch: {

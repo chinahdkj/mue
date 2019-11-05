@@ -2,7 +2,8 @@
     <div>
         <br/>
         <mue-date-range-picker bar :begin.sync="begin" :end.sync="end" format="YYYY-MM-DD"
-                               @confirm="onConfirm" @arrow="onArrow">
+                               @confirm="onConfirm" @arrow="onArrow"  min-date="2000-01-01"
+                               max-date="2049-12-31">
         </mue-date-range-picker>
     </div>
 
