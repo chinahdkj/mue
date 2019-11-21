@@ -4,8 +4,9 @@
             <mue-popover ref="pop" placement="bottom">
                 <div style="padding: 10px;">99999</div>
             </mue-popover>
-            <div style="height: 400px;" v-loading="loading">
+            <div style="height: 400px; padding: 5px;" v-loading="loading">
                 <mue-datatable ref="table" :columns="columns" :min-col-width="minColWidth"
+                               :noborder="noborder" :border-effect="borderEffect"
                                :data="data" :sort="sort" :total="total" :row-class="rowClass"
                                :stripe="stripe" :row-key="rowKey" :row-height="rowHeight"
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
@@ -91,6 +92,7 @@
             return {
                 loading: false,
                 pageNo: 0,
+                noborder: false, borderEffect: "both",
 
                 header: true, // 显示表头
                 columns: [ // 列定义

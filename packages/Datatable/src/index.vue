@@ -1,5 +1,6 @@
 <template>
-    <div class="mue-datatable" :class="{'no-border': noborder}" v-resize="onResize">
+    <div class="mue-datatable" v-resize="onResize"
+         :class="{'no-border': noborder, 'border-both': !noborder && borderEffect === 'both'}">
         <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
                  :style="{width:fixedWidth + 'px' }">
@@ -167,6 +168,11 @@
             rowHeight: {type: Number, default: 40}, // 行高
             stripe: {type: Boolean, default: false}, // 斑马线
             noborder: {type: Boolean, default: false}, // 不显示边框
+            borderEffect: {
+                type: String, default: "row", validator(v){
+                    return ["row", "both"].indexOf(v) > -1;
+                }
+            },
             sort: {type: Object, default: null}, // 排序
 
             pageSize: {type: Number, default: 0},
@@ -212,7 +218,7 @@
                 return this.header && this.colFields.length > 0;
             },
             headerHeight(){
-                return (this.headerVisibel ? (this.headerRows * 36 + 4) : 0) + "px";
+                return (this.headerVisibel ? (this.headerRows * 38) : 0) + "px";
             },
             isNight(){
                 return this.$root.theme === "night";
