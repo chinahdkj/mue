@@ -95,9 +95,22 @@
     .mue-select {
         display: inline-block;
 
+        .mue-form-input {
+            position: relative;
+        }
+
         .input__inner {
             overflow: hidden;
             text-overflow: ellipsis;
+            padding-right: 25px;
+            width: 100%;
+            flex-basis: 100%;
+        }
+
+        .input__suffix.icon-arrows-copy-copy {
+            pointer-events: none;
+            position: absolute;
+            right: 5px;
         }
 
     }

@@ -1,10 +1,10 @@
 <template>
     <div class="mue-select">
-        <div class="mue-form-input has-suffix" @click="ShowPop"
-             :class="{'mue-form-input__is-disabled': disabled}">
+        <div class="mue-form-input has-suffix" :class="{'mue-form-input__is-disabled': disabled}"
+             @click.stop="ShowPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
-            <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
+            <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"/>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
                    get-container="body" :close-on-click-overlay="false"
@@ -13,7 +13,8 @@
                         @cancel="onCancel" :cancel-button-text="cancelButtonText"
                         value-key="name" @change="onChange">
                 <template #title v-if="searchable">
-                    <input class="input__search" type="text" v-model="searchValue" placeholder="输入选项关键字">
+                    <input class="input__search" type="text" v-model="searchValue"
+                           placeholder="输入选项关键字">
                 </template>
             </van-picker>
         </van-popup>
@@ -64,7 +65,7 @@
                 dict: {},
                 columns: [],
                 searchDict: {},
-                searchValue: ''
+                searchValue: ""
             };
         },
         computed: {
@@ -121,11 +122,12 @@
                     this.dict = dict;
                 }
             },
-            searchValue(val) {
+            searchValue(val){
                 this.searchDict = {};
-                for (let [key, col] of Object.entries(this.dict)) {
-                    let isChildren = col.$parent ? String(this.dict[col.$parent].name).includes(val) : false;
-                    if (col.$lv === 0 && String(col.name).includes(val) || isChildren) {
+                for(let [key, col] of Object.entries(this.dict)){
+                    let isChildren = col.$parent ? String(this.dict[col.$parent].name).includes(val)
+                        : false;
+                    if(col.$lv === 0 && String(col.name).includes(val) || isChildren){
                         this.searchDict[key] = col;
                     }
                 }
@@ -191,8 +193,8 @@
                     return (r || {}).code;
                 }), this.searchValue);
             },
-            onPopupClose() {
-                this.searchValue = '';
+            onPopupClose(){
+                this.searchValue = "";
             },
 
             ShowPop(){
@@ -205,5 +207,5 @@
                 return this.dict[code];
             },
         }
-    }
+    };
 </script>
