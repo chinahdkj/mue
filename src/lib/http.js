@@ -3,61 +3,63 @@ import {getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
-let token = GetQueryString('token') || GetQueryString('token', 'hash');
-if (token) {
-    sessionStorage.setItem('authortoken', token);
+let token = GetQueryString("token") || GetQueryString("token", "hash");
+if(token){
+    sessionStorage.setItem("authortoken", token);
 }
-let APP = GetQueryString('app') || GetQueryString('app', 'hash');
-if (APP) {
-    sessionStorage.setItem('authorapp', APP);
+let APP = GetQueryString("app") || GetQueryString("app", "hash");
+if(APP){
+    sessionStorage.setItem("authorapp", APP);
 }
-let host = GetQueryString('host') || GetQueryString('host', 'hash');
-if (host) {
+let host = GetQueryString("host") || GetQueryString("host", "hash");
+if(host){
     host = decodeURIComponent(host);
-    sessionStorage.setItem('host', host);
+    sessionStorage.setItem("host", host);
 }
 
 let getAppId = () => {
     return GetQueryString("appid") || GetQueryString("appid", "hash")
-        || sessionStorage.getItem("appid") || 'scada';
+        || sessionStorage.getItem("appid") || "scada";
 };
 
-export function InitHttp() {
-    axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('authortoken');
-    axios.defaults.headers.common['Token'] = sessionStorage.getItem('authortoken');
-    axios.defaults.headers.common['APP'] = sessionStorage.getItem('authorapp');
+axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("authortoken");
+axios.defaults.headers.common["Token"] = sessionStorage.getItem("authortoken");
+axios.defaults.headers.common["APP"] = sessionStorage.getItem("authorapp");
 
-    axios.interceptors.request.use(config => {
-        return config;
-    }, error => {
-        return Promise.error(error);
-    });
+axios.interceptors.request.use(config => {
+    return config;
+}, error => {
+    return Promise.error(error);
+});
 
-    axios.interceptors.response.use(response => {
-        CloseLoading();
-        if (response.status === 200) {
-            if (response.data.Code === 0) {
-                return Promise.resolve(response.data)
-            }
-            else {
-                // return Promise.resolve(response.data)
-                return Promise.reject(response.data)
-            }
+axios.interceptors.response.use(response => {
+    CloseLoading();
+    if(response.status === 200){
+        if(response.data.Code === 0){
+            return Promise.resolve(response.data);
         }
-        else {
-            return Promise.reject(response)
+        else{
+            // return Promise.resolve(response.data)
+            return Promise.reject(response.data);
         }
-    }, e => {
-        CloseLoading();
-        return Promise.reject(e);
-    });
+    }
+    else{
+        return Promise.reject(response);
+    }
+}, e => {
+    CloseLoading();
+    return Promise.reject(e);
+});
+
+export function InitHttp(){
+
 }
 
 export default {
-    post(url, data, failed = false, appid = null) {
+    post(url, data, failed = false, appid = null){
         return axios({
-            method: 'post',
-            baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
+            method: "post",
+            baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             data: data,
             timeout: 30000,
@@ -67,21 +69,23 @@ export default {
 
             // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
             // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
-            if ((e.response && e.response.status === 404) || (e.Code === 21001)){
+            if((e.response && e.response.status === 404) || (e.Code === 21001)){
                 // TODO
-            } else if (e.Message) {
+            }
+            else if(e.Message){
                 !failed && Vue.prototype.$toast(e.Message);
-            } else {
+            }
+            else{
                 !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
             return Promise.reject(e);
-        })
+        });
     },
-    get(url, params, failed = false, appid = null) {
+    get(url, params, failed = false, appid = null){
         return axios({
-            method: 'get',
-            baseURL: process.env.NODE_ENV === 'production' ? getHost() : '/list',
+            method: "get",
+            baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             params, // get 请求时带的参数
             timeout: 30000,
@@ -89,13 +93,14 @@ export default {
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
-            if (e.Message) {
+            if(e.Message){
                 !failed && Vue.prototype.$toast(e.Message);
-            } else {
+            }
+            else{
                 !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
             return Promise.reject(e);
-        })
+        });
     }
 };

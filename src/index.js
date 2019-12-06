@@ -28,7 +28,7 @@ import touch from "../packages/directives/touch.js";
 import Vant, {Locale} from "vant";
 import zhCN from "vant/lib/locale/lang/zh-CN";
 import axios from "axios";
-import http, {InitHttp} from "./lib/http";
+import http from "./lib/http";
 import native from "./lib/native";
 import comm from "./lib/common";
 
@@ -70,7 +70,6 @@ const install = function(Vue){
 
     Vue.prototype.$loading = Loading.service;
     Vue.prototype.$ajax = axios;
-    InitHttp();
     Vue.prototype.$http = http;
     Vue.prototype.$native = native;
     Vue.prototype.$comm = comm;
