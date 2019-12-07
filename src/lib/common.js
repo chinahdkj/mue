@@ -180,13 +180,22 @@ export function makeCall(no){
 
 export const getHost = () => {
     let location = window.location;
+    let host = GetQueryString("host") || GetQueryString("host", "hash");
+    if(host){
+        host = decodeURIComponent(host);
+        sessionStorage.setItem("host", host);
+    }
+    else{
+        host = sessionStorage.getItem("host") || "";
+    }
+
     if(location.origin.toLowerCase() === "file://"){
-        return sessionStorage.getItem("host") || "";
+        return host;
     }
     let code = location.port.substring(1);
     let regex = new RegExp(`^${location.origin}/packages/${code}/`, "i");
     if(regex.test(location.href)){
-        return sessionStorage.getItem("host") || "";
+        return host;
     }
     return "";
 };
