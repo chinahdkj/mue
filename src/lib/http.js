@@ -22,9 +22,9 @@ let getAppId = () => {
         || sessionStorage.getItem("appid") || "scada";
 };
 
-axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("authortoken");
-axios.defaults.headers.common["Token"] = sessionStorage.getItem("authortoken");
-axios.defaults.headers.common["APP"] = sessionStorage.getItem("authorapp");
+axios.defaults.headers.common["Authorization"] = token || sessionStorage.getItem("authortoken");
+axios.defaults.headers.common["Token"] = token || sessionStorage.getItem("authortoken");
+axios.defaults.headers.common["APP"] = APP || sessionStorage.getItem("authorapp");
 
 axios.interceptors.request.use(config => {
     return config;
