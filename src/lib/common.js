@@ -180,7 +180,7 @@ export function makeCall(no){
 
 export const getHost = () => {
     let location = window.location;
-    let host = GetQueryString("host") || GetQueryString("host", "hash");
+    let host = GetQueryString("host");
     if(host){
         host = decodeURIComponent(host);
         sessionStorage.setItem("host", host);

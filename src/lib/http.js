@@ -3,23 +3,34 @@ import {getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
-let token = GetQueryString("token") || GetQueryString("token", "hash");
+const HEADER_IGNORE = {};
+
+let token = GetQueryString("token");
 if(token){
     sessionStorage.setItem("authortoken", token);
 }
-let APP = GetQueryString("app") || GetQueryString("app", "hash");
+let APP = GetQueryString("app");
 if(APP){
     sessionStorage.setItem("authorapp", APP);
 }
-let host = GetQueryString("host") || GetQueryString("host", "hash");
+let host = GetQueryString("host");
 if(host){
     host = decodeURIComponent(host);
     sessionStorage.setItem("host", host);
 }
 
+let appid = GetQueryString("appid");
+if(appid){
+    sessionStorage.setItem("appid", appid);
+}
+
 let getAppId = () => {
-    return GetQueryString("appid") || GetQueryString("appid", "hash")
-        || sessionStorage.getItem("appid") || "scada";
+    let _appid = GetQueryString("appid");
+    if(_appid){
+        sessionStorage.setItem("appid", _appid);
+        return _appid;
+    }
+    return sessionStorage.getItem("appid") || "scada";
 };
 
 axios.defaults.headers.common["Authorization"] = token || sessionStorage.getItem("authortoken");
@@ -51,9 +62,44 @@ axios.interceptors.response.use(response => {
     return Promise.reject(e);
 });
 
-export function InitHttp(){
-
+export function InitHttp(opt = {}){
+    let opts = opt || {};
+    (opts.header_ignore || []).forEach((ig) => {
+        axios.defaults.headers.common[ig] = "";
+        HEADER_IGNORE[ig] = true;
+    });
 }
+
+let getHeaders = (appid = null) => {
+    let _token = GetQueryString("token");
+    if(_token){
+        sessionStorage.setItem("authortoken", _token);
+    }
+    else{
+        _token = sessionStorage.getItem("authortoken") || "";
+    }
+
+    let _app = GetQueryString("app");
+    if(_app){
+        sessionStorage.setItem("authorapp", _app);
+    }
+    else{
+        _app = sessionStorage.getItem("authorapp");
+    }
+
+    let headers = {
+        Authorization: _token,
+        Token: _token,
+        APP: _app,
+        appid: appid || getAppId()
+    };
+
+    Object.entries(HEADER_IGNORE).forEach(([k, v]) => {
+        v && delete headers[k];
+    });
+
+    return headers;
+};
 
 export default {
     post(url, data, failed = false, appid = null){
@@ -63,7 +109,7 @@ export default {
             url,
             data: data,
             timeout: 30000,
-            headers: {appid: appid || getAppId()}
+            headers: getHeaders(appid)
         }).then(res => res.Response).catch(e => {
             console.log(e);
 
@@ -89,7 +135,7 @@ export default {
             url,
             params, // get 请求时带的参数
             timeout: 30000,
-            headers: {appid: appid || getAppId()}
+            headers: getHeaders(appid)
         }).then(res => res.Response).catch(e => {
             console.log(e);
 

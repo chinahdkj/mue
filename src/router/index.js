@@ -11,7 +11,7 @@ export const InitHook = (router) => {
             return;
         }
 
-        let mid = GetQueryString('mid') || GetQueryString('mid', 'hash');
+        let mid = GetQueryString('mid');
         native.userBehaviorRecord({ // 用户行为分析
             params: {
                 "mid": mid,  //菜单ID
