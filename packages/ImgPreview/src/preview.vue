@@ -121,7 +121,7 @@
                 }
                 if(path.startsWith("/upload")){
                     // return `http://192.168.100.179:8081${path}`;
-                    return `${this.$comm.getHost()}${path}`;
+                    return `${this.$comm.getHost()}${path}?appid=${this.$comm.getAppId()}`;
                 }
                 return path;
             },

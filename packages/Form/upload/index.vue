@@ -117,7 +117,7 @@
                     return "";
                 }
                 if (m.startsWith("/upload")) {
-                    return `${this.$comm.getHost()}${m}`;
+                    return `${this.$comm.getHost()}${m}?appid=${this.$comm.getAppId()}`;
                 }
                 return m;
             },

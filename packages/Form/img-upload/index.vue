@@ -309,7 +309,7 @@
                     return "";
                 }
                 if (whole.startsWith("/upload")) {
-                    return `${this.$comm.getHost()}${whole}`;
+                    return `${this.$comm.getHost()}${whole}?appid=${this.$comm.getAppId()}`;
                 }
                 return whole;
             },

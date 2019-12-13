@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getHost, GetQueryString} from "./common";
+import {getAppId, getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
@@ -23,15 +23,6 @@ let appid = GetQueryString("appid");
 if(appid){
     sessionStorage.setItem("appid", appid);
 }
-
-let getAppId = () => {
-    let _appid = GetQueryString("appid");
-    if(_appid){
-        sessionStorage.setItem("appid", _appid);
-        return _appid;
-    }
-    return sessionStorage.getItem("appid") || "scada";
-};
 
 axios.defaults.headers.common["Authorization"] = token || sessionStorage.getItem("authortoken");
 axios.defaults.headers.common["Token"] = token || sessionStorage.getItem("authortoken");

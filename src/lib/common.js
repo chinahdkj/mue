@@ -200,9 +200,18 @@ export const getHost = () => {
     return "";
 };
 
+export const getAppId = ()=>{
+    let _appid = GetQueryString("appid");
+    if(_appid){
+        sessionStorage.setItem("appid", _appid);
+        return _appid;
+    }
+    return sessionStorage.getItem("appid") || "scada";
+};
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall, getHost,
+    newFixed, newFilePath, makeCall, getHost, getAppId,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
