@@ -27,13 +27,16 @@
                 }
             });
 
+            let evt = {};
+            evt[this.$comm.isMobile() ? "touchstart" : "click"] = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.TABLE.onRowClick(this.row, this.no);
+            };
+
             return h("tr", {
                 class: ["__row", this.TABLE.rowCls(this.row, this.no)],
-                on: {
-                    click: () => {
-                        this.TABLE.onRowClick(this.row, this.no);
-                    }
-                }
+                on: evt
             }, cells);
 
         },

@@ -11,22 +11,20 @@
         data(){
             return {};
         },
-        inject:["TABLE"],
+        inject: ["TABLE"],
         render(h){
             let td = {
                 style: [this.hstyle, {"text-align": this.col.align || "center"}]
             };
             let inner = [];
             if(this.TABLE.$listeners["cell-click"]){
-                td.on = {
-                    click: (e) => {
-                        this.TABLE.$emit("cell-click",
-                            this.value, this.row, this.col, this.no, e);
-                    }
-                }
+                td.on = {};
+                td.on[this.$comm.isMobile() ? "touchstart" : "click"] = (e) => {
+                    this.TABLE.$emit("cell-click", this.value, this.row, this.col, this.no, e);
+                };
             }
             let $scoped = this.col.tmpl && this.TABLE.$scopedSlots[this.col.tmpl]
-                          ? this.TABLE.$scopedSlots[this.col.tmpl] : null;
+                ? this.TABLE.$scopedSlots[this.col.tmpl] : null;
             if($scoped){
                 inner = [$scoped({row: this.row, col: this.col, value: this.value, no: this.no})];
             }
@@ -37,5 +35,5 @@
         },
 
         methods: {}
-    }
+    };
 </script>
