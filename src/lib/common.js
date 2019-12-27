@@ -41,6 +41,10 @@ export const isAndroid = () => {
     return u.indexOf("Android") > -1 || u.indexOf("Adr") > -1;
 };
 
+export const isMobile = () => {
+    return isIos() || isAndroid();
+};
+
 /**
  * 设置苹果/安卓标题
  * @param {*} title
@@ -200,7 +204,7 @@ export const getHost = () => {
     return "";
 };
 
-export const getAppId = ()=>{
+export const getAppId = () => {
     let _appid = GetQueryString("appid");
     if(_appid){
         sessionStorage.setItem("appid", _appid);
@@ -211,7 +215,7 @@ export const getAppId = ()=>{
 
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall, getHost, getAppId,
+    newFixed, newFilePath, makeCall, getHost, getAppId, isMobile,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
