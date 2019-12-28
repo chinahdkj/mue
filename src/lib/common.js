@@ -1,5 +1,6 @@
 // 通用方法
 import uuid from "../utils/uuid";
+import {ElementClick} from "../utils/fast-click";
 
 /**
  * 获取url参数
@@ -213,9 +214,11 @@ export const getAppId = () => {
     return sessionStorage.getItem("appid") || "scada";
 };
 
+export const clickElement = ElementClick;
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall, getHost, getAppId, isMobile,
+    newFixed, newFilePath, makeCall, getHost, getAppId, isMobile, clickElement,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }

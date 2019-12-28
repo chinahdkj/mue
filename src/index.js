@@ -31,7 +31,7 @@ import axios from "axios";
 import http from "./lib/http";
 import native from "./lib/native";
 import comm from "./lib/common";
-
+import "./utils/fast-click";
 import {objectGet} from "./utils/object";
 // svg 图标
 import "../themes/fonts/iconfont";

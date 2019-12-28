@@ -228,7 +228,7 @@
                     /*if (this.isAd && this.multiple) {
                         this.$refs.androidUpload.Upload();
                     } else {
-                        this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input")[0].click();
+                        this.$comm.clickElement(this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input"));
                     }*/
                 } else if (act === "video") {
                     this.videoUpload();

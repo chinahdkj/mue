@@ -18,10 +18,12 @@
             };
             let inner = [];
             if(this.TABLE.$listeners["cell-click"]){
-                td.on = {};
-                td.on[this.$comm.isMobile() ? "touchstart" : "click"] = (e) => {
-                    this.TABLE.$emit("cell-click", this.value, this.row, this.col, this.no, e);
-                };
+                td.on = {
+                    click: (e) => {
+                        this.TABLE.$emit("cell-click",
+                            this.value, this.row, this.col, this.no, e);
+                    }
+                }
             }
             let $scoped = this.col.tmpl && this.TABLE.$scopedSlots[this.col.tmpl]
                 ? this.TABLE.$scopedSlots[this.col.tmpl] : null;
