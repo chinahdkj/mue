@@ -32,6 +32,9 @@
                 on: {
                     click: () => {
                         this.TABLE.onRowClick(this.row, this.no);
+                    },
+                    touchstart: (e)=>{
+                        e.preventDefault();
                     }
                 }
             }, cells);
