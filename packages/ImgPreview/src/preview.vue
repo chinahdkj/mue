@@ -7,7 +7,7 @@
         <div class="handle-btn">
             <van-icon class="handle-icon" name="replay" @click="handleRotate('right')"/>
             <van-icon class="handle-icon" name="replay" @click="handleRotate('left')"/>
-            <i class="fa fa-download handle-icon" @click="download"/>
+            <i v-if="!isDingdingEnv" class="fa fa-download handle-icon" @click="download"/>
         </div>
 
     </div>
@@ -66,6 +66,7 @@
         },
         data() {
             return {
+                isDingdingEnv: sessionStorage.getItem('isDingdingEnv'),
                 current: -1,
                 imgs: [],
                 angles: [],
