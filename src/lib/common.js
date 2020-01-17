@@ -205,13 +205,13 @@ export const getHost = () => {
     return "";
 };
 
-export const getAppId = () => {
+export const getAppId = (defaultValue = "scada") => {
     let _appid = GetQueryString("appid");
     if(_appid){
         sessionStorage.setItem("appid", _appid);
         return _appid;
     }
-    return sessionStorage.getItem("appid") || "scada";
+    return sessionStorage.getItem("appid") || defaultValue;
 };
 
 export const clickElement = ElementClick;

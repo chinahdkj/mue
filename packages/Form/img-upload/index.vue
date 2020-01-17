@@ -55,7 +55,6 @@
 </template>
 
 <script>
-    import {ImagePreview} from "vant";
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
     import {isAndroid} from "../../../src/lib/common";
     import androidUpload from "./androidUpload";
@@ -295,8 +294,10 @@
                 });
 
                 this.$native.saveLocalData({
-                    params: {type: "common-image", state: "1", datas: imgs},
-                    cb: (result) => {
+                    params: {
+                        type: "common-image", state: "1", datas: imgs,
+                        url: this.$comm.getAppId("")
+                    }, cb: (result) => {
                         callback(result, imgs);
                     }
                 });
