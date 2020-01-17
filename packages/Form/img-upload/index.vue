@@ -287,6 +287,7 @@
                     let id = this.$comm.newFilePath(ext);
                     return {
                         _id: id,
+                        c6: this.$comm.getAppId(""),
                         data: JSON.stringify({
                             contextType: type, url: id, name, base64: content
                         })
@@ -294,10 +295,8 @@
                 });
 
                 this.$native.saveLocalData({
-                    params: {
-                        type: "common-image", state: "1", datas: imgs,
-                        c6: this.$comm.getAppId("")
-                    }, cb: (result) => {
+                    params: {type: "common-image", state: "1", datas: imgs},
+                    cb: (result) => {
                         callback(result, imgs);
                     }
                 });
