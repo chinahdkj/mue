@@ -296,7 +296,7 @@
                 this.$native.saveLocalData({
                     params: {
                         type: "common-image", state: "1", datas: imgs,
-                        url: this.$comm.getAppId("")
+                        c6: this.$comm.getAppId("")
                     }, cb: (result) => {
                         callback(result, imgs);
                     }
