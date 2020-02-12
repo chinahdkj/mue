@@ -35,6 +35,9 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
+    if("Code" in response){
+        return Promise.resolve(response);
+    }
     CloseLoading();
     if(response.status === 200){
         if(response.data.Code === 0 || response.data.code === 0){

@@ -23,16 +23,16 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                    <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
                                     :limit="limit" :before-read="beforeRead" :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
-                    <!--<van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
-                    </van-uploader>-->
+                    </van-uploader>
                 </div>
             </li>
         </ul>
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-    import {ImagePreview} from "vant";
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
     import {isAndroid} from "../../../src/lib/common";
     import androidUpload from "./androidUpload";
@@ -100,6 +99,7 @@
         },
         data() {
             return {
+                isDingdingEnv: sessionStorage.getItem('isDingdingEnv'),
                 imgs: [], thumbs: [], uploading: false, dict: {},
                 pop: {visible: false},
                 uploadPop: {visible: false},
@@ -222,14 +222,16 @@
             },
             typeSelect({act}) {
                 if (act === "image") {
-                    this.$nextTick(() => {
+                    /*this.$nextTick(() => {
                         this.$refs.androidUpload.Upload();
-                    })
-                    /*if (this.isAd && this.multiple) {
-                        this.$refs.androidUpload.Upload();
+                    })*/
+                    if (!this.isDingdingEnv) {
+                        this.$nextTick(() => {
+                            this.$refs.androidUpload.Upload();
+                        })
                     } else {
                         this.$comm.clickElement(this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input"));
-                    }*/
+                    }
                 } else if (act === "video") {
                     this.videoUpload();
                 }
@@ -285,6 +287,7 @@
                     let id = this.$comm.newFilePath(ext);
                     return {
                         _id: id,
+                        c6: this.$comm.getAppId(""),
                         data: JSON.stringify({
                             contextType: type, url: id, name, base64: content
                         })
@@ -524,6 +527,6 @@
                     return false;
                 }
             }
-        }
+        },
     }
 </script>
