@@ -37,7 +37,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
     CloseLoading();
     if(response.status === 200){
-        if(response.data.Code === 0){
+        if(response.data.Code === 0 || response.data.code === 0){
             return Promise.resolve(response.data);
         }
         else{
@@ -82,7 +82,8 @@ let getHeaders = (appid = null) => {
         Authorization: _token,
         Token: _token,
         APP: _app,
-        appid: appid || getAppId()
+        // appid: appid || getAppId()
+        appid: appid === '' ? appid : appid || getAppId()
     };
 
     Object.entries(HEADER_IGNORE).forEach(([k, v]) => {
@@ -106,7 +107,7 @@ export default {
 
             // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
             // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
-            if((e.response && e.response.status === 404) || (e.Code === 21001)){
+            if((e.response && e.response.status === 404) || (e.Code === 21001 || e.code === 21001)){
                 // TODO
             }
             else if(e.Message){
