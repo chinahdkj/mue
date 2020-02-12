@@ -198,7 +198,7 @@
                     station: {
                         pics: []
                     },
-                    pos: "120,30",
+                    pos: null,
                     user: null,
                     remark: "",
                     valid: {

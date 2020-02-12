@@ -158,8 +158,8 @@
                 if(!pos){
                     this.pos = null;
                     this.$native.getLocation({
-                        cb: ({lat, lng}) => {
-                            this.pos = {lat, lng};
+                        cb: (pos) => {
+                            this.pos = pos ? {lat: pos.lat, lng: pos.lng} : {lat: 30, lng: 120};
                         }
                     });
                     return;
@@ -201,8 +201,8 @@
                     return;
                 }
                 this.$native.getLocation({
-                    cb: ({lat, lng}) => {
-                        this.pos = {lat, lng};
+                    cb: (pos) => {
+                        this.pos = pos ? {lat: pos.lat, lng: pos.lng} : {lat: 30, lng: 120};
                         this.$nextTick(() => {
                             this.onConfirm();
                         });
