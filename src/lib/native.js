@@ -1,5 +1,6 @@
 // 原生调用方法
 import {isIos} from "./common";
+import * as NativePc from "./native-pc";
 
 const _cache = {};
 const _cache2 = {};
@@ -26,11 +27,14 @@ const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
     _cache[msgid] = cb;
     try{
-        isIos()
-            ? window.webkit.messageHandlers.postMessage.postMessage(
-            JSON.stringify({msgid, method, params}))
-            : window.native.postMessage(
-            JSON.stringify({msgid, method, params}));
+        if(!window.webkit || !window.native){
+            typeof NativePc[method] === "function" && NativePc[method]({msgid, method, params});
+        }
+        else{
+            let p = JSON.stringify({msgid, method, params});
+            isIos() ? window.webkit.messageHandlers.postMessage.postMessage(p)
+                : window.native.postMessage(p);
+        }
     } catch(e){
         console.log(e);
         return;
