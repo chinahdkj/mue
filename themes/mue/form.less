@@ -888,10 +888,19 @@
         // select
         .mue-select {
             width: 100%;
-            // 箭头旋转
-            .input__suffix.icon-arrows-copy-copy {
-                transform: rotate(-90deg);
+
+            .has-suffix {
+                .input__inner {
+                    padding-right: 0;
+                }
+
+                // 箭头旋转
+                .input__suffix.icon-arrows-copy-copy {
+                    transform: rotate(-90deg);
+                    right: 0;
+                }
             }
+
         }
 
         // date-picker
