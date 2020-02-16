@@ -27,7 +27,7 @@ const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
     _cache[msgid] = cb;
     try{
-        if(!window.webkit || !window.native){
+        if(!window.webkit && !window.native){
             typeof NativePc[method] === "function" && NativePc[method]({msgid, method, params});
         }
         else{
