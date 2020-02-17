@@ -10,7 +10,7 @@
                    :lazy-render="false" get-container="body" :close-on-click-overlay="false"
                    @click-overlay="isVisible = false">
             <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText"
-                      @cancel="onCancel"
+                      @cancel="onCancel" :searchable="searchable"
                       @confirm="onConfirm" :multiple="multiple" :selectable="selectable"/>
         </van-popup>
     </div>
@@ -38,7 +38,8 @@
             disabled: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
             multiple: {type: Boolean, default: false},
-            selectable: {type: Function, default: null}
+            selectable: {type: Function, default: null},
+            searchable: {type: Boolean, default: false}
         },
         data(){
             return {
