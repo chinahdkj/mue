@@ -206,6 +206,9 @@ export const getHost = () => {
 };
 
 export const getAppId = (defaultValue = "scada") => {
+    if(defaultValue == null){
+        defaultValue = "scada";
+    }
     let _appid = GetQueryString("appid");
     if(_appid){
         sessionStorage.setItem("appid", _appid);

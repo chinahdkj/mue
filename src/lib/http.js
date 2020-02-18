@@ -5,6 +5,11 @@ import Vue from "vue";
 
 const HEADER_IGNORE = {};
 
+const HEADER_SETTING = {
+    ignore: {},
+    rewrite: {}
+};
+
 let token = GetQueryString("token");
 if(token){
     sessionStorage.setItem("authortoken", token);
@@ -41,7 +46,7 @@ axios.interceptors.response.use(response => {
     CloseLoading();
     if(response.status === 200){
         if(response.data.Code === 0 || response.data.code === 0){
-            if(response.data.data) {
+            if(response.data.data){
                 response.data.Response = response.data.data;
             }
             return Promise.resolve(response.data);
@@ -61,9 +66,17 @@ axios.interceptors.response.use(response => {
 
 export function InitHttp(opt = {}){
     let opts = opt || {};
+    HEADER_SETTING.ignore = {};
+    HEADER_SETTING.rewrite = {};
+
+    Object.entries(opts.header_rewrite || {}).forEach(([k, v]) => {
+        axios.defaults.headers.common[k] = v;
+        HEADER_SETTING.rewrite[k] = v;
+    });
+
     (opts.header_ignore || []).forEach((ig) => {
         axios.defaults.headers.common[ig] = "";
-        HEADER_IGNORE[ig] = true;
+        HEADER_SETTING.ignore[ig] = true;
     });
 }
 
@@ -87,12 +100,16 @@ let getHeaders = (appid = null) => {
     let headers = {
         Authorization: _token,
         Token: _token,
-        APP: _app,
+        APP: _app || "",
         // appid: appid || getAppId()
-        appid: appid === '' ? appid : appid || getAppId()
+        appid: appid === "" ? appid : (appid || getAppId())
     };
 
-    Object.entries(HEADER_IGNORE).forEach(([k, v]) => {
+    Object.entries(HEADER_SETTING.rewrite).forEach(([k, v]) => {
+        headers[k] = v;
+    });
+
+    Object.entries(HEADER_SETTING.ignore).forEach(([k, v]) => {
         v && delete headers[k];
     });
 
@@ -100,7 +117,7 @@ let getHeaders = (appid = null) => {
 };
 
 export default {
-    post(url, data, failed = false, appid = null){
+    post(url, data, failed = false, appid = ""){
         return axios({
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
@@ -126,7 +143,7 @@ export default {
             return Promise.reject(e);
         });
     },
-    get(url, params, failed = false, appid = null){
+    get(url, params, failed = false, appid = ""){
         return axios({
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",

@@ -74,7 +74,6 @@ const install = function(Vue){
     Vue.prototype.$native = native;
     Vue.prototype.$comm = comm;
 
-
     // 过滤器
     Vue.filter("OBJECT_GET", (object, expression) => {
         return objectGet(object, expression);
