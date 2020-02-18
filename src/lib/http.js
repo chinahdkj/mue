@@ -3,8 +3,6 @@ import {getAppId, getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
-const HEADER_IGNORE = {};
-
 const HEADER_SETTING = {
     ignore: {},
     rewrite: {}
