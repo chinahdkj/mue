@@ -100,7 +100,7 @@ let getHeaders = (appid = null) => {
         Token: _token,
         APP: _app || "",
         // appid: appid || getAppId()
-        appid: appid === "" ? appid : (appid || getAppId())
+        appid: appid == null ? getAppId() : appid
     };
 
     Object.entries(HEADER_SETTING.rewrite).forEach(([k, v]) => {
@@ -115,7 +115,7 @@ let getHeaders = (appid = null) => {
 };
 
 export default {
-    post(url, data, failed = false, appid = ""){
+    post(url, data, failed = false, appid = null){
         return axios({
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
@@ -141,7 +141,7 @@ export default {
             return Promise.reject(e);
         });
     },
-    get(url, params, failed = false, appid = ""){
+    get(url, params, failed = false, appid = null){
         return axios({
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
