@@ -100,7 +100,7 @@ let getHeaders = (appid = null) => {
         Token: _token,
         APP: _app || "",
         // appid: appid || getAppId()
-        appid: appid == null ? getAppId() : appid
+        appid: appid === "" ? "" : (appid || getAppId())
     };
 
     Object.entries(HEADER_SETTING.rewrite).forEach(([k, v]) => {
