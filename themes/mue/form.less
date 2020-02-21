@@ -344,6 +344,110 @@
         }
     }
 
+    .mue-signature {
+        display: inline-block;
+        padding: 5px 0 0 5px;
+        box-sizing: border-box;
+        min-width: 55px;
+        max-width: 100%;
+        background: @@background;
+
+        ul.mue-signature-list {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+
+            @item-size: 50px;
+
+            > li {
+                display: block;
+                float: left;
+                box-sizing: border-box;
+                height: @item-size;
+                width: @item-size;
+                border: 2px solid @@border-color;
+                margin: 2px 5px 2px 0;
+                overflow: hidden;
+                position: relative;
+
+                &.__upload-btn {
+                    .upload-btn {
+                        position: relative;
+                        display: inline-block;
+                        background: none;
+                        border: 0;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    i.icon-tianjia {
+                        font-size: @item-size - 20px;
+                        color: @@grey;
+                        display: block;
+                        height: @item-size - 4px;
+                        width: @item-size - 4px;
+                        line-height: @item-size - 2px;
+                        text-align: center;
+
+                        &.is-disabled {
+                            color: @@disabled;
+                        }
+                    }
+
+                    .van-loading {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: @@grey;
+                    }
+                }
+
+                &.__upload-img {
+                    background: @@background-base;
+
+                    .box {
+                        width: 100%;
+                        height: 100%;
+                        position: relative;
+
+                        > img {
+                            width: @item-size - 4px;
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            left: 0;
+                        }
+
+                        .box-shadow {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            z-index: 1;
+                            background: rgba(0, 0, 0, .4);
+                        }
+
+                        i {
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            color: #212121;
+                            height: 24px;
+                            width: 24px;
+                            text-align: center;
+                            line-height: 24px;
+                            border-radius: 50%;
+                            font-size: 12px;
+                            background: rgba(255, 255, 255, .6);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     .mue-upload {
         display: inline-block;
         padding: 5px 0 0 5px;
@@ -932,6 +1036,11 @@
 
         // tree-picker
         .mue-tree-picker {
+            width: 100%;
+        }
+
+        // signature
+        .mue-signature {
             width: 100%;
         }
 
