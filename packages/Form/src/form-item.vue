@@ -1,11 +1,11 @@
 <template>
     <div class="mue-form-item"
          :class="{'is-required': !readonly && isRequired, 'is-readonly': readonly,
-         'not-inline': !inline}">
+         'not-inline': !labelInline}">
         <label :class="{'is-error': isError}"
-               :style="inline ? {'max-width': paddingLeft} : null">{{label}}</label>
+               :style="labelInline ? {'max-width': paddingLeft} : null">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
-             :style="[inline ? {'padding-left': paddingLeft} : null, contentStyle]">
+             :style="[labelInline ? {'padding-left': paddingLeft} : null, contentStyle]">
             <slot></slot>
         </div>
         <!--<i v-if="isError" class="error-icon fa fa-exclamation-circle" aria-hidden="true"></i>-->
@@ -34,6 +34,7 @@
         },
         props: {
             label: {type: String, default: ""},
+            inline: {type: Boolean, default: true},
             field: {type: String, default: ""},
             labelWidth: {type: Number, default: 0},
             contentStyle: null,
@@ -55,8 +56,8 @@
                 let w = this.labelWidth || this.GROUP.labelWidth || this.FORM.labelWidth || 110;
                 return `${w}px`;
             },
-            inline(){
-                return this.FORM.inline;
+            labelInline(){
+                return this.inline || this.FORM.inline;
             },
             isRequired(){
                 return this.required || this.rules.filter((r) => {
