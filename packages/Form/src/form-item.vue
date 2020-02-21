@@ -34,7 +34,11 @@
         },
         props: {
             label: {type: String, default: ""},
-            inline: {type: Boolean, default: true},
+            inline: {
+                type: [Boolean, Object], default: null, validator(v){
+                    return typeof v === "boolean" || v == null;
+                }
+            },
             field: {type: String, default: ""},
             labelWidth: {type: Number, default: 0},
             contentStyle: null,
@@ -57,7 +61,7 @@
                 return `${w}px`;
             },
             labelInline(){
-                return this.inline || this.FORM.inline;
+                return this.inline === null ? this.FORM.inline : this.inline;
             },
             isRequired(){
                 return this.required || this.rules.filter((r) => {
@@ -79,5 +83,5 @@
                 this.FORM.removeItem(this);
             }
         }
-    }
+    };
 </script>
