@@ -46,6 +46,10 @@
             <mue-sound-record style="margin-left: 5px;" v-model="audio1" local multiple/>
         </mue-panel>
 
+        <mue-panel hairline="normal" title="签名" style="height:120px;">
+            <mue-signature style="margin-left: 5px;" v-model="signature"/>
+        </mue-panel>
+
     </div>
 </template>
 
@@ -104,7 +108,8 @@
                     video1: []
                 },
                 audio: [],
-                audio1: []
+                audio1: [],
+                signature: []
             };
         },
         methods: {

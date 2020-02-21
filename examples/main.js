@@ -2,7 +2,7 @@ import "@babel/polyfill";
 // 开发环境设置tooken
 if(process.env.NODE_ENV === "development"){
     sessionStorage.setItem("authortoken",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTA4MjQzMjMsInQiOjE1NTkyODgzMjIsInVpZCI6ImJkZGRhYjJmLTBmNTgtNDY2My05ODk5LTFlZjNmNzNkYmNiYyJ9.vDrWvN5QV28AVQMS6QYjp66K1-BqDzvQkyfSP5JbAps");
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM3ODMyMzgsInQiOjE1ODIyNDcyMzgsInVpZCI6ImJkZGRhYjJmLTBmNTgtNDY2My05ODk5LTFlZjNmNzNkYmNiYyJ9.wFR1flJIpiPW02LX_8NGP5hOJhXXekPqBoWF75GfILE");
     sessionStorage.setItem("authorapp", "5a9912544d4843264cb002fc");
 }
 
