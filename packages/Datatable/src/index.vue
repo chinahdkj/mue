@@ -520,15 +520,19 @@
             onRefresh(success){
                 let self = this;
                 let callback = () => {
-                    self.ScrollLeft();
-                    success();
+                    this.$nextTick(() => {
+                        self.ScrollLeft();
+                        success();
+                    });
                 };
                 self.$emit("refresh", callback);
             },
             onLoad(success){
                 let self = this;
                 let callback = () => {
-                    success();
+                    this.$nextTick(() => {
+                        success();
+                    });
                 };
                 self.$emit("load-more", callback);
             },
