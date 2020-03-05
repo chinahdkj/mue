@@ -29,6 +29,10 @@
                         <mue-gis-point placeholder="请选择" v-model="model.pos"></mue-gis-point>
                     </mue-form-item>
 
+                    <mue-form-item label="签名" field="signature">
+                        <mue-signature v-model="model.signature"/>
+                    </mue-form-item>
+
                     <mue-form-item label="站点图片" field="station.pics"
                                    required :rules="[{type:'array'}]">
                         <mue-img-upload multiple v-model="model.station.pics" :quality="0.6" accept="all"/>

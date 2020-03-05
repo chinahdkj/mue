@@ -8,6 +8,7 @@
             <van-icon class="handle-icon" name="replay" @click="handleRotate('right')"/>
             <van-icon class="handle-icon" name="replay" @click="handleRotate('left')"/>
             <i v-if="!isDingdingEnv" class="fa fa-download handle-icon" @click="download"/>
+            <slot name="handle"></slot>
         </div>
 
     </div>
