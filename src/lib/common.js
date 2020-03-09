@@ -205,9 +205,9 @@ export const getHost = () => {
     return "";
 };
 
-export const getAppId = (defaultValue = "scada") => {
+export const getAppId = (defaultValue = "") => {
     if(defaultValue == null){
-        defaultValue = "scada";
+        defaultValue = "";
     }
     let _appid = GetQueryString("appid");
     if(_appid){
@@ -217,11 +217,28 @@ export const getAppId = (defaultValue = "scada") => {
     return sessionStorage.getItem("appid") || defaultValue;
 };
 
+export const getCid = () => {
+    let _app = GetQueryString("app");
+    if(_app){
+        sessionStorage.setItem("authorapp", _app);
+        return _app;
+    }
+    return sessionStorage.getItem("authorapp") || "";
+};
+
+export const getUploadPath = (path) => {
+    if(!path.startsWith("/upload")){
+        return path;
+    }
+    return `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}`;
+};
+
 export const clickElement = ElementClick;
 
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall, getHost, getAppId, isMobile, clickElement,
+    newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
+    getUploadPath,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }

@@ -15,11 +15,7 @@
                 if(!this.src){
                     return "";
                 }
-                if(this.src.startsWith("/upload")){
-                    // return `http://192.168.100.179:8081${path}`;
-                    return `${this.$comm.getHost()}${this.src}?appid=${this.$comm.getAppId()}`;
-                }
-                return this.src;
+                return this.$comm.getUploadPath(this.src);
             }
         },
         methods: {},

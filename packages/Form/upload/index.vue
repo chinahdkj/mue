@@ -116,10 +116,7 @@
                 if (!m) {
                     return "";
                 }
-                if (m.startsWith("/upload")) {
-                    return `${this.$comm.getHost()}${m}?appid=${this.$comm.getAppId()}`;
-                }
-                return m;
+                return this.$comm.getUploadPath(m);
             },
             showAction(i) {
                 this.pop.current = i;
