@@ -121,7 +121,9 @@
             showAction(i) {
                 this.pop.current = i;
                 if (this.isReadonly) {
-                    window.open(`${this.getPath(this.files[i])}?origname=1`); //下载
+                    let path = this.getPath(this.files[i]);
+                    path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
+                    window.open(path); //下载
                     return;
                 }
                 this.pop.visible = true;
