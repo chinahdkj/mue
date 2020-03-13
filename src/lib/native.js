@@ -1,5 +1,6 @@
 // 原生调用方法
 import {isIos} from "./common";
+import * as NativePc from "./native-pc";
 
 const _cache = {};
 const _cache2 = {};
@@ -12,24 +13,28 @@ const fns = [
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
     "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
-    "resSave", "sqlite_close", "unzip", "queryCustomer","fmkz_params","fmkz_sscx","fmkz_tc"
+    "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc"
 ];
 
 const fns2 = [
     "search", "collect", "btDisConnected", "btReceiver", "btGetParams", "manualPostRes", "handPostResp",
     "btSound", "btScan", "handCollectResp", "bluetooth", "onBtState", "interceptBack", "bgNavi", "getLocation", "btUpdate",
-    "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog"
+    "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog",
+    "get_blan", "rpc_blan", "analRelated"
 ]; // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
     _cache[msgid] = cb;
     try{
-        isIos()
-            ? window.webkit.messageHandlers.postMessage.postMessage(
-            JSON.stringify({msgid, method, params}))
-            : window.native.postMessage(
-            JSON.stringify({msgid, method, params}));
+        if(!window.webkit && !window.native){
+            typeof NativePc[method] === "function" && NativePc[method]({msgid, method, params});
+        }
+        else{
+            let p = JSON.stringify({msgid, method, params});
+            isIos() ? window.webkit.messageHandlers.postMessage.postMessage(p)
+                : window.native.postMessage(p);
+        }
     } catch(e){
         console.log(e);
         return;

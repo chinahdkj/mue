@@ -94,10 +94,10 @@
                 // reference.setAttribute('tabindex', 0); // tab序列
                 // popper.setAttribute('tabindex', 0);
 
-                on(reference, 'touchend', this.handleClick);
-                on(reference, 'touchend', this.doToggle);
+                on(reference, 'click', this.handleClick);
+                on(reference, 'click', this.doToggle);
             }
-            on(document.body, 'touchend', this.handleDocumentClick);
+            on(document.body, 'click', this.handleDocumentClick);
         },
 
         methods: {
@@ -136,9 +136,9 @@
         destroyed() {
             const reference = this.reference;
 
-            off(reference, 'touchend', this.handleClick);
-            off(reference, 'touchend', this.doToggle);
-            off(document.body, 'touchend', this.handleDocumentClick);
+            off(reference, 'click', this.handleClick);
+            off(reference, 'click', this.doToggle);
+            off(document.body, 'click', this.handleDocumentClick);
         }
     };
 </script>

@@ -3,14 +3,17 @@
         <div class="van-hairline--top-bottom van-picker__toolbar mue-tree__toolbar"
              v-if="showToolbar">
             <div class="van-picker__cancel" @click="onCancelClick">{{cancelButtonText}}</div>
-            <slot name="title">
+            <input v-if="searchable" class="input__search" type="text" v-model="searchValue"
+                   placeholder="输入选项关键字">
+            <slot v-else name="title">
                 <div class="van-ellipsis van-picker__title" v-if="title">{{title}}</div>
             </slot>
             <div class="van-picker__confirm" @click="onConfirmClick">{{confirmButtonText}}</div>
         </div>
         <div class="mue-tree__panels">
             <div class="mue-tree__panels-content">
-                <panel v-for="(col, index) in columns" :key="index" :nodes="col"/>
+                <panel v-for="(col, index) in columns" :key="index" :nodes="col"
+                       :search="index === 0 && searchable ? searchValue : null"/>
             </div>
         </div>
     </div>
@@ -37,7 +40,8 @@
                     return [];
                 }
             },
-            selectable: {type: Function, default: null}
+            selectable: {type: Function, default: null},
+            searchable: {type: Boolean, default: false}
         },
         data(){
             return {
@@ -45,8 +49,9 @@
                 dict: {}, // 节点属性字典
                 leaves: {}, // 叶子节点选中情况
                 opens: [], // 展开路径
-                current: null // 当前选中
-            }
+                current: null, // 当前选中
+                searchValue: ""
+            };
         },
         watch: {
             data: {
@@ -84,13 +89,18 @@
                 handler(){
                     this.initColumns();
                 }
+            },
+            searchValue(){
+                this.opens = [];
             }
         },
         methods: {
             onCancelClick(){
+                this.searchValue = "";
                 this.$emit("cancel");
             },
             onConfirmClick(){
+                this.searchValue = "";
                 this.$emit("confirm");
             },
 

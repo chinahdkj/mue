@@ -11,7 +11,7 @@
         data(){
             return {};
         },
-        inject:["TABLE"],
+        inject: ["TABLE"],
         render(h){
             let td = {
                 style: [this.hstyle, {"text-align": this.col.align || "center"}]
@@ -26,7 +26,7 @@
                 }
             }
             let $scoped = this.col.tmpl && this.TABLE.$scopedSlots[this.col.tmpl]
-                          ? this.TABLE.$scopedSlots[this.col.tmpl] : null;
+                ? this.TABLE.$scopedSlots[this.col.tmpl] : null;
             if($scoped){
                 inner = [$scoped({row: this.row, col: this.col, value: this.value, no: this.no})];
             }
@@ -37,5 +37,5 @@
         },
 
         methods: {}
-    }
+    };
 </script>

@@ -30,6 +30,9 @@
                 </mue-datatable>
             </div>
             <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
+
+            <van-actionsheet v-model="show"
+                    :actions="[{ name: '选项'}]"/>
         </van-tab>
 
         <van-tab title="定义">
@@ -90,6 +93,7 @@
     export default {
         data(){
             return {
+                show: false,
                 loading: false,
                 pageNo: 0,
                 noborder: false, borderEffect: "both",
@@ -192,7 +196,8 @@
             },
 
             onCellClick(value, row, col, no, event){
-                console.info(value);
+                this.show = true;
+                // console.info(value);
                 // alert(value);
             }
         },

@@ -1,5 +1,6 @@
 // 通用方法
 import uuid from "../utils/uuid";
+import {ElementClick} from "../utils/fast-click";
 
 /**
  * 获取url参数
@@ -39,6 +40,10 @@ export const isIos = () => {
 export const isAndroid = () => {
     const u = navigator.userAgent;
     return u.indexOf("Android") > -1 || u.indexOf("Adr") > -1;
+};
+
+export const isMobile = () => {
+    return isIos() || isAndroid();
 };
 
 /**
@@ -200,9 +205,40 @@ export const getHost = () => {
     return "";
 };
 
+export const getAppId = (defaultValue = "") => {
+    if(defaultValue == null){
+        defaultValue = "";
+    }
+    let _appid = GetQueryString("appid");
+    if(_appid){
+        sessionStorage.setItem("appid", _appid);
+        return _appid;
+    }
+    return sessionStorage.getItem("appid") || defaultValue;
+};
+
+export const getCid = () => {
+    let _app = GetQueryString("app");
+    if(_app){
+        sessionStorage.setItem("authorapp", _app);
+        return _app;
+    }
+    return sessionStorage.getItem("authorapp") || "";
+};
+
+export const getUploadPath = (path) => {
+    if(!path.startsWith("/upload")){
+        return path;
+    }
+    return `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}`;
+};
+
+export const clickElement = ElementClick;
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
-    newFixed, newFilePath, makeCall, getHost,
+    newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
+    getUploadPath,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }

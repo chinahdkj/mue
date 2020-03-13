@@ -193,7 +193,7 @@ export default {
                 setStyle(modal, "left", bound.left + "px");
             }
             setTimeout(()=>{
-                once(modal, "touchend", (e) => {
+                once(modal, "click", (e) => {
                     this.showPopper = false;
                     e.stopPropagation();
                     e.preventDefault();

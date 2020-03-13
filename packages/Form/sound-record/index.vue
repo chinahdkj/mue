@@ -175,10 +175,7 @@
                 if (!whole) {
                     return "";
                 }
-                if (whole.startsWith("/upload")) {
-                    return `${this.$comm.getHost()}${whole}`;
-                }
-                return whole;
+                return this.$comm.getUploadPath(whole);
             },
             queryLocal(id) {
                 return new Promise((resolve) => {

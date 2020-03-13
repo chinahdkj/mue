@@ -168,6 +168,7 @@
 
                 this.scroller.on("pullingDown", () => {
                     !self.loading && self.top.state === "drop" && self.topAction();
+                    this.scroller.finishPullDown();
                 });
 
                 this.scroller.on("scrollEnd", ({y}) => {
@@ -180,13 +181,8 @@
                     !self.loading && self.bottom.state === "drop" && self.bottomAction();
                 });
 
-                this.scroller.on("refresh", () => {
-                    if(self.scrolling){
-                        return;
-                    }
-                    if(self.scroller.y < self.scroller.maxScrollY){
-                        self.ScrollTop(0);
-                    }
+                this.scroller.on("pullingUp", () => {
+                    self.scroller.finishPullUp();
                 });
 
                 this.LoadSuccess();
@@ -237,10 +233,6 @@
             resetStates(){
                 this.top.style = {top: `-${this.distance}px`};
                 this.bottom.style = {bottom: `-${this.distance}px`};
-                if(this.scroller){
-                    this.scroller.finishPullDown();
-                    this.scroller.refresh();
-                }
                 this.loading = false;
                 this.top.state = "";
                 this.bottom.state = "";
@@ -264,8 +256,22 @@
             },
 
             LoadSuccess(){
-                this.resetStates();
-                this.fillContainer();
+                if(this.scroller){
+                    this.scroller.once("refresh", () => {
+                        this.resetStates();
+                        this.fillContainer();
+                        if(!this.scrolling && this.scroller.y < this.scroller.maxScrollY){
+                            this.ScrollTop(0);
+                        }
+                    });
+                    this.scroller.refresh();
+                }
+                else{
+                    this.$nextTick(() => {
+                        this.resetStates();
+                        this.fillContainer();
+                    });
+                }
             },
 
             ScrollTop(t = 0){

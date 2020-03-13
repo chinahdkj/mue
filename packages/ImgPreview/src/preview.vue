@@ -7,7 +7,8 @@
         <div class="handle-btn">
             <van-icon class="handle-icon" name="replay" @click="handleRotate('right')"/>
             <van-icon class="handle-icon" name="replay" @click="handleRotate('left')"/>
-            <i class="fa fa-download handle-icon" @click="download"/>
+            <i v-if="!isDingdingEnv" class="fa fa-download handle-icon" @click="download"/>
+            <slot name="handle"></slot>
         </div>
 
     </div>
@@ -66,6 +67,7 @@
         },
         data() {
             return {
+                isDingdingEnv: sessionStorage.getItem('isDingdingEnv'),
                 current: -1,
                 imgs: [],
                 angles: [],
@@ -119,11 +121,7 @@
                 if(!path){
                     return "";
                 }
-                if(path.startsWith("/upload")){
-                    // return `http://192.168.100.179:8081${path}`;
-                    return `${this.$comm.getHost()}${path}`;
-                }
-                return path;
+            return this.$comm.getUploadPath(path);
             },
             download() {
                 this.loading = true;
