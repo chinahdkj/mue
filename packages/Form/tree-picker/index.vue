@@ -144,6 +144,9 @@
             },
             GetOptionInfo(code){
                 return this.$refs.tree.GetNode(code);
+            },
+            GetNodeCheckState(node){
+                return this.$refs.tree.GetNodeCheckState(node);
             }
         }
     };
