@@ -13,14 +13,14 @@ const fns = [
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
     "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
     "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
-    "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor"
+    "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor", "analRelated"
 ];
 
 const fns2 = [
     "search", "collect", "btDisConnected", "btReceiver", "btGetParams", "manualPostRes", "handPostResp",
     "btSound", "btScan", "handCollectResp", "bluetooth", "onBtState", "interceptBack", "bgNavi", "getLocation", "btUpdate",
     "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog",
-    "get_blan", "rpc_blan", "analRelated"
+    "get_blan", "rpc_blan"
 ]; // 原生主动调用js的方法
 
 const postMessage = ({cb, method, params}) => {
