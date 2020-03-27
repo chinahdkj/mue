@@ -196,6 +196,9 @@
                 return node.code;
             },
 
+            GetNodeCheckState(node){
+                return node.GetCheckState(this.leaves);
+            },
             GetChecks(){
                 let result = [];
                 Object.entries(this.dict).forEach(([k, v]) => {

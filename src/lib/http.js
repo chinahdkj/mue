@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getAppId, getHost, GetQueryString} from "./common";
+import {getAppId, getCid, getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
@@ -87,18 +87,10 @@ let getHeaders = (appid = null) => {
         _token = sessionStorage.getItem("authortoken") || "";
     }
 
-    let _app = GetQueryString("app");
-    if(_app){
-        sessionStorage.setItem("authorapp", _app);
-    }
-    else{
-        _app = sessionStorage.getItem("authorapp");
-    }
-
     let headers = {
         Authorization: _token,
         Token: _token,
-        APP: _app || "",
+        APP: getCid(),
         // appid: appid || getAppId()
         appid: appid === "" ? "" : (appid || getAppId())
     };

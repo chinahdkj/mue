@@ -2,7 +2,7 @@
     <van-tabs v-loading="confirming" class="no-flex">
         <van-tab title="demo">
             <mue-form v-model="model" @cancel="onCancel" @confirm="onConfirm" :label-width="110"
-                      :readonly="readonly" :inline="false">
+                      :readonly="readonly" :inline="true">
                 <mue-form-item-group title="基本信息" sub-title="自动保存" style="border-top: 0;">
                     <div slot="help">11111</div>
 
@@ -27,6 +27,10 @@
 
                     <mue-form-item label="经纬度" required field="pos">
                         <mue-gis-point placeholder="请选择" v-model="model.pos"></mue-gis-point>
+                    </mue-form-item>
+
+                    <mue-form-item label="签名" field="signature">
+                        <mue-signature v-model="model.signature"/>
                     </mue-form-item>
 
                     <mue-form-item label="站点图片" field="station.pics"

@@ -116,11 +116,15 @@
                 this.isVisible = false;
                 if(this.multiple){
                     let checks = this.$refs.tree.GetChecks();
-                    this.$emit("input", checks.length === 0 ? null : checks);
+                    let v = checks.length === 0 ? null : checks;
+                    this.$emit("input", v);
+                    v !== this.value && this.$emit("change", v, this.value);
                 }
                 else{
                     let current = this.$refs.tree.GetCurrent();
-                    this.$emit("input", current == null ? null : current);
+                    let v = current == null ? null : current;
+                    this.$emit("input", v);
+                    v !== this.value && this.$emit("change", v, this.value);
                 }
             },
 
@@ -128,6 +132,7 @@
                 this.isVisible = false;
                 if(this.clearable){
                     this.$emit("input", null);
+                    null !== this.value && this.$emit("change", null, this.value);
                 }
             },
 
@@ -139,6 +144,9 @@
             },
             GetOptionInfo(code){
                 return this.$refs.tree.GetNode(code);
+            },
+            GetNodeCheckState(node){
+                return this.$refs.tree.GetNodeCheckState(node);
             }
         }
     };

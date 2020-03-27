@@ -6,19 +6,23 @@
                     <img :src="m.url"/>
                 </div>
             </li>
+
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <button class="upload-btn" type="button"
+                    <!--<button class="upload-btn" type="button"
                             :disabled="disabled" @click="doSignature">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
+                    </button>-->
+                    <button class="signature-btn" type="button" :disabled="disabled" @click="doSignature">
+
                     </button>
                     <van-uploader ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
                                   result-type="dataUrl" :multiple="multiple" accept="image/*">
-                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
-                           aria-hidden="true"></i>
+                        <!--<i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>-->
                     </van-uploader>
                 </div>
             </li>
@@ -26,9 +30,11 @@
 
         <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
                          @select="onSelect"
-                         :actions="[{name: '预览文件', act: 'view'}, {name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: '预览文件', act: 'view'},
+                         {name: '重签', act: 'resign'},
+                         {name: '删除', act: 'delete'}]"/>
 
-        <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
+        <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start" />
     </div>
 </template>
 
@@ -198,10 +204,7 @@
                 if (!whole) {
                     return "";
                 }
-                if (whole.startsWith("/upload")) {
-                    return `${this.$comm.getHost()}${whole}?appid=${this.$comm.getAppId()}`;
-                }
-                return whole;
+                return this.$comm.getUploadPath(whole);
             },
 
             async doSignature() {
@@ -209,12 +212,13 @@
                 if (!url) {
                     return
                 }
-                let base64 = await this.getBase64Image(this.getPath(url));
+                this.imgs = [url];
+                /*let base64 = await this.getBase64Image(this.getPath(url));
                 let type = base64.substring(base64.indexOf(':') + 1, base64.indexOf(';'));
                 let name = `Signature.${type.substring(type.lastIndexOf('/') + 1)}`;
                 let blob = Base64ToFile(base64, {type, name});
                 let file = {content: base64, file: blob};
-                this.upload(file);
+                this.upload(file);*/
             },
 
             getSignatureData() {
@@ -315,6 +319,8 @@
             onSelect({act}) {
                 if (act === "view") {
                     this.showFile();
+                } else if (act === "resign") {
+                    this.doSignature();
                 } else if (act === "delete") {
                     this.removeFile();
                 }

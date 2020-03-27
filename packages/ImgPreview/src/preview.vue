@@ -8,6 +8,7 @@
             <van-icon class="handle-icon" name="replay" @click="handleRotate('right')"/>
             <van-icon class="handle-icon" name="replay" @click="handleRotate('left')"/>
             <i v-if="!isDingdingEnv" class="fa fa-download handle-icon" @click="download"/>
+            <slot name="handle"></slot>
         </div>
 
     </div>
@@ -120,11 +121,7 @@
                 if(!path){
                     return "";
                 }
-                if(path.startsWith("/upload")){
-                    // return `http://192.168.100.179:8081${path}`;
-                    return `${this.$comm.getHost()}${path}?appid=${this.$comm.getAppId()}`;
-                }
-                return path;
+            return this.$comm.getUploadPath(path);
             },
             download() {
                 this.loading = true;
