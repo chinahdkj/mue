@@ -133,19 +133,18 @@
         }
 
         &.no-flex.van-tabs--line {
-            .van-tabs__nav--line {
-                //display: inline-block;
-                //white-space: nowrap;
-                //overflow: scroll;
-                //overflow-y: hidden;
-                //width: 100%;
-                .van-tab {
-                    //display: inline-block;
-                    //flex: none;
-                    flex-basis: auto !important;
-                    flex-shrink: 0;
-                    flex-grow: 0;
-                }
+            .van-tab {
+                flex-basis: auto !important;
+                flex-shrink: 0;
+                flex-grow: 1;
+            }
+        }
+
+        &.no-flex-left.van-tabs--line {
+            .van-tab {
+                flex-basis: auto !important;
+                flex-shrink: 0;
+                flex-grow: 0;
             }
         }
 
