@@ -3,6 +3,8 @@ import {getAppId, getCid, getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
+const isWebApi = process.env.VUE_APP_INTERFACE === 'web'?true:false
+
 const HEADER_SETTING = {
     ignore: {},
     rewrite: {}
@@ -25,6 +27,10 @@ if(host){
 let appid = GetQueryString("appid");
 if(appid){
     sessionStorage.setItem("appid", appid);
+}
+
+if(isWebApi){
+    axios.defaults.headers.common["Uid"] = sessionStorage.getItem("Uid") || "";
 }
 
 axios.defaults.headers.common["Authorization"] = token || sessionStorage.getItem("authortoken");
@@ -106,16 +112,33 @@ let getHeaders = (appid = null) => {
     return headers;
 };
 
+//针对S7
+function getUrl (url){
+    let prefix = "/app/customer"
+    if(url.startsWith(prefix)){
+        return url.substring(prefix.length) 
+    }else{
+        return url;
+    }
+}
+
+
 export default {
     post(url, data, failed = false, appid = null){
-        return axios({
+        let setting = {
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             data: data,
-            timeout: 30000,
-            headers: getHeaders(appid)
-        }).then(res => res.Response).catch(e => {
+            timeout: 30000
+        }
+        if(isWebApi){
+            setting.url = getUrl(url)
+        }else{
+            setting['headers'] = getHeaders(appid)
+        }
+
+        return axios(setting).then(res => res.Response).catch(e => {
             console.log(e);
 
             // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
@@ -134,14 +157,21 @@ export default {
         });
     },
     get(url, params, failed = false, appid = null){
-        return axios({
+        let setting = {
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             params, // get 请求时带的参数
-            timeout: 30000,
-            headers: getHeaders(appid)
-        }).then(res => res.Response).catch(e => {
+            timeout: 30000
+        }
+        if(isWebApi){
+            setting.url = getUrl(url)
+        }else{
+            setting['headers'] = getHeaders(appid)
+        }
+        
+        
+        return axios(setting).then(res => res.Response).catch(e => {
             console.log(e);
 
             if(e.Message){
