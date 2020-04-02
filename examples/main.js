@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+// import "@babel/polyfill";
 // 开发环境设置tooken
 if(process.env.NODE_ENV === "development"){
     sessionStorage.setItem("authortoken",
@@ -6,20 +6,21 @@ if(process.env.NODE_ENV === "development"){
     sessionStorage.setItem("authorapp", "5a9912544d4843264cb002fc");
 }
 
-import Vue from 'vue';
-import App from './App';
-import Mue from '../src/index';
-import '../themes/index.less';
+import Vue from "vue";
+import App from "./App";
+import Mue from "../src/index";
+import "../themes/index.less";
 import "./assets/demo.less";
-import router from './router/index';
+import router from "./router/index";
 
-Vue.use(Mue);
+let lang = window.localStorage.getItem("language");
+Vue.use(Mue, {lang: lang});
 
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
+    el: "#app",
     router,
     render(h){
         if(this.unload){
@@ -28,7 +29,7 @@ new Vue({
         return h(App);
     },
     data(){
-        return {theme: "day", unload: false};
+        return {theme: "day", unload: false, lang: lang};
     },
     watch: {
         "$route.query.theme": {
@@ -44,7 +45,7 @@ new Vue({
         }
     },
     mounted(){
-        window.addEventListener("beforeunload", ()=>{
+        window.addEventListener("beforeunload", () => {
             this.unload = true;
         });
     }

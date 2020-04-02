@@ -28,8 +28,10 @@
 <script>
     import {GetType} from "./utils";
     import yearPicker from "./year-picker";
+    import {localeMixin, t} from "../../../src/locale";
 
     export default {
+        mixins: [localeMixin],
         name: "MueDatePicker",
         components: {yearPicker},
         inheritAttrs: false,
@@ -66,7 +68,8 @@
                 return GetType(this.format);
             },
             cancelText(){
-                return !this.bar && this.clearable ? "清空" : "取消";
+                return !this.bar && this.clearable
+                    ? t("mue.common.clear") : t("mue.common.cancel");
             },
             pickerOps(){
                 let opts = {};

@@ -25,8 +25,7 @@ import resize from "../packages/directives/resize.js";
 import touch from "../packages/directives/touch.js";
 
 
-import Vant, {Locale} from "vant";
-import zhCN from "vant/lib/locale/lang/zh-CN";
+import Vant from "vant";
 import axios from "axios";
 import http from "./lib/http";
 import native from "./lib/native";
@@ -35,8 +34,8 @@ import "./utils/fast-click";
 import {objectGet} from "./utils/object";
 // svg 图标
 import "../themes/fonts/iconfont";
-
-Locale.use("zh-CN", zhCN);
+// 国际化
+import {use} from "./locale";
 
 window.requestAnimFrame = (() => {
     return window.requestAnimationFrame ||
@@ -53,7 +52,11 @@ const components = [
     ...Object.values(Dvr), SortPicker, Tree, Empty, ImgPreview, Actionsheet, Image
 ];
 
-const install = function(Vue){
+const install = function(Vue, opts){
+    opts = opts || {};
+    Vue.prototype.$options = opts;
+    // 设置语音
+    use(opts.lang);
     // 加载Vant
     Vue.use(Vant);
     components.map(component => {

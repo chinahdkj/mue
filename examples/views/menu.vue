@@ -44,8 +44,18 @@
             <van-cell value="TREE-PICKER" @click="open('/form/treepicker')"/>
         </van-cell-group>
 
-        <div class="night-switch" @click="toggleNight">
-            <i class="fa" :class="[isNight ? 'fa-sun-o' : 'fa-moon-o']" aria-hidden="true"></i>
+        <div class="night-switch">
+            <van-button plain size="mini" type="primary" @click="toggleNight">
+                {{isNight ? "暗色" : "亮色"}}
+            </van-button>
+            <van-button v-if="lang === 'en'" plain size="mini" type="primary"
+                        @click="changeLang('zh-cn')">
+                英文
+            </van-button>
+            <van-button v-else plain size="mini" type="primary"
+                        @click="changeLang('en')">
+                中文
+            </van-button>
         </div>
     </div>
 </template>
@@ -58,6 +68,9 @@
         computed: {
             isNight(){
                 return this.$root.theme === "night";
+            },
+            lang(){
+                return this.$root.lang;
             }
         },
         methods: {
@@ -69,6 +82,11 @@
                 let path = this.$route.path;
                 let query = !this.isNight ? {theme: "night"} : {theme: "day"};
                 this.$router.push({path, query});
+            },
+
+            changeLang(lang){
+                window.localStorage.setItem("language", lang)
+                window.location.reload();
             }
         }
     }

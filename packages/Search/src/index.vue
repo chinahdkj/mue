@@ -5,19 +5,26 @@
             <van-search ref="search" v-model="q" background="transparent"
                         :show-action="showAction || q.length > 0"
                         :placeholder="placeholder" @search="onSearch">
-                <div slot="action" @click="onCancel">取消</div>
+                <div slot="action" @click="onCancel">{{t("mue.common.cancel")}}</div>
             </van-search>
         </form>
     </div>
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
+        mixins: [localeMixin],
         name: "MueSearch",
         components: {},
         props: {
             value: String,
-            placeholder: {type: String, default: "请输入搜索关键词"},
+            placeholder: {
+                type: String, default: () => {
+                    return t("mue.search.placeholder");
+                }
+            },
             showAction: {type: Boolean, default: false}
         },
         data(){

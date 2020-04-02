@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mue-search :placeholder="placeholder" v-model="v" style="padding: 5px;"
+        <mue-search v-model="v" style="padding: 5px;"
                     @search="onSearch"></mue-search>
     </div>
 
@@ -22,5 +22,5 @@
         },
         mounted(){
         }
-    }
+    };
 </script>
