@@ -68,22 +68,37 @@
     import BETTER_SCROLL from "better-scroll";
     import Pager from "./pager";
 
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
+        mixins: [localeMixin],
         name: "MueLoadMore",
         components: {Pager},
-
         props: {
             autoFill: {type: Boolean, default: true},
 
-            topPullText: {type: String, default: "下拉可以刷新"},
-            topDropText: {type: String, default: "释放开始刷新"},
-            topLoadingText: {type: String, default: "刷新中..."},
+            topPullText: {type: String, default: () => {
+                return t("mue.loadMore.topPullText");
+            }},
+            topDropText: {type: String, default:  () => {
+                return t("mue.loadMore.topDropText");
+            }},
+            topLoadingText: {type: String, default: () => {
+                return t("mue.loadMore.topLoadingText");
+            }},
+            bottomPullText: {type: String, default: () => {
+                return t("mue.loadMore.bottomPullText");
+            }},
+            bottomDropText: {type: String, default:  () => {
+                return t("mue.loadMore.bottomDropText");
+            }},
+            bottomLoadingText: {type: String, default: () => {
+                return t("mue.loadMore.bottomLoadingText");
+            }},
 
-            bottomPullText: {type: String, default: "上拉加载更多"},
-            bottomDropText: {type: String, default: "释放开始加载"},
-            bottomLoadingText: {type: String, default: "加载中..."},
-
-            allLoadedText: {type: String, default: "没有更多了"},
+            allLoadedText: {type: String, default: () => {
+                return t("mue.loadMore.allLoadedText");
+            }},
 
             allLoaded: {type: Boolean, default: false},
 

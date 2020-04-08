@@ -16,9 +16,10 @@
 <script>
     import Validator from '../../../src/utils/validator';
     import {objectGet} from '../../../src/utils/object';
-
+    import {localeMixin, t} from "../../../src/locale";
     export default {
         name: "MueForm",
+        mixins: [localeMixin],
         components: {},
         props: {
             readonly: {type: Boolean, default: false},
@@ -30,8 +31,12 @@
                     return {};
                 }
             },
-            cancelText: {type: String, default: "取消"},
-            confirmText: {type: String, default: "提交"}
+            cancelText: {type: String, default: () => {
+                return t("mue.common.cancel");
+            }},
+            confirmText: {type: String, default: () => {
+                return t("mue.common.submit");
+            }}
         },
         provide(){
             return {

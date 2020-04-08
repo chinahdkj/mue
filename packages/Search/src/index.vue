@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-search" @focus.native="focus = true" @blur.native="focus = false"
+    <div class="mue-search" @focus="focus = true" @blur="focus = false"
          :class="{'mue-search__focus': focus}">
         <form action="/">
             <van-search ref="search" v-model="q" background="transparent"

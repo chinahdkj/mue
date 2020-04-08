@@ -17,7 +17,9 @@
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
     export default {
+        mixins: [localeMixin],
         name: "MueTreePicker",
         inject: {
             FORM_ITEM: {
@@ -48,7 +50,7 @@
         },
         computed: {
             cancelButtonText(){
-                return this.clearable ? "清空" : "取消";
+                return this.clearable ? t('mue.common.clear') : t('mue.common.cancel');
             }
         },
         watch: {

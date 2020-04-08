@@ -31,7 +31,7 @@
              :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
             <span class="mue-dvr-video__bar-name">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
-                {{!rtsp ? "请添加视频" : name}}
+                {{!rtsp ? t('mue.dvr.tooltip') : name}}
             </span>
             <a class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
         </div>
@@ -51,8 +51,11 @@
 
     // import uuid from "../../../src/utils/uuid";
 
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
         name: "MueDvrVideo",
+        mixins: [localeMixin],
         components: {},
         props: {
             height: {type: Number, default: 0},

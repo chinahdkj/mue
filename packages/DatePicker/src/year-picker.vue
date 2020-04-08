@@ -4,11 +4,16 @@
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
+        mixins: [localeMixin],
         props: {
             title: {type: String, default: ""},
             value: {type: String},
-            cancelButtonText: {type: String, default: "取消"},
+            cancelButtonText: {type: String, default: () => {
+                return t("mue.common.cancel");
+            }},
             minDate: {default: null},
             maxDate: {default: null}
         },

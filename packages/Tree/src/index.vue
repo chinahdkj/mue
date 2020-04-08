@@ -4,7 +4,7 @@
              v-if="showToolbar">
             <div class="van-picker__cancel" @click="onCancelClick">{{cancelButtonText}}</div>
             <input v-if="searchable" class="input__search" type="text" v-model="searchValue"
-                   placeholder="输入选项关键字">
+                   :placeholder="t('mue.common.placeholder')">
             <slot v-else name="title">
                 <div class="van-ellipsis van-picker__title" v-if="title">{{title}}</div>
             </slot>
@@ -22,18 +22,24 @@
 <script>
     import panel from "./panel";
     import TreeNode from "./treeNode";
+    import {localeMixin, t} from "../../../src/locale";
 
     export default {
         name: "MueTree",
         components: {panel},
+        mixins: [localeMixin],
         provide(){
             return {TREE: this};
         },
         props: {
             title: {type: String, default: ""},
             showToolbar: {type: Boolean, default: true},
-            confirmButtonText: {type: String, default: "确认"},
-            cancelButtonText: {type: String, default: "取消"},
+            confirmButtonText: {type: String, default: () => {
+                return t('mue.common.confirm');
+            }},
+            cancelButtonText: {type: String, default: () => {
+                return t('mue.common.cancel');
+            }},
             multiple: {type: Boolean, default: false},
             data: {
                 type: Array, default(){
@@ -41,7 +47,7 @@
                 }
             },
             selectable: {type: Function, default: null},
-            searchable: {type: Boolean, default: false}
+            searchable: {type: Boolean, default: false},
         },
         data(){
             return {
