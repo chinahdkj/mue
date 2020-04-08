@@ -17,14 +17,16 @@
                 </van-uploader>
             </li>
         </ul>
-        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+        <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
-                         :actions="[{name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: t('mue.common.delete'), act: 'delete'}]"/>
     </div>
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
     export default {
+        mixins: [localeMixin],
         name: "MueUpload",
         components: {},
         inject: {
@@ -140,7 +142,7 @@
                 }
 
                 this.$dialog.confirm({
-                    title: "删除", message: `是否删除此文件？`
+                    title: t('mue.common.delete'), message: t('mue.form.common.delPrompt')
                 }).then(() => {
                     this.files.splice(this.pop.current, 1);
                 }).catch(() => {
@@ -155,7 +157,7 @@
                 if(fileArr.length <= limit && ((this.files.length + fileArr.length) <= limit)){
                     return true
                 }
-                this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                this.$toast.fail(t('mue.form.common.uploadLimitErrorPrompt')+this.limit);
                 return false;
             },
             base64ToFile(base64, file){

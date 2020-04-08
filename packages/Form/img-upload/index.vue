@@ -37,13 +37,13 @@
             </li>
         </ul>
 
-        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+        <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
-                         :actions="[{name: '预览文件', act: 'view'}, {name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: t('mue.form.imgUpload.viewText'), act: 'view'}, {name: t('mue.common.delete'), act: 'delete'}]"/>
 
-        <van-actionsheet v-model="uploadPop.visible" get-container="body" cancel-text="取消"
+        <van-actionsheet v-model="uploadPop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="typeSelect"
-                         :actions="[{name: '上传图片', act: 'image'}, {name: '拍摄视频', act: 'video'}]"/>
+                         :actions="[{name:  t('mue.form.imgUpload.imageText'), act: 'image'}, {name: t('mue.form.imgUpload.videoText'), act: 'video'}]"/>
 
         <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
 
@@ -58,11 +58,14 @@
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
     import {isAndroid} from "../../../src/lib/common";
     import androidUpload from "./androidUpload";
+    
+    import {localeMixin, t} from "../../../src/locale";
 
     const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
     const VIDEO = 'video/mp4,video/rmvb,video/avi,video/mov,video/flv,video/3gp';
 
     export default {
+        mixins: [localeMixin],
         name: "MueImgUpload",
         components: {
             androidUpload
@@ -415,7 +418,7 @@
                     cb: (res) => {
                         if (res.code === 0) {
                         } else {
-                            this.$toast.success('图片保存至相册时发生错误');
+                            this.$toast.success(t('mue.form.imgUpload.errorTiltop'));
                         }
                     }
                 })
@@ -431,7 +434,7 @@
                             this.imgs.push(id);
                         } else if (code === 1) {
                         } else {
-                            this.$toast.fail('上传失败');
+                            this.$toast.fail(t('mue.form.imgUpload.errorUpload'));
                         }
                         this.uploading = false;
                     }
@@ -492,7 +495,7 @@
                 }
 
                 this.$dialog.confirm({
-                    title: "删除", message: "是否删除此文件!"
+                    title: t('mue.common.delete'), message: t('mue.form.common.delPrompt')
                 }).then(() => {
                     let id = this.imgs[this.current], info = this.dict[id] || {};
                     this.imgs.splice(this.current, 1);
@@ -520,7 +523,7 @@
                 if (fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)) {
                     return fileArr
                 } else {
-                    this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                    this.$toast.fail(t('mue.form.common.uploadLimitErrorPrompt')+this.limit);
                     return false;
                 }
             }

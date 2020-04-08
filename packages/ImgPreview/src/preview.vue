@@ -16,9 +16,10 @@
 
 <script>
     import {rotateImg} from "../../../src/utils/image-utils";
-
+    import {localeMixin, t} from "../../../src/locale";
     export default {
         name: 'MueImgPreview',
+        mixins: [localeMixin],
         inheritAttrs: false,
         props: {
             visible: {
@@ -140,9 +141,9 @@
                     cb: (res) => {
                         this.loading = false;
                         if(res.code === 0) {
-                            this.$toast.success('已下载至手机相册')
+                            this.$toast.success(t("mue.imgPreview.downloadSuccess"))
                         } else {
-                            this.$toast.success('下载失败')
+                            this.$toast.success(t("mue.imgPreview.downloadError"))
                         }
                     }
                 })

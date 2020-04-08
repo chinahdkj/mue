@@ -15,15 +15,17 @@
             </li>
         </ul>
 
-        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+        <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
-                         :actions="[{name: '播放音频', act: 'play'}, {name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: t('mue.form.soundRecord.playText'), act: 'play'}, {name: t('mue.common.delete'), act: 'delete'}]"/>
     </div>
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
     export default {
         name: "MueSoundRecord",
+        mixins: [localeMixin],
         components: {},
         inject: {
             FORM_ITEM: {
@@ -152,7 +154,7 @@
                     return;
                 }
                 this.$dialog.confirm({
-                    title: "删除", message: "是否删除此文件!"
+                    title: t('mue.common.delete'), message: t('mue.form.common.delPrompt')
                 }).then(() => {
                     let id = this.audios[this.current], info = this.dict[id] || {};
                     this.audios.splice(this.current, 1);
@@ -197,7 +199,7 @@
                                 this.audios.push(id);
                             } else if (code === 1) {
                             } else {
-                                this.$toast.fail('录制失败');
+                                this.$toast.fail(t('mue.form.soundRecord.errorText'));
                             }
                             this.recording = false;
                         }

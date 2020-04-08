@@ -16,11 +16,11 @@
                     <div class="van-picker__cancel" @click="onCancel">
                         {{cancelButtonText}}
                     </div>
-                    <div class="van-picker__confirm" @click="onConfirm">确认</div>
+                    <div class="van-picker__confirm" @click="onConfirm">{{ t('mue.common.confirm') }}</div>
                 </div>
                 <div class="mue-gis-point-pop--info">
-                    <label>经度</label><span>{{(pos || {}).lng | round}}</span>
-                    <label>纬度</label><span>{{(pos || {}).lat | round}}</span>
+                    <label>{{ t('mue.form.gis.longText')}}</label><span>{{(pos || {}).lng | round}}</span>
+                    <label>{{ t('mue.form.gis.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
                 </div>
                 <div class="mue-gis-point-pop--map">
                     <l-map ref="Lmap" v-if="pos" :zoom="zoom" :min-zoom="8" :max-zoom="18"
@@ -30,7 +30,7 @@
                             <div class="btn-con" @click.stop="getLocation">
                                 <van-loading type="spinner" size="24px" v-if="loading"/>
                                 <i v-else class="iconfont icon-dingwei1"></i>
-                                <span class="title">定位</span>
+                                <span class="title">{{ t('mue.form.gis.positionText')}}</span>
                             </div>
                         </l-control>
                         <l-control-zoom position="topright" :zoomInText="zoomInIcon"
@@ -58,6 +58,9 @@
     import "leaflet/dist/leaflet.css";
     import {MarkerIcon} from "../../../src/utils/gis";
 
+    import {localeMixin, t} from "../../../src/locale";
+
+
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({...MarkerIcon});
 
@@ -80,6 +83,7 @@
     };
 
     export default {
+        mixins: [localeMixin],
         name: "MueGisPoint",
         components: {LMap, LTileLayer, LMarker, LControlZoom, LCircle, LControl},
         inject: {
@@ -111,8 +115,8 @@
                 pos: null,
                 distance: null,
                 exceedArea: false,
-                zoomInIcon: "<i class=\"iconfont icon-tianjia1-copy\"></i><span class=\"title\">放大</span>",
-                zoomOutIcon: "<i class=\"iconfont icon-jianquminus25-copy\"></i><span class=\"title\">缩小</span>",
+                zoomInIcon: `<i class=\"iconfont icon-tianjia1-copy\"></i><span class=\"title\">${t('mue.form.gis.zoomInText')}</span>`,
+                zoomOutIcon: `<i class=\"iconfont icon-jianquminus25-copy\"></i><span class=\"title\">${t('mue.form.gis.zoomOutText')}</span>`,
             };
         },
         computed: {
@@ -121,7 +125,7 @@
                 return !pos ? "" : `${ROUND(pos.lng)},${ROUND(pos.lat)}`;
             },
             cancelButtonText(){
-                return this.clearable ? "清空" : "取消";
+                return this.clearable ? t('mue.common.clear') : t('mue.common.cancel');
             },
             isReadonly(){
                 return this.FORM_ITEM.readonly || this.readonly;
@@ -222,7 +226,7 @@
             },
             onConfirm(){
                 if(this.distance && this.exceedArea){
-                    this.$toast.fail("超出范围");
+                    this.$toast.fail(t('mue.form.gis.rangeOutText'));
                     return;
                 }
 

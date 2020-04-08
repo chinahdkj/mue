@@ -11,10 +11,10 @@
                    get-container="body" :close-on-click-overlay="false"
                    @click-overlay="pop = false">
             <van-datetime-picker v-if="step == 'begin'" :type="dtype" v-model="bv"
-                                 title="起始" @confirm="onConfirmBegin" v-bind="pickerOps"
+                                 :title="t('mue.dateRangePicker.start')" @confirm="onConfirmBegin" v-bind="pickerOps"
                                  @cancel="onCancel" :cancel-button-text="cancelText"/>
             <van-datetime-picker v-if="step == 'end'" :type="dtype" v-model="ev"
-                                 title="截止" v-bind="pickerOpts2" @confirm="onConfirmEnd"
+                                 :title="t('mue.dateRangePicker.end')" v-bind="pickerOpts2" @confirm="onConfirmEnd"
                                  @cancel="onCancel" :cancel-button-text="cancelText"/>
         </van-popup>
     </div>
@@ -23,8 +23,11 @@
 <script>
     import {GetType} from "../../DatePicker/src/utils";
 
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
         name: "MueDateRangePicker",
+        mixins: [localeMixin],
         inheritAttrs: false,
         components: {},
         props: {
@@ -53,7 +56,8 @@
                 return GetType(this.format);
             },
             cancelText(){
-                return !this.bar && this.clearable ? "清空" : "取消";
+                return !this.bar && this.clearable ? 
+                            t('mue.common.clear') : t('mue.common.cancel');
             },
             pickerOps(){
                 let opts = {};

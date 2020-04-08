@@ -14,7 +14,7 @@
                         value-key="name" @change="onChange">
                 <template #title v-if="searchable">
                     <input class="input__search" type="text" v-model="searchValue"
-                           placeholder="输入选项关键字">
+                           :placeholder="t('mue.common.placeholder')">
                 </template>
             </van-picker>
         </van-popup>
@@ -22,8 +22,11 @@
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
         name: "MueSelect",
+        mixins: [localeMixin],
         components: {},
         inject: {
             FORM_ITEM: {
@@ -70,7 +73,7 @@
         },
         computed: {
             cancelButtonText(){
-                return this.clearable ? "清空" : "取消";
+                return this.clearable ? t('mue.common.clear') :  t('mue.common.cancel');
             },
             text(){
                 let temp = this.dict[this.value] || {};

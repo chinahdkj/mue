@@ -143,7 +143,10 @@
     import {getStyle, setStyle} from "../../../src/utils/dom";
     // import BETTER_SCROLL from "better-scroll";
 
+    import {localeMixin, t} from "../../../src/locale";
+
     export default {
+        mixins: [localeMixin],
         name: "MueDatatable",
         components: {colGroup, tableBody},
         provide(){
@@ -239,7 +242,7 @@
                 return style;
             },
             allLoadedText(){
-                return this.pageTotal > 1 ? `已加载${this.total}条数据，没有更多数据了` : "";
+                return this.pageTotal > 1 ? (this.total + t("mue.dataTable.allLoadedText")) : "";
             },
             vrows(){
                 return this.data.slice(this.yScroller.start, this.yScroller.end);

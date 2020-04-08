@@ -28,11 +28,11 @@
             </li>
         </ul>
 
-        <van-actionsheet v-model="pop.visible" get-container="body" cancel-text="取消"
+        <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
-                         :actions="[{name: '预览文件', act: 'view'},
-                         {name: '重签', act: 'resign'},
-                         {name: '删除', act: 'delete'}]"/>
+                         :actions="[{name: t('mue.form.signature.viewText'), act: 'view'},
+                         {name: t('mue.form.signature.resignText'), act: 'resign'},
+                         {name: t('mue.common.delete'), act: 'delete'}]"/>
 
         <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start" />
     </div>
@@ -40,9 +40,10 @@
 
 <script>
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-
+    import {localeMixin, t} from "../../../src/locale";
     export default {
         name: "MueSignature",
+        mixins: [localeMixin],
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -341,7 +342,7 @@
                 }
 
                 this.$dialog.confirm({
-                    title: "删除", message: "是否删除此文件!"
+                    title: t('mue.common.delete'), message: t('mue.form.common.delPrompt')
                 }).then(() => {
                     let id = this.imgs[this.current], info = this.dict[id] || {};
                     this.imgs.splice(this.current, 1);
@@ -369,7 +370,7 @@
                 if (fileArr.length <= limit && ((this.imgs.length + fileArr.length) <= limit)) {
                     return fileArr
                 } else {
-                    this.$toast.fail(`上传文件不能超过${this.limit}个`);
+                    this.$toast.fail(t('mue.form.common.uploadLimitErrorPrompt')+this.limit);
                     return false;
                 }
             }
