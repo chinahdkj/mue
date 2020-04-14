@@ -225,7 +225,9 @@
             getSignatureData() {
                 return new Promise(resolve => {
                     this.$native.signature({
-                        params: {},
+                        params: {
+                            "isLandscape": true
+                        },
                         cb: ({url}) => {
                             resolve(url);
                         }
