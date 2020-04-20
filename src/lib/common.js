@@ -227,7 +227,8 @@ export const getCid = () => {
 };
 
 export const getUploadPath = (path) => {
-    if(!path.startsWith("/upload")){
+    if(!/^(\/\S+)?\/upload/.test(path)){
+    // if(!path.startsWith("/upload")){
         return path;
     }
     return `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}`;
