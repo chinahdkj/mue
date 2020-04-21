@@ -13,7 +13,7 @@
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
-                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="num"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="setFloat"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
@@ -106,7 +106,7 @@
                 let tmpl = this.templates[index] || {};
                 this.ipt = tmpl.code || "";
             },
-            num(e){
+            setFloat(e){
                 e.target.valueAsNumber = parseFloat((e.target.valueAsNumber).toFixed(this.floatLength))
             }
         },
