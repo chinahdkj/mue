@@ -13,7 +13,7 @@
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
-                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="setFloat"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
@@ -63,7 +63,8 @@
             },
             maxlength: {type: [String, Number], default: null},
             max: {type: [String, Number], default: null},
-            min: {type: [String, Number], default: null}
+            min: {type: [String, Number], default: null},
+            floatLength:{type: [String, Number], default: 999}
         },
         inject: {
             FORM_ITEM: {
@@ -104,6 +105,9 @@
                 let index = this.$refs.picker.getColumnIndex(0);
                 let tmpl = this.templates[index] || {};
                 this.ipt = tmpl.code || "";
+            },
+            setFloat(e){
+                e.target.valueAsNumber = parseFloat((e.target.valueAsNumber).toFixed(this.floatLength))
             }
         },
         mounted(){
