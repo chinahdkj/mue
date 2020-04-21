@@ -388,7 +388,7 @@
                         background-position: center center;
                         background-size: contain;
                         width: 94px;
-                        height:32px;
+                        height: 32px;
                         border: 0;
                         padding: 0;
                         margin: 0;
@@ -738,10 +738,14 @@
 
             div.mue-form-item-group-title {
                 margin: 0;
-                height: 36px;
+                min-height: 36px;
                 padding: 0 10px;
                 box-sizing: border-box;
                 position: relative;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
 
                 i.__icon {
                     outline: 0;
@@ -757,11 +761,12 @@
                 }
 
                 > span:first-child {
-                    float: left;
                     font-size: @font-size;
                     color: @@grey;
                     margin-top: 8px;
                     line-height: 20px;
+                    flex-grow: 1;
+                    flex-shrink: 1;
 
                     i.__icon {
                         float: left;
@@ -770,11 +775,14 @@
                 }
 
                 > span:nth-child(2) {
-                    float: right;
                     font-size: @font-size;
                     color: @@grey-sub;
                     margin-top: 8px;
                     line-height: 20px;
+                    flex-grow: 1;
+                    flex-shrink: 1;
+                    margin-left: 20px;
+
 
                     i.__icon {
                         float: right;
@@ -787,10 +795,13 @@
 
                     .mue-form-help {
                         color: @black;
-                        padding: 5px;
                         margin-top: 5px;
-                        background: #fbf0b8;
                         font-size: @font-size;
+
+                        .mue-popover-content {
+                            padding: 5px;
+                            background: #fbf0b8;
+                        }
 
                         .popper__arrow {
                             border-bottom-color: #fbf0b8;
