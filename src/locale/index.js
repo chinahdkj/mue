@@ -2,22 +2,26 @@ import {Locale} from "vant";
 import {objectGet} from "../utils/object";
 
 import EN from "./lang/en";
+import ZH_TW from "./lang/zh-TW";
 import ZH_CN from "./lang/zh-CN";
 
 let _lang = ZH_CN;
 
 const getLanguage = (name) => {
-    if(name === "en"){
+    if (/^en$/i.test(name)) {
         return EN;
     }
-    else{
+    else if (/^zh[-_]?tw$/i.test(name)) {
+        return ZH_TW;
+    }
+    else {
         return ZH_CN;
     }
 };
 
 export const use = (name) => {
     let lang = getLanguage(name);
-    if(!lang){
+    if (!lang) {
         return;
     }
     _lang = lang;
@@ -28,20 +32,20 @@ export const use = (name) => {
 
 export const t = (path, args) => {
     let v = objectGet(_lang, path);
-    if(v == undefined){
+    if (v == undefined) {
         return "";
     }
-    else if(typeof v === "function"){
+    else if (typeof v === "function") {
         return v(args);
     }
-    else{
+    else {
         return v;
     }
 };
 
 export const localeMixin = {
     methods: {
-        t(path, args){
+        t(path, args) {
             return t(path, args);
         }
     }

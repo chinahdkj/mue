@@ -48,14 +48,16 @@
             <van-button plain size="mini" type="primary" @click="toggleNight">
                 {{isNight ? "暗色" : "亮色"}}
             </van-button>
-            <van-button v-if="lang === 'en'" plain size="mini" type="primary"
-                        @click="changeLang('zh-cn')">
-                英文
-            </van-button>
-            <van-button v-else plain size="mini" type="primary"
-                        @click="changeLang('en')">
-                中文
-            </van-button>
+
+            <mue-select style="width: 80px; margin-left: 10px;" v-model="lang" :data="langs"></mue-select>
+<!--            <van-button v-if="lang === 'en'" plain size="mini" type="primary"-->
+<!--                        @click="changeLang('zh-cn')">-->
+<!--                英文-->
+<!--            </van-button>-->
+<!--            <van-button v-else plain size="mini" type="primary"-->
+<!--                        @click="changeLang('en')">-->
+<!--                中文-->
+<!--            </van-button>-->
         </div>
     </div>
 </template>
@@ -63,14 +65,28 @@
 <script>
     export default {
         data(){
-            return {};
+            return {
+                langs: [
+                    {code: "zh_cn", name: "中文"},
+                    {code: "en", name: "英文"},
+                    {code: "zh_tw", name: "繁体"}
+                ]
+            };
         },
         computed: {
             isNight(){
                 return this.$root.theme === "night";
             },
-            lang(){
-                return this.$root.lang;
+            lang:{
+                get(){
+                    return this.$root.lang;
+                },
+                set(nv){
+                    this.$root.lang = nv;
+                    window.localStorage.setItem("language", nv);
+                    window.location.reload();
+                }
+
             }
         },
         methods: {
@@ -82,11 +98,6 @@
                 let path = this.$route.path;
                 let query = !this.isNight ? {theme: "night"} : {theme: "day"};
                 this.$router.push({path, query});
-            },
-
-            changeLang(lang){
-                window.localStorage.setItem("language", lang)
-                window.location.reload();
             }
         }
     }
