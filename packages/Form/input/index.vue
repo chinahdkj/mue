@@ -88,10 +88,10 @@
                 }
             },
             ipt(v, ov){
-                if(this.max!=null&&v>this.max){
+                if(this.max!=null&&v>this.max&&v){
                     v=this.max
                     this.ipt=this.max
-                }else if(this.min!=null&&v<this.min){
+                }else if(this.min!=null&&v<this.min&&v){
                     v=this.min
                     this.ipt=this.min
                 }
