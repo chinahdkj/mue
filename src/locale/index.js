@@ -19,6 +19,10 @@ const getLanguage = (name) => {
     }
 };
 
+export const getValidLang = () => {
+    return _lang["async-validate"];
+}
+
 export const use = (name) => {
     let lang = getLanguage(name);
     if (!lang) {

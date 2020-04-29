@@ -16,7 +16,7 @@
 <script>
     import Validator from '../../../src/utils/validator';
     import {objectGet} from '../../../src/utils/object';
-    import {localeMixin, t} from "../../../src/locale";
+    import {localeMixin, t, getValidLang} from "../../../src/locale";
     export default {
         name: "MueForm",
         mixins: [localeMixin],
@@ -136,7 +136,7 @@
                     callback({result: true, messages: [], inputs: []});
                 }
                 else{
-                    let handler = Validator.init(rules);
+                    let handler = Validator.init(rules, getValidLang());
                     handler.validate(model, (errors) => {
                         errors = errors || [];
                         let msgs = [], inputs = [];
