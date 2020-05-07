@@ -13,11 +13,11 @@
                    onfocus="this.blur()" :maxlength="maxlength"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
-                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="setFloat"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
             <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
-                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
             <input v-else :type="type" class="input__inner" :disabled="disabled"
@@ -88,13 +88,13 @@
                 }
             },
             ipt(v, ov){
-                if(this.max!=null&&v>this.max&&v){
+                /*if(this.max!=null&&v>this.max&&v){
                     v=this.max
                     this.ipt=this.max
                 }else if(this.min!=null&&v<this.min&&v){
                     v=this.min
                     this.ipt=this.min
-                }
+                }*/
                 this.$emit("input", v);
                 this.$emit("change", v, ov);
             }
@@ -106,8 +106,22 @@
                 let tmpl = this.templates[index] || {};
                 this.ipt = tmpl.code || "";
             },
-            setFloat(e){
-                e.target.valueAsNumber = parseFloat((e.target.valueAsNumber).toFixed(this.floatLength))
+            onChange(e){
+                let v = e.target.valueAsNumber
+                if(this.max!=null&&v>this.max&&v){
+                    v=this.max
+                    this.ipt=this.max
+                }else if(this.min!=null&&(v<this.min||v===0)){
+                    v=this.min
+                    this.ipt=this.min
+                }
+
+                if(this.floatLength) {
+                    v = parseFloat((v).toFixed(this.floatLength))
+                    this.ipt = v;
+
+                }
+
             }
         },
         mounted(){
