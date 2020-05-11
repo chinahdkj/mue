@@ -64,7 +64,7 @@
             maxlength: {type: [String, Number], default: null},
             max: {type: [String, Number], default: null},
             min: {type: [String, Number], default: null},
-            floatLength:{type: [String, Number], default: 999}
+            floatLength:{type: [String, Number], default: 0}
         },
         inject: {
             FORM_ITEM: {
