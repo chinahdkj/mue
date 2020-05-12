@@ -157,12 +157,12 @@
             // },
             onVideoClosed() {
                 this.video.path = null;
-                this.$native.hideHeader({params: {hide: 0}});
-                this.$native.rotate({params: {}});
+                this.$native.hideHeader({params: {hide: 0}});  // 显示app标题栏
+                this.$native.rotate({params: {}});  // 转回竖屏
             },
             onVideoOpen() {
-                this.$native.hideHeader({params: {hide: 1}});
-                this.$native.rotate({
+                this.$native.hideHeader({params: {hide: 1}}); // 隐藏app标题栏
+                this.$native.rotate({ // 旋转到横屏
                     params: {}, cb: () => {
                         let host = this.$comm.getHost();
                         this.video.visible = true;
