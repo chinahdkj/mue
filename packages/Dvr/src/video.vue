@@ -36,12 +36,10 @@
             <a class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
         </div>
 
-        <van-popup v-model="video.visible" @closed="onVideoClosed" get-container="body">
-            <div v-if="video.path" :style="{height: video.height + 'px', width: video.width + 'px'}"
-                 style="overflow: hidden">
-                <iframe :src="video.path" frameborder="0" scrolling="no"
-                        style="width: 100%;height: 100%;"></iframe>
-            </div>
+        <van-popup v-model="video.visible" :overlay="false" @closed="onVideoClosed" get-container="body"
+                   class="mue-dvr-video__pop">
+            <iframe v-if="video.path" :src="video.path" frameborder="0" scrolling="no"></iframe>
+            <a class="fa fa-times" @click="video.visible = false"></a>
         </van-popup>
 
     </div>
@@ -66,7 +64,7 @@
             type: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false}
         },
-        data(){
+        data() {
             return {
                 playing: false,
                 fullLoading: false,
@@ -79,25 +77,26 @@
             };
         },
         computed: {
-            version(){
-                if(this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()){
+            version() {
+                if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()) {
                     return "hik-ys";
                 }
                 return {ffmpeg: "img", flv: "flv"}[String(this.type).toLowerCase()] || "h264";
             },
-            src(){
+            src() {
                 let rtsp = this.rtsp || "";
-                if(!this.rtsp){
+                if (!this.rtsp) {
                     return "";
                 }
-                if(this.version === "hik-ys"){
-                    if(rtsp.startsWith("rtmp://")){
+                if (this.version === "hik-ys") {
+                    // 萤石rtmp地址转换成hls地址
+                    if (rtsp.startsWith("rtmp://")) {
                         return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com")
                             + ".m3u8";
                     }
                     return rtsp;
                 }
-
+                // 使用ffmpeg thumb地址播放
                 let host = this.$comm.getHost();
                 return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
@@ -105,7 +104,7 @@
         watch: {
             rtsp: {
                 immediate: true,
-                handler(){
+                handler() {
                     this.Stop();
                     this.autoPlay && this.$nextTick(() => {
                         this.Play();
@@ -114,7 +113,7 @@
             }
         },
         methods: {
-            choose(){
+            choose() {
                 this.$emit("choose");
             },
             // Full(){
@@ -156,33 +155,29 @@
             //     }).appendTo(this.$el);
             //
             // },
-            onVideoClosed(){
+            onVideoClosed() {
                 this.video.path = null;
                 this.$native.hideHeader({params: {hide: 0}});
+                this.$native.rotate({params: {}});
             },
-            onVideoOpen(){
-                this.video.visible = true;
+            onVideoOpen() {
                 this.$native.hideHeader({params: {hide: 1}});
-                let host = this.$comm.getHost();
-                let cw = document.body.clientWidth, ch = document.body.clientHeight;
-                let w = cw, h = cw * 0.75;
-                if(h > ch - 80){
-                    h = ch - 80;
-                    w = h / 0.75;
-                }
-                this.video.width = w;
-                this.video.height = h;
-
-                this.video.path = `${host}/fstatic/img/index.html?stream=${
-                    encodeURIComponent(this.rtsp)}`;
+                this.$native.rotate({
+                    params: {}, cb: () => {
+                        let host = this.$comm.getHost();
+                        this.video.visible = true;
+                        this.video.path = `${host}/fstatic/img/index.html?stream=${
+                            encodeURIComponent(this.rtsp)}`;
+                    }
+                });
             },
-            Stop(){
+            Stop() {
                 this.playing = false;
             },
-            Play(){
+            Play() {
                 this.Stop();
 
-                if(!this.rtsp){
+                if (!this.rtsp) {
                     return;
                 }
                 this.$nextTick(() => {
@@ -190,16 +185,16 @@
                 });
             }
         },
-        beforeDestroy(){
+        beforeDestroy() {
             this.Stop();
         },
-        deactivated(){
+        deactivated() {
             this.video.visible = false;
             this.video.path = null;
             this.Stop();
         },
-        activated(){
-            if(this.rtsp && this.autoPlay && !this.playing){
+        activated() {
+            if (this.rtsp && this.autoPlay && !this.playing) {
                 this.Play();
             }
         }

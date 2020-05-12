@@ -11,6 +11,7 @@
         <mue-main v-resize="resize">
             <div :style="{'padding-left': gutter + 'px'}">
                 <template v-if="selectable">
+                    <!--视频可选择切换，按行列渲染格子-->
                     <div v-for="i in row * col" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video ref="video" :width="size.width" :height="size.height"
@@ -19,6 +20,7 @@
                     </div>
                 </template>
                 <template v-else>
+                    <!--视频不能选择切换，按照cameras 参数进行平铺-->
                     <div v-for="(c, i) in cameras" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video :width="size.width" :height="size.height"
@@ -105,9 +107,11 @@
             },
 
             GetView(){
+                // 读取当前视频布局信息
                 return {layout: this.layout, videos: this.videos};
             },
             SetView({layout, videos}, autoPlay = false){
+                // 设置视频布局
                 this.layout = layout;
                 this.$set(this, "videos", {});
                 this.selectable && this.$nextTick(() => {
