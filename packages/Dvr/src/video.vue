@@ -37,7 +37,7 @@
         </div>
 
         <van-popup v-model="video.visible" :overlay="false" @closed="onVideoClosed" get-container="body"
-                   class="mue-dvr-video__pop">
+                   class="mue-dvr-video__pop" :class="{'rotate-screen': video.rotate}">
             <iframe v-if="video.path" :src="video.path" frameborder="0" scrolling="no"></iframe>
             <a class="fa fa-times" @click="video.visible = false"></a>
         </van-popup>
@@ -71,8 +71,7 @@
                 video: {
                     visible: false,
                     path: null,
-                    height: 0,
-                    width: 0
+                    rotate: false
                 }
             };
         },
@@ -158,18 +157,14 @@
             onVideoClosed() {
                 this.video.path = null;
                 this.$native.hideHeader({params: {hide: 0}});  // 显示app标题栏
-                this.$native.rotate({params: {}});  // 转回竖屏
             },
             onVideoOpen() {
                 this.$native.hideHeader({params: {hide: 1}}); // 隐藏app标题栏
-                this.$native.rotate({ // 旋转到横屏
-                    params: {}, cb: () => {
-                        let host = this.$comm.getHost();
-                        this.video.visible = true;
-                        this.video.path = `${host}/fstatic/img/index.html?stream=${
-                            encodeURIComponent(this.rtsp)}`;
-                    }
-                });
+                let host = this.$comm.getHost();
+                this.video.rotate = document.body.clientWidth < document.body.clientHeight;
+                this.video.visible = true;
+                this.video.path = `${host}/fstatic/img/index.html?stream=${
+                    encodeURIComponent(this.rtsp)}`;
             },
             Stop() {
                 this.playing = false;

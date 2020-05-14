@@ -193,5 +193,20 @@
             text-align: center;
             color: @white;
         }
+
+        &.rotate-screen{
+            > iframe {
+                width: 100vh;
+                height: 100vw;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(90deg);
+            }
+            > a.fa-times{
+                top: unset;
+                bottom: 0;
+            }
+        }
     }
 }
