@@ -124,7 +124,7 @@ function getUrl (url){
 
 
 export default {
-    post(url, data, failed = false, appid = null){
+    post(url, data, failed = false, appid = null, header = null){
         let setting = {
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
@@ -135,7 +135,7 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = getHeaders(appid)
+            setting['headers'] = header || getHeaders(appid)
         }
 
         return axios(setting).then(res => res.Response).catch(e => {
@@ -156,7 +156,7 @@ export default {
             return Promise.reject(e);
         });
     },
-    get(url, params, failed = false, appid = null){
+    get(url, params, failed = false, appid = null, header = null){
         let setting = {
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
@@ -167,7 +167,7 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = getHeaders(appid)
+            setting['headers'] = header || getHeaders(appid)
         }
         
         
