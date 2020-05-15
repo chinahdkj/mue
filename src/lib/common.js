@@ -55,11 +55,9 @@ export const isDingDing = () => {
  * 关闭页面
  */
 export const closePage = ()=>{
+    window.location.href = "/appback";
     if (isDingDing()) {
-        biz.navigation.close({});
-    }
-    else {
-        window.location.href = "/appback";
+        biz.navigation.quit({});
     }
     return null;
 };
@@ -262,7 +260,7 @@ export const clickElement = ElementClick;
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
-    getUploadPath,
+    getUploadPath, isDingDing,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
