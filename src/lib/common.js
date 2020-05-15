@@ -260,7 +260,7 @@ export const clickElement = ElementClick;
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
-    getUploadPath, isDingDing,
+    getUploadPath, isDingDing, closePage,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
