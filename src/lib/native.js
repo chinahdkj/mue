@@ -1,6 +1,7 @@
 // 原生调用方法
-import {isIos} from "./common";
+import {isIos, isDingDing} from "./common";
 import * as NativePc from "./native-pc";
+import * as NativeDingDing from "./native-dingding";
 
 const _cache = {};
 const _cache2 = {};
@@ -26,11 +27,14 @@ const fns2 = [
 const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17));
     _cache[msgid] = cb;
-    try{
-        if(!window.webkit && !window.native){
+    try {
+        if (isDingDing()) {
+            typeof NativeDingDing[method] === "function" && NativeDingDing[method]({msgid, method, params});
+        }
+        else if (!window.webkit && !window.native) {
             typeof NativePc[method] === "function" && NativePc[method]({msgid, method, params});
         }
-        else{
+        else {
             let p = JSON.stringify({msgid, method, params});
             isIos() ? window.webkit.messageHandlers.postMessage.postMessage(p)
                 : window.native.postMessage(p);

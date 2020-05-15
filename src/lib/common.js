@@ -1,6 +1,7 @@
 // 通用方法
 import uuid from "../utils/uuid";
 import {ElementClick} from "../utils/fast-click";
+import {env, biz} from "dingtalk-jsapi";
 
 /**
  * 获取url参数
@@ -46,13 +47,35 @@ export const isMobile = () => {
     return isIos() || isAndroid();
 };
 
+export const isDingDing = () => {
+    return env.platform !== "notInDingTalk";
+};
+
+/*
+ * 关闭页面
+ */
+export const closePage = ()=>{
+    if (isDingDing()) {
+        biz.navigation.close({});
+    }
+    else {
+        window.location.href = "/appback";
+    }
+    return null;
+};
+
 /**
  * 设置苹果/安卓标题
  * @param {*} title
  */
 export const setDocumentTitle = (title) => {
     document.title = title;
-    if(/ip(hone|od|ad)/i.test(navigator.userAgent)){
+    if (isDingDing()) {
+        biz.navigation.setTitle({
+            title: title,//控制标题文本，空字符串表示显示默认文本
+        });
+    }
+    else if(/ip(hone|od|ad)/i.test(navigator.userAgent)){
         var i = document.createElement("iframe");
         i.src = "";
         i.style.display = "none";
