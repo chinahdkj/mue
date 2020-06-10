@@ -18,9 +18,6 @@
 </template>
 
 <script>
-    import VConsole from './assets/vconsole.min'
-    const vConsole = new VConsole();
-
     import vmenu from './views/menu';
 
     export default {
