@@ -151,6 +151,9 @@
         },
         mounted() {
             document.body.appendChild(this.$el);
+        },
+        beforeDestroy() {
+            document.body.removeChild(this.$el);
         }
     };
 </script>
