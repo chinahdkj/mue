@@ -9,6 +9,9 @@
                     <mue-form-item label="客户名称" required field="name" :rules="[{min: 3}]">
                         <mue-input placeholder="请输入" v-model.trim="model.name"></mue-input>
                     </mue-form-item>
+                    <mue-form-item label="浮点数" required field="nb">
+                        <mue-input placeholder="请输入" v-model="model.nb" type="number" numberType="float" :float-length="3" :min="0.001" :max="0.5"></mue-input>
+                    </mue-form-item>
                 </mue-form-item-group>
 
                 <mue-form-item-group title="站点信息">
@@ -31,6 +34,10 @@
 
                     <mue-form-item label="签名" field="signature">
                         <mue-signature v-model="model.signature"/>
+                    </mue-form-item>
+
+                    <mue-form-item label="摄像抄表" field="watermeter">
+                        <mue-watermeter v-model="model.watermeter"/>
                     </mue-form-item>
 
                     <mue-form-item label="站点图片" field="station.pics"
@@ -199,6 +206,7 @@
 
                 model: {
                     name: "",
+                    nb: 0,
                     station: {
                         pics: []
                     },
