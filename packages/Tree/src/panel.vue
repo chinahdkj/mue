@@ -6,7 +6,9 @@
              @click="onSelect(node)" v-show="!search || String(node.name).includes(search)">
             <check-box v-if="TREE.multiple" class="mue-tree__checkbox" :checks="TREE.leaves"
                        :node="node" @check="onCheck"/>
-            <span class="mue-tree__label">{{node.name}}</span>
+            <span class="mue-tree__label">
+                <slot name="node" :node="node">{{node.name}}</slot>
+            </span>
         </div>
     </div>
 </template>

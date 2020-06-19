@@ -13,7 +13,11 @@
         <div class="mue-tree__panels">
             <div class="mue-tree__panels-content">
                 <panel v-for="(col, index) in columns" :key="index" :nodes="col"
-                       :search="index === 0 && searchable ? searchValue : null"/>
+                       :search="index === 0 && searchable ? searchValue : null">
+                    <template #node="{node}">
+                        <slot name="node" :node="node">{{node.name}}</slot>
+                    </template>
+                </panel>
             </div>
         </div>
     </div>

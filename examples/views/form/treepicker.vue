@@ -8,7 +8,11 @@
 
             <mue-panel title="多选">
                 <mue-tree-picker placeholder="请选择" multiple :data="data" v-model="multiple"
-                                 clearable searchable/>
+                                 clearable searchable>
+                    <template #node="{node}">
+                        <span><i class="iconfont icon-bliuliang"></i> {{node.name}}</span>
+                    </template>
+                </mue-tree-picker>
             </mue-panel>
 
             <mue-panel title="单选过滤">
