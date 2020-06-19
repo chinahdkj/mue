@@ -11,7 +11,11 @@
                    @click-overlay="isVisible = false">
             <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText"
                       @cancel="onCancel" :searchable="searchable"
-                      @confirm="onConfirm" :multiple="multiple" :selectable="selectable"/>
+                      @confirm="onConfirm" :multiple="multiple" :selectable="selectable">
+                <template #node="{node}">
+                    <slot name="node" :node="node">{{node.name}}</slot>
+                </template>
+            </mue-tree>
         </van-popup>
     </div>
 </template>
