@@ -20,6 +20,14 @@ export const GetQueryString = (n) => {
         if(!target){
             return null;
         }
+
+        //针对不同ip和端口视频
+        let regVideo = new RegExp("(^|&)" + 'video' + "=([^&]*)(&|$)");
+        let rVideo = target.match(regVideo);
+        if(rVideo != null){
+            return rVideo[2];
+        }
+
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         let r = target.match(reg);
         if(r != null){
