@@ -50,6 +50,7 @@
     // import uuid from "../../../src/utils/uuid";
 
     import {localeMixin, t} from "../../../src/locale";
+    import {GetQueryString} from "../../../src/lib/common";
 
     export default {
         name: "MueDvrVideo",
@@ -96,7 +97,7 @@
                     return rtsp;
                 }
                 // 使用ffmpeg thumb地址播放
-                let host = this.$comm.getHost();
+                let host = this.getVideoHost();
                 return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
@@ -160,7 +161,7 @@
             },
             onVideoOpen() {
                 this.$native.hideHeader({params: {hide: 1}}); // 隐藏app标题栏
-                let host = this.$comm.getHost();
+                let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
                 this.video.path = `${host}/fstatic/img/index.html?stream=${
@@ -178,6 +179,56 @@
                 this.$nextTick(() => {
                     this.playing = true;
                 });
+            },
+            getVideoHost() {
+                let location = window.location;
+                let host = this.GetHost("host");
+                if(host){
+                    host = decodeURIComponent(host);
+                    sessionStorage.setItem("host", host);
+                }
+                else{
+                    host = sessionStorage.getItem("host") || "";
+                }
+
+                if(location.origin.toLowerCase() === "file://"){
+                    return host;
+                }
+                let code = location.port.substring(1);
+                let regex = new RegExp(`^${location.origin}/packages/${code}/`, "i");
+                if(regex.test(location.href)){
+                    return host;
+                }
+                return "";
+            },
+            GetHost(n) {
+                let fn = (name, type) => {
+                    let target;
+                    if(type === "hash"){
+                        target = window.location.hash.split("?")[1];
+                    }
+                    else{
+                        target = window.location.search.substr(1);
+                    }
+                    if(!target){
+                        return null;
+                    }
+
+                    // 针对不同ip和端口视频
+                    let regVideo = new RegExp("(^|&)" + 'video' + "=([^&]*)(&|$)");
+                    let rVideo = target.match(regVideo);
+                    if(rVideo != null){
+                        return rVideo[2];
+                    }
+
+                    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                    let r = target.match(reg);
+                    if(r != null){
+                        return r[2];
+                    }
+                    return null;
+                };
+                return fn(n) || fn(n, "hash");
             }
         },
         beforeDestroy() {
