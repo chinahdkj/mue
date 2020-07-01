@@ -58,7 +58,7 @@
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
     import {isAndroid} from "../../../src/lib/common";
     import androidUpload from "./androidUpload";
-    
+
     import {localeMixin, t} from "../../../src/locale";
 
     const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
@@ -98,6 +98,10 @@
                 default() {
                     return null
                 }
+            },
+            header: { //自定义请求头
+                tyoe: Object,
+                default: () => null
             }
         },
         data() {
@@ -389,7 +393,7 @@
 
                         return this.$http.post("/app/v1.0/upload.json", form, {
                             processData: false, contentType: false
-                        });
+                        }, null, this.header);
                     });
 
                     this.$ajax.all(posts).then((rs) => {
