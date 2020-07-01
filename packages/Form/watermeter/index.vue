@@ -17,6 +17,7 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             placeholder: {type: String, default: ""},
+            mask: {type: Boolean, default: true} //是否显示扫描框
         },
         data() {
             return {
@@ -39,10 +40,14 @@
         methods: {
             callCamera() {
                 this.$native.ocr_watermeter({
-                    params: {},
+                    params: {
+                        mask: this.mask,
+                    },
                     cb: (res) => {
                         if(res.code === 0) {
-                            this.text = res.response;
+                            this.text = res.response.word;
+                            /*res.response.image => base64图片  res.response.word 识别结果*/
+                            this.$emit('change', res.response)
                         }
                     }
                 });
