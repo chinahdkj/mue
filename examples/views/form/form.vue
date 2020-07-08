@@ -10,17 +10,18 @@
                         <mue-input placeholder="请输入" v-model.trim="model.name"></mue-input>
                     </mue-form-item>
                     <mue-form-item label="浮点数" required field="nb">
-                        <mue-input placeholder="请输入" v-model="model.nb" type="number" numberType="float" :float-length="3" :min="0.001" :max="0.5"></mue-input>
+                        <mue-input placeholder="请输入" v-model="model.nb" type="number" numberType="float"
+                                   :float-length="3" :min="0.001" :max="0.5"></mue-input>
                     </mue-form-item>
                 </mue-form-item-group>
 
                 <mue-form-item-group title="站点信息">
 
                     <mue-form-item label="片区名称" field="div">
-                        <mue-select placeholder="请选择"></mue-select>
+                        <mue-select placeholder="请选择" v-model="model.div" :data="divData" unit="m³/h"></mue-select>
                     </mue-form-item>
 
-                    <mue-form-item label="人员选择" field="div">
+                    <mue-form-item label="人员选择" field="user">
                         <mue-tree-picker placeholder="请选择" multiple :data="users" v-model="model.user" clearable/>
                     </mue-form-item>
 
@@ -55,7 +56,7 @@
 
                     <mue-form-item label="备注" field="remark">
                         <mue-textarea placeholder="请输入备注" v-model="model.remark"
-                        :templates="[{code: '模板内容1', name: '模板1'}, {code: '模板内容2', name: '模板2'}]"/>
+                                      :templates="[{code: '模板内容1', name: '模板1'}, {code: '模板内容2', name: '模板2'}]"/>
                     </mue-form-item>
                 </mue-form-item-group>
 
@@ -149,7 +150,7 @@
 
     export default {
         // components: {MueTreePicker},
-        data(){
+        data() {
             return {
                 readonly: false,
                 confirming: false,
@@ -187,16 +188,29 @@
                     {code: "c5", name: "选项5"}
                 ],
 
+                divData: [
+                    {
+                        code: "1", name: "分区1", children: [
+                            {code: "1-1", name: "分区1-1"},
+                            {code: "1-2", name: "分区1-2"},
+                            {code: "1-3", name: "分区1-3"},
+                        ]
+                    },
+                    {
+                        code: "2", name: "分区2"
+                    }
+                ],
+
                 rules: {
-                    custom(rule, value, callback){
-                        if(value === "xx"){
+                    custom(rule, value, callback) {
+                        if (value === "xx") {
                             callback(new Error("值不能为xx"));
                         }
                         callback();
                     },
-                    sync(rule, value, callback){
+                    sync(rule, value, callback) {
                         setTimeout(() => {
-                            if(value === "qq"){
+                            if (value === "qq") {
                                 callback(new Error("值不能为qq"));
                             }
                             callback();
@@ -211,6 +225,7 @@
                         pics: []
                     },
                     pos: null,
+                    div: null,
                     user: null,
                     remark: "",
                     valid: {
@@ -229,10 +244,10 @@
             };
         },
         methods: {
-            onCancel(){
+            onCancel() {
                 this.$toast("点击取消");
             },
-            onConfirm(promise){
+            onConfirm(promise) {
                 this.confirming = true;
                 promise.then((v) => {
                     // 提交表单
