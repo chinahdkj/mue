@@ -4,6 +4,7 @@
              @click.stop="ShowPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
+            <span v-if="this.unit" class="input__unit">{{this.unit}}</span>
             <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"/>
         </div>
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
@@ -59,7 +60,8 @@
             searchable: {
                 type: Boolean,
                 default: false
-            }
+            },
+            unit: {type: String, default: ""}
         },
         data(){
             return {
