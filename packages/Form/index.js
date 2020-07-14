@@ -13,8 +13,10 @@ import Watermeter from "./watermeter/index"
 
 import GisPoint from './gis-point/index'
 import SoundRecord from './sound-record/index'
+import BlueAlarm from './blue-alarm/index'
 
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, Upload, GisPoint, TreePicker, SoundRecord, Signature, Watermeter];
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload,
+    Upload, GisPoint, TreePicker, SoundRecord, Signature, Watermeter, BlueAlarm];
 
 cmps.forEach((cmp) => {
     cmp.install = (Vue) => {
