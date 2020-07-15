@@ -8,27 +8,8 @@
         <div class="play_audio" >
             <i v-if="!playing" class="play iconfont icon-xiangzuo"></i>
             <i v-else class="play fa fa-pause" @click="stopPlay"></i>
-
         </div>
 
-
-        <!--<ul class="mue-sound-record-list">
-            &lt;!&ndash;<li class="record_audio" @click="showAction(0)">
-                <i class="play iconfont icon-xiangzuo"></i>
-            </li>&ndash;&gt;
-            <li class="record_audio" v-for="(a,i) in audios" :key="i" @click="showAction(i)">
-                <i class="play iconfont icon-xiangzuo"></i>
-            </li>
-            <li class="_record-btn" v-if="!isReadonly && recordAble">
-                <i v-if="recording" class="recording"></i>
-                <button v-else class="record-btn" :disabled="disabled" @click="recordAudio()" :class="{'is-disabled': disabled}">
-                </button>
-            </li>
-        </ul>
-
-        <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
-                         @select="onSelect"
-                         :actions="[{name: t('mue.form.soundRecord.playText'), act: 'play'}, {name: t('mue.common.delete'), act: 'delete'}]"/>-->
     </div>
 </template>
 
@@ -130,35 +111,3 @@
         }
     }
 </script>
-
-<style lang="less">
-    .mue-blue-alarm{
-        display: inline-block;
-        padding: 5px 0 0 5px;
-        box-sizing: border-box;
-        min-width: 55px;
-        max-width: 100%;
-        background: #ffffff;
-        width: 100%;
-        .play_audio {
-            display: block;
-            box-sizing: border-box;
-            height: 50px;
-            width: 50px;
-            border: 2px solid #e0e0e0;
-            margin: 2px 5px 2px 0;
-            overflow: hidden;
-            position: relative;
-            border-radius: 50%;
-            float:left;
-            .play {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 24px;
-                color: #757575;
-            }
-        }
-    }
-</style>
