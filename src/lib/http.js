@@ -147,10 +147,10 @@ export default {
                 // TODO
             }
             else if(e.Message){
-                !failed && Vue.prototype.$toast(e.Message);
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
             }
             else{
-                !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
             return Promise.reject(e);
@@ -175,10 +175,10 @@ export default {
             console.log(e);
 
             if(e.Message){
-                !failed && Vue.prototype.$toast(e.Message);
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
             }
             else{
-                !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
             return Promise.reject(e);
@@ -207,10 +207,10 @@ export default {
                 // TODO
             }
             else if(e.Message){
-                !failed && Vue.prototype.$toast(e.Message);
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
             }
             else{
-                !failed && Vue.prototype.$toast("请求出错，请稍候再试!");
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
             return Promise.reject(e);

@@ -207,6 +207,7 @@ export function makeCall(no){
 
 export const getHost = () => {
     let location = window.location;
+    console.log(location);
     let host = GetQueryString("host");
     if(host){
         host = decodeURIComponent(host);
