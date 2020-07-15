@@ -99,6 +99,7 @@
             },
             getData() {
                 if(!this.times) {
+                    this.bluetoothing();
                     return
                 }
                 setTimeout(async () => {
