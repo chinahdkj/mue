@@ -49,8 +49,7 @@
         },
         props: {
             value: {type: [String, Array], default: ""},
-            disabled: {type: Boolean, default: false},
-            readonly: {type: Boolean, default: false}
+            times: {type: [String, Number], default: null}
         },
         data() {
             return {
@@ -75,7 +74,8 @@
                     }
                 ],*/
                 resData: [],
-                playing: false
+                playing: false,
+                timer: null
             };
         },
         computed: {},
@@ -96,19 +96,37 @@
                     this.playing = false
                     $dom.pause();
                 }
+            },
+            getData() {
+                if(!this.times) {
+                    this.bluetoothing();
+                    return
+                }
+                setTimeout(async () => {
+                    await this.bluetoothing()
+                    this.getData();
+                }, this.times * 1000)
+            },
+            bluetoothing() {
+                return new Promise((resolve, reject) => {
+                    this.$native.eranntex_params({
+                        params: {},
+                        cb: (res) => {
+                            if(res.code === 0 && res.response) {
+                                this.resData = res.response.get || [];
+                                this.$emit("loaded", this.resData);
+                                resolve();
+                            } else {
+                                this.$toast(res.msg);
+                                reject(res.msg)
+                            }
+                        }
+                    });
+                })
             }
         },
         beforeMount() {
-            this.$native.eranntex_params({
-                params: {},
-                cb: (res) => {
-                    console.log(res);
-                    if(res.code === 0 && res.response) {
-                        this.resData = res.response.get || [];
-                        this.$emit("loaded", this.resData)
-                    }
-                }
-            });
+            this.getData();
         }
     }
 </script>
