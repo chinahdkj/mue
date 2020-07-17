@@ -64,14 +64,36 @@
         methods: {
             //检测数据，发起警报
             _checkAlarm() {
-                //检查完毕
+                //ios下原生audio无法自动触发play方法
+                if(this.$comm.isIos()) {
+                    console.log(window.location);
+                    let idx = window.location.href.indexOf('/index.html#/');
+                    if(idx > -1) {
+                        let url = window.location.substring(0, idx);
+                        let audioPath = `${url}/static/media/alarm.ee3a3349.mp3`;
+                        this.$native.soundPlay({params: {path: audioPath, loopPlay: true, hiddenView: true}});
+                        this.playing = true;
+                    } else {
+                        this.$toast("报警音频资源未找到");
+                    }
+                    return
+                }
+
                 let $dom = this.$el.getElementsByClassName("audio")[0]
                 if($dom && !this.playing) {
                     this.playing = true;
                     $dom.play()
                 }
+
             },
+
             stopPlay() {
+                if(this.$comm.isIos()) {
+                    this.$native.soundPlay({value: 'stop'});
+                    this.playing = false;
+                    return
+                }
+
                 let $dom = this.$el.getElementsByClassName("audio")[0]
                 if($dom) {
                     this.playing = false
