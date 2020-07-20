@@ -65,13 +65,11 @@
             //检测数据，发起警报
             _checkAlarm() {
                 //ios下原生audio无法自动触发play方法
-                alert("进入报警");
                 if(this.$comm.isIos()) {
-                    alert("是ios")
                     console.log(window.location);
                     let idx = window.location.href.indexOf('/index.html#/');
                     if(idx > -1) {
-                        let url = window.location.substring(0, idx);
+                        let url = window.location.href.substring(0, idx);
                         let audioPath = `${url}/static/media/alarm.ee3a3349.mp3`;
                         this.$native.soundPlay({params: {path: audioPath, loopPlay: true, hiddenView: true}});
                         this.playing = true;
@@ -79,8 +77,6 @@
                         this.$toast("报警音频资源未找到");
                     }
                     return
-                } else {
-                    alert("是安卓")
                 }
 
                 let $dom = this.$el.getElementsByClassName("audio")[0]
