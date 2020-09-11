@@ -254,7 +254,7 @@ export const getUploadPath = (path) => {
     // if(!path.startsWith("/upload")){
         return path;
     }
-    return `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}`;
+    return getAppId() ? `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}` : `${getHost()}${path}`;
 };
 
 export const clickElement = ElementClick;
