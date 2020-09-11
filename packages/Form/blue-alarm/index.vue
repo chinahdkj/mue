@@ -30,7 +30,8 @@
         },
         props: {
             value: {type: [String, Array], default: ""},
-            times: {type: [String, Number], default: null}
+            times: {type: [String, Number], default: null},
+            url: {type: String, default: ""}
         },
         data() {
             return {
@@ -117,6 +118,26 @@
                         cb: (res) => {
                             if(res.code === 0 && res.response) {
                                 this.resData = res.response.get || [];
+
+                                this.$native.saveLocalData({
+                                    params: {
+                                        type: "blue-alarm", state: "1",
+                                        datas: [{
+                                            "_id": new Date().getTime(),
+                                            "c1": "",
+                                            "c2": "",
+                                            "c3": "",
+                                            "c4": "",
+                                            "c5": "",
+                                            "c6": this.url,
+                                            "data": JSON.stringify({"blueAlarm": this.resData})
+                                        }]
+                                    },
+                                    cb: (result) => {
+
+                                    }
+                                });
+
                                 this.$emit("loaded", this.resData);
                                 resolve();
                             } else {
