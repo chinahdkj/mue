@@ -31,7 +31,8 @@
         props: {
             value: {type: [String, Array], default: ""},
             times: {type: [String, Number], default: null},
-            url: {type: String, default: ""}
+            url: {type: String, default: ""},
+            id: {type: String, default: ""}
         },
         data() {
             return {
@@ -123,7 +124,8 @@
                                     params: {
                                         type: "blue-alarm", state: "1",
                                         datas: [{
-                                            "_id": new Date().getTime(),
+                                            //"_id": new Date().getTime(),
+                                            "_id": this.id,
                                             "c1": "",
                                             "c2": "",
                                             "c3": "",
