@@ -132,7 +132,7 @@
                                             "c4": "",
                                             "c5": "",
                                             "c6": this.url,
-                                            "data": JSON.stringify({"blueAlarm": this.resData})
+                                            "data": JSON.stringify({"blueAlarm": this.resData, "id": this.id})
                                         }]
                                     },
                                     cb: (result) => {
