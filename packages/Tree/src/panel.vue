@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-tree__panel mue-tree__item van-hairline--left">
+    <div class="mue-tree__panel mue-tree__item">
         <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
              :checked="(TREE.opens || []).indexOf(node.code) > -1"
              :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
