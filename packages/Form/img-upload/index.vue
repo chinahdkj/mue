@@ -102,6 +102,10 @@
             header: { //自定义请求头
                 tyoe: Object,
                 default: () => null
+            },
+            uploadPrefix: {
+                type: String,
+                default: ""
             }
         },
         data() {
@@ -403,7 +407,7 @@
                             this.saveAlbum(content, file)
                         }*/
 
-                        return this.$http.post("/app/v1.0/upload.json", form, {
+                        return this.$http.post(`${this.uploadPrefix}/app/v1.0/upload.json`, form, {
                             processData: false, contentType: false
                         }, null, this.header);
                     });
