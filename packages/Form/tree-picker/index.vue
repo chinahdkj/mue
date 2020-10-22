@@ -123,6 +123,7 @@
                 if(this.multiple){
                     let checks = this.$refs.tree.GetChecks();
                     let v = checks.length === 0 ? null : checks;
+                    // let roads = v ? this.$refs.tree.dict
                     this.$emit("input", v);
                     v !== this.value && this.$emit("change", v, this.value);
                 }
