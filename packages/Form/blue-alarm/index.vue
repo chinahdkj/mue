@@ -136,7 +136,7 @@
                                         }]
                                     },
                                     cb: (result) => {
-
+                                        console.log("蓝牙保存本地数据：", result);
                                     }
                                 });
 
