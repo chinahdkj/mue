@@ -123,15 +123,23 @@
                 if(this.multiple){
                     let checks = this.$refs.tree.GetChecks();
                     let v = checks.length === 0 ? null : checks;
-                    // let roads = v ? this.$refs.tree.dict
+
+                    let roadObj = {}
+                    if(v) {
+                        for(let item of v) {
+                            roadObj[item] = this.$refs.tree.dict[item].$road
+                        }
+                    }
+
                     this.$emit("input", v);
-                    v !== this.value && this.$emit("change", v, this.value);
+                    v !== this.value && this.$emit("change", v, this.value, roadObj);
                 }
                 else{
                     let current = this.$refs.tree.GetCurrent();
                     let v = current == null ? null : current;
+                    let road = v ? this.$refs.tree.dict[v].$road : []
                     this.$emit("input", v);
-                    v !== this.value && this.$emit("change", v, this.value);
+                    v !== this.value && this.$emit("change", v, this.value, road);
                 }
             },
 
