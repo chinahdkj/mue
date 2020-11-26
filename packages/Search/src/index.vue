@@ -55,6 +55,7 @@
             onCancel(){
                 this.q = "";
                 this.$emit("cancel");
+                console.log(4234)
             },
             Focus(){
                 let input = this.$refs.search.querySelector("input.van-field__control");
