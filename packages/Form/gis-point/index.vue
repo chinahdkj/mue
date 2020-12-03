@@ -234,6 +234,7 @@
                 if(!this.pos){
                     this.$emit("input", null);
                     this.$emit("change", null);
+                    this.getAddress(null);
                     return;
                 }
                 let value;
@@ -248,14 +249,42 @@
                 }
                 this.$emit("input", value);
                 this.$emit("change", value);
+                this.getAddress(`${ROUND(this.pos.lng)},${ROUND(this.pos.lat)}`);
             },
             onCancel(){
                 this.pop = false;
                 if(this.clearable){
                     this.$emit("input", null);
                     this.$emit("change", null);
+                    this.getAddress(null);
                 }
-            }
+            },
+            getAddress(pos) { //通过经纬度获取地址详细信息
+                if(!pos) {
+                    this.$emit("on-confirm", null);
+                    return
+                }
+                $.ajax({
+                    type: "get",
+                    url: "https://restapi.amap.com/v3/geocode/regeo",
+                    data: {
+                        location: pos,
+                        key: '5f222dee3e0f7eee71b86a8eee0e4a54',
+                    },
+                    async:true,
+                    cache:false,
+                    dataType: 'json',
+                    success: (res) => {
+                        if(res.status === '1') {
+                            this.$emit("on-confirm", res.regeocode)
+                        }
+                    },
+                    error: (data) => {
+
+                        console.log(data);
+                    }
+                })
+            },
         }
     };
 </script>
