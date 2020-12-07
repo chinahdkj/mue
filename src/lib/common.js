@@ -36,7 +36,7 @@ export const GetQueryString = (n) => {
  */
 export const isIos = () => {
     const u = navigator.userAgent;
-    return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) || !!u.match(/\(M[^;]+; Intel Mac OS X/);
 };
 
 export const isAndroid = () => {
