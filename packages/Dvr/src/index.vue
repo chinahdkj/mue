@@ -43,18 +43,22 @@
         components: {},
         props: {
             cameras: {type: Array, default: []},
-            selectable: {type: Boolean, default: false}
+            selectable: {type: Boolean, default: false},
+            tabs: {
+                type: Array, default() {
+                    return [
+                        {row: 2, col: 1, icon: "icon-danlie"},
+                        {row: 2, col: 2, icon: "icon-lianglie"},
+                        {row: 3, col: 3, icon: "icon-sanlie"}
+                    ]
+                }
+            }
         },
-        data(){
+        data() {
             return {
                 gutter: 6,
                 width: 0,
                 layout: 0,
-                tabs: [
-                    {row: 2, col: 1, icon: "icon-danlie"},
-                    {row: 2, col: 2, icon: "icon-lianglie"},
-                    {row: 3, col: 3, icon: "icon-sanlie"}
-                ],
                 videos: {},
                 pop: {
                     index: 0, current: null
@@ -62,13 +66,13 @@
             };
         },
         computed: {
-            col(){
+            col() {
                 return this.tabs[this.layout].col;
             },
-            row(){
+            row() {
                 return this.tabs[this.layout].row;
             },
-            size(){
+            size() {
                 let width = this.width - (this.col - 1) * this.gutter;
                 width = width / this.col;
                 let height = width * (this.col === 1 ? 0.5625 : 0.75);
@@ -76,7 +80,7 @@
             }
         },
         watch: {
-            layout(){
+            layout() {
                 this.selectable && this.$nextTick(() => {
                     Object.keys(this.videos).forEach((k) => {
                         k > this.col * this.row && this.$delete(this.videos, k);
@@ -87,17 +91,17 @@
             }
         },
         methods: {
-            resize(){
+            resize() {
                 this.width = this.$el.clientWidth - 2 * this.gutter;
             },
-            pickCamera(i){
+            pickCamera(i) {
                 this.pop.index = i;
                 this.pop.current = (this.videos[i] || {}).code || null;
                 this.$nextTick(() => {
                     this.$refs.pop.ShowPop();
                 });
             },
-            setCamera(v){
+            setCamera(v) {
                 let opt = {...this.$refs.pop.GetOptionInfo(v)};
                 this.$set(this.videos, this.pop.index, opt);
                 this.$nextTick(() => {
@@ -106,11 +110,11 @@
                 this.$emit("choose-video", this.pop.index - 1, opt);
             },
 
-            GetView(){
+            GetView() {
                 // 读取当前视频布局信息
                 return {layout: this.layout, videos: this.videos};
             },
-            SetView({layout, videos}, autoPlay = false){
+            SetView({layout, videos}, autoPlay = false) {
                 // 设置视频布局
                 this.layout = layout;
                 this.$set(this, "videos", {});
