@@ -29,7 +29,7 @@
 
         <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px', height: nameHigher ? '42px' : '', padding: nameHigher ? '6px 0' : ''}"
              :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
-            <span class="mue-dvr-video__bar-name" :style="showSwitchCn ? 'calc(100% - 64px)' : ''">
+            <span class="mue-dvr-video__bar-name" :style="showSwitchCn ? 'width: calc(100% - 64px)' : ''">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
                 {{!rtsp ? t('mue.dvr.tooltip') : name}}
             </span>
