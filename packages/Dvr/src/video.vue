@@ -27,13 +27,14 @@
 
         </div>
 
-        <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px'}"
+        <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px', height: nameHigher ? '42px' : '', padding: nameHigher ? '6px 0' : ''}"
              :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
-            <span class="mue-dvr-video__bar-name">
+            <span class="mue-dvr-video__bar-name" :style="showSwitchCn ? 'calc(100% - 64px)' : ''">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
                 {{!rtsp ? t('mue.dvr.tooltip') : name}}
             </span>
-            <a class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
+            <a v-if="showSwitchCn" @click="choose" style="line-height: 30px;">切换视频</a>
+            <a v-else class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
         </div>
 
         <van-popup v-model="video.visible" :overlay="false" @closed="onVideoClosed" get-container="body"
@@ -63,7 +64,9 @@
             name: {type: String, default: ""},
             rtsp: {type: String, default: ""},
             type: {type: String, default: ""},
-            autoPlay: {type: Boolean, default: false}
+            autoPlay: {type: Boolean, default: false},
+            nameHigher: {type: Boolean, default: false},
+            showSwitchCn: {type: Boolean, default: false}
         },
         data() {
             return {
