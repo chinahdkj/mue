@@ -17,7 +17,7 @@
                     <template v-else>
                         <iframe frameborder="0" scrolling="no" :src="src"></iframe>
                         <i class="mue-dvr-video__masker" @click="Stop">
-                            <!--                            <i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
+                            <!--<i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
                             <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
                         </i>
                     </template>
@@ -95,8 +95,7 @@
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址
                     if (rtsp.startsWith("rtmp://")) {
-                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com")
-                            + ".m3u8";
+                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
                     }
                     return rtsp;
                 }
