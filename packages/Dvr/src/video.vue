@@ -17,7 +17,7 @@
                     <template v-else>
                         <iframe frameborder="0" scrolling="no" :src="src"></iframe>
                         <i class="mue-dvr-video__masker" @click="Stop">
-                            <!--                            <i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
+                            <!--<i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
                             <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
                         </i>
                     </template>
@@ -66,7 +66,8 @@
             type: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false},
             nameHigher: {type: Boolean, default: false},
-            showSwitchCn: {type: Boolean, default: false}
+            showSwitchCn: {type: Boolean, default: false},
+            definition: {type: String, default: "ordinary"}
         },
         data() {
             return {
@@ -94,14 +95,20 @@
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址
                     if (rtsp.startsWith("rtmp://")) {
-                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com")
-                            + ".m3u8";
+                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
                     }
                     return rtsp;
                 }
                 // 使用ffmpeg thumb地址播放
                 let host = this.getVideoHost();
-                return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
+                // 清晰度调整
+                let furl = "thumb";
+                if (this.definition == "standard") {
+                    furl = "img";
+                } else if (this.definition == "fluent") {
+                    furl = "flv";
+                }
+                return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
         watch: {
@@ -167,8 +174,12 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                this.video.path = `${host}/fstatic/img/index.html?stream=${
-                    encodeURIComponent(this.rtsp)}`;
+                // 清晰度调整
+                let furl = "img";
+                if (this.definition == "standard" || this.definition == "fluent") {
+                    furl = "flv";
+                }
+                this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
             },
             Stop() {
                 this.playing = false;
