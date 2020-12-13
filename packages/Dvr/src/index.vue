@@ -17,7 +17,7 @@
                         <mue-dvr-video ref="video" :width="size.width" :height="size.height"
                                        :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
                                        :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
-                                       @choose="pickCamera(i)"/>
+                                       :definition="definition" @choose="pickCamera(i)"/>
                     </div>
                 </template>
                 <template v-else>
@@ -26,7 +26,7 @@
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video :width="size.width" :height="size.height"
                                        :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
-                                       :name="c.name" :rtsp="c.rtsp"/>
+                                       :definition="definition" :name="c.name" :rtsp="c.rtsp"/>
                     </div>
                 </template>
 
@@ -56,7 +56,8 @@
                 }
             },
             nameHigher: {type: Boolean, default: false},
-            showSwitchCn: {type: Boolean, default: false}
+            showSwitchCn: {type: Boolean, default: false},
+            definition: {type: String, default: "ordinary"}
         },
         data() {
             return {

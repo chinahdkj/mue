@@ -66,7 +66,8 @@
             type: {type: String, default: ""},
             autoPlay: {type: Boolean, default: false},
             nameHigher: {type: Boolean, default: false},
-            showSwitchCn: {type: Boolean, default: false}
+            showSwitchCn: {type: Boolean, default: false},
+            definition: {type: String, default: "ordinary"}
         },
         data() {
             return {
@@ -101,7 +102,14 @@
                 }
                 // 使用ffmpeg thumb地址播放
                 let host = this.getVideoHost();
-                return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
+                // 清晰度调整
+                let furl = "thumb";
+                if (this.definition == "standard") {
+                    furl = "img";
+                } else if (this.definition == "fluent") {
+                    furl = "flv";
+                }
+                return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
         watch: {
@@ -167,8 +175,12 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                this.video.path = `${host}/fstatic/img/index.html?stream=${
-                    encodeURIComponent(this.rtsp)}`;
+                // 清晰度调整
+                let furl = "img";
+                if (this.definition == "standard" || this.definition == "fluent") {
+                    furl = "flv";
+                }
+                this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
             },
             Stop() {
                 this.playing = false;
