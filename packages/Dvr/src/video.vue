@@ -103,10 +103,8 @@
                 let host = this.getVideoHost();
                 // 清晰度调整
                 let furl = "thumb";
-                if (this.definition == "standard") {
+                if (this.definition == "fluent") {
                     furl = "img";
-                } else if (this.definition == "fluent") {
-                    furl = "flv";
                 }
                 return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
@@ -174,12 +172,7 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                // 清晰度调整
-                let furl = "img";
-                if (this.definition == "standard" || this.definition == "fluent") {
-                    furl = "flv";
-                }
-                this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
             },
             Stop() {
                 this.playing = false;
