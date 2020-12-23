@@ -5,7 +5,13 @@
             <van-search ref="search" v-model="q" background="transparent"
                         :show-action="showAction || q.length > 0"
                         :placeholder="placeholder" @search="onSearch">
-                <div slot="action" @click="onCancel">{{t("mue.common.cancel")}}</div>
+
+                <div class="mue-search-action" slot="action">
+                    <slot name="action">
+                        <div v-if="actionType === 'search'" @click="onSearch">{{t("mue.common.search")}}</div>
+                        <div v-else @click="onCancel">{{t("mue.common.cancel")}}</div>
+                    </slot>
+                </div>
             </van-search>
         </form>
     </div>
@@ -25,7 +31,8 @@
                     return t("mue.search.placeholder");
                 }
             },
-            showAction: {type: Boolean, default: false}
+            showAction: {type: Boolean, default: false},
+            actionType: {type: String, default: "cancel"}
         },
         data(){
             return {

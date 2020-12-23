@@ -12,6 +12,7 @@ export default {
             confirm: "OK",
             submit:'Submit',
             cancel: "Cancel",
+            search: "Search",
             delete: "Delete",
             clear: "Clear",
             empty: "No data",
