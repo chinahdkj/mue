@@ -17,7 +17,7 @@
                     <template v-else>
                         <iframe frameborder="0" scrolling="no" :src="src"></iframe>
                         <i class="mue-dvr-video__masker" @click="Stop">
-                            <!--                            <i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
+                            <!--<i class="fa fa-arrows-alt" @click.stop="Full"></i>-->
                             <i class="fa fa-arrows-alt" @click.stop="onVideoOpen"></i>
                         </i>
                     </template>
@@ -27,13 +27,14 @@
 
         </div>
 
-        <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px'}"
+        <div v-if="!nobar" class="mue-dvr-video__bar" :style="{width: width + 'px', height: nameHigher ? '42px' : '', padding: nameHigher ? '6px 0' : ''}"
              :class="{'mue-dvr-video__bar-selectable': !!$listeners.choose}">
-            <span class="mue-dvr-video__bar-name">
+            <span class="mue-dvr-video__bar-name" :style="showSwitchCn ? 'width: calc(100% - 64px)' : ''">
                 <i v-if="width >= 300" class="iconfont icon-jiankongshipin"/>
                 {{!rtsp ? t('mue.dvr.tooltip') : name}}
             </span>
-            <a class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
+            <a v-if="showSwitchCn" @click="choose" style="line-height: 30px;">切换视频</a>
+            <a v-else class="mue-dvr-video__bar-btn iconfont icon-gengduo1" @click="choose"/>
         </div>
 
         <van-popup v-model="video.visible" :overlay="false" @closed="onVideoClosed" get-container="body"
@@ -63,7 +64,10 @@
             name: {type: String, default: ""},
             rtsp: {type: String, default: ""},
             type: {type: String, default: ""},
-            autoPlay: {type: Boolean, default: false}
+            autoPlay: {type: Boolean, default: false},
+            nameHigher: {type: Boolean, default: false},
+            showSwitchCn: {type: Boolean, default: false},
+            definition: {type: String, default: "ordinary"}
         },
         data() {
             return {
@@ -91,14 +95,18 @@
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址
                     if (rtsp.startsWith("rtmp://")) {
-                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com")
-                            + ".m3u8";
+                        return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
                     }
                     return rtsp;
                 }
                 // 使用ffmpeg thumb地址播放
                 let host = this.getVideoHost();
-                return `${host}/fstatic/thumb/index.html?stream=${encodeURIComponent(rtsp)}`;
+                // 清晰度调整
+                let furl = "thumb";
+                if (this.definition == "fluent") {
+                    furl = "img";
+                }
+                return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
         watch: {
@@ -164,8 +172,7 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                this.video.path = `${host}/fstatic/img/index.html?stream=${
-                    encodeURIComponent(this.rtsp)}`;
+                this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
             },
             Stop() {
                 this.playing = false;
