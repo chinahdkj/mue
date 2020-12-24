@@ -11,6 +11,7 @@ export default {
             confirm: "确定",
             submit:'提交',
             cancel: "取消",
+            search: "搜索",
             clear: "清空",
             delete: "删除",
             empty: "暂无数据",
