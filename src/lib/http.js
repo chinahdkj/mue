@@ -37,6 +37,10 @@ axios.defaults.headers.common["Authorization"] = token || sessionStorage.getItem
 axios.defaults.headers.common["Token"] = token || sessionStorage.getItem("authortoken");
 axios.defaults.headers.common["APP"] = APP || sessionStorage.getItem("authorapp");
 
+console.log(token || sessionStorage.getItem("authortoken"))
+console.log(token || sessionStorage.getItem("authortoken"))
+console.log(APP || sessionStorage.getItem("authorapp"))
+
 axios.interceptors.request.use(config => {
     return config;
 }, error => {
