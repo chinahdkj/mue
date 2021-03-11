@@ -1,7 +1,9 @@
 // 原生调用方法
-import {isIos, isDingDing} from "./common";
+import ccworkBridge from 'ccwork-jsbridge';
+import {isIos, isDingDing, isCCWork} from "./common";
 import * as NativePc from "./native-pc";
 import * as NativeDingDing from "./native-dingding";
+import NativeCcwork from "./native-ccwork";
 
 const _cache = {};
 const _cache2 = {};
@@ -12,8 +14,8 @@ const fns = [
     "collect", "nfcData", "goback", "refreshBadge", "signature", "saveLocalData", "queryLocalData", "deleteLocalData",
     "bluetooth", "btDisConnected", "bluetoothState", "manualPost", "btGetParams", "manualPostRes", "btSound", "soundPlay", "vibratorSound", "dictList",
     "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
-    "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "download", "watermarkCamera",
-    "download", "delFile", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
+    "video", "showVideo", "sound", "screenshot", "screenoff", "screenon", "bgNaviClose", "regeocode", "watermarkCamera",
+    "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
     "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag"
 ];
@@ -32,6 +34,13 @@ const postMessage = ({cb, method, params}) => {
         if (isDingDing()) {
             typeof NativeDingDing[method] === "function" && NativeDingDing[method]({msgid, method, params});
         }
+        else if (isCCWork()) {
+            if(typeof NativeCcwork[method] === "function") {
+                ccworkBridge.init(function(hasLogin) {
+                    NativeCcwork[method]({msgid, method, params})
+                });
+            }
+        }
         else if (!window.webkit && !window.native) {
             typeof NativePc[method] === "function" && NativePc[method]({msgid, method, params});
         }
@@ -45,7 +54,7 @@ const postMessage = ({cb, method, params}) => {
         return;
     }
 };
-window.response = ({msgid, params, method}) => {
+window.response = ({msgid, method, params}) => { //id, 方法名，返回数据
     // 原生回调传入一个json对象
     fns2.some(v => {
         if(v === method){
