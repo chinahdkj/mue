@@ -52,6 +52,10 @@ export const isDingDing = () => {
     return env.platform !== "notInDingTalk";
 };
 
+export const isCCWork = () => {
+    return window.navigator.userAgent.indexOf('ccwork') > 0
+}
+
 /*
  * 关闭页面
  */
@@ -262,7 +266,7 @@ export const clickElement = ElementClick;
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
-    getUploadPath, isDingDing, closePage,
+    getUploadPath, isDingDing, closePage, isCCWork,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
