@@ -35,9 +35,14 @@
                 </a>
                 <van-popup ref="pop" class="mue-input__pop" v-model="pop" position="bottom"
                            get-container="body" :close-on-click-overlay="false"
-                           @click-overlay="pop = false">
-                    <van-picker ref="picker" :columns="templates" show-toolbar @confirm="onConfirm"
-                                @cancel="pop = false" value-key="name"/>
+                           @click-overlay="pop = false" @close="onPopupClose">
+                    <van-picker ref="picker" :columns="tmp" show-toolbar @confirm="onConfirm"
+                                @cancel="pop = false" value-key="name">
+                        <template #title v-if="templates.length && searchable">
+                            <input class="input__search" type="text" v-model="searchValue"
+                                   :placeholder="t('mue.common.placeholder')">
+                        </template>
+                    </van-picker>
                 </van-popup>
             </template>
         </div>
@@ -45,8 +50,10 @@
 </template>
 
 <script>
+    import {localeMixin, t} from "../../../src/locale";
     export default {
         name: "MueInput",
+        mixins: [localeMixin],
         components: {},
         props: {
             value: {default: null},
@@ -61,6 +68,7 @@
                     return [];
                 }
             },
+            searchable: {type: Boolean, default: false},
             maxlength: {type: [String, Number], default: null},
             max: {type: [String, Number], default: null},
             min: {type: [String, Number], default: null},
@@ -77,7 +85,9 @@
         data(){
             return {
                 ipt: "",
-                pop: false
+                pop: false,
+                searchValue: "",
+                tmp: []
             };
         },
         watch: {
@@ -97,13 +107,21 @@
                 }*/
                 this.$emit("input", v);
                 this.$emit("change", v, ov);
+            },
+            searchValue: {
+                immediate: true, handler(v) {
+                    let filterData = this.templates.filter(f => {
+                        return f.name.includes(v);
+                    })
+                    this.tmp = $.extend(true, [], filterData);
+                }
             }
         },
         methods: {
             onConfirm(){
                 this.pop = false;
                 let index = this.$refs.picker.getColumnIndex(0);
-                let tmpl = this.templates[index] || {};
+                let tmpl = this.tmp[index] || {};
                 this.ipt = tmpl.code || "";
             },
             onChange(e){
@@ -122,6 +140,9 @@
 
                 }
 
+            },
+            onPopupClose() {
+                this.searchValue = "";
             }
         },
         mounted(){
