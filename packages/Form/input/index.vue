@@ -109,11 +109,19 @@
                 this.$emit("change", v, ov);
             },
             searchValue: {
-                immediate: true, handler(v) {
+                handler(v) {
                     let filterData = this.templates.filter(f => {
                         return f.name.includes(v);
                     })
                     this.tmp = $.extend(true, [], filterData);
+                }
+            },
+            templates: {
+                immediate: true, deep: true, handler(v, ov) {
+                    if(JSON.stringify(v) === JSON.stringify(ov)) {
+                        return
+                    }
+                    this.tmp = $.extend(true, [], v);
                 }
             }
         },
