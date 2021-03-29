@@ -10,7 +10,7 @@
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
-                              accept="*/*" result-type="dataUrl" :multiple="multiple">
+                              :accept="accept" result-type="dataUrl" :multiple="multiple">
                               <!-- :multiple="multiple" -->
                     <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                        aria-hidden="true"></i>
@@ -38,6 +38,7 @@
             }
         },
         props: {
+            accept: {type: String, default: "*/*"},
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
