@@ -176,7 +176,11 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                if(this.defaultUrl) {
+                    this.video.path = this.src
+                }else {
+                    this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                }
             },
             Stop() {
                 this.playing = false;
