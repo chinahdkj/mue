@@ -67,7 +67,8 @@
             autoPlay: {type: Boolean, default: false},
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
-            definition: {type: String, default: "ordinary"}
+            definition: {type: String, default: "ordinary"},
+            defaultUrl:Boolean
         },
         data() {
             return {
@@ -91,6 +92,9 @@
                 let rtsp = this.rtsp || "";
                 if (!this.rtsp) {
                     return "";
+                }
+                if(this.defaultUrl) {
+                    return rtsp
                 }
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址

@@ -14,7 +14,7 @@
                     <!--视频可选择切换，按行列渲染格子-->
                     <div v-for="i in row * col" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
-                        <mue-dvr-video ref="video" :width="size.width" :height="size.height"
+                        <mue-dvr-video ref="video" :width="size.width" :height="size.height" default-url
                                        :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
                                        :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
                                        :definition="definition" @choose="pickCamera(i)"/>
@@ -24,7 +24,7 @@
                     <!--视频不能选择切换，按照cameras 参数进行平铺-->
                     <div v-for="(c, i) in cameras" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
-                        <mue-dvr-video :width="size.width" :height="size.height"
+                        <mue-dvr-video :width="size.width" :height="size.height" default-url
                                        :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
                                        :definition="definition" :name="c.name" :rtsp="c.rtsp"/>
                     </div>
@@ -57,7 +57,8 @@
             },
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
-            definition: {type: String, default: "ordinary"}
+            definition: {type: String, default: "ordinary"},
+            defaultUrl:Boolean
         },
         data() {
             return {
