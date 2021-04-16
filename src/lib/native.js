@@ -5,7 +5,7 @@ import * as NativePc from "./native-pc";
 import * as NativeDingDing from "./native-dingding";
 import NativeCcwork from "./native-ccwork";
 
-const _printEnable = true;
+const _printEnable = false;
 const _cache = {};
 const _cache2 = {};
 
@@ -75,7 +75,7 @@ window.response = ({msgid, method, params}) => {
     }
     else{
         // 分发至子系统的
-        broadcastFns(msgid, method, params);
+        iframeSendMessage({ msgid, method, params });
         delete _cache[msgid];
     }
 };
@@ -85,9 +85,6 @@ window.response2 = ({method, cb}) => {
     if(!method || !cb){
         return;
     }
-
-    // 分发至子系统的
-    broadcastFns2(method, cb);
 
     Object.defineProperty(_cache2, method, {
         configurable: true,
@@ -125,35 +122,28 @@ window.changeTheme = (t) => {
 
 /// ***** iframe 原生交互 接收/分发 *****
 // 分发
-const broadcastFns = (msgid, params, method) => {
-    iframeSendMessage({ msgid, method, params });
-}
-
-const broadcastFns2 = (method, params) => {
-    iframeSendMessage({ method, params });
-}
 function iframeSendMessage(data) {
-    if (_printEnable) {console.log("发送消息 至 iframe: ", data)};
+    if (_printEnable) console.log("发送消息 至 iframe: ", data);
     if (window.frames == null || window.frames.length == 0) { return; }
     for (let index = 0; index < window.frames.length; index++) {
         const ele = window.frames[index];
-        console.log("ele1111111", ele);
         ele.postMessage(data, "*");
     }
 }
 
 // 接收
 function iframeReceiveMessage(event) {
-    if (_printEnable) {console.log("iframe 接收消息 ", event.data)};
+    if (_printEnable) console.log("iframe 接收消息 ", event.data);
     let data = event.data;
     if (data == null) return;
     let msgid = data["msgid"], method = data["method"], params = data["params"];
     if (method == null || params == null) return;
-    if (msgid !== null && msgid !== "") {
-        window.response({ msgid, method, params });
-    } else {
-        window.response2({ method, cb: params });
-    }
+    window.response({ msgid : msgid || "", method, params });
+    // if (msgid !== null && msgid !== "") {
+    //     window.response({ msgid, method, params });
+    // } else {
+    //     window.response2({ method, cb: params });
+    // }
 }
 window.addEventListener("message", iframeReceiveMessage, false);
 
