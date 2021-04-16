@@ -58,8 +58,8 @@ const postMessage = ({cb, method, params}) => {
     }
 };
 window.response = ({msgid, method, params}) => {
-    console.log("返回结果11111", params)
-    console.log("方法名", method)
+    // console.log("返回结果11111", params)
+    // console.log("方法名", method)
     // 原生回调传入一个json对象（id, 方法名，返回数据）
     fns2.some(v => {
         if(v === method){
