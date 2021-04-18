@@ -3,7 +3,7 @@
         <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
              :checked="(TREE.opens || []).indexOf(node.code) > -1"
              :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
-             @click="onSelect(node)" v-show="!search || String(node.name).includes(search)">
+             @click="onSelect(node)" v-show="!search || showNode(node)">
             <check-box v-if="TREE.multiple" class="mue-tree__checkbox" :checks="TREE.leaves"
                        :node="node" @check="onCheck"/>
             <span class="mue-tree__label">
@@ -31,6 +31,12 @@
             },
             onCheck(node, state){
                 this.TREE.updateCheck(node, state);
+            },
+            showNode(node) {
+                let n = node.$leaves.some((s) => {
+                    return String(this.TREE.dict[s].name).includes(this.search);
+                })
+                return String(node.name).includes(this.search) || n
             }
         }
     };
