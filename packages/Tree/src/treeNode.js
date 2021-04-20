@@ -1,11 +1,12 @@
 class TreeNode {
-    constructor(data, road, index){
+    constructor(data, road, nameRoad, index){
         this.data = {...data};
         // this.data.children = undefined;
         this.code = data.code;
         this.name = data.name;
         this.$lv = road.length;
         this.$road = [...road, data.code];
+        this.$nameRoad = [...nameRoad, data.name]
         this.$index = index;
         this.$parent = this.$lv === 0 ? null : road[road.length - 1];
         this.$leaves = [];

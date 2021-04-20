@@ -45,7 +45,8 @@
             placeholder: {type: String, default: ""},
             multiple: {type: Boolean, default: false},
             selectable: {type: Function, default: null},
-            searchable: {type: Boolean, default: false}
+            searchable: {type: Boolean, default: false},
+            wholePath: {type: Boolean, default: false} //是否显示全路径
         },
         data(){
             return {
@@ -98,8 +99,12 @@
 
                     let getName = (code) => {
                         let node = this.GetOptionInfo(code);
-                        return node == null || (typeof this.selectable === "function"
-                            && !this.selectable(node.data, node)) ? "" : node.name;
+                        if(node == null || (typeof this.selectable === "function"
+                            && !this.selectable(node.data, node))) {
+                            return ""
+                        } else {
+                            return this.wholePath ? node.$nameRoad.join("-") : node.name;
+                        }
                     };
 
                     if(!this.multiple){
