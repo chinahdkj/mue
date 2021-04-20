@@ -51,7 +51,7 @@
                 }
             },
             selectable: {type: Function, default: null},
-            searchable: {type: Boolean, default: false},
+            searchable: {type: Boolean, default: false}
         },
         data(){
             return {
@@ -69,25 +69,25 @@
                 handler(v){
                     let dict = {}, checks = {};
 
-                    let initNode = (opts, road) => {
+                    let initNode = (opts, road, nameRoad) => {
                         let leaves = [];
                         opts.forEach((opt, i) => {
 
-                            let node = new TreeNode(opt, road, i);
+                            let node = new TreeNode(opt, road, nameRoad, i);
                             dict[opt.code] = node;
                             if((opt.children || []).length === 0){
                                 node.AddLeaves([node.code]);
                                 checks[node.code] = false;
                             }
                             else{
-                                node.AddLeaves(initNode(opt.children, node.$road));
+                                node.AddLeaves(initNode(opt.children, node.$road, node.$nameRoad));
                             }
                             leaves = leaves.concat(node.$leaves);
                         });
                         return leaves;
                     };
 
-                    initNode(v, []);
+                    initNode(v, [], []);
 
                     this.dict = dict;
                     this.leaves = checks;
