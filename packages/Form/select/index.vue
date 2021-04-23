@@ -25,6 +25,11 @@
 <script>
     import {localeMixin, t} from "../../../src/locale";
 
+    //处理字典随数字类型code自动排序问题
+    const _CODE = (code) => {
+        return '_' + code
+    }
+
     export default {
         name: "MueSelect",
         mixins: [localeMixin],
@@ -78,14 +83,14 @@
                 return this.clearable ? t('mue.common.clear') :  t('mue.common.cancel');
             },
             text(){
-                let temp = this.dict[this.value] || {};
+                let temp = this.dict[_CODE(this.value)] || {};
                 if(this.textLv === "last"){
                     return temp.code == null ? "" : temp.name;
                 }
                 let text = [];
                 while(temp.code != null){
                     text.splice(0, 0, temp.name);
-                    temp = this.dict[temp.$parent] || {};
+                    temp = this.dict[_CODE(temp.$parent)] || {};
                 }
                 return text.join(",");
             }
@@ -95,7 +100,7 @@
                 if(!v){
                     return;
                 }
-                let opt = this.dict[this.value] || {};
+                let opt = this.dict[_CODE(this.value)] || {};
                 this.initCols(opt.disabled ? null : opt.$road);
             },
             data: {
@@ -115,7 +120,7 @@
                                 disabled: disabled || opt.disabled
                             };
                             delete clone.children;
-                            dict[opt.code] = clone;
+                            dict[_CODE(opt.code)] = clone;
 
                             feach(opt.children || [], clone.$road, clone.disabled);
                         });
@@ -130,7 +135,7 @@
             searchValue(val){
                 this.searchDict = {};
                 for(let [key, col] of Object.entries(this.dict)){
-                    let isChildren = col.$parent ? String(this.dict[col.$parent].name).includes(val)
+                    let isChildren = col.$parent ? String(this.dict[_CODE(col.$parent)].name).includes(val)
                         : false;
                     if(col.$lv === 0 && String(col.name).includes(val) || isChildren){
                         this.searchDict[key] = col;
@@ -209,7 +214,7 @@
                 this.pop = true;
             },
             GetOptionInfo(code){
-                return this.dict[code];
+                return this.dict[_CODE(code)];
             },
         }
     };
