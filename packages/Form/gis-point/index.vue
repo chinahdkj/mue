@@ -106,7 +106,8 @@
                 }
             },
             zoom: {type: Number, default: 18},
-            limit: {type: Object, default: null}
+            limit: {type: Object, default: null},
+            currentLocation: {type: Boolean, default: false} //初始化获取并赋值当前经纬度
         },
         data(){
             return {
@@ -285,6 +286,11 @@
                     }
                 })
             },
+        },
+        mounted() {
+            if(this.currentLocation && !this.value) {
+                this.rePos();
+            }
         }
     };
 </script>
