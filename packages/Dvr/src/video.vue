@@ -68,7 +68,7 @@
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
             definition: {type: String, default: "ordinary"},
-            defaultUrl:Boolean
+            defaulturl: {type: Boolean, default: false}
         },
         data() {
             return {
@@ -93,7 +93,7 @@
                 if (!this.rtsp) {
                     return "";
                 }
-                if(this.defaultUrl) {
+                if(this.defaulturl) {
                     return rtsp
                 }
                 if (this.version === "hik-ys") {
@@ -176,7 +176,7 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                if(this.defaultUrl) {
+                if(this.defaulturl) {
                     this.video.path = this.src
                 }else {
                     this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
