@@ -125,6 +125,45 @@ export const Base64ToFile = (base64, {type, name}) => {
     return blob;
 };
 
+export const urlToBase64 = (url) => {
+    return new Promise((resolve) => {
+        let image = new Image();
+        image.crossOrigin = '';
+        image.src = url;
+        if(url) {
+            image.onload = () => {
+                let canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                resolve(canvas.toDataURL())
+            }
+        }
+    })
+};
+
+export const videoToBase64 = (url) => {
+    return new Promise((resolve) => {
+        let dataURL = '';
+        let video = document.createElement("video");
+        video.setAttribute('crossOrigin', 'anonymous');//处理跨域
+        video.setAttribute('src', url);
+        video.setAttribute('width', 50);
+        video.setAttribute('height', 50);
+        video.addEventListener('loadeddata', function () {
+            let canvas = document.createElement("canvas")
+            let width = video.width
+            let height = video.height;
+            canvas.width = width; //canvas的尺寸和图片一样
+            canvas.height = height;
+            canvas.getContext("2d").drawImage(video, 0, 0, width, height); //绘制canvas
+            dataURL = canvas.toDataURL('image/jpeg'); //转换为base64
+            resolve(dataURL);
+        });
+    })
+}
+
 export const ZipImage = (base64, file, quality, maxWidth) => {
 
     return new Promise((resolve) => {

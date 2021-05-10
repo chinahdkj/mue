@@ -226,6 +226,7 @@ export const getHost = () => {
     }
     let code = location.port.substring(1);
     let regex = new RegExp(`^${location.origin}/packages/${code}/`, "i");
+    // return host;
     if(regex.test(location.href)){
         return host;
     }

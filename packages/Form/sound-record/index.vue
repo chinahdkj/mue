@@ -138,6 +138,9 @@
                     return;
                 }
                 let audioPath = this.dict[this.audios[this.current]].path;
+                //浪潮测试，需接口真实地址
+                // let audioPath = 'http://192.168.100.179:8089' + this.dict[this.audios[this.current]].url;
+                // console.log("audioPath", audioPath)
                 this.$native.soundPlay({params: {path: audioPath}});
             },
             onSelect({act}) {
@@ -191,7 +194,7 @@
             },
             recordAudio() {
                 this.recording = true;
-                let id = this.$comm.newFilePath('mp3');
+                let id = this.$comm.newFilePath('wav');
                 this.$native.sound({
                         params: {id: id, local: this.local},
                         cb: ({code}) => {
