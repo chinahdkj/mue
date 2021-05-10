@@ -67,7 +67,8 @@
             autoPlay: {type: Boolean, default: false},
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
-            definition: {type: String, default: "ordinary"}
+            definition: {type: String, default: "ordinary"},
+            defaulturl: {type: Boolean, default: false}
         },
         data() {
             return {
@@ -91,6 +92,9 @@
                 let rtsp = this.rtsp || "";
                 if (!this.rtsp) {
                     return "";
+                }
+                if(this.defaulturl) {
+                    return rtsp
                 }
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址
@@ -172,7 +176,11 @@
                 let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                if(this.defaulturl) {
+                    this.video.path = this.src
+                }else {
+                    this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                }
             },
             Stop() {
                 this.playing = false;
