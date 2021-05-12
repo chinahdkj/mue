@@ -154,7 +154,18 @@ const ccworkApi = {
             }
             let target = {
                 "_id": result.userId,
-                "account": "zander",
+                "account": result.mobile,
+                "avatar": result.avatar,
+                "email": result.email,
+                "mobile": result.mobile,
+                "name": result.name,
+                "sn": result.mobile,
+                "state": 0,
+            }
+
+            /*let target = {
+                "_id": result.userId,
+                "account": result.mobile,
                 "admin": 1,
                 "avatar": result.avatar,
                 "changed": 1542452471,
@@ -196,7 +207,8 @@ const ccworkApi = {
                 "state": 0,
                 "sysname": "",
                 "telephone": ""
-            }
+            }*/
+
             window.response({
                 msgid, method, params: {
                     userInfo: isIos() ? target : JSON.stringify(target), set: {}
