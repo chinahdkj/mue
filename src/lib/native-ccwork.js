@@ -161,6 +161,13 @@ const ccworkApi = {
                 "name": result.name,
                 "sn": result.mobile,
                 "state": 0,
+                group: result.subdepartmentId || result.departmentId,
+                group_code: result.userCorpOrganId,
+                "group_data": {
+                    _id: result.subdepartmentId || result.departmentId,
+                    name: result.subdepartment || result.department,
+                    code: result.userCorpOrganId,
+                }
             }
 
             /*let target = {
