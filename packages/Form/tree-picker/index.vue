@@ -46,7 +46,8 @@
             multiple: {type: Boolean, default: false},
             selectable: {type: Function, default: null},
             searchable: {type: Boolean, default: false},
-            wholePath: {type: Boolean, default: false} //是否显示全路径
+            wholePath: {type: Boolean, default: false}, //是否显示全路径
+            limit: {type: [Number, String], default: 0} //最多选中个数，默认无限个，多选时有效
         },
         data(){
             return {
@@ -124,9 +125,13 @@
                 });
             },
             onConfirm(){
-                this.isVisible = false;
                 if(this.multiple){
                     let checks = this.$refs.tree.GetChecks();
+                    let limit = Number(this.limit);
+                    if(limit > 0 && checks.length > limit) {
+                        this.$toast(`选中不能超过${this.limit}`);
+                        return
+                    }
                     let v = checks.length === 0 ? null : checks;
 
                     let roadObj = {}
@@ -146,6 +151,7 @@
                     this.$emit("input", v);
                     v !== this.value && this.$emit("change", v, this.value, road);
                 }
+                this.isVisible = false;
             },
 
             onCancel(){
