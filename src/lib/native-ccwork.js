@@ -1,16 +1,20 @@
 /*
 * 浪潮方法代替原生方法
 */
+import axios from "axios";
 import {getAppId, getCid, GetQueryString, isIos, isAndroid, getHost} from "./common";
 import uuid from "../utils/uuid";
 import {urlToBase64, videoToBase64} from "../utils/image-utils";
 import ccworkBridge from 'ccwork-jsbridge';
+import Vue from "vue";
+const isWebApi = process.env.VUE_APP_INTERFACE === 'web'?true:false
 
 //横竖屏切换状态，默认false 竖屏
 let rotateflag = false;
 
 //上传接口
 let uploadApi = `${getHost()}/app/v1.0/upload.json`;
+let userInfoApi = `/app/v1.0/userinfo.json`;
 
 //获取header
 const HEADER_SETTING1 = {
@@ -44,8 +48,45 @@ const getHeaders = (appid = null) => {
     return headers;
 };
 
-const errorHandle = (msg) => {
-    console.error(msg);
+//针对S7
+function getUrl (url){
+    let prefix = "/app/customer"
+    if(url.startsWith(prefix)){
+        return url.substring(prefix.length)
+    }else{
+        return url;
+    }
+}
+
+let post = (url, data, failed = false, appid = null, header = null) => {
+    let setting = {
+        method: "post",
+        baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
+        url,
+        data: data,
+        timeout: 30000
+    }
+    if(isWebApi){
+        setting.url = getUrl(url)
+    }else{
+        setting['headers'] = header || getHeaders(appid)
+    }
+    return axios(setting).then(res => res.Response).catch(e => {
+        console.log(e);
+        // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
+        // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
+        if((e.response && e.response.status === 404) || (e.Code === 21001 || e.code === 21001) || e.response == undefined){
+            // TODO
+        }
+        else if(e.Message){
+            !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
+        }
+        else{
+            !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
+        }
+
+        return Promise.reject(e);
+    });
 }
 
 //ccwork主动发起
@@ -140,7 +181,7 @@ const ccworkApi = {
             });
         })
     },
-    //获取用户相关信息
+    //获取用户相关信息(是否需要用到云上协同的用户信息？)
     userInfo: ({msgid, method, params}) => {
         ccworkBridge.ccworkGetUserInfo(({status, errormessage, result}) => {
             if(!status) {
@@ -152,7 +193,7 @@ const ccworkApi = {
                 });
                 return
             }
-            let target = {
+            /*let target = {
                 "_id": result.userId,
                 "account": result.mobile,
                 "avatar": result.avatar,
@@ -168,59 +209,16 @@ const ccworkApi = {
                     name: result.subdepartment || result.department,
                     code: result.userCorpOrganId,
                 }
-            }
-
-            /*let target = {
-                "_id": result.userId,
-                "account": result.mobile,
-                "admin": 1,
-                "avatar": result.avatar,
-                "changed": 1542452471,
-                "direct": "",
-                "duty": "",
-                "email": result.email,
-                "group": "6f747226-ba22-4cc6-9fe7-94970b5a52a6",
-                "group_code": "C057002",
-                "group_data": {
-                    "_id": "6f747226-ba22-4cc6-9fe7-94970b5a52a6",
-                    "address": "嘉兴",
-                    "changed": 1539753739,
-                    "city": "嘉兴市",
-                    "code": "C057002",
-                    "created": 1537324874,
-                    "district": "秀洲区",
-                    "level": "C",
-                    "name": result.company,
-                    "order": 1,
-                    "parent": "C057",
-                    "province": "浙江省",
-                    "sname": "嘉兴水务",
-                    "status": 1,
-                    "tenantid": 0,
-                    "type": "123",
-                    "zipcode": "440000000000",
-                    "zone": "1001"
-                },
-                "idcard": "33333",
-                "job": "",
-                "mobile": result.mobile,
-                "name": result.name,
-                "pinyin": "ZHANGCHAO",
-                "post": "",
-                "py": "ZC",
-                "scada6_token": "",
-                "smobile": "",
-                "sn": "hd543",
-                "state": 0,
-                "sysname": "",
-                "telephone": ""
             }*/
+            post(`/app/v1.0/userinfo.json`, {}).then(res => {
+                window.response({
+                    msgid, method, params: {
+                        userInfo: isIos() ? res : JSON.stringify(res), set: {}
+                    }
+                });
+            })
 
-            window.response({
-                msgid, method, params: {
-                    userInfo: isIos() ? target : JSON.stringify(target), set: {}
-                }
-            });
+
         })
     },
     //文件/图片批量选择
@@ -819,6 +817,12 @@ const ccworkApi = {
         window.response({
             msgid, method, params: {}
         });
+        if(!rotateflag) {
+            ccworkBridge.hideTitleBar()
+        } else {
+            let title = document.title;
+            ccworkBridge.setTitle(title)
+        }
         rotateflag = !rotateflag;
     },
     //经纬度转详细地址

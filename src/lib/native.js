@@ -1,5 +1,4 @@
 // 原生调用方法
-import ccworkBridge from 'ccwork-jsbridge';
 import {isIos, isDingDing, isCCWork} from "./common";
 import * as NativePc from "./native-pc";
 import * as NativeDingDing from "./native-dingding";
@@ -39,9 +38,7 @@ const postMessage = ({cb, method, params}) => {
         }
         else if (isCCWork()) {
             if(typeof NativeCcwork[method] === "function") {
-                ccworkBridge.init(() => {
-                    NativeCcwork[method]({msgid, method, params})
-                });
+                NativeCcwork[method]({msgid, method, params})
             }
         }
         else if (!window.webkit && !window.native) {
