@@ -1,27 +1,39 @@
 <template>
     <div class="mue-img-preview" v-show="isShow" v-loading.fullscreen="loading">
-        <van-image-preview ref="preview" v-model="isShow" :images="imgs" :startPosition="startPosition"
+        <van-image-preview v-if="!isComment" ref="preview" v-model="isShow" :images="imgs" :startPosition="startPosition"
                            :loop="loop" v-bind="$attrs" v-on="$listeners" @close="onClose"
                            @change="onChange">
         </van-image-preview>
-        <div class="handle-btn">
+        <m-image-preview  ref="preview" v-if="isComment" v-model="isShow" :images="imgs"  :startPosition="startPosition"
+            :loop="loop" v-bind="$attrs" v-on="$listeners" @close="onClose" @change="onChange" @save="save"></m-image-preview>
+        <div class="handle-btn" v-if="!isComment">
             <van-icon class="handle-icon" name="replay" @click="handleRotate('right')"/>
             <van-icon class="handle-icon" name="replay" @click="handleRotate('left')"/>
             <i v-if="!isDingdingEnv" class="fa fa-download handle-icon" @click="download"/>
             <slot name="handle"></slot>
         </div>
-
+        <div class="handle-btn" v-if="isComment" :class="{comment:isComment}">
+            <i class="fa fa-chevron-left handle-icon" @click="handleAction('left')"/>
+            <i class="fa fa-download handle-icon" @click="download"/>
+            <i class="fa fa-repeat handle-icon" @click="handleAction('save')"/>
+            <i class="fa fa-pencil handle-icon" @click="handleAction('pen')"/>
+            <i class="fa fa-font handle-icon" @click="handleAction('text')"/>
+            <i class="fa fa-chevron-right handle-icon" @click="handleAction('right')"/>
+        </div>
     </div>
 </template>
 
 <script>
     import {rotateImg} from "../../../src/utils/image-utils";
     import {localeMixin, t} from "../../../src/locale";
+    import MImagePreview from './MImagePreview'
     export default {
         name: 'MueImgPreview',
         mixins: [localeMixin],
         inheritAttrs: false,
+        components: {MImagePreview},
         props: {
+            isComment: {type: Boolean, default: false},
             visible: {
                 type: Boolean,
                 default: false
@@ -76,6 +88,9 @@
             }
         },
         methods: {
+            handleAction(action) {
+                this.$refs.preview.handleActions(action)
+            },
             onClose() {
                 this.angles = [];
                 this.$emit('update:visible', false);
@@ -123,6 +138,9 @@
                     return "";
                 }
             return this.$comm.getUploadPath(path);
+            },
+            save(data) {
+                this.$emit('upload', data)
             },
             download() {
                 this.loading = true;

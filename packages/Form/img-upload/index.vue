@@ -45,7 +45,7 @@
                          @select="typeSelect"
                          :actions="[{name:  t('mue.form.imgUpload.imageText'), act: 'image'}, {name: t('mue.form.imgUpload.videoText'), act: 'video'}]"/>
 
-        <mue-img-preview :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
+        <mue-img-preview @upload="save" :is-comment="isComment" :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
 
         <!--<van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
             <video :src="videoPop.src" style="width:100%;height:300px;" controls></video>
@@ -81,6 +81,7 @@
         props: {
             value: {type: [String, Array], default: ""},
             disabled: {type: Boolean, default: false},
+            isComment: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
             base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
@@ -352,7 +353,7 @@
             },
 
             //base64图片主动调上传
-            base64ToUpload(base64) {
+            base64ToUpload(base64,index) {
                 if (!base64) {
                     return
                 }
@@ -360,10 +361,13 @@
                 let name = `ocr_pic.${type.substring(type.lastIndexOf('/') + 1)}`;
                 let blob = Base64ToFile(base64, {type, name});
                 let file = {content: base64, file: blob};
-                this.upload(file);
+                this.upload(file, index);
             },
-
-            upload(files) {
+            save(data) {
+                console.log(data)
+                this.base64ToUpload(data.base64,data.index)
+            },
+            upload(files, index = '') {
                 this.uploading = true;
                 if (!Array.isArray(files)) {
                     files = [files];
@@ -413,12 +417,16 @@
                     });
 
                     this.$ajax.all(posts).then((rs) => {
-                        if (this.multiple) {
-                            rs.forEach(({url}) => {
-                                this.imgs.push(url);
-                            });
-                        } else {
-                            this.imgs = rs.length > 0 ? [rs[0].url] : [];
+                        if(index === '') {
+                            if (this.multiple) {
+                                rs.forEach(({url}) => {
+                                    this.imgs.push(url);
+                                });
+                            } else {
+                                this.imgs = rs.length > 0 ? [rs[0].url] : [];
+                            }
+                        }else {
+                            this.imgs.splice(index, 1, rs[0].url);
                         }
                         this.uploading = false;
                     }).catch(() => {
