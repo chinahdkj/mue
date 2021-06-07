@@ -36,7 +36,7 @@
                         <l-control-zoom position="topright" :zoomInText="zoomInIcon"
                                         :zoomOutText="zoomOutIcon"></l-control-zoom>
                         <l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
-                                      url="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"/>
+                                      :url="tileLayerUrl"/>
                         <l-marker v-if="isReadonly" :lat-lng="pos"/>
                         <l-circle v-if="limit" :lat-lng="limit.center" :radius="limit.radius"
                                   color="#4796e3"/>
@@ -107,7 +107,8 @@
             },
             zoom: {type: Number, default: 18},
             limit: {type: Object, default: null},
-            currentLocation: {type: Boolean, default: false} //初始化获取并赋值当前经纬度
+            currentLocation: {type: Boolean, default: false}, //初始化获取并赋值当前经纬度
+            tileLayerUrl: {type: String, default: "http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"}
         },
         data(){
             return {
