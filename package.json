@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.313",
+  "version": "1.0.314",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": true,
@@ -25,7 +25,7 @@
     "dingtalk-jsapi": "^2.10.3",
     "echarts": "^4.2.0-rc.2",
     "exif-js": "^2.3.0",
-    "fabric": "^4.4.0",
+    "fabric": "4.4.0",
     "fastclick": "^1.0.6",
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
