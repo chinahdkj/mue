@@ -146,13 +146,11 @@
                 this.$emit('upload', data)
             },
             download() {
-                // this.loading = true;
+                this.loading = true;
                 let value = this.images[this.current];
                 if(this.isComment) {
                     value = this.$refs.preview.getBase64()
                 }
-                console.log(value)
-                return
                 let type = this.isBase64(value) ? 'img_base64' : 'img_url';
                 if (this.isBase64(value)) {
                     type = 'img_base64';
