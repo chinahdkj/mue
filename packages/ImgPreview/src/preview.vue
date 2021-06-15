@@ -13,12 +13,14 @@
             <slot name="handle"></slot>
         </div>
         <div class="handle-btn" v-if="isComment" :class="{comment:isComment}">
-            <i class="fa fa-chevron-left handle-icon" @click="handleAction('left')"/>
+            <i class="fa fa-chevron-left handle-icon" @click="handleAction('prev')"/>
             <i class="fa fa-download handle-icon" @click="download"/>
-            <i class="fa fa-repeat handle-icon" @click="handleAction('save')"/>
+            <van-icon class="handle-icon" name="upgrade" @click="handleAction('save')"/>
+            <i class="fa fa-undo handle-icon" @click="handleRotate('right')"/>
+            <i class="fa fa-repeat handle-icon" @click="handleRotate('left')"/>
             <i class="fa fa-pencil handle-icon" @click="handleAction('pen')"/>
             <i class="fa fa-font handle-icon" @click="handleAction('text')"/>
-            <i class="fa fa-chevron-right handle-icon" @click="handleAction('right')"/>
+            <i class="fa fa-chevron-right handle-icon" @click="handleAction('next')"/>
         </div>
     </div>
 </template>
@@ -124,6 +126,7 @@
                             let ctx = canvas.getContext('2d');
                             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);*/
                             rotateImg(image, angle, canvas);
+                            console.log(canvas.toDataURL())
                             resolve(canvas.toDataURL())
                         }
                     }
@@ -143,8 +146,13 @@
                 this.$emit('upload', data)
             },
             download() {
-                this.loading = true;
+                // this.loading = true;
                 let value = this.images[this.current];
+                if(this.isComment) {
+                    value = this.$refs.preview.getBase64()
+                }
+                console.log(value)
+                return
                 let type = this.isBase64(value) ? 'img_base64' : 'img_url';
                 if (this.isBase64(value)) {
                     type = 'img_base64';

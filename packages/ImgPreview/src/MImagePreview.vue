@@ -2,9 +2,9 @@
     <div class="m-image-preview-wrap">
         <div class="zhishqi-ctr"><span>{{`${index + 1}/${images.length}`}}</span></div>
         <van-popup v-model="isShow" @closed="closed">
-            <div class="m-image-preview-ctr" :style="{width:width+'px',height:height+'px'}">
+            <div class="m-image-preview-ctr" :style="{width:width+'px',height:height+'px'}" v-if="isShow && isRotate">
                 <van-swipe ref="swiper" @change="onChange" :show-indicators="false" :initial-swipe="startPosition" :touchable="false">
-                    <van-swipe-item v-for="(item, key) in images" :key="key">
+                    <van-swipe-item v-for="(item, key) in images" :key="key" v-loading="loading">
                         <canvas 
                             v-if="key == index"
                             id="canvas"
@@ -15,9 +15,10 @@
                             <img
                                 class="swiper-img" 
                                 :src="item" 
+                                crossorigin="anonymous"
                                 data-id="canvas"
                                 @load="handleImgLoad"
-                                 :style="{width:width+'px'}"
+                                :style="{width:width+'px'}"
                                 ref="img">
                         </div>
                         
@@ -43,7 +44,9 @@ export default {
             mouseTo:{},
             doDrawing:false,
             moveCount:1,
-            action:'pen'
+            action:'pen',
+            loading:false,
+            isRotate:false
         }
     },
     props: {
@@ -65,6 +68,14 @@ export default {
             type: Boolean,
             default: false
         },
+    },
+    watch: {
+        images(n) {
+            this.isRotate = false
+            this.$nextTick(() => {
+                this.isRotate = true
+            })
+        }
     },
     computed: {
         isShow: {
@@ -88,15 +99,15 @@ export default {
                     isDrawingMode:true,
                     skipTargetFind: true,
                     selectable: false,
-                    selection: false
+                    selection: false,
                 }) 
 
                 this.canvas.freeDrawingBrush.color = this.color
                 this.canvas.freeDrawingBrush.width = 2
                 this.canvas.width = this.width 
-                this.canvas.height = 300
                 const imgInstance = this.addOriginImage(this.canvas)
                 imgInstance.set('selectable', false)
+                this.loading = false
                 this.$nextTick(() => {
                     this.textbox = null
                     if(this.action === 'text') {
@@ -148,7 +159,9 @@ export default {
         drawing() {
             let index = this.index
             switch (this.action) {
-                case 'left':
+                case 'prev':
+                    this.canvas.rotate(90)
+                    return
                     if(index === 0) {
                         index = this.images.length - 1
                     }else {
@@ -157,7 +170,7 @@ export default {
                     this.$refs.swiper.swipeTo(index)
                     this.action = 'pen'
                 break
-                case 'right':
+                case 'next':
                     if(index === this.images.length) {
                         index = 0
                     }else {
@@ -187,10 +200,13 @@ export default {
                     this.textbox.enterEditing()
                     this.textbox.hiddenTextarea.focus()
                 break
+                case 'left':
+                    
+                break
             }
         },
         handleActions(action) {
-            // if (this.loading) return;
+            if (this.loading) return;
             this.action = action
             this.canvas.isDrawingMode = false
             if (this.textbox) {
@@ -207,25 +223,10 @@ export default {
             let base64 = this.canvas.toDataURL()
             this.$emit('save',{base64,index:this.index})
         },
-        dataURLtoBlob (dataurl) {
-            let arr = dataurl.split(',')
-            let mime = arr[0].match(/:(.*?);/)[1]
-            let bstr = atob(arr[1])
-            let n = bstr.length
-            let u8arr = new Uint8Array(n)
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n)
-            }
-            return new Blob([u8arr], { type: mime })
-        },
-        blobToFile (theBlob, fileName) {
-            theBlob.lastModifiedDate = new Date()
-            theBlob.name = fileName
-            return theBlob
+        getBase64() {
+            return this.canvas && this.canvas.toDataURL()
         },
         handleImgLoad() {
-            // this.loading = false;
-            
             this.$nextTick(() => {
                 this.initCanvas()
             })
@@ -234,14 +235,12 @@ export default {
             return { x: mouseX , y: mouseY };
         },
         onChange(index) {
+            this.loading = true
             if(this.canvas){
                 this.canvas.dispose()
             }
             this.$emit('change', index)
             this.index = index
-        },
-        handleBindId(key) {
-            return `canvas${key}`
         },
         closed() {
             if(this.canvas){
