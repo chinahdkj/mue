@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.314",
+  "version": "1.0.315",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": true,
@@ -24,6 +24,7 @@
     "core-js": "^2.6.5",
     "dingtalk-jsapi": "^2.10.3",
     "echarts": "^4.2.0-rc.2",
+    "esri-leaflet": "^3.0.2",
     "exif-js": "^2.3.0",
     "fabric": "4.4.0",
     "fastclick": "^1.0.6",
