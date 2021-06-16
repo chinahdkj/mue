@@ -49,6 +49,7 @@
 						:max-zoom="18"
 						:options="{zoomControl: false, attributionControl: false}"
 						:center="pos"
+						@leaflet:load="mapReady"
 						@update:center="updateCenter">
 						<l-control position="topright"
 							class="get-location"
@@ -159,7 +160,8 @@ export default {
 			type: String,
 			default:
 				"http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
-		}
+		},
+		gislist: { type: Array, default: null }
 	},
 	data() {
 		return {
@@ -274,6 +276,21 @@ export default {
 		updateCenter(v) {
 			if (!this.isReadonly) {
 				this.pos = v;
+			}
+		},
+		mapReady() {
+			let map = this.$refs.Lmap.mapObject;
+			if (!!this.gislist) {
+				this.gislist.forEach(e => {
+					esri
+						.dynamicMapLayer({
+							url: e.url,
+							format: e.format,
+							f: "image",
+							layers: e.layers
+						})
+						.addTo(map);
+				});
 			}
 		},
 		showPop() {
