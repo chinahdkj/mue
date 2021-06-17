@@ -92,6 +92,7 @@
         },
         methods: {
             handleAction(action) {
+                this.isShow = false
                 this.$refs.preview.handleActions(action)
             },
             onClose() {
@@ -151,6 +152,7 @@
                 if(this.isComment) {
                     value = this.$refs.preview.getBase64()
                 }
+                console.log(value)
                 let type = this.isBase64(value) ? 'img_base64' : 'img_url';
                 if (this.isBase64(value)) {
                     type = 'img_base64';
