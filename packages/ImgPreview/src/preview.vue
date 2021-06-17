@@ -134,8 +134,7 @@
                 })
             },
             isBase64(str) {
-                let reg = /^data:image\/[a-z]+;base64,(.|\n)+=$/;
-                return reg.test(str);
+                return str.indexOf('data:image') > -1;
             },
             wholePath(path){
                 if(!path){
@@ -152,8 +151,7 @@
                 if(this.isComment) {
                     value = this.$refs.preview.getBase64()
                 }
-                console.log(value)
-                let type = this.isBase64(value) ? 'img_base64' : 'img_url';
+                let type = '';
                 if (this.isBase64(value)) {
                     type = 'img_base64';
                     let prefix = value.match(/^data:image\/[a-z]+;base64,/)[0];
