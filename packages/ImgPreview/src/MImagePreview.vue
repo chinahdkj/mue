@@ -21,7 +21,6 @@
                                 :style="{width:width+'px'}"
                                 ref="img">
                         </div>
-                        
                     </van-swipe-item>
                 </van-swipe>
             </div>
@@ -160,8 +159,6 @@ export default {
             let index = this.index
             switch (this.action) {
                 case 'prev':
-                    this.canvas.rotate(90)
-                    return
                     if(index === 0) {
                         index = this.images.length - 1
                     }else {
