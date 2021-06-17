@@ -92,7 +92,10 @@
         },
         methods: {
             handleAction(action) {
-                this.isShow = false
+                if(action === 'save') {
+                    this.isShow = false
+                }
+                
                 this.$refs.preview.handleActions(action)
             },
             onClose() {
