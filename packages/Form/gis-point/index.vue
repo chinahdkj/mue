@@ -103,6 +103,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { MarkerIcon } from "../../../src/utils/gis";
 import { localeMixin, t } from "../../../src/locale";
+import L from "leaflet"
 import leaflettilelayerwmtssrc from "../../../src/lib/leaflet-tilelayer-wmts-src";
 const esri = require("esri-leaflet");
 
