@@ -103,7 +103,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { MarkerIcon } from "../../../src/utils/gis";
 import { localeMixin, t } from "../../../src/locale";
-import "../../../src/lib/leaflet-tilelayer-wmts-src";
+import leaflettilelayerwmtssrc from "../../../src/lib/leaflet-tilelayer-wmts-src";
 const esri = require("esri-leaflet");
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -161,7 +161,8 @@ export default {
 			default:
 				"http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
 		},
-		gislist: { type: Array, default: null }
+		gislist: { type: Array, default: null },
+		lhsw:{ type: Boolean, default: false}
 	},
 	data() {
 		return {
@@ -299,7 +300,7 @@ export default {
 			}
 			this.pop = true;
 
-			if (this.$route.query.lhsw) {
+			if (this.lhsw) {
 				let _this = this;
 				this.showlhsw = true;
 				this.$nextTick(() => {
