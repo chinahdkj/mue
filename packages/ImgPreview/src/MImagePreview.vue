@@ -4,7 +4,7 @@
         <van-popup v-model="isShow" @closed="closed">
             <div class="m-image-preview-ctr" :style="{width:width+'px',height:height+'px'}" v-if="isShow && isRotate">
                 <van-swipe ref="swiper" @change="onChange" :show-indicators="false" :initial-swipe="startPosition" :touchable="false">
-                    <van-swipe-item v-for="(item, key) in images" :key="key" v-loading="loading">
+                    <van-swipe-item v-for="(item, key) in images" :key="key">
                         <canvas 
                             v-if="key == index"
                             id="canvas"
@@ -14,8 +14,8 @@
                         <div class="img-box" v-if="key == index">
                             <img
                                 class="swiper-img" 
-                                :src="item" 
-                                crossorigin="anonymous"
+                                :src="item"
+                                crossOrigin="anonymous"
                                 data-id="canvas"
                                 @load="handleImgLoad"
                                 :style="{width:width+'px'}"
@@ -106,7 +106,6 @@ export default {
                 this.canvas.width = this.width 
                 const imgInstance = this.addOriginImage(this.canvas)
                 imgInstance.set('selectable', false)
-                this.loading = false
                 this.$nextTick(() => {
                     this.textbox = null
                     if(this.action === 'text') {
@@ -145,15 +144,21 @@ export default {
             })
         },
         addOriginImage (canvas) {
-            const imgInstance = new fabric.Image(this.$refs.img[0], {
-                left: 0,
-                top: 0,
-                angle: 0
-            })
-            imgInstance.scaleToWidth(this.width)
-            imgInstance.scaleToHeight(this.height)
-            canvas.add(imgInstance)
-            return imgInstance
+            const image = new Image()
+            image.setAttribute('crossOrigin', 'anonymous')
+            image.onload =() => {
+                const imgInstance = new fabric.Image(image, {
+                    left: 0,
+                    top: 0,
+                    angle: 0,
+                })
+                imgInstance.scaleToWidth(this.width)
+                imgInstance.scaleToHeight(this.height)
+                canvas.add(imgInstance)
+                return imgInstance
+            }
+            image.src = this.$refs.img[0].src
+            
         },
         drawing() {
             let index = this.index
@@ -221,7 +226,13 @@ export default {
             this.$emit('save',{base64,index:this.index})
         },
         getBase64() {
-            return this.canvas && this.canvas.toDataURL()
+            if(this.canvas){
+                try{
+                    return this.canvas.toDataURL()
+                }catch(err) {
+                    console.log(err)
+                }
+            }
         },
         handleImgLoad() {
             this.$nextTick(() => {
@@ -232,7 +243,6 @@ export default {
             return { x: mouseX , y: mouseY };
         },
         onChange(index) {
-            this.loading = true
             if(this.canvas){
                 this.canvas.dispose()
             }
