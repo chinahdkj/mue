@@ -93,7 +93,7 @@ export default {
     methods: {
         initCanvas() {
             this.height = this.$refs.img[0].offsetHeight
-            this.$nextTick(() => {
+            this.$nextTick(async () => {
                 this.canvas = new fabric.Canvas('canvas',{
                     isDrawingMode:true,
                     skipTargetFind: true,
@@ -104,7 +104,7 @@ export default {
                 this.canvas.freeDrawingBrush.color = this.color
                 this.canvas.freeDrawingBrush.width = 2
                 this.canvas.width = this.width 
-                const imgInstance = this.addOriginImage(this.canvas)
+                const imgInstance = await this.addOriginImage(this.canvas)
                 imgInstance.set('selectable', false)
                 this.$nextTick(() => {
                     this.textbox = null
@@ -144,20 +144,23 @@ export default {
             })
         },
         addOriginImage (canvas) {
-            const image = new Image()
-            image.setAttribute('crossOrigin', 'anonymous')
-            image.onload =() => {
-                const imgInstance = new fabric.Image(image, {
-                    left: 0,
-                    top: 0,
-                    angle: 0,
-                })
-                imgInstance.scaleToWidth(this.width)
-                imgInstance.scaleToHeight(this.height)
-                canvas.add(imgInstance)
-                return imgInstance
-            }
-            image.src = this.$refs.img[0].src
+            return new Promise((resolve) => {
+                 const image = new Image()
+                image.setAttribute('crossOrigin', 'anonymous')
+                image.onload =() => {
+                    const imgInstance = new fabric.Image(image, {
+                        left: 0,
+                        top: 0,
+                        angle: 0,
+                    })
+                    imgInstance.scaleToWidth(this.width)
+                    imgInstance.scaleToHeight(this.height)
+                    canvas.add(imgInstance)
+                    resolve(imgInstance)
+                }
+                image.src = this.$refs.img[0].src
+            })
+           
             
         },
         drawing() {
