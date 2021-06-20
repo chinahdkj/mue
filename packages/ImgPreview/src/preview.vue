@@ -15,11 +15,12 @@
         <div class="handle-btn" v-if="isComment" :class="{comment:isComment}">
             <i class="fa fa-chevron-left handle-icon" @click="handleAction('prev')"/>
             <i class="fa fa-download handle-icon" @click="download"/>
-            <van-icon class="handle-icon" name="upgrade" @click="handleAction('save')"/>
+            <i class="fa fa-refresh handle-icon" @click="handleAction('save')"/>
             <i class="fa fa-undo handle-icon" @click="handleRotate('right')"/>
             <i class="fa fa-repeat handle-icon" @click="handleRotate('left')"/>
             <i class="fa fa-pencil handle-icon" @click="handleAction('pen')"/>
             <i class="fa fa-font handle-icon" @click="handleAction('text')"/>
+            <i class="fa fa-times handle-icon" @click="isShow = false"/>
             <i class="fa fa-chevron-right handle-icon" @click="handleAction('next')"/>
         </div>
     </div>
@@ -91,6 +92,10 @@
         },
         methods: {
             handleAction(action) {
+                if(action === 'save') {
+                    this.isShow = false
+                }
+                
                 this.$refs.preview.handleActions(action)
             },
             onClose() {
@@ -126,15 +131,13 @@
                             let ctx = canvas.getContext('2d');
                             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);*/
                             rotateImg(image, angle, canvas);
-                            console.log(canvas.toDataURL())
                             resolve(canvas.toDataURL())
                         }
                     }
                 })
             },
             isBase64(str) {
-                let reg = /^data:image\/[a-z]+;base64,(.|\n)+=$/;
-                return reg.test(str);
+                return str.indexOf('data:image') > -1;
             },
             wholePath(path){
                 if(!path){
@@ -151,7 +154,7 @@
                 if(this.isComment) {
                     value = this.$refs.preview.getBase64()
                 }
-                let type = this.isBase64(value) ? 'img_base64' : 'img_url';
+                let type = '';
                 if (this.isBase64(value)) {
                     type = 'img_base64';
                     let prefix = value.match(/^data:image\/[a-z]+;base64,/)[0];

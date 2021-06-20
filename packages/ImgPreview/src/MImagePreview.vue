@@ -4,7 +4,7 @@
         <van-popup v-model="isShow" @closed="closed">
             <div class="m-image-preview-ctr" :style="{width:width+'px',height:height+'px'}" v-if="isShow && isRotate">
                 <van-swipe ref="swiper" @change="onChange" :show-indicators="false" :initial-swipe="startPosition" :touchable="false">
-                    <van-swipe-item v-for="(item, key) in images" :key="key" v-loading="loading">
+                    <van-swipe-item v-for="(item, key) in images" :key="key">
                         <canvas 
                             v-if="key == index"
                             id="canvas"
@@ -14,14 +14,13 @@
                         <div class="img-box" v-if="key == index">
                             <img
                                 class="swiper-img" 
-                                :src="item" 
-                                crossorigin="anonymous"
+                                :src="item"
+                                crossOrigin="anonymous"
                                 data-id="canvas"
                                 @load="handleImgLoad"
                                 :style="{width:width+'px'}"
                                 ref="img">
                         </div>
-                        
                     </van-swipe-item>
                 </van-swipe>
             </div>
@@ -94,7 +93,7 @@ export default {
     methods: {
         initCanvas() {
             this.height = this.$refs.img[0].offsetHeight
-            this.$nextTick(() => {
+            this.$nextTick(async () => {
                 this.canvas = new fabric.Canvas('canvas',{
                     isDrawingMode:true,
                     skipTargetFind: true,
@@ -105,9 +104,8 @@ export default {
                 this.canvas.freeDrawingBrush.color = this.color
                 this.canvas.freeDrawingBrush.width = 2
                 this.canvas.width = this.width 
-                const imgInstance = this.addOriginImage(this.canvas)
+                const imgInstance = await this.addOriginImage(this.canvas)
                 imgInstance.set('selectable', false)
-                this.loading = false
                 this.$nextTick(() => {
                     this.textbox = null
                     if(this.action === 'text') {
@@ -146,22 +144,29 @@ export default {
             })
         },
         addOriginImage (canvas) {
-            const imgInstance = new fabric.Image(this.$refs.img[0], {
-                left: 0,
-                top: 0,
-                angle: 0
+            return new Promise((resolve) => {
+                 const image = new Image()
+                image.setAttribute('crossOrigin', 'anonymous')
+                image.onload =() => {
+                    const imgInstance = new fabric.Image(image, {
+                        left: 0,
+                        top: 0,
+                        angle: 0,
+                    })
+                    imgInstance.scaleToWidth(this.width)
+                    imgInstance.scaleToHeight(this.height)
+                    canvas.add(imgInstance)
+                    resolve(imgInstance)
+                }
+                image.src = this.$refs.img[0].src
             })
-            imgInstance.scaleToWidth(this.width)
-            imgInstance.scaleToHeight(this.height)
-            canvas.add(imgInstance)
-            return imgInstance
+           
+            
         },
         drawing() {
             let index = this.index
             switch (this.action) {
                 case 'prev':
-                    this.canvas.rotate(90)
-                    return
                     if(index === 0) {
                         index = this.images.length - 1
                     }else {
@@ -224,7 +229,13 @@ export default {
             this.$emit('save',{base64,index:this.index})
         },
         getBase64() {
-            return this.canvas && this.canvas.toDataURL()
+            if(this.canvas){
+                try{
+                    return this.canvas.toDataURL()
+                }catch(err) {
+                    console.log(err)
+                }
+            }
         },
         handleImgLoad() {
             this.$nextTick(() => {
@@ -235,7 +246,6 @@ export default {
             return { x: mouseX , y: mouseY };
         },
         onChange(index) {
-            this.loading = true
             if(this.canvas){
                 this.canvas.dispose()
             }
