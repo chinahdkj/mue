@@ -383,8 +383,7 @@ export default {
 			let map = this.$refs.Lmap.mapObject;
 			if (!!this.gislist) {
 				this.gislist.forEach(e => {
-					esri
-						.dynamicMapLayer({
+					let gx = new esri.dynamicMapLayer({
 							url: e.url,
 							format: e.format,
 							f: "image",
