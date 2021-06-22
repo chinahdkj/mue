@@ -106,6 +106,7 @@ import { localeMixin, t } from "../../../src/locale";
 import L from "leaflet"
 import leaflettilelayerwmtssrc from "../../../src/lib/leaflet-tilelayer-wmts-src";
 const esri = require("esri-leaflet");
+import "leaflet.chinatmsproviders";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({ ...MarkerIcon });
@@ -381,17 +382,17 @@ export default {
 		},
 		mapReady() {
 			let map = this.$refs.Lmap.mapObject;
-			if (!!this.gislist) {
-				this.gislist.forEach(e => {
-					let gx = new esri.dynamicMapLayer({
-							url: e.url,
-							format: e.format,
-							f: "image",
-							layers: e.layers
-						})
-						.addTo(map);
-				});
-			}
+			// if (!!this.gislist) {
+			// 	this.gislist.forEach(e => {
+			// 		let gx = new esri.dynamicMapLayer({
+			// 				url: e.url,
+			// 				format: e.format,
+			// 				f: "image",
+			// 				layers: e.layers
+			// 			})
+			// 			.addTo(map);
+			// 	});
+			// }
 		},
 		showPop() {
 			if (this.disabled) {
@@ -456,6 +457,45 @@ export default {
 								f: "image"
 							})
 							.addTo(map);
+						this.map = map;
+					} else {
+						this.map.setView(_this.pos);
+					}
+				});
+			}else if(this.gislist){
+				let _this = this;
+				this.showlhsw = true;
+				var normalm = L.tileLayer.chinaProvider("GaoDe.Normal.Map", {
+					maxZoom: 18,
+					minZoom: 8
+				});
+				var normal = L.layerGroup([normalm]);
+				this.$nextTick(() => {
+					let mapOption = {
+						center: _this.pos,
+						zoom: _this.zoom,
+						attributionControl: false,
+						zoomControl: true,
+						layers:[normal],
+						minZoom: 8,
+						maxZoom: 18
+					};
+					if (!this.map) {
+						let map = L.map("map", mapOption);
+						map.on("drag", function(e) {
+							_this.pos = map.getCenter();
+							_this.loading = false;
+						});
+						_this.gislist.forEach(e=>{
+							esri
+								.dynamicMapLayer({
+									url: e.url,
+									format: e.format,
+									f: "image",
+									layers: e.layers
+								})
+								.addTo(map);
+						})
 						this.map = map;
 					} else {
 						this.map.setView(_this.pos);
