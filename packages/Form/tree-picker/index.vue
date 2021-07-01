@@ -93,7 +93,7 @@
         methods: {
             getText(){
                 this.$nextTick(() => {
-                    if(this.value == null || !this.$refs.tree){
+                    if(this.value == null || this.value === "" || !this.$refs.tree){
                         this.text = "";
                         return;
                     }
