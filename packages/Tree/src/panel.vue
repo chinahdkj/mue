@@ -33,10 +33,15 @@
                 this.TREE.updateCheck(node, state);
             },
             showNode(node) {
-                let n = node.$leaves.some((s) => {
+                let n = node.$children.some((s) => {
                     return String(this.TREE.dict[s].name).includes(this.search);
                 })
-                return String(node.name).includes(this.search) || n
+
+                let p = node.$nameRoad.some((name) => { //路径中包含搜索内容
+                    return String(name).includes(this.search);
+                })
+
+                return String(node.name).includes(this.search) || n || p
             }
         }
     };

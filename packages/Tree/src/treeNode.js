@@ -1,3 +1,18 @@
+const getChildren = (data) => {
+    let childrenCodes = [];
+    let childrens = (data.children || []).length ? data.children : []
+    let fetch = (nodes) => {
+        nodes.forEach(f => {
+            if(f.code) childrenCodes.push(f.code);
+            if((f.children || []).length) {
+                fetch(f.children);
+            }
+        })
+    }
+    fetch(childrens);
+    return childrenCodes;
+}
+
 class TreeNode {
     constructor(data, road, nameRoad, index){
         this.data = {...data};
@@ -9,7 +24,8 @@ class TreeNode {
         this.$nameRoad = [...nameRoad, data.name]
         this.$index = index;
         this.$parent = this.$lv === 0 ? null : road[road.length - 1];
-        this.$leaves = [];
+        this.$children = getChildren(data); //当前节点下子节点集合
+        this.$leaves = []; //当前节点下叶子节点集合
     }
 
     AddLeaves(codes){
