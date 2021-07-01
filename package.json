@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.320",
+  "version": "1.0.321",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": true,
@@ -29,6 +29,7 @@
     "fabric": "4.4.0",
     "fastclick": "^1.0.6",
     "jquery": "^3.3.1",
+    "leaflet.chinatmsproviders": "^3.0.4",
     "moment": "^2.22.2",
     "resize-observer-polyfill": "^1.5.0",
     "socket.io-client": "^2.2.0",
