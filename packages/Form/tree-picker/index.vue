@@ -4,7 +4,9 @@
              :class="{'mue-form-input__is-disabled': disabled}">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" onfocus="this.blur()"/>
-            <i class="input__suffix input__suffix_icon iconfont icon-zhanlei"></i>
+            <slot name="icon">
+                <i class="input__suffix input__suffix_icon iconfont icon-zhanlei"></i>
+            </slot>
         </div>
         <van-popup class="mue-tree-picker-pop" v-model="isVisible" position="right"
                    :lazy-render="false" get-container="body" :close-on-click-overlay="false"
