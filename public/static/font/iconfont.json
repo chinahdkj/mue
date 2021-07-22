@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "23005207",
+      "name": "联系",
+      "font_class": "bianzu",
+      "unicode": "ea1c",
+      "unicode_decimal": 59932
+    },
+    {
+      "icon_id": "1507553",
+      "name": "a 竣工",
+      "font_class": "ajungong",
+      "unicode": "e6ff",
+      "unicode_decimal": 59135
+    },
+    {
+      "icon_id": "1714586",
+      "name": "消防栓",
+      "font_class": "xiaofangshuan1",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
       "icon_id": "21751210",
       "name": "更多",
       "font_class": "gengduo12",
