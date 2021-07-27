@@ -8,7 +8,7 @@
             </template>
 
             <template v-else>
-                <video v-if="version === 'hik-ys'" loop muted preload webkit-playsinline="true"
+                <video v-if="version === 'hik-ys' || version === 'hls'" loop muted preload webkit-playsinline="true"
                        playsinline="true" autoplay :src="src"></video>
 
                 <template v-else>
@@ -86,6 +86,9 @@
                 if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()) {
                     return "hik-ys";
                 }
+                if (this.rtsp && this.rtsp.endsWith(".m3u8")) {
+                    return "hls";
+                }
                 return {ffmpeg: "img", flv: "flv"}[String(this.type).toLowerCase()] || "h264";
             },
             src() {
@@ -93,7 +96,7 @@
                 if (!this.rtsp) {
                     return "";
                 }
-                if(this.defaulturl) {
+                if(this.defaulturl || this.version === "hls") {
                     return rtsp
                 }
                 if (this.version === "hik-ys") {
