@@ -6,9 +6,16 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21776987",
+      "name": "聚合",
+      "font_class": "juhe",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
       "icon_id": "23005207",
       "name": "联系",
-      "font_class": "bianzu",
+      "font_class": "lianxi",
       "unicode": "ea1c",
       "unicode_decimal": 59932
     },
