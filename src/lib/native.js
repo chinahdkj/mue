@@ -17,7 +17,8 @@ const fns = [
     "video", "showVideo", "sound", "screenshot", "bgNaviClose", "regeocode", "watermarkCamera",
     "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
-    "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth"
+    "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth",
+    "tlv_params", "tlv_dataquery", "tlv_tc"
 ];
 
 // 原生主动调用js的方法
