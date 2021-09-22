@@ -17,7 +17,8 @@ const fns = [
     "video", "showVideo", "sound", "screenshot", "bgNaviClose", "regeocode", "watermarkCamera",
     "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
-    "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth"
+    "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth",
+    "tlv_params", "tlv_dataQuery", "tlv_tc", "tlv_noiseAudio"
 ];
 
 // 原生主动调用js的方法
@@ -25,7 +26,8 @@ const fns2 = [
     "search", "collect", "btDisConnected", "btReceiver", "btGetParams", "manualPostRes", "handPostResp",
     "btSound", "btScan", "handCollectResp", "bluetooth", "onBtState", "interceptBack", "bgNavi", "getLocation", "btUpdate",
     "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog",
-    "get_blan", "rpc_blan", "onfmkz_sscx", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "nfcData"
+    "get_blan", "rpc_blan", "onfmkz_sscx", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "nfcData",
+    "tlv_onDataReport"
 ];
 
 const postMessage = ({cb, method, params}) => {
