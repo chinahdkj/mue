@@ -56,7 +56,7 @@
 
 <script>
     import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-    import {isAndroid} from "../../../src/lib/common";
+    import {isAndroid, isCCWork} from "../../../src/lib/common";
     import androidUpload from "./androidUpload";
 
     import {localeMixin, t} from "../../../src/locale";
@@ -198,7 +198,7 @@
                         });
                     });
 
-                    if (this.base64 || this.accept === "video" || this.accept === 'all') {
+                    if ((this.base64 || this.accept === "video" || this.accept === 'all') && !isCCWork()) {
                         let prms = v.filter((p) => {
                             return this.base64 || this.fileType(p) === "video";
                         }).map((p) => {

@@ -393,13 +393,12 @@ const ccworkApi = {
                 });
                 return
             }
-
-            //上传并获取视频地址
-            let uploadVideo = (url) => {
+            
+            const uploadVideo = (url) => {
                 return new Promise((resolve, reject) => {
                     ccworkBridge.ccworkFileUpload({
-                        // api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
-                        api: uploadApi,
+                        api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
+                        // api: uploadApi,
                         headers: getHeaders(),
                         value: [url],
                         params: {id: params.id}
@@ -413,14 +412,24 @@ const ccworkApi = {
                     })
                 });
             }
-
+    
+            //上传并获取视频地址
             let videoUrl = await uploadVideo(result.value);
-            //获取第一帧缩略图
+            // console.log("videoUrl", videoUrl);
+            window.response({
+                msgid, method, params: {
+                    code: 0,
+                    ccUrl: videoUrl
+                }
+            });
+            
+            
+            /*//获取第一帧缩略图
             // let thumb = await videoToBase64(getHost() + videoUrl);
             let thumb = await videoToBase64('http://192.168.100.179:8089' + videoUrl);
             console.log("缩略图", thumb);
             //上传并获取缩略图地址
-            /*let uploadThumb = new Promise((resolve, reject) => {
+            let uploadThumb = new Promise((resolve, reject) => {
                 ccworkBridge.ccworkFileUpload({
                     // api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
                     api: uploadApi,
@@ -451,8 +460,10 @@ const ccworkApi = {
     },
     //视频播放
     showVideo: ({msgid, method, params}) => {
+        let path = getHost() + params.path;
+        // let path = 'http://192.168.100.179:8089' + params.path;
         ccworkBridge.ccworkPlayShortVideo({
-            path: params.path
+            path
         }, ({status, errormessage, result}) => {
             if(status != 1) {
                 window.response({
