@@ -223,7 +223,7 @@ const ccworkApi = {
     },
     //文件/图片批量选择
     multi_file: ({msgid, method, params}) => {
-        ccworkBridge.ccworkGetPicsFromAlbum({
+        ccworkBridge.ccworkGetPicsFromAlbumV2({
             maxNum: params.maxNum,
             mType: params.mType,
             piciterable: (res) => {
