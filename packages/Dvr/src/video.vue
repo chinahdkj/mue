@@ -96,7 +96,7 @@
                 if (!this.rtsp) {
                     return "";
                 }
-                if(this.defaulturl || this.version === "hls") {
+                if(this.defaulturl || this.version === "hls" || rtsp.startsWith("http://")) {
                     return rtsp
                 }
                 if (this.version === "hik-ys") {
