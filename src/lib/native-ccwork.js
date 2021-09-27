@@ -397,8 +397,8 @@ const ccworkApi = {
             const uploadVideo = (url) => {
                 return new Promise((resolve, reject) => {
                     ccworkBridge.ccworkFileUpload({
-                        api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
-                        // api: uploadApi,
+                        // api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
+                        api: uploadApi,
                         headers: getHeaders(),
                         value: [url],
                         params: {id: params.id}
@@ -460,8 +460,8 @@ const ccworkApi = {
     },
     //视频播放
     showVideo: ({msgid, method, params}) => {
-        let path = getHost() + params.path;
         // let path = 'http://192.168.100.179:8089' + params.path;
+        let path = params.path;
         ccworkBridge.ccworkPlayShortVideo({
             path
         }, ({status, errormessage, result}) => {

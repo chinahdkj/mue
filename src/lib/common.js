@@ -220,16 +220,22 @@ export const getHost = () => {
     else{
         host = sessionStorage.getItem("host") || "";
     }
+    
+    //本地测试
+    // return host;
 
+    //匹配安卓host
     if(location.origin.toLowerCase() === "file://"){
         return host;
     }
+    
+    //匹配ios host
     let code = location.port.substring(1);
     let regex = new RegExp(`^${location.origin}/packages/${code}/`, "i");
-    // return host;
     if(regex.test(location.href)){
         return host;
     }
+    
     return "";
 };
 
