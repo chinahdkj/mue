@@ -547,7 +547,7 @@ export default {
 					center: _this.pos,
 					zoom: 10,
 					attributionControl: false,
-					zoomControl: false,
+					zoomControl: true,
 					minZoom: 6,
 					maxZoom: 19,
 					tap:false,
