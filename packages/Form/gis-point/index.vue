@@ -38,10 +38,17 @@
 					<label>{{ t('mue.form.gis.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
 				</div>
 				<div class="mue-gis-point-pop--map">
-					<div v-if="showlhsw"
-						id="map"
-						style="height:100%">
+					<div class="lh-map-wrap" v-if="showlhsw">
+						<div id="map"
+							style="height:100%">
+						</div>
+						<div class="lh-boxshow"></div>
+						<div class="lh-gxtype-change">
+							<div class="gxtype-item" :class="{active:gxType=='排水'}" @click.stop="handleGxType('排水')">排水</div>
+							<div class="gxtype-item" :class="{active:gxType=='供水'}" @click.stop="handleGxType('供水')">供水</div>
+						</div>
 					</div>
+					
 					<l-map ref="Lmap"
 						v-if="pos&&!showlhsw"
 						:zoom="zoom"
@@ -64,6 +71,7 @@
 								<span class="title">{{ t('mue.form.gis.positionText')}}</span>
 							</div>
 						</l-control>
+						
 						<l-control-zoom position="topright"
 							:zoomInText="zoomInIcon"
 							:zoomOutText="zoomOutIcon"></l-control-zoom>
@@ -343,6 +351,7 @@ export default {
 			default:
 				"http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
 		},
+		
 		gislist: { type: Array, default: null },
 		lhsw:{ type: Boolean, default: false}
 	},
@@ -360,7 +369,8 @@ export default {
 				"mue.form.gis.zoomOutText"
 			)}</span>`,
 			map: null,
-			showlhsw: false
+			showlhsw: false,
+			gxType:'排水',
 		};
 	},
 	computed: {
@@ -482,67 +492,8 @@ export default {
 			this.pop = true;
 
 			if (this.lhsw) {
-				let _this = this;
 				this.showlhsw = true;
-				this.$nextTick(() => {
-					let mapOption = {
-						center: _this.pos,
-						zoom: 10,
-						attributionControl: false,
-						zoomControl: true,
-						minZoom: 6,
-						maxZoom: 19,
-						crs: L.CRS.EPSG4326
-					};
-					if (!this.map) {
-						let map = L.map("map", mapOption);
-						map.on("drag", function(e) {
-							_this.pos = map.getCenter();
-							_this.loading = false;
-						});
-						let matrixIds = new Array(22);
-						for (var i = 0; i < 22; i++) {
-							matrixIds[i] = {
-								identifier: "" + i,
-								topLeftCorner: new L.LatLng(90, -180)
-							};
-						}
-						let layer1 = L.tileLayer.wmts(
-							"http://ditu.zjzwfw.gov.cn/services/wmts/emap/default/oss?token=2c92920471b56e640171be7444540073",
-							{
-								layer: "emap",
-								style: "default",
-								tilematrixSet: "esritilematirx",
-								format: "image/png",
-								maxZoom: 20,
-								ident: 1,
-								matrixIds
-							}
-						);
-						let layer2 = L.tileLayer.wmts(
-							"http://ditu.zjzwfw.gov.cn/services/wmts/emap_lab/default/oss?token=2c92920471b56e640171be7444540073",
-							{
-								layer: "emap",
-								style: "default",
-								tilematrixSet: "esritilematirx",
-								format: "image/png",
-								maxZoom: 20,
-								ident: 1,
-								matrixIds
-							}
-						);
-						let layer = L.layerGroup([layer1, layer2]).addTo(map);
-						esri
-							.dynamicMapLayer({
-								url: "http://111.1.5.8:6080/arcgis/rest/services/LH_PS_GWT1/MapServer",
-								f: "image"
-							})
-							.addTo(map);
-						this.map = map;
-					} else {
-						this.map.setView(_this.pos);
-					}
-				});
+				this.handleGxType(this.gxType)
 			}else if(this.gislist){
 				let _this = this;
 				this.showlhsw = true;
@@ -583,6 +534,82 @@ export default {
 					}
 				});
 			}
+		},
+		handleGxType(value){
+			let _this = this;
+			_this.gxType = value
+			if(this.map){
+				this.map.off();
+				this.map.remove();
+			}
+			setTimeout(() => {
+				let mapOption = {
+					center: _this.pos,
+					zoom: 10,
+					attributionControl: false,
+					zoomControl: false,
+					minZoom: 6,
+					maxZoom: 19,
+					tap:false,
+					crs: L.CRS.EPSG4326
+				};
+				let map = L.map("map", mapOption);
+				map.on("drag", function(e) {
+					_this.pos = map.getCenter();
+					_this.loading = false;
+				});
+				let matrixIds = new Array(22);
+				for (var i = 0; i < 22; i++) {
+					matrixIds[i] = {
+						identifier: "" + i,
+						topLeftCorner: new L.LatLng(90, -180)
+					};
+				}
+				let layer1 = L.tileLayer.wmts(
+					"http://ditu.zjzwfw.gov.cn/services/wmts/emap/default/oss?token=2c92920471b56e640171be7444540073",
+					{
+						layer: "emap",
+						style: "default",
+						tilematrixSet: "esritilematirx",
+						format: "image/png",
+						maxZoom: 20,
+						ident: 1,
+						matrixIds
+					}
+				);
+				let layer2 = L.tileLayer.wmts(
+					"http://ditu.zjzwfw.gov.cn/services/wmts/emap_lab/default/oss?token=2c92920471b56e640171be7444540073",
+					{
+						layer: "emap",
+						style: "default",
+						tilematrixSet: "esritilematirx",
+						format: "image/png",
+						maxZoom: 20,
+						ident: 1,
+						matrixIds
+					}
+				);
+				let layer = L.layerGroup([layer1, layer2]).addTo(map);
+				if(value==='排水') {
+					esri
+					.dynamicMapLayer({
+						url: "http://111.1.5.8:6080/arcgis/rest/services/LH_PS_GWT1/MapServer",
+						// url: "http://111.1.5.8:6080/arcgis/rest/services/LM_LH_WATER01/MapServer",
+						f: "image"
+					})
+					.addTo(map);
+				}else{
+					esri
+					.dynamicMapLayer({
+						//url: "http://111.1.5.8:6080/arcgis/rest/services/LH_PS_GWT1/MapServer",
+						url: "http://111.1.5.8:6080/arcgis/rest/services/LM_LH_WATER01/MapServer",
+						f: "image"
+					})
+					.addTo(map);
+				}
+				this.map = map;
+			},500);
+			
 		},
 		onConfirm() {
 			if (this.distance && this.exceedArea) {
