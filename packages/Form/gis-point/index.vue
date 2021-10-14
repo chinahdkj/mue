@@ -370,7 +370,7 @@ export default {
 			)}</span>`,
 			map: null,
 			showlhsw: false,
-			gxType:'排水',
+			gxType:'供水',
 		};
 	},
 	computed: {
