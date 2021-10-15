@@ -19,7 +19,7 @@
         </ul>
         <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
-                         :actions="[{name: t('mue.common.delete'), act: 'delete'}]"/>
+                         :actions="actions"/>
     </div>
 </template>
 
@@ -43,15 +43,26 @@
             disabled: {type: Boolean, default: false},
             readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            limit: {type: Number, default: 0}
+            limit: {type: Number, default: 0},
+            isDownload: {type: Boolean, default: false}, //预览下载
         },
         data(){
             return {
                 files: [], thumbs: [], uploading: false, dict: {},
-                pop: {visible: false, current: -1}
+                pop: {visible: false, current: -1},
             };
         },
         computed: {
+            actions() {
+                return this.isDownload ?
+                    [
+                        {name: t('mue.common.download'), act: 'download'},
+                        {name: t('mue.common.delete'), act: 'delete'}
+                    ] :
+                    [
+                        {name: t('mue.common.delete'), act: 'delete'}
+                    ]
+            },
             uploadAble() {
                 if(!this.multiple){
                     return this.files.length < 1;
@@ -124,20 +135,26 @@
             showAction(i) {
                 this.pop.current = i;
                 if (this.isReadonly) {
-                    let path = this.getPath(this.files[i]);
-                    path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
-                    window.open(path); //下载
+                    this.downloadFile(i);
                     return;
                 }
                 this.pop.visible = true;
             },
             onSelect({act}) {
                 if (act === "delete") {
-                    this.removeImg();
+                    this.removeFile();
+                }
+                if (act === "download") {
+                    this.downloadFile(this.pop.current);
                 }
                 this.pop.visible = false;
             },
-            removeImg() {
+            downloadFile(i) {
+                let path = this.getPath(this.files[i]);
+                path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
+                window.open(path); //下载
+            },
+            removeFile() {
                 if (this.disabled) {
                     return;
                 }
