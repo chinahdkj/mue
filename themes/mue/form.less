@@ -616,7 +616,44 @@
             flex-grow: 1;
             flex-shrink: 1;
             position: relative;
-
+            .lh-map-wrap{
+                height: 100%;
+                position: relative;
+                .lh-boxshow{
+                    position: absolute;
+                    left:0;
+                    right:0;
+                    top:0;
+                    bottom: 0;
+                    z-index:998;
+                }
+                .lh-gxtype-change{
+                    position: absolute;
+                    z-index: 999;
+                    border: 1px solid #e0e0e0;
+                    box-shadow: 0 0 6px rgba(0,0, 0, 0.75);
+                    background:#fff;
+                    width: 40px;
+                    box-sizing: border-box;
+                    left:10px;
+                    top:100px;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    .gxtype-item{
+                        cursor: pointer;
+                        font-size: 12px;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        &.active{
+                            color:#4796e3;
+                        }
+                        &:nth-child(1){
+                            border-bottom: 1px solid #e0e0e0;
+                        }
+                    }
+                }
+            }
             > .vue2leaflet-map {
                 position: absolute;
                 height: 100%;
