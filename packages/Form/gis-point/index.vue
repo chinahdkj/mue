@@ -109,6 +109,7 @@ import {
 	LTileLayer
 } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
+import { coordtransform } from './coordtransform'
 import { MarkerIcon } from "../../../src/utils/gis";
 import { localeMixin, t } from "../../../src/locale";
 import L from "leaflet"
@@ -543,8 +544,9 @@ export default {
 				this.map.remove();
 			}
 			setTimeout(() => {
+				let gbjpos = coordtransform.gcj02towgs84(Number(_this.pos.lng),Number(_this.pos.lat))
 				let mapOption = {
-					center: _this.pos,
+					center: {lat:String(gbjpos[1]),lng:String(gbjpos[0])},
 					zoom: 10,
 					attributionControl: false,
 					zoomControl: true,
