@@ -224,6 +224,11 @@ export const getHost = () => {
     //本地测试
     // return host;
 
+    //匹配云上协同(仅在线模式)
+    if(isCCWork()) {
+        return host || location.origin
+    }
+    
     //匹配安卓host
     if(location.origin.toLowerCase() === "file://"){
         return host;

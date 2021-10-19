@@ -463,12 +463,12 @@ const ccworkApi = {
     showVideo: ({msgid, method, params}) => {
         // let path = 'http://192.168.100.179:8089' + params.path;
         let path = params.path;
-        alert('3-----' + path);
+        // alert('3-----' + path);
         ccworkBridge.ccworkPlayShortVideo({
             path
         }, ({status, errormessage, result}) => {
             if(status != 1) {
-                alert('4-----');
+                // alert('4-----');
                 window.response({
                     msgid, method, params: {
                         code: 1,
@@ -477,7 +477,7 @@ const ccworkApi = {
                 });
                 return
             }
-            alert('5-----');
+            // alert('5-----');
             window.response({
                 msgid, method, params: {}
             });
