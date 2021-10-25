@@ -393,7 +393,6 @@ const ccworkApi = {
                 });
                 return
             }
-            alert('1-----' + uploadApi);
             const uploadVideo = (url) => {
                 return new Promise((resolve, reject) => {
                     ccworkBridge.ccworkFileUpload({
@@ -405,7 +404,6 @@ const ccworkApi = {
                     }, (data) => {
                         let res = data.result.url ? JSON.parse(data.result.url) : data.result;
                         if(res.Code === 0) {
-                            alert('2-----' + res.Response.url);
                             resolve(res.Response.url);
                         } else {
                             reject(res.Message)
@@ -463,12 +461,10 @@ const ccworkApi = {
     showVideo: ({msgid, method, params}) => {
         // let path = 'http://192.168.100.179:8089' + params.path;
         let path = params.path;
-        // alert('3-----' + path);
         ccworkBridge.ccworkPlayShortVideo({
             path
         }, ({status, errormessage, result}) => {
             if(status != 1) {
-                // alert('4-----');
                 window.response({
                     msgid, method, params: {
                         code: 1,
@@ -477,7 +473,6 @@ const ccworkApi = {
                 });
                 return
             }
-            // alert('5-----');
             window.response({
                 msgid, method, params: {}
             });
