@@ -106,7 +106,13 @@
             disLoadMore: {type: Boolean, default: false},
 
             pageNo: {type: Number, default: 0},
-            pageTotal: {type: Number, default: 0}
+            pageTotal: {type: Number, default: 0},
+
+            //是否启用滚动条
+            scrollbar: {
+                type: [Object, Boolean],
+                default: false
+            }
         },
         data(){
             return {
@@ -135,7 +141,7 @@
                 let self = this;
                 self.resetStates();
                 self.scroller = new BETTER_SCROLL(this.$refs.box, {
-                    click: true, probeType: 1, scrollbar: false, momentum: false,
+                    click: true, probeType: 1, scrollbar: this.scrollbar, momentum: false,
                     scrollY: true, scrollX: false, bindToWrapper: false, startY: this.posY,
                     bounce: {
                         left: false, right: false,
