@@ -109,10 +109,7 @@
             pageTotal: {type: Number, default: 0},
 
             //是否启用滚动条
-            scrollbar: {
-                type: [Object, Boolean],
-                default: false
-            }
+            scrollbar: {type: [Object, Boolean], default: false}
         },
         data(){
             return {

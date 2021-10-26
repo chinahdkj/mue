@@ -68,7 +68,7 @@
                            @scroll-change="onScrollY" :dis-refresh="!$listeners['refresh']"
                            :dis-load-more="!$listeners['load-more'] || total === 0"
                            :all-loaded="data.length >= total" :all-loaded-text="allLoadedText"
-                           :page-no="pageNo" :page-total="pageTotal">
+                           :page-no="pageNo" :page-total="pageTotal" :scrollbar="scrollbar">
 
                 <mue-empty v-if="total === 0"></mue-empty>
 
@@ -181,7 +181,10 @@
             pageSize: {type: Number, default: 0},
             rowNo: {type: [String, Function], default: ""},
 
-            virtual: {type: Boolean, default: true} // 虚拟渲染，可视区域之外不渲染
+            virtual: {type: Boolean, default: true}, // 虚拟渲染，可视区域之外不渲染
+
+            //是否启用滚动条
+            scrollbar: {type: [Object, Boolean], default: false}
         },
         data(){
             return {
