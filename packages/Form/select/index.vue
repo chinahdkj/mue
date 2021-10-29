@@ -1,6 +1,6 @@
 <template>
     <div class="mue-select">
-        <div class="mue-form-input has-suffix" :class="{'mue-form-input__is-disabled': disabled}"
+        <div class="mue-form-input has-suffix" :class="{'mue-form-input__is-disabled': disabled, 'has-unit': !!unit}"
              @click.stop="ShowPop">
             <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
                    :placeholder="placeholder" unselectable="on" onfocus="this.blur()"/>
