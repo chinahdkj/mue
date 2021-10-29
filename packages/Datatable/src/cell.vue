@@ -1,4 +1,5 @@
 <script>
+    import Vue from "vue";
     export default {
         components: {},
         props: {
@@ -31,7 +32,24 @@
                 inner = [$scoped({row: this.row, col: this.col, value: this.value, no: this.no})];
             }
             else{
-                td.domProps = {innerHTML: this.value == null ? "" : this.value};
+                let v = this.value == null ? "" : this.value;
+                let dtype = this.col.options.dtype;
+                let format = this.col.options.format;
+                if (dtype === 'number' && format) {
+                    v = Vue.filter("NUMBER")(v, format);
+                } else if (dtype === 'date' && format) {
+                    v = Vue.filter("DATE")(v, format);
+                } else if(dtype === "code" && format){
+                    let r = null;
+                    if((this.TABLE.bindings || {})[format]){
+                        r = this.TABLE.bindings[format].find((c) => {
+                            return c.Value === v;
+                        });
+                    }
+                    v = r ? r.Name : "";
+                }
+
+                td.domProps = {innerHTML: v};
             }
             return h("td", td, inner);
         },

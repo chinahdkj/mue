@@ -184,7 +184,9 @@
             virtual: {type: Boolean, default: true}, // 虚拟渲染，可视区域之外不渲染
 
             //是否启用滚动条
-            scrollbar: {type: [Object, Boolean], default: false}
+            scrollbar: {type: [Object, Boolean], default: false},
+
+            bindings: {type: Object, default: null}
         },
         data(){
             return {

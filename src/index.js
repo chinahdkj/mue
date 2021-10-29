@@ -31,6 +31,7 @@ import http from "./lib/http";
 import native from "./lib/native";
 import comm from "./lib/common";
 import "./utils/fast-click";
+import "./utils/date";
 import {objectGet} from "./utils/object";
 // svg 图标
 import "../themes/fonts/iconfont";
@@ -81,6 +82,13 @@ const install = function(Vue, opts){
     Vue.filter("OBJECT_GET", (object, expression) => {
         return objectGet(object, expression);
     });
+    //数字格式化
+    Vue.filter("NUMBER", comm.NumberFormat);
+    //时间格式化
+    Vue.filter("DATE", comm.DateFormat);
+    Vue.filter("ShortTime", comm.ShortTime);
+    Vue.filter("TimeSpan", comm.TimeSpan);
+    Vue.filter("PercentFormat", comm.PercentFormat);
 };
 
 if(typeof window !== "undefined" && window.Vue){

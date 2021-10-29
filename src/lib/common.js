@@ -221,7 +221,7 @@ export const getHost = () => {
         host = sessionStorage.getItem("host") || "";
     }
     
-    //本地测试
+    //web端本地测试用
     // return host;
 
     //匹配云上协同(仅在线模式)
@@ -275,10 +275,61 @@ export const getUploadPath = (path) => {
 
 export const clickElement = ElementClick;
 
+export function DateFormat(value, format) {
+    if (!value) {
+        return "";
+    }
+    format = format||"yyyy-MM-dd";
+    if(value instanceof Date){
+        return value.FormatString(format);
+    }
+    if (typeof value === "number") {
+        return new Date(value * 1000).FormatString(format);
+    }
+    return value;
+}
+
+export function NumberFormat(value, format) {
+    if (!$.isNumeric(value)) {
+        return value || "";
+    }
+    var dp = typeof format == "number" ? format : 0;
+    return Number(value).toFixed(dp);
+}
+
+export function PercentFormat(value, f) {
+    if (!$.isNumeric(f)) {
+        f = 2;
+    }
+    f = f || 2;
+    var v = NumberFormat(value * 100, f);
+    if (v == "") return ""
+    return v + "%";
+}
+
+export function ShortTime(value) {
+    if (value && typeof value == "number") return new Date(value * 1000).ShortTime();
+    else if (value == 0) return "";
+    else return value;
+}
+
+export function TimeSpan(value) {
+    if (value && typeof value == "number") {
+        if (value < 100) return value + "秒";
+        if (value < 6000) return NumberFormat(value / 60, 0) + "分钟";
+        if (value < 360000) return NumberFormat(value / 3600, 1) + "小时";
+        if (value < 8640000) return NumberFormat(value / 86400, 1) + "天";
+        else return NumberFormat(value / 86400, 0) + "天";
+    }
+    else if (value == 0) return "";
+    else return value;
+}
+
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
-    getUploadPath, isDingDing, closePage, isCCWork,
+    getUploadPath, isDingDing, closePage, isCCWork, DateFormat, NumberFormat, PercentFormat,
+    ShortTime, TimeSpan,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
     }
