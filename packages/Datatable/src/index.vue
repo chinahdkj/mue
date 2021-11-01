@@ -166,7 +166,7 @@
             },
             total: {type: Number, default: 0}, // 总行数
             minColWidth: {type: Number, default: 80},
-            rowKey: {type: String, default: ""},
+            rowKey: {type: String, default: "_id"},
             rowClass: {type: [String, Function], default: ""},
             rowHeight: {type: Number, default: 40}, // 行高
             stripe: {type: Boolean, default: false}, // 斑马线
@@ -177,16 +177,13 @@
                 }
             },
             sort: {type: Object, default: null}, // 排序
-
             pageSize: {type: Number, default: 0},
             rowNo: {type: [String, Function], default: ""},
-
             virtual: {type: Boolean, default: true}, // 虚拟渲染，可视区域之外不渲染
-
-            //是否启用滚动条
-            scrollbar: {type: [Object, Boolean], default: false},
-
-            bindings: {type: Object, default: null}
+            scrollbar: {type: [Object, Boolean], default: false}, //是否启用滚动条
+            bindings: {type: Object, default: null}, //数据字典
+            colSlots: {type: Object, default: null}, //用于继承插槽
+            highlightCurrentRow: {type: Boolean, default: false}, //是否高亮当前行
         },
         data(){
             return {
@@ -206,7 +203,8 @@
                     start: 0,
                     end: 0,
                     marginTop: "0px"
-                }
+                },
+                currentKey: null
             };
         },
         computed: {
@@ -303,6 +301,7 @@
             rowCls(row, i){
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
+                    this.highlightCurrentRow && this.rowKey && this.currentKey && row[this.rowKey] === this.currentKey ? "active" : "",
                     typeof this.rowClass === "function"
                         ? this.rowClass(row, i) : (this.rowClass || "")
                 ];
@@ -545,6 +544,10 @@
                 self.$emit("load-more", callback);
             },
             onRowClick(row, i){
+                if(this.rowKey && row[this.rowKey]) {
+                    this.currentKey = row[this.rowKey];
+                }
+
                 this.$emit("row-click", row, i);
             },
 
