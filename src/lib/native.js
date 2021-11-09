@@ -18,7 +18,7 @@ const fns = [
     "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
     "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth",
-    "tlv_params", "tlv_dataQuery", "tlv_tc", "tlv_noiseAudio", "r800c_printer"
+    "tlv_params", "tlv_dataQuery", "tlv_tc", "tlv_noiseAudio", "r800c_printer", "qx_rtk"
 ];
 
 // 原生主动调用js的方法
@@ -27,7 +27,7 @@ const fns2 = [
     "btSound", "btScan", "handCollectResp", "bluetooth", "onBtState", "interceptBack", "bgNavi", "getLocation", "btUpdate",
     "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog",
     "get_blan", "rpc_blan", "onfmkz_sscx", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "nfcData",
-    "tlv_onDataReport"
+    "tlv_onDataReport", "qx_rtk"
 ];
 
 const postMessage = ({cb, method, params}) => {
