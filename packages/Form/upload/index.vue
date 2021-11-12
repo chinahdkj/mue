@@ -9,12 +9,17 @@
             </li>
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
-                <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
-                              :accept="accept" result-type="dataUrl" :multiple="multiple">
-                              <!-- :multiple="multiple" -->
-                    <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
-                       aria-hidden="true"></i>
-                </van-uploader>
+                <template v-else>
+                    <ccwork-upload v-if="isCCWork" ref="ccworkUpload" :disabled="disabled" :multiple="multiple"
+                                    :limit="limit" :before-read="beforeRead" :after-read="onCcworkUpload">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </ccwork-upload>
+                    <van-uploader v-else :disabled="disabled" :after-read="upload" :before-read="beforeRead"
+                                  :accept="accept" result-type="dataUrl" :multiple="multiple">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </van-uploader>
+                </template>
             </li>
         </ul>
         <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
@@ -25,10 +30,15 @@
 
 <script>
     import {localeMixin, t} from "../../../src/locale";
+    import {isCCWork, getHost} from '../../../src/lib/common';
+    import {getHeaders} from "../../../src/lib/http";
+    import CcworkUpload from "./ccworkUpload";
+    import ccworkBridge from 'ccwork-jsbridge';
+
     export default {
         mixins: [localeMixin],
         name: "MueUpload",
-        components: {},
+        components: {CcworkUpload},
         inject: {
             FORM_ITEM: {
                 from: "FORM_ITEM",
@@ -71,6 +81,9 @@
             },
             isReadonly(){
                 return this.FORM_ITEM.readonly || this.readonly;
+            },
+            isCCWork() {
+                return isCCWork();
             }
         },
         watch: {
@@ -104,7 +117,6 @@
                         return;
                     }
                     this.$http.post('/app/redirect/upload/infos',{ids}).then((res)=>{
-                        console.log(res);
                         v.forEach((p) => {
                             this.$set(this.dict, p, {
                                 url: p,
@@ -222,6 +234,43 @@
                     this.uploading = false;
                 }).catch(()=>{
                     this.uploading = false;
+                });
+            },
+            //云上协同文件上传
+            async onCcworkUpload(urls){
+                this.uploading = true;
+                let rs = []
+                for(let i=0; i<urls.length; i++) {
+                    let url = await this.onFileUpload(urls[i]);
+                    rs.push(url);
+                }
+                if(this.multiple){
+                    rs.forEach((url) => {
+                        this.files.push(url);
+                    });
+                }
+                else{
+                    this.files = rs.length > 0 ? [rs[0].url] : [];
+                }
+                this.uploading = false;
+            },
+            onFileUpload(url) {
+                return new Promise((resolve, reject) => {
+                    ccworkBridge.ccworkFileUpload({
+                        // api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
+                        api: `${getHost()}/app/v1.0/upload.json`,
+                        headers: getHeaders(),
+                        value: [url],
+                        params: {}
+                    }, (data) => {
+                        let res = data.result.url ? JSON.parse(data.result.url) : data.result;
+                        if(res.Code === 0) {
+                            resolve(res.Response.url);
+                        } else {
+                            this.uploading = false;
+                            reject(res.Message)
+                        }
+                    })
                 });
             }
         }

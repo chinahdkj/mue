@@ -86,7 +86,7 @@ export function InitHttp(opt = {}){
     });
 }
 
-let getHeaders = (appid = null) => {
+export const getHeaders = (appid = null) => {
     let _token = GetQueryString("token");
     if(_token){
         sessionStorage.setItem("authortoken", _token);
