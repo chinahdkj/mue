@@ -2,6 +2,7 @@
 import uuid from "../utils/uuid";
 import {ElementClick} from "../utils/fast-click";
 import {env, biz} from "dingtalk-jsapi";
+import ccworkBridge from 'ccwork-jsbridge';
 
 /**
  * 获取url参数
@@ -60,6 +61,10 @@ export const isCCWork = () => {
  * 关闭页面
  */
 export const closePage = ()=>{
+    if(isCCWork()) {
+        ccworkBridge.closeWebView()
+        return
+    }
     window.location.href = "/appback";
     if (isDingDing()) {
         biz.navigation.quit({});
