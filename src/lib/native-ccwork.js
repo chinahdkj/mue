@@ -667,18 +667,18 @@ const ccworkApi = {
             }
             window.response({
                 msgid, method, params: {
-                    "account": "张超",
-                    "brand": "HUAWEI",
-                    "h5_version": "/upload/h5version/139/1.0.139/5bf387ffde88e92549d59ecd.zip",
-                    "ip": "http://app.dlmeasure.com",
-                    "model": "HUAWEI VNS-AL00",
-                    "os": "6.0",
-                    "push_reg_id": "0863293038255797300002353500CN01",
-                    "resolution": "1080*1812",
-                    "sn": "0023",
-                    "sys_name": "SCADA7基板185:7202",
-                    "version": "1.0.1811210947",
-                    "support_apple_sign_in": false // 是否支持苹果登录
+                    // "account": "zhangsan",
+                    // "brand": "HUAWEI",
+                    // "h5_version": "/upload/h5version/139/1.0.139/5bf387ffde88e92549d59ecd.zip",
+                    // "ip": "http://app.dlmeasure.com",
+                    // "model": "HUAWEI VNS-AL00",
+                    // "os": "6.0",
+                    // "push_reg_id": "0863293038255797300002353500CN01",
+                    // "resolution": "1080*1812",
+                    // "sn": "0023",
+                    // "sys_name": "SCADA7基板185:7202",
+                    // "version": "1.0.1811210947",
+                    // "support_apple_sign_in": false // 是否支持苹果登录
                 }
             });
         })
