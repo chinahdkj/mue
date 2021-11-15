@@ -85,7 +85,6 @@
 							color="#4796e3" />
 					</l-map>
 					<div class="mue-gis-point-pop--marker"
-						v-if="!isReadonly"
 						:style="markerOpt.style">
 						<img class="--shadow"
 							v-bind="shandowOpt" />
@@ -675,6 +674,7 @@ export default {
 	},
 	created() {},
 	mounted() {
+		
 		if (this.currentLocation && !this.value) {
 			this.rePos();
 		}
