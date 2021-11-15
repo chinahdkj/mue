@@ -125,6 +125,25 @@
                         });
                         this.createThumbs();
                     });
+                    // if(isCCWork()) {
+                    //     ids.forEach((p) => {
+                    //         this.$set(this.dict, p, {
+                    //             url: p,
+                    //             name: p
+                    //         });
+                    //     });
+                    //     this.createThumbs();
+                    // } else {
+                    //     this.$http.post('/app/redirect/upload/infos',{ids}).then((res)=>{
+                    //         v.forEach((p) => {
+                    //             this.$set(this.dict, p, {
+                    //                 url: p,
+                    //                 name: res[p].name
+                    //             });
+                    //         });
+                    //         this.createThumbs();
+                    //     });
+                    // }
                 }
             }
         },
@@ -250,7 +269,7 @@
                     });
                 }
                 else{
-                    this.files = rs.length > 0 ? [rs[0].url] : [];
+                    this.files = rs.length > 0 ? [rs[0]] : [];
                 }
                 this.uploading = false;
             },
