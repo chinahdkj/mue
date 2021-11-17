@@ -467,6 +467,9 @@
                         this.uploading = false;
                     }
                 });
+
+                //云上协同目前没有“取消录制”回调，强制关闭加载动画
+                if(isCCWork()) this.uploading = false;
             },
 
             showAction(i) {
