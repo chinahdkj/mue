@@ -579,7 +579,7 @@ export default {
 					}
 				);
 				let layer2 = L.tileLayer.wmts(
-					"http://ditu.zjzwfw.gov.cn/services/wmts/emap_lab/default/oss?token=2c92920471b56e640171be7444540073",
+					"http://ditu.zjzwfw.gov.cn/services/wmts/emap_lab/default/oss?token=2c92920471b56e640171be7537bd0074",
 					{
 						layer: "emap",
 						style: "default",
