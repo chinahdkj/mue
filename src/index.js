@@ -55,7 +55,7 @@ const components = [
 
 const install = function(Vue, opts){
     opts = opts || {};
-    Vue.prototype.$options = opts;
+    Vue.prototype.$OPTIONS = opts;
     // 设置语音
     use(opts.lang);
     // 加载Vant
