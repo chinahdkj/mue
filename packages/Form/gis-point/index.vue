@@ -42,8 +42,8 @@
 						<div id="map"
 							style="height:100%">
 						</div>
-						<div class="lh-boxshow"></div>
-						<div class="lh-gxtype-change">
+						<div class="lh-boxshow" v-if="!showGisList"></div>
+						<div class="lh-gxtype-change" v-if="!showGisList">
 							<div class="gxtype-item" :class="{active:gxType=='排水'}" @click.stop="handleGxType('排水')">排水</div>
 							<div class="gxtype-item" :class="{active:gxType=='供水'}" @click.stop="handleGxType('供水')">供水</div>
 						</div>
@@ -370,6 +370,7 @@ export default {
 			)}</span>`,
 			map: null,
 			showlhsw: false,
+			showGisList:false,
 			gxType:'供水',
 		};
 	},
@@ -496,6 +497,7 @@ export default {
 				this.handleGxType(this.gxType)
 			}else if(this.gislist){
 				let _this = this;
+				this.showGisList = true;
 				this.showlhsw = true;
 				var normalm = L.tileLayer.chinaProvider("GaoDe.Normal.Map", {
 					maxZoom: 18,
