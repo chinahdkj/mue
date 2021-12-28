@@ -685,12 +685,12 @@ const ccworkApi = {
     },
     //客户端扫码功能
     scanCode: ({msgid, method, params}) => {
-        ccworkBridge.openScan({
+        ccworkBridge.ccworkScanCode({
             type: "callback",
-        },({type, reqid, data}) => {
+        },({type, reqid, result}) => {
             window.response({
                 msgid, method, params: {
-                    code: data.result
+                    code: result
                 }
             });
         })
