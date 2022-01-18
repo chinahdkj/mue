@@ -132,7 +132,13 @@
                 return {transition: "0.6s"};
             }
         },
-        watch: {},
+        watch: {
+            pageTotal(){
+                setTimeout(() => {
+                    this.scroller.refresh();
+                }, 100);
+            }
+        },
         methods: {
             initScroll(){
                 let self = this;
