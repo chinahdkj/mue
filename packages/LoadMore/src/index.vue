@@ -134,9 +134,11 @@
         },
         watch: {
             pageTotal(){
-                setTimeout(() => {
-                    this.scroller.refresh();
-                }, 100);
+                if(this.scrollbar) {
+                    setTimeout(() => {
+                        this.scroller.refresh();
+                    }, 100);
+                }
             }
         },
         methods: {
