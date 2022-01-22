@@ -205,7 +205,6 @@
                     marginTop: "0px"
                 },
                 currentKey: null,
-                onceFlag: 0 //是否首次加载数据
             };
         },
         computed: {
@@ -276,11 +275,7 @@
             "data.length": {
                 immediate: true, handler(v) {
                     this.$nextTick(() => {
-                        //首次加载数据执行一次刷新，修复better-scroll 升级2.x后首次加载bug
-                        if(this.onceFlag <= 1) {
-                            this.onceFlag += 1;
-                            this.$refs.load_more.scroller.refresh()
-                        }
+                        this.$refs.load_more.scroller.refresh()
                     })
                 }
             }
