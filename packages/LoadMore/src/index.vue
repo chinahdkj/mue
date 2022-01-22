@@ -132,15 +132,6 @@
                 return {transition: "0.6s"};
             }
         },
-        watch: {
-            pageTotal(){
-                if(this.scrollbar) {
-                    setTimeout(() => {
-                        this.scroller.refresh();
-                    }, 100);
-                }
-            }
-        },
         methods: {
             initScroll(){
                 let self = this;

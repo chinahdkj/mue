@@ -204,7 +204,8 @@
                     end: 0,
                     marginTop: "0px"
                 },
-                currentKey: null
+                currentKey: null,
+                onceFlag: 0 //是否首次加载数据
             };
         },
         computed: {
@@ -270,6 +271,17 @@
                     this.yScroller.timer = setTimeout(() => {
                         this.calcYScroller();
                     }, 100);
+                }
+            },
+            "data.length": {
+                immediate: true, handler(v) {
+                    this.$nextTick(() => {
+                        //首次加载数据执行一次刷新，修复better-scroll 升级2.x后首次加载bug
+                        if(this.onceFlag <= 1) {
+                            this.onceFlag += 1;
+                            this.$refs.load_more.scroller.refresh()
+                        }
+                    })
                 }
             }
         },
