@@ -6,7 +6,7 @@
                     <i slot="title" class="iconfont" :class="t.icon" style="font-size: 28px;"/>
                 </van-tab>
             </van-tabs>
-            <div class="multi-select" @click="pickGroup">
+            <div class="multi-select" @click="pickGroup" v-if="multiple">
                 <i class="van-icon van-icon-add-o"></i>
             </div>
         </mue-header>
@@ -63,7 +63,8 @@
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
             definition: {type: String, default: "ordinary"},
-            defaulturl: {type: Boolean, default: false}
+            defaulturl: {type: Boolean, default: false},
+            multiple: {type: Boolean, default: false}
         },
         data() {
             return {
