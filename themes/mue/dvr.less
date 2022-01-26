@@ -5,6 +5,8 @@
     @grey: %("%s-grey", @theme);
     @background: %("%s-background", @theme);
     @background-base: %("%s-background-base", @theme);
+    @background-bar: %("%s-background-bar", @theme);
+    @border-color-bar: %("%s-border-color-bar", @theme);
     @color: %("%s-common", @theme);
     @border-color: %("%s-border-color", @theme);
 
@@ -165,7 +167,7 @@
 
     .mue-dvr {
         .mue-main {
-            background: @background-base;
+            background: @@background-base;
         }
 
         .mue-dvr-header {
@@ -178,10 +180,10 @@
                 align-items: center;
                 justify-content: center;
                 display: flex;
-                background: #ffffff;
+                background: @@background-bar;
                 >i {
                     font-size: 20px;
-                    border-left: solid 1px #e0e0e0;
+                    border-left: solid 1px @@border-color-bar;
                     padding: 0 15px;
                 }
             }
