@@ -9,7 +9,6 @@
     @border-color-bar: %("%s-border-color-bar", @theme);
     @tabs-color: %("%s-tabs-color", @theme);
     @color: %("%s-common", @theme);
-    @border-color: %("%s-border-color", @theme);
 
     .mue-dvr-video {
         display: inline-block;
@@ -182,7 +181,18 @@
                 justify-content: center;
                 display: flex;
                 background: @@background-bar;
-                border-bottom: solid 1px @@border-color;
+                border-color: @@border-color-bar;
+                border-style: solid;
+
+                .border(@t) when (@t = dark) {
+                    border-width: 1px 0 0 0;
+                }
+
+                .border(@t) when not (@t = dark) {
+                    border-width: 0 0 1px 0;
+                }
+
+                .border(@theme);
                 >i {
                     font-size: 20px;
                     border-left: solid 1px @@border-color-bar;
