@@ -172,11 +172,19 @@
 
         .mue-dvr-header {
             display: flex;
+
             .mue-dvr-tabs {
                 flex: 1;
             }
-            .multi-select {
+
+            .multi-select-box {
                 flex-shrink: 0;
+                display: flex;
+                height: 40px;
+            }
+
+            .multi-select {
+                height: 39px;
                 align-items: center;
                 justify-content: center;
                 display: flex;
@@ -193,7 +201,8 @@
                 }
 
                 .border(@theme);
-                >i {
+
+                > i {
                     font-size: 20px;
                     border-left: solid 1px @@border-color-bar;
                     padding: 0 15px;
