@@ -6,8 +6,10 @@
                     <i slot="title" class="iconfont" :class="t.icon" style="font-size: 28px;"/>
                 </van-tab>
             </van-tabs>
-            <div class="multi-select" @click="pickGroup" v-if="multiple">
-                <i class="van-icon van-icon-add-o"></i>
+            <div class="multi-select-box" v-if="multiple">
+                <div class="multi-select" @click="pickGroup">
+                    <i class="van-icon van-icon-add-o"></i>
+                </div>
             </div>
         </mue-header>
 
