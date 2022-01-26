@@ -1,11 +1,14 @@
 <template>
     <mue-container class="mue-dvr">
-        <mue-header>
-            <van-tabs v-model="layout">
+        <mue-header class="mue-dvr-header">
+            <van-tabs class="mue-dvr-tabs" v-model="layout">
                 <van-tab v-for="(t, i) in tabs" :key="i">
                     <i slot="title" class="iconfont" :class="t.icon" style="font-size: 28px;"/>
                 </van-tab>
             </van-tabs>
+            <div class="multi-select" @click="pickGroup">
+                <i class="van-icon van-icon-add-o"></i>
+            </div>
         </mue-header>
 
         <mue-main v-resize="resize">
@@ -34,6 +37,8 @@
             </div>
             <mue-select style="display: none;" ref="pop" :data="cameras" v-model="pop.current"
                         @change="setCamera" searchable></mue-select>
+            <mue-select style="display: none;" ref="multiPop" :data="groups" v-model="multiPop.current"
+                        @change="setCameras" searchable></mue-select>
         </mue-main>
 
     </mue-container>
@@ -68,6 +73,9 @@
                 videos: {},
                 pop: {
                     index: 0, current: null
+                },
+                multiPop: {
+                    current: null
                 }
             };
         },
@@ -83,6 +91,14 @@
                 width = width / this.col;
                 let height = width * (this.col === 1 ? 0.5625 : 0.75);
                 return {width, height};
+            },
+            groups() {
+                return this.cameras.map(m => {
+                    return {
+                        code: m.code,
+                        name: m.name
+                    }
+                })
             }
         },
         watch: {
@@ -107,6 +123,11 @@
                     this.$refs.pop.ShowPop();
                 });
             },
+            pickGroup() {
+                this.$nextTick(() => {
+                    this.$refs.multiPop.ShowPop();
+                });
+            },
             setCamera(v) {
                 let opt = {...this.$refs.pop.GetOptionInfo(v)};
                 this.$set(this.videos, this.pop.index, opt);
@@ -114,6 +135,20 @@
                     this.$refs.video[this.pop.index - 1].Play();
                 });
                 this.$emit("choose-video", this.pop.index - 1, opt);
+            },
+            //自动填充选中一级菜单下的所有视频
+            setCameras(v) {
+                let selection = this.cameras.find(f => f.code === v).children;
+                if(!selection) return
+                for(let [index, item] of selection.entries()) {
+                    let opt = {...this.$refs.pop.GetOptionInfo(item.code)};
+                    this.$set(this.videos, index + 1, opt);
+                    this.$nextTick(() => {
+                        this.$refs.video[index].Play();
+                    });
+
+                }
+
             },
 
             GetView() {

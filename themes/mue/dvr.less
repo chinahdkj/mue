@@ -167,6 +167,25 @@
         .mue-main {
             background: @background-base;
         }
+
+        .mue-dvr-header {
+            display: flex;
+            .mue-dvr-tabs {
+                flex: 1;
+            }
+            .multi-select {
+                flex-shrink: 0;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                background: #ffffff;
+                >i {
+                    font-size: 20px;
+                    border-left: solid 1px #e0e0e0;
+                    padding: 0 15px;
+                }
+            }
+        }
     }
 
     .mue-dvr-video__pop {
