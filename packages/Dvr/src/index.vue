@@ -141,6 +141,7 @@
             setCameras(v) {
                 let selection = this.cameras.find(f => f.code === v).children;
                 if(!selection) return
+                this.videos = {};
                 for(let [index, item] of selection.entries()) {
                     let opt = {...this.$refs.pop.GetOptionInfo(item.code)};
                     this.$set(this.videos, index + 1, opt);
