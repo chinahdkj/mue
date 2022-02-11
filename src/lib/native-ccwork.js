@@ -954,7 +954,7 @@ const ccworkApi = {
             window.response({
                 msgid, method, params: {
                     code: 0,
-                    result: result
+                    tag: result['NFC content'].cardId
                 }
             });
         })
