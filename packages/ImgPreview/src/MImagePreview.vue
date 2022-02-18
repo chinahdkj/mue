@@ -1,7 +1,7 @@
 <template>
     <div class="m-image-preview-wrap">
         <div class="zhishqi-ctr"><span>{{`${index + 1}/${images.length}`}}</span></div>
-        <van-popup v-model="isShow" @closed="closed">
+        <van-popup v-model="isShow" @closed="closed" @close="$emit('close')">
             <div class="m-image-preview-ctr" :style="{width:width+'px',height:height+'px'}" v-if="isShow && isRotate">
                 <van-swipe ref="swiper" @change="onChange" :show-indicators="false" :initial-swipe="startPosition" :touchable="false">
                     <van-swipe-item v-for="(item, key) in images" :key="key">
