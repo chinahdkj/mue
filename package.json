@@ -28,6 +28,7 @@
     "exif-js": "^2.3.0",
     "fabric": "4.4.0",
     "fastclick": "^1.0.6",
+    "gdt-jsapi": "^1.9.27-beta.1",
     "jquery": "^3.3.1",
     "leaflet.chinatmsproviders": "^3.0.4",
     "moment": "^2.22.2",

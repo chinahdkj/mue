@@ -2,6 +2,7 @@
 import uuid from "../utils/uuid";
 import {ElementClick} from "../utils/fast-click";
 import {env, biz} from "dingtalk-jsapi";
+import ddgov from "gdt-jsapi";
 import ccworkBridge from 'ccwork-jsbridge';
 
 /**
@@ -52,6 +53,10 @@ export const isMobile = () => {
 export const isDingDing = () => {
     return env.platform !== "notInDingTalk";
 };
+export const isDingGov = () => {
+    const u = navigator.userAgent;
+    return u.indexOf("TaurusApp") > -1 || u.indexOf("taurusapp") > -1;
+}
 
 export const isCCWork = () => {
     return window.navigator.userAgent.indexOf('ccwork') > 0
@@ -63,6 +68,10 @@ export const isCCWork = () => {
 export const closePage = ()=>{
     if(isCCWork()) {
         ccworkBridge.closeWebView()
+        return
+    }
+    if(isDingGov()){
+        ddgov.closePage()
         return
     }
     window.location.href = "/appback";
@@ -82,6 +91,9 @@ export const setDocumentTitle = (title) => {
         biz.navigation.setTitle({
             title: title,//控制标题文本，空字符串表示显示默认文本
         });
+    }
+    else if(isDingGov()){
+        ddgov.setTitle({title})
     }
     else if(/ip(hone|od|ad)/i.test(navigator.userAgent)){
         var i = document.createElement("iframe");
@@ -229,8 +241,8 @@ export const getHost = () => {
     //web端本地测试用
     // return host;
 
-    //匹配云上协同(仅在线模式)
-    if(isCCWork()) {
+    //匹配云上协同和浙政钉(仅在线模式)
+    if(isCCWork() || isDingGov()) {
         return host || location.origin
     }
     
@@ -333,7 +345,7 @@ export function TimeSpan(value) {
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
-    getUploadPath, isDingDing, closePage, isCCWork, DateFormat, NumberFormat, PercentFormat,
+    getUploadPath, isDingDing, isDingGov, closePage, isCCWork, DateFormat, NumberFormat, PercentFormat,
     ShortTime, TimeSpan,
     isNight(){
         return sessionStorage.getItem("theme") === "night";
