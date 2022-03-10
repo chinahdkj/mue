@@ -44,6 +44,11 @@
             <van-cell value="TREE-PICKER" @click="open('/form/treepicker')"/>
         </van-cell-group>
 
+        <h3>DINGGOV</h3>
+        <van-cell-group border>
+            <van-cell value="DINGGOV" @click="open('/dinggov')"/>
+        </van-cell-group>
+
         <div class="night-switch">
             <van-button plain size="mini" type="primary" @click="toggleNight">
                 {{isNight ? "暗色" : "亮色"}}

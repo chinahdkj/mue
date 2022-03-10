@@ -134,6 +134,11 @@ const routes = [
         name: 'form_treepicker',
         component: () => import("../views/form/treepicker")
     },
+    {
+        path: '/dinggov',
+        name: 'dinggovdemoo',
+        component: () => import("../views/dinggov")
+    },
 ];
 
 const router = new Router({routes});

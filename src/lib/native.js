@@ -1,8 +1,9 @@
 // 原生调用方法
-import {isIos, isDingDing, isCCWork} from "./common";
+import {isIos, isDingDing, isCCWork, isDingGov} from "./common";
 import * as NativePc from "./native-pc";
 import * as NativeDingDing from "./native-dingding";
 import NativeCcwork from "./native-ccwork";
+import NativeDingGov from "./native-dinggov";
 
 const _printEnable = false;
 const _cache = {};
@@ -37,6 +38,9 @@ const postMessage = ({cb, method, params}) => {
     try {
         if (isDingDing()) {
             typeof NativeDingDing[method] === "function" && NativeDingDing[method]({msgid, method, params});
+        }
+        else if(isDingGov()){
+            typeof NativeDingGov[method] === "function" && NativeDingGov[method]({msgid, method, params});
         }
         else if (isCCWork()) {
             if(typeof NativeCcwork[method] === "function") {
