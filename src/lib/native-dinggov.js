@@ -179,22 +179,27 @@ const dinggovApi = {
     },
     //获取定位 ？需要js鉴权
     getLocation: ({msgid, method, params}) => {
-        ddgov.getGeolocation({
-            useCache:true
-        }).then(result=>{
-            window.response({
-                msgid, method, params: {
-                    lat: result.latitude, lng: result.longitude, addgovr: result.addgovress
-                }
-            });
-        }).catch(err=>{
-            window.response({
-                msgid, method, params: {
-                    code: 1,
-                    msg: err.errorMessage
-                }
-            });
-        })
+        window.response({
+            msgid, method, params: {
+                lat: 0, lng: 0, addgovr:''
+            }
+        });
+        // ddgov.getGeolocation({
+        //     useCache:true
+        // }).then(result=>{
+        //     window.response({
+        //         msgid, method, params: {
+        //             lat: result.latitude, lng: result.longitude, addgovr: result.addgovress
+        //         }
+        //     });
+        // }).catch(err=>{
+        //     window.response({
+        //         msgid, method, params: {
+        //             code: 1,
+        //             msg: err.errorMessage
+        //         }
+        //     });
+        // })
     },
     //获取用户相关信息(是否需要用到浙政钉的用户信息？)
     userInfo: ({msgid, method, params}) => {
