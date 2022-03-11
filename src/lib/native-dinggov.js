@@ -181,7 +181,7 @@ const dinggovApi = {
     getLocation: ({msgid, method, params}) => {
         window.response({
             msgid, method, params: {
-                lat: 0, lng: 0, addgovr:''
+                lat: 0, lng: 0, addr:''
             }
         });
         // ddgov.getGeolocation({
@@ -189,7 +189,7 @@ const dinggovApi = {
         // }).then(result=>{
         //     window.response({
         //         msgid, method, params: {
-        //             lat: result.latitude, lng: result.longitude, addgovr: result.addgovress
+        //             lat: result.latitude, lng: result.longitude, addr: result.address
         //         }
         //     });
         // }).catch(err=>{
