@@ -158,6 +158,25 @@ export default {
             return Promise.reject(e);
         });
     },
+    sourcePost(url, data, failed = false, appid = null, header = null){
+        let setting = {
+            method: "post",
+            baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
+            url,
+            data: data,
+            timeout: 30000
+        }
+        if(isWebApi){
+            setting.url = getUrl(url)
+        }else{
+            setting['headers'] = header || getHeaders(appid)
+        }
+        
+        return axios(setting).then(res => res).catch(e => {
+            console.log(e);
+            return Promise.reject(e);
+        });
+    },
     get(url, params, failed = false, appid = null, header = null){
         let setting = {
             method: "get",
@@ -183,6 +202,25 @@ export default {
                 !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
             }
 
+            return Promise.reject(e);
+        });
+    },
+    sourceGet(url, params, failed = false, appid = null, header = null){
+        let setting = {
+            method: "get",
+            baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
+            url,
+            params, // get 请求时带的参数
+            timeout: 30000
+        }
+        if(isWebApi){
+            setting.url = getUrl(url)
+        }else{
+            setting['headers'] = header || getHeaders(appid)
+        }
+        
+        return axios(setting).then(res => res).catch(e => {
+            console.log(e);
             return Promise.reject(e);
         });
     },
