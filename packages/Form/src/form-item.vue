@@ -1,9 +1,9 @@
 <template>
     <div class="mue-form-item"
          :class="{'is-required': !readonly && isRequired, 'is-readonly': readonly,
-         'not-inline': !labelInline}">
+         'is-label-hidden': labelHidden, 'not-inline': !labelInline}">
         <label :class="{'is-error': isError}"
-               :style="labelInline ? {'max-width': paddingLeft} : null">{{label}}</label>
+               :style="labelStyle">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
              :style="[labelInline ? {'padding-left': paddingLeft} : null, contentStyle]">
             <slot></slot>
@@ -34,11 +34,13 @@
         },
         props: {
             label: {type: String, default: ""},
+            //标签是否内联模式，与cue相反
             inline: {
                 type: [Boolean, Object], default: null, validator(v){
                     return typeof v === "boolean" || v == null;
                 }
             },
+            labelHidden: {type: Boolean, default: false},
             field: {type: String, default: ""},
             labelWidth: {type: Number, default: 0},
             contentStyle: null,
@@ -62,6 +64,16 @@
             },
             labelInline(){
                 return this.inline === null ? this.FORM.inline : this.inline;
+            },
+            labelStyle() {
+                if (this.labelHidden) {
+                    return {display: 'none'};
+                }
+                if (this.labelInline) {
+                    return {'max-width': this.paddingLeft};
+                } else {
+                    return null
+                }
             },
             isRequired(){
                 return this.required || this.rules.filter((r) => {
