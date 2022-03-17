@@ -33,7 +33,7 @@
         </van-col>
         <van-col span="8">
             <div class="grid-item" @click="getLocation">
-                获取定位
+                获取定位/并导航
             </div>
         </van-col>
         <van-col span="8">
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+
 export default {
     data(){
         return{
@@ -163,6 +164,18 @@ export default {
                 params:{},
                 cb:(res)=>{
                     console.log({res})
+                    this.$native.startNavi({
+                        params:{
+                            lat:30.412655,
+                            lng:120.315934,
+                            addr:res.addr,
+                            startLat:res.lat,
+                            startLng:res.lng
+                        },
+                        cb:(r)=>{
+                            console.log({r})
+                        }
+                    })
                 }
             })
         },
