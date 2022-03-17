@@ -90,6 +90,26 @@ let post = (url, data, failed = false, appid = null, header = null) => {
     });
 }
 
+const jsApiAuth = (arr = []) =>{
+    return new Promise((resolve,reject)=>{
+        post('/hd/app/dingtalkgov/v1.0/user/getTicket.json', {},{
+            processData: false, 
+            contentType: false
+        }).then(res => {
+            const ticket = res && res.ticket
+            ddgov.authConfig({
+                ticket:ticket,
+                jsApiList:["getGeolocation","showOnMap",...arr]
+            }).then((e)=>{
+                resolve()
+            }).catch(err=>{
+                reject(err)
+            })
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
 
 // 浙政钉主动监听
 if(isDingGov()){
@@ -179,27 +199,31 @@ const dinggovApi = {
     },
     //获取定位 ？需要js鉴权
     getLocation: ({msgid, method, params}) => {
-        window.response({
-            msgid, method, params: {
-                lat: 0, lng: 0, addr:''
-            }
-        });
-        // ddgov.getGeolocation({
-        //     useCache:true
-        // }).then(result=>{
-        //     window.response({
-        //         msgid, method, params: {
-        //             lat: result.latitude, lng: result.longitude, addr: result.address
-        //         }
-        //     });
-        // }).catch(err=>{
-        //     window.response({
-        //         msgid, method, params: {
-        //             code: 1,
-        //             msg: err.errorMessage
-        //         }
-        //     });
-        // })
+        jsApiAuth().then(()=>{
+            ddgov.getGeolocation({
+                useCache:true,
+                coordinate:1,
+                withReGeocode:true,
+            }).then(result=>{
+                window.response({
+                    msgid, method, params: {
+                        lat: result.latitude, lng: result.longitude, addr: result.address
+                    }
+                });
+            }).catch(err=>{
+                window.response({
+                    msgid, method, params: {
+                        lat: 0, lng: 0, addr:''
+                    }
+                });
+            })
+        }).catch(()=>{
+            window.response({
+                msgid, method, params: {
+                    lat: 0, lng: 0, addr:''
+                }
+            });
+        })
     },
     //获取用户相关信息(是否需要用到浙政钉的用户信息？)
     userInfo: ({msgid, method, params}) => {
@@ -459,7 +483,27 @@ const dinggovApi = {
     },
     //地图导航(百度地图，高德地图，腾讯地图)
     startNavi: ({msgid, method, params}) => {
-
+        jsApiAuth().then(()=>{
+            ddgov.showOnMap({
+                latitude:params.lat,
+                longitude:params.lng,
+                title:params.addr
+            }).then(res=>{
+                window.response({
+                    msgid, method, params: {
+                        state: 0
+                    }
+                });                
+            }).catch(r=>{
+                window.response({
+                    msgid, method, params: {code: 1,msg: r}
+                }); 
+            })
+        }).catch((err)=>{
+            window.response({
+                msgid, method, params: {code: 1,msg: err}
+            }); 
+        })
     },
     //H5开启/关闭巡检定位
     trace: ({msgid, method, params}) => {
