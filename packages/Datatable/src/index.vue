@@ -12,7 +12,7 @@
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" :rowspan="c.rowspan">
-                            <a v-if="c.fixed" :style="{'text-align': c.align || 'center'}">
+                            <a v-if="c.fixed && !c.selection" :style="{'text-align': c.align || 'center'}">
                                 <span :class="sortCls(c)" @click="onChangeSort(c)">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
@@ -21,6 +21,11 @@
                                     </template>
                                     <i class="icon-asc fa fa-caret-up" aria-hidden="true"></i>
                                     <i class="icon-desc fa fa-caret-down" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                            <a v-if="c.fixed && c.selection" class="mue-datatable-selection" :style="{'text-align': c.align || 'center'}">
+                                <span :class="sortCls(c)">
+                                    <van-checkbox v-model="allCheck" @change="onSelectionChange"></van-checkbox>
                                 </span>
                             </a>
                         </th>
@@ -82,7 +87,7 @@
                             <table class="mue-datatable__inner-table"
                                    :style="[{width: tableWidth + 'px'}]">
                                 <col-group :columns="colFields"/>
-                                <table-body :rows="data" :is-fixed="true" :start="0"/>
+                                <table-body :rows="dataRows" :is-fixed="true" :start="0"/>
                             </table>
                         </div>
 
@@ -93,7 +98,7 @@
                             <table class="mue-datatable__inner-table" ref="main_table"
                                    :style="[{width: tableWidth - fixedWidth + 'px'}]">
                                 <col-group :columns="colFields" filter/>
-                                <table-body :rows="data" :is-fixed="false" :start="0"/>
+                                <table-body :rows="dataRows" :is-fixed="false" :start="0"/>
                             </table>
 
                         </div>
@@ -184,6 +189,7 @@
             bindings: {type: Object, default: null}, //数据字典
             colSlots: {type: Object, default: null}, //用于继承插槽
             highlightCurrentRow: {type: Boolean, default: false}, //是否高亮当前行
+            selection: {type: Boolean, default: false},//是否支持多选功能
         },
         data(){
             return {
@@ -205,6 +211,7 @@
                     marginTop: "0px"
                 },
                 currentKey: null,
+                allCheck:false,//是否全部选中
             };
         },
         computed: {
@@ -248,7 +255,18 @@
                 return this.pageTotal > 1 ? (this.total + t("mue.dataTable.allLoadedText")) : "";
             },
             vrows(){
-                return this.data.slice(this.yScroller.start, this.yScroller.end);
+                return this.dataRows.slice(this.yScroller.start, this.yScroller.end);
+            },
+            dataRows(){
+                if(this.allCheck){
+                    return this.data.map(i=>{
+                        return {...i,_mue_checked:true}
+                    })
+                }else{
+                    return this.data.map(i=>{
+                        return {...i,_mue_checked:false}
+                    })
+                }
             }
         },
         watch: {
@@ -384,9 +402,10 @@
                         }
                         return;
                     }
-                    if(!col.field){
+                    if(!col.field && !col.selection){
                         return;
                     }
+                    column.selection = col.selection || null;
                     column.field = col.field || "";
                     column.align = col.align || "center";
                     column.width = col.width || 0;
@@ -403,8 +422,16 @@
                     whole.push(column);
                 }
 
-                for(let i = 0; i < this.columns.length; i++){
-                    _create([], this.columns[i], 0, !!this.columns[i].fixed);
+                // 判断是否支持多选，columns增加一列固定在左侧最前面
+                let columns = []
+                if(this.selection){
+                    columns = [{selection:true, width: 50, fixed: true},...this.columns]
+                }else{
+                    columns = this.columns
+                }
+
+                for(let i = 0; i < columns.length; i++){
+                    _create([], columns[i], 0, !!columns[i].fixed);
                 }
 
                 let dftWidth = 0;
@@ -556,6 +583,14 @@
                 }
 
                 this.$emit("row-click", row, i);
+            },
+
+            onSelectionChange(){
+                if(!this.virtual){
+                    this.$emit('selection-change',this.dataRows.filter(data => data._mue_checked))
+                }else{
+                    this.$emit('selection-change',this.vrows.filter(data => data._mue_checked))
+                }
             },
 
             ScrollLeft(l = 0){

@@ -18,12 +18,34 @@
             let cells = [];
             this.TABLE.colFields.forEach((cf) => {
                 if(!!cf.fixed === !!this.isFixed){
-                    cells.push(h("cell", {
-                        props: {
-                            hstyle: this.TABLE.cellHeight, col: cf, row: this.row,
-                            value: this.TABLE.getValue(this.row, cf.field), no: this.no
-                        }
-                    }));
+                    if(cf.selection){
+                        cells.push(h("td", {
+                            props: {
+                                hstyle: this.TABLE.cellHeight, col: cf, row: this.row,
+                                no: this.no
+                            },
+                        },[
+                            h('van-checkbox',{
+                                props: {
+                                    value:this.row._mue_checked
+                                },
+                                on: {
+                                    input: event =>{
+                                        this.row._mue_checked = event
+                                        this.$forceUpdate()
+                                        this.TABLE.onSelectionChange(this.row, this.no)
+                                    }
+                                }
+                            })
+                        ]));
+                    }else{
+                        cells.push(h("cell", {
+                            props: {
+                                hstyle: this.TABLE.cellHeight, col: cf, row: this.row,
+                                value: this.TABLE.getValue(this.row, cf.field), no: this.no
+                            }
+                        }));
+                    }
                 }
             });
 

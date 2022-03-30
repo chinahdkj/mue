@@ -11,7 +11,8 @@
                                :stripe="stripe" :row-key="rowKey" :row-height="rowHeight"
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
                                @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
-                               @row-click="onRowClick" @cell-click="onCellClick">
+                               @row-click="onRowClick" @cell-click="onCellClick"
+                               :selection="true" @selection-change="onSelectionChange">
 <!--                    <template slot="row" slot-scope="{row, cols, no}">-->
 <!--                        <tr>-->
 <!--                            <td v-for="c in cols" :key="c.field">-->
@@ -53,6 +54,7 @@
 
             pageSize > 0 可视区域最后一行的rowNo 计算当前页码， 页码 > 1时 显示右下角分页按钮，点击返回顶部。
             <br/>
+            selection: 是否启用表格多选功能[true,false]<br/>
         </van-tab>
 
         <van-tab title="列定义">
@@ -76,7 +78,8 @@
             refresh: 顶部下拉刷新 参数: func(回调方法，执行完以后调用) <br/>
             load-more: 底部上拉刷新加载 参数: func(回调方法，执行完以后调用) <br/>
             row-click: 行点击 参数: row(行数据), no(行索引) <br/>
-            cell-click: 单元格点击 参数: value(单元格数据), row(行数据), col(列定义), no(行索引), event
+            cell-click: 单元格点击 参数: value(单元格数据), row(行数据), col(列定义), no(行索引), event<br/>
+            selection-change: 表格多选选中触发 无参数，返回选中的数据<br/>
         </van-tab>
 
         <van-tab title="Method">
@@ -199,6 +202,10 @@
                 this.show = true;
                 // console.info(value);
                 // alert(value);
+            },
+
+            onSelectionChange(selects){
+                console.log({selects})
             }
         },
         mounted(){
