@@ -33,7 +33,7 @@
                                     input: event =>{
                                         this.row._mue_checked = event
                                         this.$forceUpdate()
-                                        this.TABLE.onSelectionChange(this.row, this.no)
+                                        this.TABLE.onSelectionChange()
                                     }
                                 }
                             })

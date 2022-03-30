@@ -25,7 +25,7 @@
                             </a>
                             <a v-if="c.fixed && c.selection" class="mue-datatable-selection" :style="{'text-align': c.align || 'center'}">
                                 <span :class="sortCls(c)">
-                                    <van-checkbox v-model="allCheck" @change="onSelectionChange"></van-checkbox>
+                                    <van-checkbox v-model="allCheck" @change="onCheckChange"></van-checkbox>
                                 </span>
                             </a>
                         </th>
@@ -212,6 +212,7 @@
                 },
                 currentKey: null,
                 allCheck:false,//是否全部选中
+                checkedList:[],//选中的列表
             };
         },
         computed: {
@@ -263,9 +264,15 @@
                         return {...i,_mue_checked:true}
                     })
                 }else{
-                    return this.data.map(i=>{
-                        return {...i,_mue_checked:false}
-                    })
+                    if(this.checkedList.length > 0){
+                        return this.data.map(i=>{
+                            return {...i,_mue_checked:this.checkedList.find(item=>item[this.rowKey] === i[this.rowKey]) ? true : false}
+                        })
+                    }else{
+                        return this.data.map(i=>{
+                            return {...i,_mue_checked:false}
+                        })
+                    }
                 }
             }
         },
@@ -560,6 +567,7 @@
 
             onRefresh(success){
                 let self = this;
+                self.checkedList = []
                 let callback = () => {
                     this.$nextTick(() => {
                         self.ScrollLeft();
@@ -585,12 +593,16 @@
                 this.$emit("row-click", row, i);
             },
 
-            onSelectionChange(){
-                if(!this.virtual){
-                    this.$emit('selection-change',this.dataRows.filter(data => data._mue_checked))
-                }else{
-                    this.$emit('selection-change',this.vrows.filter(data => data._mue_checked))
+            onCheckChange(){
+                if(!this.allCheck){
+                    this.checkedList = []
                 }
+                this.onSelectionChange()
+            },
+
+            onSelectionChange(){
+                this.checkedList = this.dataRows.filter(data => data._mue_checked)
+                this.$emit('selection-change',this.checkedList)
             },
 
             ScrollLeft(l = 0){
