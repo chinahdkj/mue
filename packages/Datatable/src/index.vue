@@ -605,6 +605,10 @@
                 this.$emit('selection-change',this.checkedList)
             },
 
+            getSelection(){
+                return this.checkedList
+            },
+
             ScrollLeft(l = 0){
                 this.$refs.top_table && setStyle(this.$refs.top_table, "margin-left", `0`);
                 this.$refs.main_table && setStyle(this.$refs.main_table, "margin-left", `0`);

@@ -31,6 +31,7 @@
                 </mue-datatable>
             </div>
             <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
+            <van-button size="small" @click="getSelection" type="primary">返回选中数据</van-button>
 
             <van-actionsheet v-model="show"
                     :actions="[{ name: '选项'}]"/>
@@ -86,6 +87,7 @@
             ScrollLeft: 设置table 滚动部分的左滚动距离，参数: Number(距离)
             ScrollTop: 设置table 滚动部分的上滚动距离，参数: Number(距离)
             LoadSuccess: 数据加载完成时调用，类似refresh 和 load-more 的func参数，主要用于检查数据是否已填充满
+            getSelection: 返回已选中数据
         </van-tab>
     </van-tabs>
 </template>
@@ -196,6 +198,11 @@
 
             toLeft(){
                 this.$refs.table.ScrollLeft();
+            },
+
+            getSelection(){
+                const checks = this.$refs.table.getSelection()
+                console.log(checks)
             },
 
             onCellClick(value, row, col, no, event){
