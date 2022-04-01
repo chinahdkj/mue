@@ -18,7 +18,7 @@
             let cells = [];
             this.TABLE.colFields.forEach((cf) => {
                 if(!!cf.fixed === !!this.isFixed){
-                    if(cf.selection){
+                    if(cf.type === 'selection'){
                         cells.push(h("td", {
                             props: {
                                 hstyle: this.TABLE.cellHeight, col: cf, row: this.row,

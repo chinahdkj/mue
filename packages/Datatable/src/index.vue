@@ -12,8 +12,8 @@
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" :rowspan="c.rowspan">
-                            <a v-if="c.fixed && !c.selection" :style="{'text-align': c.align || 'center'}">
-                                <span :class="sortCls(c)" @click="onChangeSort(c)">
+                            <a v-if="c.fixed" :style="{'text-align': c.align || 'center'}" :class="{'mue-datatable-selection':c.type === 'selection'}">
+                                <span :class="sortCls(c)" @click="onChangeSort(c)" v-if="c.type !== 'selection'">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
                                     <template v-else>
@@ -22,9 +22,7 @@
                                     <i class="icon-asc fa fa-caret-up" aria-hidden="true"></i>
                                     <i class="icon-desc fa fa-caret-down" aria-hidden="true"></i>
                                 </span>
-                            </a>
-                            <a v-if="c.fixed && c.selection" class="mue-datatable-selection" :style="{'text-align': c.align || 'center'}">
-                                <span :class="sortCls(c)">
+                                <span :class="sortCls(c)" v-else>
                                     <van-checkbox v-model="allCheck" @change="onCheckChange"></van-checkbox>
                                 </span>
                             </a>
@@ -47,8 +45,8 @@
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" v-if="!c.fixed"
                             :rowspan="c.rowspan">
-                            <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}">
-                                <span :class="sortCls(c)" @click="onChangeSort(c)">
+                            <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}" :class="{'mue-datatable-selection':c.type === 'selection'}">
+                                <span :class="sortCls(c)" @click="onChangeSort(c)" v-if="c.type !== 'selection'">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
                                     <template v-else>
@@ -56,6 +54,9 @@
                                     </template>
                                     <i class="icon-asc fa fa-caret-up" aria-hidden="true"></i>
                                     <i class="icon-desc fa fa-caret-down" aria-hidden="true"></i>
+                                </span>
+                                <span :class="sortCls(c)" v-else>
+                                    <van-checkbox v-model="allCheck" @change="onCheckChange"></van-checkbox>
                                 </span>
                             </a>
                         </th>
@@ -409,10 +410,10 @@
                         }
                         return;
                     }
-                    if(!col.field && !col.selection){
+                    if(!col.field && col.type !== 'selection'){
                         return;
                     }
-                    column.selection = col.selection || null;
+                    column.type = col.type || null;
                     column.field = col.field || "";
                     column.align = col.align || "center";
                     column.width = col.width || 0;
@@ -429,16 +430,8 @@
                     whole.push(column);
                 }
 
-                // 判断是否支持多选，columns增加一列固定在左侧最前面
-                let columns = []
-                if(this.selection){
-                    columns = [{selection:true, width: 50, fixed: true},...this.columns]
-                }else{
-                    columns = this.columns
-                }
-
-                for(let i = 0; i < columns.length; i++){
-                    _create([], columns[i], 0, !!columns[i].fixed);
+                for(let i = 0; i < this.columns.length; i++){
+                    _create([], this.columns[i], 0, !!this.columns[i].fixed);
                 }
 
                 let dftWidth = 0;

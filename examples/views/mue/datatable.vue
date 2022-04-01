@@ -12,7 +12,7 @@
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
                                @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
                                @row-click="onRowClick" @cell-click="onCellClick"
-                               :selection="true" @selection-change="onSelectionChange">
+                               @selection-change="onSelectionChange">
 <!--                    <template slot="row" slot-scope="{row, cols, no}">-->
 <!--                        <tr>-->
 <!--                            <td v-for="c in cols" :key="c.field">-->
@@ -55,7 +55,7 @@
 
             pageSize > 0 可视区域最后一行的rowNo 计算当前页码， 页码 > 1时 显示右下角分页按钮，点击返回顶部。
             <br/>
-            selection: 是否启用表格多选功能[true,false]<br/>
+            <!-- selection: 是否启用表格多选功能[true,false]<br/> -->
         </van-tab>
 
         <van-tab title="列定义">
@@ -68,6 +68,7 @@
             children: 子列定义(合并表头) <br/>
             slot: 表头单元格的插槽名称 <br/>
             tmpl: 行单元格的作用域插槽名称 {row, col, value, no} <br/>
+            type: 类型字段 默认/多选selection 可选，不填为默认，填了selection开启多选框，一个columns定义多个只会共享一个selection-change事件<br/>
         </van-tab>
 
         <van-tab title="作用域插槽">
@@ -105,6 +106,7 @@
 
                 header: true, // 显示表头
                 columns: [ // 列定义
+                    {width: 50, type:'selection',fixed:true},
                     {field: "a", title: "列1", width: 120, fixed: true, align: "left"},
                     {field: "b", title: "列2", width: 120, tmpl: "aa"},
                     {field: "c", title: "列3", width: 120, tmpl: "toast", sortable: true},
