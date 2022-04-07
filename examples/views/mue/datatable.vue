@@ -11,7 +11,8 @@
                                :stripe="stripe" :row-key="rowKey" :row-height="rowHeight"
                                :header="header" :page-size="pageSize" @sort-change="onSortChange"
                                @refresh="onRefresh" @load-more="onLoadMore" :virtual="true"
-                               @row-click="onRowClick" @cell-click="onCellClick">
+                               @row-click="onRowClick" @cell-click="onCellClick"
+                               @selection-change="onSelectionChange">
 <!--                    <template slot="row" slot-scope="{row, cols, no}">-->
 <!--                        <tr>-->
 <!--                            <td v-for="c in cols" :key="c.field">-->
@@ -30,6 +31,7 @@
                 </mue-datatable>
             </div>
             <van-button size="small" @click="toLeft" type="primary">滚动到最左边</van-button>
+            <van-button size="small" @click="getSelection" type="primary">返回选中数据</van-button>
 
             <van-actionsheet v-model="show"
                     :actions="[{ name: '选项'}]"/>
@@ -53,6 +55,7 @@
 
             pageSize > 0 可视区域最后一行的rowNo 计算当前页码， 页码 > 1时 显示右下角分页按钮，点击返回顶部。
             <br/>
+            <!-- selection: 是否启用表格多选功能[true,false]<br/> -->
         </van-tab>
 
         <van-tab title="列定义">
@@ -65,6 +68,7 @@
             children: 子列定义(合并表头) <br/>
             slot: 表头单元格的插槽名称 <br/>
             tmpl: 行单元格的作用域插槽名称 {row, col, value, no} <br/>
+            type: 类型字段 默认/多选selection 可选，不填为默认，填了selection开启多选框，一个columns定义多个只会共享一个selection-change事件<br/>
         </van-tab>
 
         <van-tab title="作用域插槽">
@@ -76,13 +80,15 @@
             refresh: 顶部下拉刷新 参数: func(回调方法，执行完以后调用) <br/>
             load-more: 底部上拉刷新加载 参数: func(回调方法，执行完以后调用) <br/>
             row-click: 行点击 参数: row(行数据), no(行索引) <br/>
-            cell-click: 单元格点击 参数: value(单元格数据), row(行数据), col(列定义), no(行索引), event
+            cell-click: 单元格点击 参数: value(单元格数据), row(行数据), col(列定义), no(行索引), event<br/>
+            selection-change: 表格多选选中触发 无参数，返回选中的数据<br/>
         </van-tab>
 
         <van-tab title="Method">
             ScrollLeft: 设置table 滚动部分的左滚动距离，参数: Number(距离)
             ScrollTop: 设置table 滚动部分的上滚动距离，参数: Number(距离)
             LoadSuccess: 数据加载完成时调用，类似refresh 和 load-more 的func参数，主要用于检查数据是否已填充满
+            getSelection: 返回已选中数据
         </van-tab>
     </van-tabs>
 </template>
@@ -100,6 +106,7 @@
 
                 header: true, // 显示表头
                 columns: [ // 列定义
+                    {width: 50, type:'selection',fixed:true},
                     {field: "a", title: "列1", width: 120, fixed: true, align: "left"},
                     {field: "b", title: "列2", width: 120, tmpl: "aa"},
                     {field: "c", title: "列3", width: 120, tmpl: "toast", sortable: true},
@@ -195,10 +202,19 @@
                 this.$refs.table.ScrollLeft();
             },
 
+            getSelection(){
+                const checks = this.$refs.table.getSelection()
+                console.log(checks)
+            },
+
             onCellClick(value, row, col, no, event){
                 this.show = true;
                 // console.info(value);
                 // alert(value);
+            },
+
+            onSelectionChange(selects){
+                console.log({selects})
             }
         },
         mounted(){
