@@ -34,6 +34,9 @@
                                         this.row._mue_checked = event
                                         this.$forceUpdate()
                                         this.TABLE.onSelectionChange()
+                                    },
+                                    click:(e)=>{
+                                        e.stopPropagation()
                                     }
                                 }
                             })
