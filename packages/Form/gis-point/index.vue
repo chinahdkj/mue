@@ -722,7 +722,14 @@ export default {
 	},
 	mounted() {
 		if (this.currentLocation && !this.value) {
-			this.rePos();
+			this.$native.getLocation({
+				cb: pos => {
+					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+					this.$nextTick(() => {
+						this.onConfirm();
+					});
+				}
+			});
 		}
 	}
 };
