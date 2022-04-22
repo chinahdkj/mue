@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-datatable" v-resize="onResize"
+    <div class="mue-datatable" v-resize="onResize" 
          :class="{'no-border': noborder, 'border-both': !noborder && borderEffect === 'both'}">
         <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
@@ -190,7 +190,6 @@
             bindings: {type: Object, default: null}, //数据字典
             colSlots: {type: Object, default: null}, //用于继承插槽
             highlightCurrentRow: {type: Boolean, default: false}, //是否高亮当前行
-            selection: {type: Boolean, default: false},//是否支持多选功能
         },
         data(){
             return {
@@ -213,7 +212,7 @@
                 },
                 currentKey: null,
                 allCheck:false,//是否全部选中
-                checkedList:[],//选中的列表
+                selection:[],//选中的列表
             };
         },
         computed: {
@@ -265,9 +264,9 @@
                         return {...i,_mue_checked:true}
                     })
                 }else{
-                    if(this.checkedList.length > 0){
+                    if(this.selection.length > 0){
                         return this.data.map(i=>{
-                            return {...i,_mue_checked:this.checkedList.find(item=>item[this.rowKey] === i[this.rowKey]) ? true : false}
+                            return {...i,_mue_checked:this.selection.find(item=>item[this.rowKey] === i[this.rowKey]) ? true : false}
                         })
                     }else{
                         return this.data.map(i=>{
@@ -560,7 +559,7 @@
 
             onRefresh(success){
                 let self = this;
-                self.checkedList = []
+                self.selection = []
                 let callback = () => {
                     this.$nextTick(() => {
                         self.ScrollLeft();
@@ -588,18 +587,18 @@
 
             onCheckChange(){
                 if(!this.allCheck){
-                    this.checkedList = []
+                    this.selection = []
                 }
                 this.onSelectionChange()
             },
 
             onSelectionChange(){
-                this.checkedList = this.dataRows.filter(data => data._mue_checked)
-                this.$emit('selection-change',this.checkedList)
+                this.selection = this.dataRows.filter(data => data._mue_checked)
+                this.$emit('selection-change',this.selection)
             },
 
             getSelection(){
-                return this.checkedList
+                return this.selection
             },
 
             ScrollLeft(l = 0){
