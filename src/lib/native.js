@@ -14,7 +14,7 @@ const fns = [
     "hideHeader", "scanCode", "copy", "share", "userInfo", "userBehaviorRecord", "search",
     "collect", "nfcData", "goback", "refreshBadge", "signature", "saveLocalData", "queryLocalData", "deleteLocalData",
     "bluetooth", "btDisConnected", "bluetoothState", "manualPost", "btGetParams", "manualPostRes", "btSound", "soundPlay", "vibratorSound", "dictList",
-    "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi",
+    "btScan", "shareFile", "btUpdate", "spectrum", "trace", "delFile", "interceptBack", "bgNavi", "keepScreenOn",
     "video", "showVideo", "sound", "screenshot", "bgNaviClose", "regeocode", "watermarkCamera",
     "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
