@@ -95,6 +95,7 @@
                 }
                 if(this.dtype === "time" || this.dtype === "year"){
                     this.val = this.value;
+                    this.val = (this.value ? this.value : moment().format(this.format));
                 }
                 else{
                     this.val = (this.value ? moment(this.value, this.format) : moment()).toDate();
