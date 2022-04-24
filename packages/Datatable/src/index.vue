@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-datatable" v-resize="onResize"
+    <div class="mue-datatable" v-resize="onResize" 
          :class="{'no-border': noborder, 'border-both': !noborder && borderEffect === 'both'}">
         <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
@@ -12,8 +12,8 @@
                     <thead>
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" :rowspan="c.rowspan">
-                            <a v-if="c.fixed" :style="{'text-align': c.align || 'center'}">
-                                <span :class="sortCls(c)" @click="onChangeSort(c)">
+                            <a v-if="c.fixed" :style="{'text-align': c.align || 'center'}" :class="{'mue-datatable-selection':c.type === 'selection'}">
+                                <span :class="sortCls(c)" @click="onChangeSort(c)" v-if="c.type !== 'selection'">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
                                     <template v-else>
@@ -21,6 +21,9 @@
                                     </template>
                                     <i class="icon-asc fa fa-caret-up" aria-hidden="true"></i>
                                     <i class="icon-desc fa fa-caret-down" aria-hidden="true"></i>
+                                </span>
+                                <span :class="sortCls(c)" v-else>
+                                    <van-checkbox v-model="allCheck" @change="onCheckChange"></van-checkbox>
                                 </span>
                             </a>
                         </th>
@@ -42,8 +45,8 @@
                     <tr v-for="(r , ii) in cols" :key="ii">
                         <th v-for="(c, i) in r" :key="i" :colspan="c.colspan" v-if="!c.fixed"
                             :rowspan="c.rowspan">
-                            <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}">
-                                <span :class="sortCls(c)" @click="onChangeSort(c)">
+                            <a v-if="!c.fixed" :style="{'text-align': c.align || 'center'}" :class="{'mue-datatable-selection':c.type === 'selection'}">
+                                <span :class="sortCls(c)" @click="onChangeSort(c)" v-if="c.type !== 'selection'">
                                     <slot v-if="c.slot && $slots[c.slot]" :name="c.slot">
                                     </slot>
                                     <template v-else>
@@ -51,6 +54,9 @@
                                     </template>
                                     <i class="icon-asc fa fa-caret-up" aria-hidden="true"></i>
                                     <i class="icon-desc fa fa-caret-down" aria-hidden="true"></i>
+                                </span>
+                                <span :class="sortCls(c)" v-else>
+                                    <van-checkbox v-model="allCheck" @change="onCheckChange"></van-checkbox>
                                 </span>
                             </a>
                         </th>
@@ -82,7 +88,7 @@
                             <table class="mue-datatable__inner-table"
                                    :style="[{width: tableWidth + 'px'}]">
                                 <col-group :columns="colFields"/>
-                                <table-body :rows="data" :is-fixed="true" :start="0"/>
+                                <table-body :rows="dataRows" :is-fixed="true" :start="0"/>
                             </table>
                         </div>
 
@@ -93,7 +99,7 @@
                             <table class="mue-datatable__inner-table" ref="main_table"
                                    :style="[{width: tableWidth - fixedWidth + 'px'}]">
                                 <col-group :columns="colFields" filter/>
-                                <table-body :rows="data" :is-fixed="false" :start="0"/>
+                                <table-body :rows="dataRows" :is-fixed="false" :start="0"/>
                             </table>
 
                         </div>
@@ -205,6 +211,8 @@
                     marginTop: "0px"
                 },
                 currentKey: null,
+                allCheck:false,//是否全部选中
+                selection:[],//选中的列表
             };
         },
         computed: {
@@ -248,7 +256,24 @@
                 return this.pageTotal > 1 ? (this.total + t("mue.dataTable.allLoadedText")) : "";
             },
             vrows(){
-                return this.data.slice(this.yScroller.start, this.yScroller.end);
+                return this.dataRows.slice(this.yScroller.start, this.yScroller.end);
+            },
+            dataRows(){
+                if(this.allCheck){
+                    return this.data.map(i=>{
+                        return {...i,_mue_checked:true}
+                    })
+                }else{
+                    if(this.selection.length > 0){
+                        return this.data.map(i=>{
+                            return {...i,_mue_checked:this.selection.find(item=>item[this.rowKey] === i[this.rowKey]) ? true : false}
+                        })
+                    }else{
+                        return this.data.map(i=>{
+                            return {...i,_mue_checked:false}
+                        })
+                    }
+                }
             }
         },
         watch: {
@@ -384,9 +409,10 @@
                         }
                         return;
                     }
-                    if(!col.field){
+                    if(!col.field && col.type !== 'selection'){
                         return;
                     }
+                    column.type = col.type || null;
                     column.field = col.field || "";
                     column.align = col.align || "center";
                     column.width = col.width || 0;
@@ -533,6 +559,7 @@
 
             onRefresh(success){
                 let self = this;
+                self.selection = []
                 let callback = () => {
                     this.$nextTick(() => {
                         self.ScrollLeft();
@@ -556,6 +583,22 @@
                 }
 
                 this.$emit("row-click", row, i);
+            },
+
+            onCheckChange(){
+                if(!this.allCheck){
+                    this.selection = []
+                }
+                this.onSelectionChange()
+            },
+
+            onSelectionChange(){
+                this.selection = this.dataRows.filter(data => data._mue_checked)
+                this.$emit('selection-change',this.selection)
+            },
+
+            getSelection(){
+                return this.selection
             },
 
             ScrollLeft(l = 0){

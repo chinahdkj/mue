@@ -83,6 +83,18 @@
 							:lat-lng="limit.center"
 							:radius="limit.radius"
 							color="#4796e3" />
+
+						<gwt v-for="pipe in pipeData"
+							:key="pipe.id"
+							:mode="pipe.mode"
+							:url="pipe.url"
+							:newproj4="pipe.newproj4"
+							:proj="pipe.proj"
+							:param="pipe.param"
+							:type="pipe.type"
+							:exportType="pipe.exportType"
+							:options="pipe.options"
+						/>
 					</l-map>
 					<div class="mue-gis-point-pop--marker"
 						:style="markerOpt.style">
@@ -91,6 +103,15 @@
 						<img :src="markerOpt.src" />
 						<span v-if="exceedArea"
 							class="exceed-area"></span>
+					</div>
+
+					<div class="mue-gis-point-pipeline" v-if="pipeLines && pipeLines.length">
+						<van-checkbox-group v-if="pipeLineType == 'checkbox'" v-model="pipeCheckbox">
+							<van-checkbox v-for="pipe in pipeLines" :key="pipe.id" :name="pipe.id">{{pipe.name}}</van-checkbox>
+						</van-checkbox-group>
+						<van-radio-group v-else v-model="pipeRadio">
+							<van-radio v-for="pipe in pipeLines" :key="pipe.id" :name="pipe.id">{{pipe.name}}</van-radio>
+						</van-radio-group>
 					</div>
 				</div>
 			</div>
@@ -318,10 +339,12 @@ const VALID_POS = v => {
 		: null;
 };
 
+import gwt from "./gwtOverlay/gwt.vue";
+
 export default {
 	mixins: [localeMixin],
 	name: "MueGisPoint",
-	components: { LMap, LTileLayer, LMarker, LControlZoom, LCircle, LControl },
+	components: { LMap, LTileLayer, LMarker, LControlZoom, LCircle, LControl, gwt },
 	inject: {
 		FORM_ITEM: {
 			from: "FORM_ITEM",
@@ -353,7 +376,14 @@ export default {
 		},
 		
 		gislist: { type: Array, default: null },
-		lhsw:{ type: Boolean, default: false}
+		lhsw:{ type: Boolean, default: false},
+		pipeLines: {//管线配置数组,active:true默认加载, name名称，id唯一字段，其它同gwtOption
+			type: Array,
+			default: ()=> {
+				return []
+			}
+		},
+		pipeLineType: {type: String, default: "radio"},//pipeLines管线配置是单选radio，多选checkbox
 	},
 	data() {
 		return {
@@ -372,6 +402,8 @@ export default {
 			showlhsw: false,
 			showGisList:false,
 			gxType:'供水',
+			pipeRadio: '',
+			pipeCheckbox: []
 		};
 	},
 	computed: {
@@ -405,6 +437,13 @@ export default {
 					bottom: `${MarkerIcon.shadowAnchor[1]}px`
 				}
 			};
+		},
+		pipeData() {
+			if(this.pipeLineType == 'checkbox') {
+				return this.pipeLines.filter(pipe=> this.pipeCheckbox.indexOf(pipe.id) > -1)
+			}else {
+				return this.pipeLines.filter(pipe=> pipe.id == this.pipeRadio)
+			}
 		}
 	},
 	watch: {
@@ -674,12 +713,47 @@ export default {
 			});
 		}
 	},
-	created() {},
+	created() {
+		if(this.pipeLineType == 'checkbox') {
+			this.pipeCheckbox = this.pipeLines.filter(pipe=> pipe.active).map(pipe=> pipe.id)
+		}else {
+			this.pipeRadio = (this.pipeLines.find(pipe=> pipe.active) || {id: ''}).id
+		}
+	},
 	mounted() {
-		
 		if (this.currentLocation && !this.value) {
-			this.rePos();
+			this.$native.getLocation({
+				cb: pos => {
+					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+					this.$nextTick(() => {
+						this.onConfirm();
+					});
+				}
+			});
 		}
 	}
 };
 </script>
+<style lang="less">
+.mue-gis-point-pipeline{
+	position: absolute;
+	box-shadow: 0 0 6px rgb(0, 0, 0, .75);
+    background: #fff;
+    box-sizing: border-box;
+	z-index: 1000;
+	left: 10px;
+	top: 10px;
+	border-radius: 4px;
+	padding: 4px 8px;
+	.van-radio-group{
+		.van-radio{
+			line-height: 24px;
+		}
+	}
+	.van-checkbox-group{
+		.van-checkbox{
+			line-height: 24px;
+		}
+	}
+}
+</style>

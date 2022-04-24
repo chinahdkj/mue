@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.372",
+  "version": "1.0.377",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": true,
@@ -38,7 +38,10 @@
     "vant": "1.6.23",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vue2-leaflet": "^1.2.3"
+    "vue2-leaflet": "2.5.2",
+    "coordtransform": "^2.1.2",
+    "proj4": "^2.6.1",
+    "leaflet": "1.6.0"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
