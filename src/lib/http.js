@@ -126,13 +126,13 @@ function getUrl (url){
 
 
 export default {
-    post(url, data, failed = false, appid = null, header = null){
+    post(url, data, failed = false, appid = null, header = null, timeout = 30000){
         let setting = {
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             data: data,
-            timeout: 30000
+            timeout
         }
         if(isWebApi){
             setting.url = getUrl(url)
@@ -158,13 +158,13 @@ export default {
             return Promise.reject(e);
         });
     },
-    sourcePost(url, data, failed = false, appid = null, header = null){
+    sourcePost(url, data, failed = false, appid = null, header = null, timeout = 30000){
         let setting = {
             method: "post",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             data: data,
-            timeout: 30000
+            timeout
         }
         if(isWebApi){
             setting.url = getUrl(url)
@@ -177,13 +177,13 @@ export default {
             return Promise.reject(e);
         });
     },
-    get(url, params, failed = false, appid = null, header = null){
+    get(url, params, failed = false, appid = null, header = null, timeout = 30000){
         let setting = {
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             params, // get 请求时带的参数
-            timeout: 30000
+            timeout
         }
         if(isWebApi){
             setting.url = getUrl(url)
@@ -205,13 +205,13 @@ export default {
             return Promise.reject(e);
         });
     },
-    sourceGet(url, params, failed = false, appid = null, header = null){
+    sourceGet(url, params, failed = false, appid = null, header = null, timeout = 30000){
         let setting = {
             method: "get",
             baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
             url,
             params, // get 请求时带的参数
-            timeout: 30000
+            timeout
         }
         if(isWebApi){
             setting.url = getUrl(url)
