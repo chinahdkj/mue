@@ -22,7 +22,7 @@
 			get-container="body"
 			:close-on-click-overlay="false"
 			@click-overlay="pop = false">
-			<div class="van-picker"
+			<div v-if="pop" class="van-picker"
 				v-loading="!pos">
 				<div v-if="!isReadonly"
 					class="van-hairline--top-bottom van-picker__toolbar">
@@ -134,6 +134,7 @@ import { MarkerIcon } from "../../../src/utils/gis";
 import { localeMixin, t } from "../../../src/locale";
 import L from "leaflet"
 import leaflettilelayerwmtssrc from "../../../src/lib/leaflet-tilelayer-wmts-src";
+import {Toast} from "vant"
 const esri = require("esri-leaflet");
 // import "leaflet.chinatmsproviders";
 
@@ -358,6 +359,7 @@ export default {
 		clearable: { default: false, type: Boolean },
 		disabled: { type: Boolean, default: false },
 		readonly: { type: Boolean, default: false },
+		isShot: { type: Number, default: 0 },
 		placeholder: { type: String, default: "" },
 		datatype: {
 			type: String,
@@ -658,7 +660,21 @@ export default {
 				this.$toast.fail(t("mue.form.gis.rangeOutText"));
 				return;
 			}
-
+			if(this.isShot == 1) {
+				this.toast = Toast.loading({
+					duration: 0,
+					forbidClick: true,
+					message: "加载中..."
+				});
+     			
+				this.$emit('shot')
+			}else {
+				this.confirmData()
+			}
+			
+		},
+		confirmData() {
+			this.toast.clear()
 			this.pop = false;
 			if (!this.pos) {
 				this.$emit("input", null);
