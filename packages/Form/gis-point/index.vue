@@ -674,7 +674,9 @@ export default {
 			
 		},
 		confirmData() {
-			this.toast.clear()
+			if(this.isShot == 1) {
+				this.toast.clear()
+			}
 			this.pop = false;
 			if (!this.pos) {
 				this.$emit("input", null);
