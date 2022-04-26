@@ -31,7 +31,7 @@
 						{{cancelButtonText}}
 					</div>
 					<div class="van-picker__confirm"
-						@click="onConfirm">{{ t('mue.common.confirm') }}</div>
+						@click="onConfirm(false)">{{ t('mue.common.confirm') }}</div>
 				</div>
 				<div class="mue-gis-point-pop--info">
 					<label>{{ t('mue.form.gis.longText')}}</label><span>{{(pos || {}).lng | round}}</span>
@@ -503,7 +503,7 @@ export default {
 				cb: pos => {
 					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.$nextTick(() => {
-						this.onConfirm();
+						this.onConfirm(true);
 					});
 				}
 			});
@@ -655,12 +655,12 @@ export default {
 			},500);
 			
 		},
-		onConfirm() {
+		onConfirm(isFirst = false) {
 			if (this.distance && this.exceedArea) {
 				this.$toast.fail(t("mue.form.gis.rangeOutText"));
 				return;
 			}
-			if(this.isShot == 1) {
+			if(this.isShot == 1 && !isFirst) {
 				this.toast = Toast.loading({
 					duration: 0,
 					forbidClick: true,
@@ -674,9 +674,7 @@ export default {
 			
 		},
 		confirmData() {
-			if(this.isShot == 1) {
-				this.toast.clear()
-			}
+			this.toast && this.toast.clear()
 			this.pop = false;
 			if (!this.pos) {
 				this.$emit("input", null);
@@ -744,7 +742,7 @@ export default {
 				cb: pos => {
 					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.$nextTick(() => {
-						this.onConfirm();
+						this.onConfirm(true);
 					});
 				}
 			});
