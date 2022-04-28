@@ -38,6 +38,7 @@
 					<label>{{ t('mue.form.gis.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
 				</div>
 				<div class="mue-gis-point-pop--map">
+					<div v-if="isShot" class="modal-shadow"></div>
 					<div class="lh-map-wrap" v-if="showlhsw">
 						<div id="map"
 							style="height:100%">
@@ -339,6 +340,7 @@ const VALID_POS = v => {
 		? { lng: Number(v.lng), lat: Number(v.lat) }
 		: null;
 };
+
 
 import gwt from "./gwtOverlay/gwt.vue";
 
@@ -786,5 +788,13 @@ export default {
 			line-height: 24px;
 		}
 	}
+}
+.modal-shadow{
+	position: absolute;
+	z-index:999;
+	left:0;
+	right:0;
+	width:100%;
+	height: 100%;
 }
 </style>
