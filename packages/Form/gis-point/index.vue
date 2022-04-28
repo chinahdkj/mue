@@ -11,7 +11,7 @@
 				:placeholder="placeholder"
 				unselectable="on"
 				onfocus="this.blur()" />
-			<i class="input__suffix input__suffix_icon iconfont icon-dingwei4"
+			<i v-if="!isShot" class="input__suffix input__suffix_icon iconfont icon-dingwei4"
 				@click.stop="rePos" />
 		</div>
 		<van-popup ref="pop"
@@ -531,6 +531,18 @@ export default {
 			if (this.disabled) {
 				return;
 			}
+			if(this.isShot) {
+				if (this.currentLocation && !this.value) {
+					this.$native.getLocation({
+						cb: pos => {
+							this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+							// this.$nextTick(() => {
+								// this.onConfirm(true);
+							// });
+						}
+					});
+				}
+			}
 			this.pop = true;
 
 			if (this.lhsw) {
@@ -737,16 +749,19 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.currentLocation && !this.value) {
-			this.$native.getLocation({
-				cb: pos => {
-					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
-					this.$nextTick(() => {
-						this.onConfirm(true);
-					});
-				}
-			});
+		if(!this.isShot) {
+			if (this.currentLocation && !this.value) {
+				this.$native.getLocation({
+					cb: pos => {
+						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+						this.$nextTick(() => {
+							this.onConfirm(true);
+						});
+					}
+				});
+			}
 		}
+		
 	}
 };
 </script>
