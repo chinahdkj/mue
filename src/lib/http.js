@@ -51,7 +51,7 @@ axios.interceptors.response.use(response => {
     }
     CloseLoading();
     if(response.status === 200){
-        if(response.data.Code === 0 || response.data.code === 0){
+        if(response.data.Code === 0 || response.data.code === 0 || response.data.code === 200){
             if(response.data.data){
                 response.data.Response = response.data.data;
             }
