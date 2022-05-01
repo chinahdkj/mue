@@ -11,7 +11,7 @@
 				:placeholder="placeholder"
 				unselectable="on"
 				onfocus="this.blur()" />
-			<i class="input__suffix input__suffix_icon iconfont icon-dingwei4"
+			<i v-if="!isShot" class="input__suffix input__suffix_icon iconfont icon-dingwei4"
 				@click.stop="rePos" />
 		</div>
 		<van-popup ref="pop"
@@ -22,7 +22,7 @@
 			get-container="body"
 			:close-on-click-overlay="false"
 			@click-overlay="pop = false">
-			<div class="van-picker"
+			<div v-if="pop" class="van-picker"
 				v-loading="!pos">
 				<div v-if="!isReadonly"
 					class="van-hairline--top-bottom van-picker__toolbar">
@@ -31,13 +31,14 @@
 						{{cancelButtonText}}
 					</div>
 					<div class="van-picker__confirm"
-						@click="onConfirm">{{ t('mue.common.confirm') }}</div>
+						@click="onConfirm(false)">{{ t('mue.common.confirm') }}</div>
 				</div>
 				<div class="mue-gis-point-pop--info">
 					<label>{{ t('mue.form.gis.longText')}}</label><span>{{(pos || {}).lng | round}}</span>
 					<label>{{ t('mue.form.gis.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
 				</div>
 				<div class="mue-gis-point-pop--map">
+					<div v-if="isShot" class="modal-shadow"></div>
 					<div class="lh-map-wrap" v-if="showlhsw">
 						<div id="map"
 							style="height:100%">
@@ -134,6 +135,7 @@ import { MarkerIcon } from "../../../src/utils/gis";
 import { localeMixin, t } from "../../../src/locale";
 import L from "leaflet"
 import leaflettilelayerwmtssrc from "../../../src/lib/leaflet-tilelayer-wmts-src";
+import {Toast} from "vant"
 const esri = require("esri-leaflet");
 // import "leaflet.chinatmsproviders";
 
@@ -339,6 +341,7 @@ const VALID_POS = v => {
 		: null;
 };
 
+
 import gwt from "./gwtOverlay/gwt.vue";
 
 export default {
@@ -358,6 +361,7 @@ export default {
 		clearable: { default: false, type: Boolean },
 		disabled: { type: Boolean, default: false },
 		readonly: { type: Boolean, default: false },
+		isShot: { type: Number, default: 0 },
 		placeholder: { type: String, default: "" },
 		datatype: {
 			type: String,
@@ -501,7 +505,7 @@ export default {
 				cb: pos => {
 					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.$nextTick(() => {
-						this.onConfirm();
+						this.onConfirm(true);
 					});
 				}
 			});
@@ -528,6 +532,18 @@ export default {
 		showPop() {
 			if (this.disabled) {
 				return;
+			}
+			if(this.isShot) {
+				if (this.currentLocation && !this.value) {
+					this.$native.getLocation({
+						cb: pos => {
+							this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+							// this.$nextTick(() => {
+								// this.onConfirm(true);
+							// });
+						}
+					});
+				}
 			}
 			this.pop = true;
 
@@ -653,12 +669,26 @@ export default {
 			},500);
 			
 		},
-		onConfirm() {
+		onConfirm(isFirst = false) {
 			if (this.distance && this.exceedArea) {
 				this.$toast.fail(t("mue.form.gis.rangeOutText"));
 				return;
 			}
-
+			if(this.isShot == 1 && !isFirst) {
+				this.toast = Toast.loading({
+					duration: 0,
+					forbidClick: true,
+					message: "加载中..."
+				});
+     			
+				this.$emit('shot')
+			}else {
+				this.confirmData()
+			}
+			
+		},
+		confirmData() {
+			this.toast && this.toast.clear()
 			this.pop = false;
 			if (!this.pos) {
 				this.$emit("input", null);
@@ -721,16 +751,19 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.currentLocation && !this.value) {
-			this.$native.getLocation({
-				cb: pos => {
-					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
-					this.$nextTick(() => {
-						this.onConfirm();
-					});
-				}
-			});
+		if(!this.isShot) {
+			if (this.currentLocation && !this.value) {
+				this.$native.getLocation({
+					cb: pos => {
+						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
+						this.$nextTick(() => {
+							this.onConfirm(true);
+						});
+					}
+				});
+			}
 		}
+		
 	}
 };
 </script>
@@ -755,5 +788,13 @@ export default {
 			line-height: 24px;
 		}
 	}
+}
+.modal-shadow{
+	position: absolute;
+	z-index:999;
+	left:0;
+	right:0;
+	width:100%;
+	height: 100%;
 }
 </style>
