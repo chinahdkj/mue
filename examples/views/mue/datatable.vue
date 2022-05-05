@@ -127,7 +127,7 @@
                 rowClass: (r, i) => { // 行样式类，可以试function，也可以是string
                     return i % 2 === 0 ? "tr0" : "tr1";
                 },
-                rowHeight: 40, // 行高 缺省40
+                rowHeight: 48, // 行高 缺省40
                 stripe: true, // 斑马线 样式暂无
                 pageSize: 20 // 分页大小
             };

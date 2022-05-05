@@ -174,7 +174,7 @@
             minColWidth: {type: Number, default: 80},
             rowKey: {type: String, default: "_id"},
             rowClass: {type: [String, Function], default: ""},
-            rowHeight: {type: Number, default: 40}, // 行高
+            rowHeight: {type: Number, default: 48}, // 行高
             stripe: {type: Boolean, default: false}, // 斑马线
             noborder: {type: Boolean, default: false}, // 不显示边框
             borderEffect: {
@@ -232,7 +232,7 @@
                 return this.header && this.colFields.length > 0;
             },
             headerHeight(){
-                return (this.headerVisibel ? (this.headerRows * 38) : 0) + "px";
+                return (this.headerVisibel ? (this.headerRows * 42) : 0) + "px";
             },
             isNight(){
                 return this.$root.theme === "night";
