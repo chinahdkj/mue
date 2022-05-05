@@ -2,5 +2,5 @@
 
 rm -rf dist/**
 
-npm i
+cnpm i
 NODE_ENV=production npm run build
