@@ -22,6 +22,7 @@
         mixins: [localeMixin],
         components: {},
         props: {
+            crud: {type: Object, default: null},
             readonly: {type: Boolean, default: false},
             labelWidth: {type: Number, default: 110},
             requiredPos: {type: String, default: "start"},
@@ -49,6 +50,106 @@
             };
         },
         methods: {
+            // 唯一性验证
+            uniqueValid({fields = [], message = "", method = undefined}, item){
+                message = message || t("mue.form.beUnique");
+                if(!this.crud && typeof method !== "function"){
+                    return (rule, value, callback) => {
+                        callback();
+                    };
+                }
+
+                return (rule, value, callback) => {
+                    let index = fields.indexOf(item.field);
+                    if(index > -1){
+                        fields.splice(index, 1);
+                    }
+                    let labels = [], conditions = [], dic = {};
+                    conditions.push({
+                        Field: item.field, Value: objectGet(this.value, item.field),
+                        Operate: "=", Relation: "and"
+                    });
+                    for(let i = 0; i < this.items.length; i++){
+                        let tm = this.items[i];
+                        dic[tm.field] = tm;
+                    }
+
+                    fields.forEach((f) => {
+                        conditions.push({
+                            Field: f, Value: objectGet(this.value, f),
+                            Operate: "=", Relation: "and"
+                        });
+                        dic[f] && labels.push(dic[f].label);
+                    });
+
+                    let key = null;
+                    if(this.crud){
+                        key = objectGet(this.value, this.crud.key);
+                        labels = labels.length > 0 ? `<b>、${labels.join("、")}</b> ` : "";
+
+                        if(key != null){
+                            conditions.push({
+                                Field: this.crud.key, Value: key, Operate: "!=", Relation: "and"
+                            });
+                        }
+                        else{
+                            conditions.push({
+                                Field: this.crud.key, Value: "nil", Operate: "!=", Relation: "and"
+                            });
+                        }
+                    }
+
+                    if(typeof method === "function"){
+                        // 专用非重验证
+                        let promise = method(this.value, conditions, key == null);
+
+                        if(promise instanceof Promise){
+                            promise.then(() => {
+                                callback();
+                            }).catch(() => {
+                                callback(new Error(`${labels}${message}`));
+                            });
+                        }
+                        else{
+                            promise.done(() => {
+                                callback();
+                            }).fail(() => {
+                                callback(new Error(`${labels}${message}`));
+                            });
+                        }
+                    }
+                    else{
+                        let prms = this.crud.query({conditions, size: 1, index: 1});
+                        if(prms instanceof Promise){
+                            prms.then(({total}) => {
+                                if(total === 0){
+                                    callback();
+                                }
+                                else{
+                                    callback(new Error(`${labels}${message}`));
+                                }
+                            }).catch(() => {
+                                new Error(`${labels}${t("mue.form.uniqueFail")}`)
+                            });
+                        }
+                        else{
+                            prms.done(({total}) => {
+                                if(total === 0){
+                                    callback();
+                                }
+                                else{
+                                    callback(new Error(`${labels}${message}`));
+                                }
+                            }).fail(() => {
+                                new Error(`${labels}${t("mue.form.uniqueFail")}`)
+                            });
+                        }
+                    }
+
+                };
+
+            },
+
             addItem(item){
                 this.items.push(item);
             },
@@ -106,6 +207,9 @@
 
                     // 验证规则提取
                     let vrules = item.rules.map((r) => {
+                        if(r.type === "unique"){
+                            return {validator: this.uniqueValid(r, item)};
+                        }
                         return {...r};
                     });
                     if(item.required){
