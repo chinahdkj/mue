@@ -64,7 +64,9 @@ export default {
             signature: {
                 viewText: "Preview file",
                 resignText: "Resign",
-            }
+            },
+            uniqueFail: "Uniqueness validation failed",
+            beUnique: "Must be unique",
         },
         imgPreview: {
             downloadSuccess: "Downloaded to phone album",

@@ -67,7 +67,9 @@ export default {
             signature: {
                 viewText: "预览文件",
                 resignText: "重签",
-            }
+            },
+            uniqueFail: "唯一性验证失败",
+            beUnique: "不能重复",
         },
         imgPreview: {
             downloadSuccess: "已下载至手机相册",
