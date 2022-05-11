@@ -938,16 +938,19 @@
             box-sizing: border-box;
             border-bottom: @@border-color-item 1px solid;
             position: relative;
+            display: flex;
+            align-items: center;
 
             > label {
                 display: inline-block;
                 color: @@color;
                 font-size: @font-size;
-                position: absolute;
-                top: 50%;
+                // position: absolute;
+                // top: 50%;
                 line-height: 16px;
                 z-index: 10;
-                transform: translateY(-50%);
+                // transform: translateY(-50%);
+                padding:3px 0;
                 padding-left: 5px;
                 padding-right: 0;
                 box-sizing: border-box;
@@ -970,8 +973,10 @@
                     font-size: 12px;
                     color: @red;
                     top: 50%;
-                    transform: translateY(-6px);
-                    left: -4px;
+                    // transform: translateY(-6px);
+                    transform: translateY(-12px);
+                    // left: -4px;
+                    left: 4px;
                     right: unset;
                 }
             }

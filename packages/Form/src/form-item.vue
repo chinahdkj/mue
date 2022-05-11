@@ -5,7 +5,7 @@
         <label :class="{'is-error': isError}"
                :style="labelStyle">{{label}}</label>
         <div class="mue-form-item-content" :class="contentClass"
-             :style="[labelInline ? {'padding-left': paddingLeft} : null, contentStyle]">
+             :style="[labelInline ? {'padding-left': '0px'} : null, contentStyle]">
             <slot></slot>
         </div>
         <!--<i v-if="isError" class="error-icon fa fa-exclamation-circle" aria-hidden="true"></i>-->
@@ -70,7 +70,7 @@
                     return {display: 'none'};
                 }
                 if (this.labelInline) {
-                    return {'max-width': this.paddingLeft};
+                    return {'width': this.paddingLeft};
                 } else {
                     return null
                 }
