@@ -1029,11 +1029,21 @@
         }
 
         .mue-form-item.not-inline {
+            flex-flow:column wrap;
+            
             > label {
                 position: relative;
-                margin-top: 10px;
+                // margin-top: 10px;
                 top: unset;
+                width: 100%;
                 transform: none;
+            }
+
+            &.is-required {
+
+                > label:after {
+                    left: -6px;
+                }
             }
         }
 
