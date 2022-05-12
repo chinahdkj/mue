@@ -303,6 +303,11 @@ export function DateFormat(value, format) {
     if (typeof value === "number") {
         return new Date(value * 1000).FormatString(format);
     }
+    //为字符串时，先转化成Date
+    let valueDate = new Date(value);
+    if(!isNaN(valueDate.getTime())) {
+        return valueDate.FormatString(format);
+    }
     return value;
 }
 
