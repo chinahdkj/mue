@@ -29,6 +29,12 @@ if(appid){
     sessionStorage.setItem("appid", appid);
 }
 
+// 开发平台appid，集成到第三方包的时候需要配置
+let hddevappid = GetQueryString("hddevappid");
+if(hddevappid){
+    sessionStorage.setItem("hddevappid", hddevappid);
+}
+
 if(isWebApi){
     axios.defaults.headers.common["Uid"] = sessionStorage.getItem("Uid") || "";
 }
