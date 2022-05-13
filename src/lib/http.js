@@ -255,5 +255,37 @@ export default {
 
             return Promise.reject(e);
         });
+    },
+    delete(url, data, failed = false, appid = null, header = null){
+        let setting = {
+            method: "delete",
+            baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
+            url,
+            data: data,
+            timeout: 30000
+        }
+        if(isWebApi){
+            setting.url = getUrl(url)
+        }else{
+            setting['headers'] = header || getHeaders(appid)
+        }
+
+        return axios(setting).then(res => res.Response).catch(e => {
+            console.log(e);
+
+            // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
+            // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
+            if((e.response && e.response.status === 404) || (e.Code === 21001 || e.code === 21001) || e.response == undefined){
+                // TODO
+            }
+            else if(e.Message){
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
+            }
+            else{
+                !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
+            }
+
+            return Promise.reject(e);
+        });
     }
 };
