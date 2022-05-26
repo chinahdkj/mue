@@ -2,7 +2,7 @@
     <div class="mue-upload">
         <ul class="mue-upload-list">
             <li v-for="(file, i) in thumbs" :key="i" class="__upload-file">
-                <div class="box" @click="showAction(i)">
+                <div class="box" @click.stop.prevent="showAction(i)">
                     <i class="iconfont icon-baobiao-weixuanzhong"></i>
                     <span class="text">{{file.name}}</span>
                 </div>

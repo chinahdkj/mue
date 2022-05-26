@@ -3,7 +3,7 @@
 
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
-                <div class="box" @click="showAction(i)">
+                <div class="box" @click.stop.prevent="showAction(i)">
                     <img :src="m.url"/>
                     <div v-if="m.type === 'video'" class="box-shadow">
                         <i class="fa fa-video-camera"></i>
