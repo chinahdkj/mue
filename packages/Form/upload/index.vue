@@ -25,6 +25,20 @@
         <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
                          :actions="actions"/>
+        <van-popup v-model="dialog.visible" get-container="body" :close-on-click-overlay="true"
+            class="form-input-dialog"
+            position="bottom" style="width:100%;height:85%;">
+            <div class="form-input-dialog-header">附件预览
+                <i class="iconfont icon-chushaixuanxiang" @click="dialog.visible = false"></i>
+            </div>
+            <div class="form-input-dialog-container">
+                <iframe ref="dialogFrame" frameborder="0" :src="dialog.url" marginheight='0' marginwidth='0' allowTransparency='true'
+                    :style="{width: '100%', height: '100%'}"/>
+            </div>
+            <div class="form-input-dialog-footer">
+                <van-button size="large" type="default" @click="dialog.visible = false">关闭预览</van-button>
+            </div>
+        </van-popup>
     </div>
 </template>
 
@@ -58,12 +72,17 @@ export default {
         uploadPrefix: {type: String, default: ""},
         uploadUrl: {type: String, default: ""}, //自定义上传文件地址接口,不包含prefix
         infosUrl: {type: String, default: ""}, //自定义获取文件信息接口地址,不包含prefix
-        uploadKey: {type: String, default: ""} //自定义上传参数名
+        uploadKey: {type: String, default: ""}, //自定义上传参数名
+        isFrame:{type: Boolean, default: false},//是否用iframe打开预览
     },
     data(){
         return {
             files: [], thumbs: [], uploading: false, dict: {},
             pop: {visible: false, current: -1},
+            dialog: {
+                visible: false,
+                path:'',
+            },
         };
     },
     computed: {
@@ -163,6 +182,14 @@ export default {
                 //     });
                 // }
             }
+        },
+        'dialog.visible':{
+            deep: true, immediate: true,
+            handler(v){
+                if(!v){
+                    this.dialog.url = ''
+                }
+            }
         }
     },
     methods: {
@@ -201,7 +228,27 @@ export default {
         downloadFile(i) {
             let path = this.getPath(this.files[i]);
             path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
-            window.open(path); //下载
+            if(this.isFrame){
+                this.dialog.visible = true;
+                this.dialog.url = path
+                this.$nextTick(()=>{
+                    this.$refs.dialogFrame.onload = (e) =>{
+                        let temp_css = `<style type="text/css">
+                            img{
+                                display: block;
+                                -webkit-user-select: none;
+                                max-width: 100%;
+                                margin: auto;
+                                background-color: hsl(0, 0%, 90%);
+                                transition: background-color 300ms;
+                            }
+                        </style>`
+                        // this.$refs.dialogFrame.contentDocument.body.innerHTML += temp_css
+                    }
+                })
+            }else{
+                window.open(path); //下载
+            }
         },
         removeFile() {
             if (this.disabled) {
@@ -314,3 +361,51 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+    .form-input-dialog{
+        &.fullscreen{
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0;
+        }
+        .form-input-dialog-header{
+            height: 44px;
+            line-height: 44px;
+            padding: 0 12px;
+            position: relative;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #f0f0f0;
+            color: #757575;
+            .iconfont{
+                position: absolute;
+                padding:0 12px;
+                right: 0;
+            }
+        }
+        .form-input-dialog-container{
+            height: calc(100% - 88px);
+        }
+        .form-input-dialog-footer{
+            height: 44px;
+            padding: 0px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            /deep/.van-button{
+                flex: 1;
+                border-radius: 0px;
+                margin: 0;
+                &.van-button--default{
+                    color: #333333;
+                }
+            }
+        }
+        .text-button{
+            padding: 0;
+        }
+    }
+</style>
