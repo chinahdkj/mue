@@ -32,7 +32,7 @@
                 <i class="iconfont icon-chushaixuanxiang" @click="dialog.visible = false"></i>
             </div>
             <div class="form-input-dialog-container">
-                <iframe ref="dialogFrame" frameborder="0" :src="dialog.url" marginheight='0' marginwidth='0' allowTransparency='true'
+                <iframe v-if="dialog.visible" ref="dialogFrame" frameborder="0" :src="dialog.url" marginheight='0' marginwidth='0'
                     :style="{width: '100%', height: '100%'}"/>
             </div>
             <div class="form-input-dialog-footer">
