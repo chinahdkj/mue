@@ -184,7 +184,14 @@
                 if(this.defaulturl) {
                     this.video.path = this.src
                 }else {
-                    this.video.path = `${host}/fstatic/img/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                    // 清晰度调整
+                    let furl = "thumb";
+                    if (this.definition == "fluent") {
+                        furl = "img";
+                    }else if(this.definition == "zlm"){
+                        furl = "zlm";
+                    }
+                    this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
                 }
             },
             Stop() {
