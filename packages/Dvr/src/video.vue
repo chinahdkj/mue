@@ -112,6 +112,8 @@
                 let furl = "thumb";
                 if (this.definition == "fluent") {
                     furl = "img";
+                }else if(this.definition == "zlm"){
+                    furl = "zlm";
                 }
                 return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
