@@ -3,8 +3,15 @@
         <van-button size="small" @click="visible.normal = true" type="primary">默认</van-button>
         <mue-actionsheet v-model="visible.normal"
                          :actions="actions"
+                         :title="'标题'"
                          cancel-text="取消"
                          @select="onSelect">
+<!--            <template #header>-->
+<!--                测试233-->
+<!--            </template>-->
+<!--            <template #default="{ action, index }">-->
+<!--                {{ index }}{{ action.name }}-->
+<!--            </template>-->
         </mue-actionsheet>
     </div>
 </template>

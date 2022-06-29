@@ -6,17 +6,24 @@
                    :class="{'round' : round}"
                    v-on="$listeners"
                    :close-on-click-overlay="closeOnClickOverlay">
+            <div class="mue-actionsheet-header" v-if="$slots['header'] || title">
+                <slot name="header">
+                    {{ title }}
+                </slot>
+            </div>
             <ul class="list">
-                <li v-for="(action, index) in actions"
-                    :key="index" class="item"
-                    :class="{'disabled': action.disabled}" :style="'width:' + itemWidth">
-                    <div class="icon-box" :style="'background-color:' + action.background"
-                         @click="handleClick(action, index)">
-                        <i :class="action.icon"></i>
-                    </div>
-                    <div class="name">{{ action.name }}</div>
-                </li>
-            </ul>
+                    <li v-for="(action, index) in actions"
+                        :key="index" class="item"
+                        :class="{'disabled': action.disabled}" :style="'width:' + itemWidth"
+                        @click="handleClick(action, index)">
+                        <slot :action="action" :index="index">
+                            <div class="icon-box" :style="'background-color:' + action.background">
+                                <i :class="action.icon"></i>
+                            </div>
+                            <div class="name">{{ action.name }}</div>
+                        </slot>
+                    </li>
+                </ul>
             <div v-if="cancelText" class="cancel-btn" @click="cancel">{{cancelText}}</div>
         </van-popup>
     </div>
@@ -26,6 +33,10 @@
     export default {
         name: 'MueActionsheet',
         props: {
+            title:{
+                type: String,
+                default: ''
+            },
             value: {
                 type: Boolean,
                 default: false
