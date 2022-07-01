@@ -411,7 +411,7 @@ const ccworkApi = {
                     })
                 });
             }
-    
+
             //上传并获取视频地址
             let videoUrl = await uploadVideo(result.value);
             // console.log("videoUrl", videoUrl);
@@ -421,8 +421,8 @@ const ccworkApi = {
                     ccUrl: videoUrl
                 }
             });
-            
-            
+
+
             /*//获取第一帧缩略图
             // let thumb = await videoToBase64(getHost() + videoUrl);
             let thumb = await videoToBase64('http://192.168.100.179:8089' + videoUrl);
@@ -704,7 +704,11 @@ const ccworkApi = {
     },
     //拦截app返回
     interceptBack: ({msgid, method, params}) => {
-        ccworkBridge.ccworkInterceptOriginGoback(params.value, () => {}, ({status, errormessage, result}) => {
+        ccworkBridge.ccworkInterceptOriginGoback(params.value, (e) => {
+            window.response({
+                msgid, method, params: {}
+            });
+        }, ({status, errormessage, result}) => {
             if (status != 1) {
                 window.response({
                     msgid, method, params: {
@@ -712,11 +716,7 @@ const ccworkApi = {
                         msg: errormessage
                     }
                 });
-                return
             }
-            window.response({
-                msgid, method, params: {}
-            });
         })
     },
     //数据库执行操作(SQLite)
@@ -1129,13 +1129,13 @@ const ccworkApi = {
                         "updated": 0, // 更新时间
                         "type": "",  // 业务类型
                         "_id": "",    // 业务主键
-                            "c1": "",     // 列名1
-                            "c2": "",     // 列名2
-                            "c3": "",     // 列名3
-                            "c4": "",     // 列名4
-                            "c5": "",     // 列名5
-                            "c6": "",     // 列名6
-                            "data": ""    // JSON对象字符串
+                        "c1": "",     // 列名1
+                        "c2": "",     // 列名2
+                        "c3": "",     // 列名3
+                        "c4": "",     // 列名4
+                        "c5": "",     // 列名5
+                        "c6": "",     // 列名6
+                        "data": ""    // JSON对象字符串
                     }] //集合对象
                 }
             });
