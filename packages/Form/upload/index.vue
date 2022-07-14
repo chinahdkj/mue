@@ -47,7 +47,7 @@ import {localeMixin, t} from "../../../src/locale";
 import {isCCWork, getHost} from '../../../src/lib/common';
 import {getHeaders} from "../../../src/lib/http";
 import CcworkUpload from "./ccworkUpload";
-import ccworkBridge from 'ccwork-jsbridge';
+// import ccworkBridge from 'ccwork-jsbridge';
 
 export default {
     mixins: [localeMixin],

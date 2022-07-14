@@ -5,7 +5,17 @@ import axios from "axios";
 import {getAppId, getCid, GetQueryString, isIos, isAndroid, getHost, isCCWork} from "./common";
 import uuid from "../utils/uuid";
 import {urlToBase64, videoToBase64} from "../utils/image-utils";
-import ccworkBridge from 'ccwork-jsbridge';
+// import ccworkBridge from 'ccwork-jsbridge';
+//引入ccworkBridge 兼容云+ js
+if(window.navigator.userAgent.toLowerCase().search('ccwork') !== -1
+    || window.navigator.userAgent.toLowerCase().search('emmcloud') !== -1){
+    let head = document.getElementsByTagName('head')[0];
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = 'async';
+    script.src= 'https://service.gzwatersupply.com/apps/ccworkAndImp/common.js';
+    head.appendChild(script);
+}
 import Vue from "vue";
 const isWebApi = process.env.VUE_APP_INTERFACE === 'web'?true:false
 
@@ -88,36 +98,35 @@ let post = (url, data, failed = false, appid = null, header = null) => {
         return Promise.reject(e);
     });
 }
-
 //ccwork主动发起
 if(isCCWork()) {
-    ccworkBridge.init((res) => {
-        //添加应用进入监听（切换至当前应用或亮屏）
-        ccworkBridge.addAppEnterForegroundListener(() => {
-            window.response({
-                msgid: "", method: "screenon", params: {}
-            });
+    let ccworkInterval = setInterval(()=>{
+        console.log('未挂载到ccworkBridge')
+        if(window.ccworkBridge){
+            console.warn('挂载到ccworkBridge')
+            clearInterval(ccworkInterval)
+            ccworkInterval = null
+            addCcworkListener()
+        }
+    },100)
+}
+function addCcworkListener(){
+    //添加应用进入监听（切换至当前应用或亮屏）
+    ccworkBridge.addAppEnterForegroundListener(() => {
+        window.response({
+            msgid: "", method: "screenon", params: {}
         });
-        //添加应用进入后台监听（切换至其他应用或锁屏）
-        ccworkBridge.addAppEnterBackgroundListener(() => {
-            window.response({
-                msgid: "", method: "screenoff", params: {}
-            });
+    });
+    //添加应用进入后台监听（切换至其他应用或锁屏）
+    ccworkBridge.addAppEnterBackgroundListener(() => {
+        window.response({
+            msgid: "", method: "screenoff", params: {}
         });
-        //蓝牙状态监听
-        if(isIos()) {
-            ccworkBridge.ccworkScanBluetooth((data) => {
-                //ios需要先进行蓝牙扫描
-                ccworkBridge.ccworkBluetoothUpdateState(true, (res) => {
-                    window.response({
-                        msgid: "", method: "onBtState", params: {
-                            state: !!res.data.state ? 0 : 1
-                        }
-                    });
-                },(res) => {
-                })
-            })
-        } else {
+    });
+    //蓝牙状态监听
+    if(isIos()) {
+        ccworkBridge.ccworkScanBluetooth((data) => {
+            //ios需要先进行蓝牙扫描
             ccworkBridge.ccworkBluetoothUpdateState(true, (res) => {
                 window.response({
                     msgid: "", method: "onBtState", params: {
@@ -126,8 +135,17 @@ if(isCCWork()) {
                 });
             },(res) => {
             })
-        }
-    });
+        })
+    } else {
+        ccworkBridge.ccworkBluetoothUpdateState(true, (res) => {
+            window.response({
+                msgid: "", method: "onBtState", params: {
+                    state: !!res.data.state ? 0 : 1
+                }
+            });
+        },(res) => {
+        })
+    }
 }
 
 //ccwork方法

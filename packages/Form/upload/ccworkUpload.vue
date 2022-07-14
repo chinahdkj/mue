@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import ccworkBridge from 'ccwork-jsbridge';
+    // import ccworkBridge from 'ccwork-jsbridge';
 
     export default {
         props: {

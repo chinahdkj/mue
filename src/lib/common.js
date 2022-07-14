@@ -3,7 +3,7 @@ import uuid from "../utils/uuid";
 import {ElementClick} from "../utils/fast-click";
 import {env, biz} from "dingtalk-jsapi";
 import ddgov from "gdt-jsapi";
-import ccworkBridge from 'ccwork-jsbridge';
+// import ccworkBridge from 'ccwork-jsbridge';
 
 /**
  * 获取url参数
@@ -59,7 +59,7 @@ export const isDingGov = () => {
 }
 
 export const isCCWork = () => {
-    return window.navigator.userAgent.indexOf('ccwork') > 0
+    return window.navigator.userAgent.indexOf('ccwork') > 0 || window.navigator.userAgent.indexOf('emmcloud') > 0
 }
 
 /*
