@@ -21,6 +21,10 @@
                         <mue-select placeholder="请选择" v-model="model.div" :data="divData" unit="m³/h"></mue-select>
                     </mue-form-item>
 
+                    <mue-form-item label="省市区选择" field="region">
+                        <mue-region v-model="model.region" array clearable></mue-region>
+                    </mue-form-item>
+
                     <mue-form-item label="人员选择" field="user">
                         <mue-tree-picker placeholder="请选择" multiple :data="users" v-model="model.user" clearable/>
                     </mue-form-item>
@@ -234,7 +238,8 @@
                         sync: "qq"
                     },
                     files: [],
-                    audio: []
+                    audio: [],
+                    region:['210000','210100','210112']
                 },
 
                 limit: {
