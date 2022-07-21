@@ -125,6 +125,13 @@ export default {
                     })
                 })
             })
+        },
+        getName(){
+            if(this.array){
+                return this.textShow ? this.textShow.split(',') : []
+            }else{
+                return this.textShow || ''
+            }
         }
     }
 };
