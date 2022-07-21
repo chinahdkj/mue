@@ -9,8 +9,8 @@
         <van-popup ref="pop" class="mue-select-pop" v-model="pop" position="bottom"
                    get-container="body" :close-on-click-overlay="false"
                    @click-overlay="pop = false" @close="onPopupClose">
-            <van-area :area-list="areaList" :value="text"
-                  :cancel-button-text="cancelButtonText" @cancel="onCancel" @confirm="onConfirm"/>
+            <van-area :area-list="areaList" :value="areaText"
+                      :cancel-button-text="cancelButtonText" @cancel="onCancel" @confirm="onConfirm"/>
         </van-popup>
     </div>
 </template>
@@ -52,6 +52,10 @@ export default {
     computed: {
         cancelButtonText(){
             return this.clearable ? t('mue.common.clear') :  t('mue.common.cancel');
+        },
+        areaText(){
+            let area = this.text.split(',')
+            return area[area.length - 1]
         },
         text:{
             get() {
