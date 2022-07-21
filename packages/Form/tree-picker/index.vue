@@ -1,9 +1,21 @@
 <template>
     <div class="mue-tree-picker">
-        <div class="mue-form-input has-suffix" @click="ShowPop"
+        <div class="mue-form-input has-suffix height-auto" @click="ShowPop"
              :class="{'mue-form-input__is-disabled': disabled}">
-            <input type="text" class="input__inner" readonly :value="text" :disabled="disabled"
-                   :placeholder="placeholder" onfocus="this.blur()"/>
+<!--            <textarea type="text" class="input__inner text-area" readonly :value="text" :disabled="disabled"-->
+<!--                   :placeholder="placeholder" onfocus="this.blur()"/>-->
+            <van-field
+                class="input__inner text-area"
+                :value="text"
+                type="textarea"
+                :placeholder="placeholder"
+                :disabled="disabled"
+                rows="1"
+                input-align="right"
+                readonly
+                autosize
+                onfocus="this.blur()"
+            />
             <slot name="icon">
                 <i class="input__suffix input__suffix_icon iconfont icon-zhanlei"></i>
             </slot>
