@@ -322,7 +322,12 @@ L.TileLayer.ChinaProvider.providers = {
 L.tileLayer.chinaProvider = function(type, options) {
 	return new L.TileLayer.ChinaProvider(type, options);
 };
+
+let vm = null
 const ROUND = v => {
+	if(vm && vm.noEllipsis) {
+		return Number(v)
+	}
 	return Number(Number(v).toFixed(8));
 };
 
@@ -388,6 +393,7 @@ export default {
 			}
 		},
 		pipeLineType: {type: String, default: "radio"},//pipeLines管线配置是单选radio，多选checkbox
+		noEllipsis: { type: Boolean, default: false}//坐标不省略显示
 	},
 	data() {
 		return {
@@ -744,6 +750,7 @@ export default {
 		}
 	},
 	created() {
+		vm = this
 		if(this.pipeLineType == 'checkbox') {
 			this.pipeCheckbox = this.pipeLines.filter(pipe=> pipe.active).map(pipe=> pipe.id)
 		}else {
