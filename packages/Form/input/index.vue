@@ -11,12 +11,19 @@
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
-
-            <input v-else-if="(type=='number'||type=='tel')&&numberType=='float'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+            <!-- 数字 浮点数，支持负号 -->
+            <input v-else-if="type ==='number' && numberType === 'float'" type="text" inputmode="text" @input="getFLOAT" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+            <!-- 数字 整数，支持负号 -->
+            <input v-else-if="type ==='number' && numberType !== 'float'" type="text" inputmode="text" @input="getINTEGER" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
-            <input v-else-if="(type=='number'||type=='tel')&&numberType!='float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
+            <input v-else-if="type === 'tel' && numberType === 'float'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+            <input v-else-if="type === 'tel' && numberType !== 'float'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
@@ -126,6 +133,38 @@
             }
         },
         methods: {
+            getFLOAT(e) {
+                let val = e.target.value
+                const t = val.charAt(0)
+                // 先把非数字的都替换掉，除了数字和.
+                val = val.replace(/[^\d.]/g, '')
+                // 保证只有出现一个.而没有多个.
+                val = val.replace(/\.{2,}/g, '.')
+                // 必须保证第一个为数字而不是.
+                val = val.replace(/^\./g, '')
+                // 保证.只出现一次，而不能出现两次以上
+                val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+                // 负数处理
+                if (t === '-') {
+                    e.target.value = '-' + val
+                } else {
+                    e.target.value = val
+                }
+                this.ipt = e.target.value
+            },
+            getINTEGER(e) {
+                let val = e.target.value
+                const t = val.charAt(0)
+                // 先把非数字的都替换掉，除了数字和.
+                val = val.replace(/[^0-9]+/g, '')
+                // 负数处理
+                if (t === '-') {
+                    e.target.value = '-' + val
+                } else {
+                    e.target.value = val
+                }
+                this.ipt = e.target.value
+            },
             onConfirm(){
                 this.pop = false;
                 let index = this.$refs.picker.getColumnIndex(0);

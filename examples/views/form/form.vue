@@ -65,8 +65,8 @@
                 </mue-form-item-group>
 
                 <mue-form-item label="数字验证" field="valid.number"
-                               :rules="[{type:'number', min: 10, max: 80}]">
-                    <mue-input type="number" v-model.number="model.valid.number">
+                               :rules="[{type:'number', min: -1110, max: 80}]">
+                    <mue-input type="number" number-type="float" v-model.number="model.valid.number">
                         <template slot="suffix">只</template>
                     </mue-input>
                 </mue-form-item>
