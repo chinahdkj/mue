@@ -172,7 +172,7 @@
                 this.ipt = tmpl.code || "";
             },
             onChange(e){
-                let v = e.target.valueAsNumber
+                let v = isNaN(e.target.value) ? 0 : Number(e.target.value)
                 if(this.max!=null&&v>this.max&&v){
                     v=this.max
                     this.ipt=this.max
@@ -184,7 +184,6 @@
                 if(this.floatLength) {
                     v = parseFloat((v).toFixed(this.floatLength))
                     this.ipt = v;
-
                 }
 
             },
