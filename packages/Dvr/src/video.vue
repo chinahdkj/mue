@@ -115,7 +115,7 @@
                 }else if(this.definition == "zlm"){
                     furl = "zlm";
                 }else if(this.definition == "ezviz"){
-                    furl = "ezviz";
+                    furl = "zlm";
                     this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
                     return
                 }
@@ -195,7 +195,7 @@
                     }else if(this.definition == "zlm"){
                         furl = "zlm";
                     }else if(this.definition == "ezviz"){
-                        furl = "ezviz";
+                        furl = "zlm";
                         this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
                         return
                     }
