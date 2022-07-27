@@ -114,6 +114,10 @@
                     furl = "img";
                 }else if(this.definition == "zlm"){
                     furl = "zlm";
+                }else if(this.definition == "ezviz"){
+                    furl = "ezviz";
+                    this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                    return
                 }
                 return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
@@ -190,6 +194,10 @@
                         furl = "img";
                     }else if(this.definition == "zlm"){
                         furl = "zlm";
+                    }else if(this.definition == "ezviz"){
+                        furl = "ezviz";
+                        this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                        return
                     }
                     this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
                 }
