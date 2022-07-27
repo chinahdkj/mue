@@ -114,8 +114,7 @@
 
                     let getName = (code) => {
                         let node = this.GetOptionInfo(code);
-                        if(node == null || (typeof this.selectable === "function"
-                            && !this.selectable(node.data, node))) {
+                        if(node == null) {
                             return ""
                         } else {
                             return this.wholePath ? node.$nameRoad.join("-") : node.name;
