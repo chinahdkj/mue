@@ -101,19 +101,23 @@
                 if (!this.rtsp) {
                     return "";
                 }
-                if (this.version === "hik-ys-iframe") {
-                    return `${host}/hdfstatic/zlm/index.html?stream=${encodeURIComponent(rtsp)}`;
-                }
                 if(this.defaulturl || this.version === "hls" || rtsp.startsWith("http://")) {
                     return rtsp
                 }
+
+                //萤石地址转换
                 if (this.version === "hik-ys") {
                     // 萤石rtmp地址转换成hls地址
                     if (rtsp.startsWith("rtmp://")) {
                         return rtsp.replace("rtmp://rtmp.open.ys7.com", "http://hls01open.ys7.com") + ".m3u8";
+                    }else if(rtsp.endsWith("iframe")){
+                        return `${host}/hdfstatic/zlm/index.html?stream=${encodeURIComponent(rtsp)}`;
                     }
                     return rtsp;
+                }else if (this.version === "hik-ys-iframe") {
+                    return `${host}/hdfstatic/zlm/index.html?stream=${encodeURIComponent(rtsp)}`;
                 }
+
                 // 清晰度调整
                 let furl = "thumb";
                 let fstatic = 'fstatic'
@@ -191,7 +195,7 @@
                 if(this.defaulturl) {
                     this.video.path = this.src
                 }else {
-                    if (this.version === "hik-ys-iframe") {
+                    if (this.version === "hik-ys-iframe" || this.version === "hik-ys") {
                         this.video.path =  this.src
                         return this.src
                     }
