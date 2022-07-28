@@ -110,16 +110,16 @@
                 let host = this.getVideoHost();
                 // 清晰度调整
                 let furl = "thumb";
-                if (this.definition == "fluent") {
+                let fstatic = 'fstatic'
+                if (this.definition === "fluent") {
                     furl = "img";
-                }else if(this.definition == "zlm"){
+                }else if(this.definition === "zlm"){
                     furl = "zlm";
-                }else if(this.definition == "ezviz"){
+                }else if(this.definition === "ezviz"){
                     furl = "zlm";
-                    this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
-                    return
+                    fstatic = "hdfstatic";
                 }
-                return `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
+                return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
         },
         watch: {
@@ -190,16 +190,16 @@
                 }else {
                     // 清晰度调整
                     let furl = "thumb";
-                    if (this.definition == "fluent") {
+                    let fstatic = 'fstatic';
+                    if (this.definition === "fluent") {
                         furl = "img";
-                    }else if(this.definition == "zlm"){
+                    }else if(this.definition === "zlm"){
                         furl = "zlm";
-                    }else if(this.definition == "ezviz"){
+                    }else if(this.definition === "ezviz"){
                         furl = "zlm";
-                        this.video.path = `${host}/hdfstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
-                        return
+                        fstatic = "hdfstatic";
                     }
-                    this.video.path = `${host}/fstatic/${furl}/index.html?stream=${encodeURIComponent(this.rtsp)}`;
+                    return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
                 }
             },
             Stop() {
