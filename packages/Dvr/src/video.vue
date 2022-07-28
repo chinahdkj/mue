@@ -86,6 +86,9 @@
                 if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()) {
                     return "hik-ys";
                 }
+                if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.rtsp.endsWith("iframe")) {
+                    return "hik-ys-iframe";
+                }
                 if (this.rtsp && this.rtsp.endsWith(".m3u8")) {
                     return "hls";
                 }
@@ -93,8 +96,13 @@
             },
             src() {
                 let rtsp = this.rtsp || "";
+                // 使用ffmpeg thumb地址播放
+                let host = this.getVideoHost();
                 if (!this.rtsp) {
                     return "";
+                }
+                if (this.version === "hik-ys-iframe") {
+                    return `${host}/hdfstatic/zlm/index.html?stream=${encodeURIComponent(rtsp)}`;
                 }
                 if(this.defaulturl || this.version === "hls" || rtsp.startsWith("http://")) {
                     return rtsp
@@ -106,8 +114,6 @@
                     }
                     return rtsp;
                 }
-                // 使用ffmpeg thumb地址播放
-                let host = this.getVideoHost();
                 // 清晰度调整
                 let furl = "thumb";
                 let fstatic = 'fstatic'
@@ -115,9 +121,6 @@
                     furl = "img";
                 }else if(this.definition === "zlm"){
                     furl = "zlm";
-                }else if(this.definition === "ezviz"){
-                    furl = "zlm";
-                    fstatic = "hdfstatic";
                 }
                 return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
@@ -188,6 +191,10 @@
                 if(this.defaulturl) {
                     this.video.path = this.src
                 }else {
+                    if (this.version === "hik-ys-iframe") {
+                        this.video.path =  this.src
+                        return this.src
+                    }
                     // 清晰度调整
                     let furl = "thumb";
                     let fstatic = 'fstatic';
@@ -195,9 +202,6 @@
                         furl = "img";
                     }else if(this.definition === "zlm"){
                         furl = "zlm";
-                    }else if(this.definition === "ezviz"){
-                        furl = "zlm";
-                        fstatic = "hdfstatic";
                     }
                     return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
                 }
