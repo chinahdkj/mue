@@ -3,7 +3,7 @@ import {getAppId, getCid, getHost, GetQueryString} from "./common";
 import {CloseLoading} from "../../packages/Loading/src";
 import Vue from "vue";
 
-const isWebApi = process.env.VUE_APP_INTERFACE === 'web'?true:false
+export const isWebApi = process.env.VUE_APP_INTERFACE === 'web'?true:false
 
 const HEADER_SETTING = {
     ignore: {},
@@ -121,7 +121,7 @@ export const getHeaders = (appid = null) => {
 };
 
 //针对S7
-function getUrl (url){
+export function getUrl (url){
     let prefix = "/app/customer"
     if(url.startsWith(prefix)){
         return url.substring(prefix.length)
