@@ -1,5 +1,5 @@
 <template>
-    <mue-dvr :cameras="cameras" selectable></mue-dvr>
+    <mue-dvr :cameras="cameras" selectable :panel-unhide="true"></mue-dvr>
 </template>
 
 <script>

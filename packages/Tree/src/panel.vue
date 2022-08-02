@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-tree__panel mue-tree__item">
+    <div class="mue-tree__panel mue-tree__item" :class="{'mue-tree__panel__unhide': !!panelUnhide}">
         <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
              :checked="(TREE.opens || []).indexOf(node.code) > -1"
              :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
@@ -21,7 +21,7 @@
             TREE: "TREE"
         },
         components: {checkBox},
-        props: ["nodes", "search"],
+        props: ["nodes", "search", "panelUnhide"],
         data(){
             return {}
         },

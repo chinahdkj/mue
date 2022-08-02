@@ -39,6 +39,8 @@
             </div>
             <mue-select style="display: none;" ref="pop" :data="cameras" v-model="pop.current"
                         @change="setCamera" searchable></mue-select>
+            <mue-tree-picker style="display: none" ref="treePop" :data="cameras" v-model="pop.current" :panel-unhide="panelUnhide"
+                             @change="setCamera" searchable  clearable :selectable="filter"/>
             <mue-select style="display: none;" ref="multiPop" :data="groups" v-model="multiPop.current"
                         @change="setCameras" searchable></mue-select>
         </mue-main>
@@ -62,6 +64,7 @@
                     ]
                 }
             },
+            panelUnhide: {type: Boolean, default: false}, // 标签是否隐藏
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
             definition: {type: String, default: "ordinary"},
@@ -116,6 +119,9 @@
             }
         },
         methods: {
+            filter(data,node){
+                return !(data.children && data.children.length > 0);
+            },
             resize() {
                 this.width = this.$el.clientWidth - 2 * this.gutter;
             },
@@ -123,7 +129,8 @@
                 this.pop.index = i;
                 this.pop.current = (this.videos[i] || {}).code || null;
                 this.$nextTick(() => {
-                    this.$refs.pop.ShowPop();
+                    // this.$refs.pop.ShowPop();
+                    this.$refs.treePop.ShowPop();
                 });
             },
             pickGroup() {

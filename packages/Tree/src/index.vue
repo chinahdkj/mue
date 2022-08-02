@@ -13,7 +13,7 @@
         <div class="mue-tree__panels">
             <div class="mue-tree__panels-content">
                 <panel v-for="(col, index) in columns" :key="index" :nodes="col"
-                       :search="searchable ? searchValue : null">
+                       :search="searchable ? searchValue : null" :panel-unhide="panelUnhide">
                     <template #node="{node}">
                         <slot name="node" :node="node">{{node.name}}</slot>
                     </template>
@@ -50,6 +50,7 @@
                     return [];
                 }
             },
+            panelUnhide: {type: Boolean, default: false}, // 是否显示全名称，不隐藏
             selectable: {type: Function, default: null},
             searchable: {type: Boolean, default: false}
         },

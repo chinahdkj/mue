@@ -23,7 +23,7 @@
         <van-popup class="mue-tree-picker-pop" v-model="isVisible" position="right"
                    :lazy-render="false" get-container="body" :close-on-click-overlay="false"
                    @click-overlay="isVisible = false">
-            <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText"
+            <mue-tree ref="tree" :data="data" :cancel-button-text="cancelButtonText" :panel-unhide="panelUnhide"
                       @cancel="onCancel" :searchable="searchable"
                       @confirm="onConfirm" :multiple="multiple" :selectable="selectable">
                 <template #node="{node}">
@@ -60,6 +60,7 @@
             multiple: {type: Boolean, default: false},
             selectable: {type: Function, default: null},
             searchable: {type: Boolean, default: false},
+            panelUnhide: {type: Boolean, default: false}, // 是否显示全名称，不隐藏
             wholePath: {type: Boolean, default: false}, //是否显示全路径
             limit: {type: [Number, String], default: 0} //最多选中个数，默认无限个，多选时有效
         },
