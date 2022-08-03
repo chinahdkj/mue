@@ -189,26 +189,26 @@
             },
             onVideoOpen() {
                 this.$native.hideHeader({params: {hide: 1}}); // 隐藏app标题栏
-                let host = this.getVideoHost();
                 this.video.rotate = document.body.clientWidth < document.body.clientHeight;
                 this.video.visible = true;
-                if(this.defaulturl) {
-                    this.video.path = this.src
-                }else {
-                    if (this.version === "hik-ys-iframe" || this.version === "hik-ys") {
-                        this.video.path =  this.src
-                        return this.src
-                    }
-                    // 清晰度调整
-                    let furl = "thumb";
-                    let fstatic = 'fstatic';
-                    if (this.definition === "fluent") {
-                        furl = "img";
-                    }else if(this.definition === "zlm"){
-                        furl = "zlm";
-                    }
-                    return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
-                }
+                this.video.path = this.src
+                // if(this.defaulturl) {
+                //     this.video.path = this.src
+                // }else {
+                //     if (this.version === "hik-ys-iframe" || this.version === "hik-ys") {
+                //         this.video.path =  this.src
+                //         return this.src
+                //     }
+                //     // 清晰度调整
+                //     let furl = "thumb";
+                //     let fstatic = 'fstatic';
+                //     if (this.definition === "fluent") {
+                //         furl = "img";
+                //     }else if(this.definition === "zlm"){
+                //         furl = "zlm";
+                //     }
+                //     return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
+                // }
             },
             Stop() {
                 this.playing = false;
