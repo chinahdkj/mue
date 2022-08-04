@@ -1,15 +1,31 @@
 <template>
-    <div class="mue-tree__panel mue-tree__item" :class="{'mue-tree__panel__unhide': !!panelUnhide}">
-        <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
-             :checked="(TREE.opens || []).indexOf(node.code) > -1"
-             :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
-             @click="onSelect(node)" v-show="!search || showNode(node)">
-            <check-box v-if="TREE.multiple" class="mue-tree__checkbox" :checks="TREE.leaves"
-                       :node="node" @check="onCheck"/>
-            <span class="mue-tree__label">
-                <slot name="node" :node="node">{{node.name}}</slot>
-            </span>
-        </div>
+    <div class="mue-tree__panel mue-tree__item">
+        <template v-if="!!panelUnhide">
+            <div class="mue-tree__panel__unhide">
+                <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
+                     :checked="(TREE.opens || []).indexOf(node.code) > -1"
+                     :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
+                     @click="onSelect(node)" v-show="!search || showNode(node)">
+                    <check-box v-if="TREE.multiple" class="mue-tree__checkbox" :checks="TREE.leaves"
+                               :node="node" @check="onCheck"/>
+                    <span class="mue-tree__label">
+                        <slot name="node" :node="node">{{node.name}}</slot>
+                    </span>
+                </div>
+            </div>
+        </template>
+        <template v-else>
+            <div v-for="node in nodes" class="mue-tree__item van-hairline--bottom" :key="node.code"
+                 :checked="(TREE.opens || []).indexOf(node.code) > -1"
+                 :class="{current: TREE.current === node.code, opened: TREE.opens.indexOf(node.code) > -1}"
+                 @click="onSelect(node)" v-show="!search || showNode(node)">
+                <check-box v-if="TREE.multiple" class="mue-tree__checkbox" :checks="TREE.leaves"
+                           :node="node" @check="onCheck"/>
+                <span class="mue-tree__label">
+                    <slot name="node" :node="node">{{node.name}}</slot>
+                </span>
+            </div>
+        </template>
     </div>
 </template>
 

@@ -60,8 +60,18 @@
             overflow-x: hidden;
             border-left: solid 1px @@border-color;
 
-            &.mue-tree__panel__unhide{
-                display: table;
+            .mue-tree__panel__unhide{
+                width:100%;
+
+                .mue-tree__item{
+                    height: auto;
+                    min-height: 44px;
+                    white-space: pre-wrap;
+                }
+                .mue-tree__label {
+                    flex: auto;
+                    white-space: pre-wrap;
+                }
             }
 
             &:first-child:after {
