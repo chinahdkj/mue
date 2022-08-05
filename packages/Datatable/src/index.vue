@@ -299,9 +299,9 @@
             },
             "data.length": {
                 immediate: true, handler(v) {
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.$refs.load_more.scroller.refresh()
-                    })
+                    },100)
                 }
             }
         },
