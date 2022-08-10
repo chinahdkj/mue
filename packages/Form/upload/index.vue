@@ -229,16 +229,16 @@ export default {
         },
         downloadFile(i) {
             let path = this.getPath(this.files[i]);
-            let suffix = path.substring(path.lastIndexOf('.'));
-            let previewUrl = ''
-            if(suffix === ".pdf") {
-                previewUrl = path
-            }else{
-                let host = sessionStorage.getItem('host') || ''
-                let u = `${ host || window.location.origin}${path}?download=true&origname=1`
-                previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
-            }
             if(this.isFrame){
+                let suffix = path.substring(path.lastIndexOf('.'));
+                let previewUrl = ''
+                if(suffix === ".pdf") {
+                    previewUrl = path
+                }else{
+                    let host = sessionStorage.getItem('host') || ''
+                    let u = `${ host || window.location.origin}${path}?download=true&origname=1`
+                    previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
+                }
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl
                 this.$nextTick(()=>{
@@ -257,6 +257,7 @@ export default {
                     }
                 })
             }else{
+                path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
                 window.open(path); //下载
             }
         },
