@@ -76,6 +76,8 @@ export default {
         isFrame:{type: Boolean, default: false},//是否用iframe打开预览
         isPreview: {type: Boolean, default: false}, //是否开启预览
         previewUrl: {type: String, default: ""}, //自定义文件预览ip+端口
+        watchFiles: {type: Boolean, default: true}, //是否不监听files
+        afterUpload:{type: Function, default: null}, // 上传成功后自定义事件
     },
     data(){
         return {
@@ -143,6 +145,9 @@ export default {
         files: {
             deep: true, immediate: true,
             handler(v) {
+                if(!this.watchFiles){
+                    return;
+                }
                 if(this.multiple){
                     this.$emit("input", v);
                 }
@@ -321,10 +326,18 @@ export default {
             this.$ajax.all(posts).then((rs) => {
                 if(this.multiple){
                     rs.forEach((r) => {
+                        if(typeof this.afterUpload === "function"){
+                            this.thumbs = this.afterUpload(r,this.thumbs);
+                            return
+                        }
                         this.files.push(r.url || r);
                     });
                 }
                 else{
+                    if(typeof this.afterUpload === "function"){
+                        this.thumbs = this.afterUpload(r,this.thumbs);
+                        return
+                    }
                     this.files = rs.length > 0 ? [rs[0].url || rs[0]] : [];
                 }
                 this.uploading = false;
@@ -342,6 +355,10 @@ export default {
             }
             if(this.multiple){
                 rs.forEach((url) => {
+                    if(typeof this.afterUpload === "function"){
+                        this.thumbs = this.afterUpload(url,this.thumbs);
+                        return
+                    }
                     this.files.push(url);
                 });
             }
