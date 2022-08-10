@@ -335,7 +335,7 @@ export default {
                 }
                 else{
                     if(typeof this.afterUpload === "function"){
-                        this.thumbs = this.afterUpload(r,this.thumbs);
+                        this.thumbs = this.afterUpload(rs,this.thumbs);
                         return
                     }
                     this.files = rs.length > 0 ? [rs[0].url || rs[0]] : [];
@@ -364,7 +364,7 @@ export default {
             }
             else{
                 if(typeof this.afterUpload === "function"){
-                    this.thumbs = this.afterUpload(url,this.thumbs);
+                    this.thumbs = this.afterUpload(rs,this.thumbs);
                     return
                 }
                 this.files = rs.length > 0 ? [rs[0]] : [];
