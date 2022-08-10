@@ -76,7 +76,7 @@ export default {
         isFrame:{type: Boolean, default: false},//是否用iframe打开预览
         isPreview: {type: Boolean, default: false}, //是否开启预览
         previewUrl: {type: String, default: ""}, //自定义文件预览ip+端口
-        watchFiles: {type: Boolean, default: true}, //是否不监听files
+        watchFiles: {type: Boolean, default: true}, //是否监听files
         afterUpload:{type: Function, default: null}, // 上传成功后自定义事件
     },
     data(){
@@ -363,6 +363,10 @@ export default {
                 });
             }
             else{
+                if(typeof this.afterUpload === "function"){
+                    this.thumbs = this.afterUpload(url,this.thumbs);
+                    return
+                }
                 this.files = rs.length > 0 ? [rs[0]] : [];
             }
             this.uploading = false;
