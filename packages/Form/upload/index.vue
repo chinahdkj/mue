@@ -26,14 +26,14 @@
                          @select="onSelect"
                          :actions="actions"/>
         <van-popup v-model="dialog.visible" get-container="body" :close-on-click-overlay="true"
-            class="form-input-dialog"
-            position="bottom" style="width:100%;height:85%;">
+                   class="form-input-dialog"
+                   position="bottom" style="width:100%;height:85%;">
             <div class="form-input-dialog-header">附件预览
                 <i class="iconfont icon-chushaixuanxiang" @click="dialog.visible = false"></i>
             </div>
             <div class="form-input-dialog-container">
                 <iframe v-if="dialog.visible" ref="dialogFrame" frameborder="0" :src="dialog.url" marginheight='0' marginwidth='0'
-                    :style="{width: '100%', height: '100%'}"/>
+                        :style="{width: '100%', height: '100%'}"/>
             </div>
             <div class="form-input-dialog-footer">
                 <van-button size="large" type="default" @click="dialog.visible = false">关闭预览</van-button>
@@ -74,6 +74,8 @@ export default {
         infosUrl: {type: String, default: ""}, //自定义获取文件信息接口地址,不包含prefix
         uploadKey: {type: String, default: ""}, //自定义上传参数名
         isFrame:{type: Boolean, default: false},//是否用iframe打开预览
+        isPreview: {type: Boolean, default: false}, //是否开启预览
+        previewUrl: {type: String, default: ""}, //自定义文件预览ip+端口
     },
     data(){
         return {
@@ -227,22 +229,30 @@ export default {
         },
         downloadFile(i) {
             let path = this.getPath(this.files[i]);
-            path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
+            let suffix = path.substring(path.lastIndexOf('.'));
+            let previewUrl = ''
+            if(suffix === ".pdf") {
+                previewUrl = path
+            }else{
+                let host = sessionStorage.getItem('host') || ''
+                let u = `${ host || window.location.origin}${path}?download=true&origname=1`
+                previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
+            }
             if(this.isFrame){
                 this.dialog.visible = true;
-                this.dialog.url = path
+                this.dialog.url = previewUrl
                 this.$nextTick(()=>{
                     this.$refs.dialogFrame.onload = (e) =>{
-                        let temp_css = `<style type="text/css">
-                            img{
-                                display: block;
-                                -webkit-user-select: none;
-                                max-width: 100%;
-                                margin: auto;
-                                background-color: hsl(0, 0%, 90%);
-                                transition: background-color 300ms;
-                            }
-                        </style>`
+                        // let temp_css = `<style type="text/css">
+                        //     img{
+                        //         display: block;
+                        //         -webkit-user-select: none;
+                        //         max-width: 100%;
+                        //         margin: auto;
+                        //         background-color: hsl(0, 0%, 90%);
+                        //         transition: background-color 300ms;
+                        //     }
+                        // </style>`
                         // this.$refs.dialogFrame.contentDocument.body.innerHTML += temp_css
                     }
                 })
@@ -362,50 +372,50 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    .form-input-dialog{
-        &.fullscreen{
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            padding: 0;
-        }
-        .form-input-dialog-header{
-            height: 44px;
-            line-height: 44px;
-            padding: 0 12px;
-            position: relative;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            background-color: #f0f0f0;
-            color: #757575;
-            .iconfont{
-                position: absolute;
-                padding:0 12px;
-                right: 0;
-            }
-        }
-        .form-input-dialog-container{
-            height: calc(100% - 88px);
-        }
-        .form-input-dialog-footer{
-            height: 44px;
-            padding: 0px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            /deep/.van-button{
-                flex: 1;
-                border-radius: 0px;
-                margin: 0;
-                &.van-button--default{
-                    color: #333333;
-                }
-            }
-        }
-        .text-button{
-            padding: 0;
+.form-input-dialog{
+    &.fullscreen{
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0;
+    }
+    .form-input-dialog-header{
+        height: 44px;
+        line-height: 44px;
+        padding: 0 12px;
+        position: relative;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: #f0f0f0;
+        color: #757575;
+        .iconfont{
+            position: absolute;
+            padding:0 12px;
+            right: 0;
         }
     }
+    .form-input-dialog-container{
+        height: calc(100% - 88px);
+    }
+    .form-input-dialog-footer{
+        height: 44px;
+        padding: 0px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        /deep/.van-button{
+            flex: 1;
+            border-radius: 0px;
+            margin: 0;
+            &.van-button--default{
+                color: #333333;
+            }
+        }
+    }
+    .text-button{
+        padding: 0;
+    }
+}
 </style>
