@@ -336,6 +336,7 @@ export default {
                 else{
                     if(typeof this.afterUpload === "function"){
                         this.thumbs = this.afterUpload(rs,this.thumbs);
+                        this.uploading = false;
                         return
                     }
                     this.files = rs.length > 0 ? [rs[0].url || rs[0]] : [];
@@ -365,6 +366,7 @@ export default {
             else{
                 if(typeof this.afterUpload === "function"){
                     this.thumbs = this.afterUpload(rs,this.thumbs);
+                    this.uploading = false;
                     return
                 }
                 this.files = rs.length > 0 ? [rs[0]] : [];
