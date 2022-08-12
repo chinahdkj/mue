@@ -318,6 +318,11 @@
                     }
                 });
             },
+            getRowIndexByKey(k) {
+                return !this.rowKey ? 0 : this.dataRows.findIndex((r) => {
+                    return objectGet(r, this.rowKey) === k;
+                });
+            },
             getRowNo(row, index){
                 if(typeof this.rowNo === "function"){
                     return this.rowNo(row, index);
