@@ -240,8 +240,7 @@ export default {
                 if(suffix === ".pdf") {
                     previewUrl = path
                 }else{
-                    let host = sessionStorage.getItem('host') || ''
-                    let u = `${ host || window.location.origin}${path}?download=true&origname=1`
+                    let u = `${path}?download=true&origname=1`
                     previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
                 }
                 console.log({host:sessionStorage.getItem('host') || '', path, previewUrl:this.previewUrl, url: previewUrl})
