@@ -243,9 +243,9 @@ export default {
                 previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
             }
             if(!previewUrl.startsWith('http')){
-                previewUrl = (sessionStorage.getItem('host') || '') + previewUrl;
+                previewUrl = decodeURIComponent(sessionStorage.getItem('host') || '') + previewUrl;
             }
-            console.log({host:sessionStorage.getItem('host') || '', '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
+            console.log({host:decodeURIComponent(sessionStorage.getItem('host') || ''), '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
             if(this.isFrame){
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl
