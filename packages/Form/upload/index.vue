@@ -341,6 +341,11 @@ export default {
                     }
                     this.files = rs.length > 0 ? [rs[0].url || rs[0]] : [];
                 }
+
+                files.forEach((res,idx)=>{
+                    this.$emit("on-success", rs[idx], res.file);
+                })
+
                 this.uploading = false;
             }).catch(()=>{
                 this.uploading = false;
