@@ -243,7 +243,10 @@ export default {
                     let u = `${path}?download=true&origname=1`
                     previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
                 }
-                console.log({host:sessionStorage.getItem('host') || '', path, previewUrl:this.previewUrl, url: previewUrl})
+                if(!previewUrl.startsWith('http')){
+                    previewUrl = (sessionStorage.getItem('host') || '') + previewUrl;
+                }
+                console.log({host:sessionStorage.getItem('host') || '', '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl
                 this.$nextTick(()=>{
