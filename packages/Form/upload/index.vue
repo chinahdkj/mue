@@ -234,39 +234,24 @@ export default {
         },
         downloadFile(i) {
             let path = this.getPath(this.files[i]);
+            let suffix = path.substring(path.lastIndexOf('.'));
+            let previewUrl = ''
+            if(suffix === ".pdf") {
+                previewUrl = path
+            }else{
+                let u = `${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
+                previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
+                console.log({previewUrl:this.previewUrl})
+            }
+            if(!previewUrl.startsWith('http')){
+                previewUrl = (sessionStorage.getItem('host') || '') + previewUrl;
+            }
+            console.log({host:sessionStorage.getItem('host') || '', '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
             if(this.isFrame){
-                let suffix = path.substring(path.lastIndexOf('.'));
-                let previewUrl = ''
-                if(suffix === ".pdf") {
-                    previewUrl = path
-                }else{
-                    let u = `${path}?download=true&origname=1`
-                    previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
-                }
-                if(!previewUrl.startsWith('http')){
-                    previewUrl = (sessionStorage.getItem('host') || '') + previewUrl;
-                }
-                console.log({host:sessionStorage.getItem('host') || '', '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl
-                this.$nextTick(()=>{
-                    this.$refs.dialogFrame.onload = (e) =>{
-                        // let temp_css = `<style type="text/css">
-                        //     img{
-                        //         display: block;
-                        //         -webkit-user-select: none;
-                        //         max-width: 100%;
-                        //         margin: auto;
-                        //         background-color: hsl(0, 0%, 90%);
-                        //         transition: background-color 300ms;
-                        //     }
-                        // </style>`
-                        // this.$refs.dialogFrame.contentDocument.body.innerHTML += temp_css
-                    }
-                })
             }else{
-                path = `${path}${path.indexOf("?") > -1 ? "&" : "?"}origname=1`;
-                window.open(path); //下载
+                window.open(previewUrl); //下载
             }
         },
         removeFile() {
