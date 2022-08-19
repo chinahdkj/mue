@@ -241,7 +241,6 @@ export default {
             }else{
                 let u = `${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
                 previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
-                console.log({previewUrl:this.previewUrl})
             }
             if(!previewUrl.startsWith('http')){
                 previewUrl = (sessionStorage.getItem('host') || '') + previewUrl;
