@@ -149,6 +149,10 @@
                     bv = moment(this.bv).format(this.format);
                     ev = moment(this.ev).format(this.format);
                 }
+                if(this.format === 'YYYY-MM-DD'){
+                    bv+=' 00:00:00'
+                    ev+=' 23:59:59'
+                }
                 this.$emit("update:begin", bv);
                 this.$emit("update:end", ev);
                 this.$emit("confirm", bv, ev);
