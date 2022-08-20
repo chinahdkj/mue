@@ -1,5 +1,5 @@
 <template>
-    <div class="mue-datatable" v-resize="onResize" 
+    <div class="mue-datatable" v-resize="onResize"
          :class="{'no-border': noborder, 'border-both': !noborder && borderEffect === 'both'}">
         <div class="mue-datatable-header" v-show="headerVisibel" :style="{height: headerHeight}">
             <div class="mue-datatable-fixed" v-if="fixedWidth > 0"
@@ -141,7 +141,7 @@
     </div>
 </template>
 <script>
-
+    import uuid from "../../../src/utils/uuid"
     import colGroup from "./col-group";
     // import cell from "./cell";
     import tableBody from "./table-body";
@@ -261,15 +261,24 @@
             dataRows(){
                 if(this.allCheck){
                     return this.data.map(i=>{
+                        if(!i._mue_hash_uuid_selection){
+                            i._mue_hash_uuid_selection = uuid()
+                        }
                         return {...i,_mue_checked:true}
                     })
                 }else{
                     if(this.selection.length > 0){
                         return this.data.map(i=>{
-                            return {...i,_mue_checked:this.selection.find(item=>item[this.rowKey] === i[this.rowKey]) ? true : false}
+                            if(!i._mue_hash_uuid_selection){
+                                i._mue_hash_uuid_selection = uuid()
+                            }
+                            return {...i,_mue_checked:!!this.selection.find (item => item['_mue_hash_uuid_selection'] === i['_mue_hash_uuid_selection'])}
                         })
                     }else{
                         return this.data.map(i=>{
+                            if(!i._mue_hash_uuid_selection){
+                                i._mue_hash_uuid_selection = uuid()
+                            }
                             return {...i,_mue_checked:false}
                         })
                     }
@@ -338,7 +347,7 @@
             rowCls(row, i){
                 return [
                     this.stripe && i % 2 === 1 ? "tr_stripe" : "",
-                    this.highlightCurrentRow && this.rowKey && this.currentKey && row[this.rowKey] === this.currentKey ? "active" : "",
+                    this.highlightCurrentRow && this.rowKey && this.currentKey && row['_mue_hash_uuid_selection'] === this.currentKey ? "active" : "",
                     typeof this.rowClass === "function"
                         ? this.rowClass(row, i) : (this.rowClass || "")
                 ];
@@ -583,9 +592,11 @@
                 self.$emit("load-more", callback);
             },
             onRowClick(row, i){
-                if(this.rowKey && row[this.rowKey]) {
-                    this.currentKey = row[this.rowKey];
-                }
+                // rowKey主键可能会有重复数据问题
+                // if(this.rowKey && row[this.rowKey]) {
+                //     this.currentKey = row[this.rowKey];
+                // }
+                this.currentKey = row['_mue_hash_uuid_selection']
 
                 this.$emit("row-click", row, i);
             },
