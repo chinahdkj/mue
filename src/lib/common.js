@@ -282,12 +282,16 @@ export const getCid = () => {
     return sessionStorage.getItem("authorapp") || "";
 };
 
-export const getUploadPath = (path) => {
+export const getUploadPath = (path, host = true) => {
     if(!/^(\/\S+)?\/upload/.test(path)){
     // if(!path.startsWith("/upload")){
         return path;
     }
-    return getAppId() ? `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}` : `${getHost()}${path}`;
+    if(host){
+        return getAppId() ? `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}` : `${getHost()}${path}`;
+    }else{
+        return getAppId() ? `${path}?appid=${getAppId()}&cid=${getCid()}` : `${path}`;
+    }
 };
 
 export const clickElement = ElementClick;

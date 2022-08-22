@@ -76,6 +76,7 @@ export default {
         isFrame:{type: Boolean, default: false},//是否用iframe打开预览
         isPreview: {type: Boolean, default: false}, //是否开启预览
         previewUrl: {type: String, default: ""}, //自定义文件预览ip+端口
+        previewSource: {type: String, default: ""}, //自定义文件预览url的内网地址
         watchFiles: {type: Boolean, default: true}, //是否监听files
         afterUpload:{type: Function, default: null}, // 上传成功后自定义事件
     },
@@ -209,11 +210,11 @@ export default {
             let url = this.dict[p].url;
             return {url: this.getPath(url), name: this.dict[p].name}
         },
-        getPath(m) {
+        getPath(m, host = true) {
             if (!m) {
                 return "";
             }
-            return this.$comm.getUploadPath(m);
+            return this.$comm.getUploadPath(m, host);
         },
         showAction(i) {
             this.pop.current = i;
@@ -233,13 +234,13 @@ export default {
             this.pop.visible = false;
         },
         downloadFile(i) {
-            let path = this.getPath(this.files[i]);
+            let path = this.previewSource ? this.getPath(this.files[i], false) : this.getPath(this.files[i]);
             let suffix = path.substring(path.lastIndexOf('.'));
             let previewUrl = ''
             if(suffix === ".pdf") {
                 previewUrl = path
             }else{
-                let u = `${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
+                let u = `${this.previewSource || ''}${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
                 previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
             }
             if(!previewUrl.startsWith('http')){
