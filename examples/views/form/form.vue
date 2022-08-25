@@ -54,6 +54,11 @@
                         <mue-upload multiple v-model="model.files" :limit="2"/>
                     </mue-form-item>
 
+                    <mue-form-item label="水印相加" field="station.waterpics"
+                                    :rules="[{type:'array'}]">
+                        <mue-img-upload multiple v-model="model.station.waterpics" base64 :quality="0.4" accept="watermark" :watermark-params="watermarkParams"/>
+                    </mue-form-item>
+
                     <mue-form-item label="录制音频" field="audios">
                         <mue-sound-record v-model="model.audio" multiple/>
                     </mue-form-item>
@@ -226,7 +231,8 @@
                     name: "",
                     nb: 0,
                     station: {
-                        pics: []
+                        pics: [],
+                        waterpics:[],
                     },
                     pos: null,
                     div: null,
@@ -247,6 +253,14 @@
                     radius: 500
                 }
             };
+        },
+        computed:{
+            watermarkParams(){
+                return {
+                    userName:'当前登录人',
+                    addr:'地址' + new Date().getTime()
+                }
+            }
         },
         methods: {
             onCancel() {

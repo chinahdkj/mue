@@ -1,6 +1,5 @@
 <template>
     <div class="mue-img-upload">
-
         <ul class="mue-img-upload-list">
             <li v-for="(m, i) in thumbs" :key="i" class="__upload-img">
                 <div class="box" @click.stop.prevent="showAction(i)">
@@ -18,21 +17,23 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <button v-if="accept === 'video' || accept === 'all'" class="upload-btn" type="button"
+                    <button v-else-if="accept === 'video' || accept === 'all'" class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadhadVideo()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
-                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
-                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
-                    </android-upload>
-                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
-                                  :before-read="beforeRead"
-                                  result-type="dataUrl" :multiple="multiple" accept="image/*">
-                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
-                           aria-hidden="true"></i>
-                    </van-uploader>
+                    <template v-else>
+                        <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                                        :limit="limit" :before-read="beforeRead" :after-read="upload">
+                            <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                        </android-upload>
+                        <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                                      :before-read="beforeRead"
+                                      result-type="dataUrl" :multiple="multiple" accept="image/*">
+                            <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                               aria-hidden="true"></i>
+                        </van-uploader>
+                    </template>
                 </div>
             </li>
         </ul>
