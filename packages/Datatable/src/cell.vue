@@ -1,5 +1,6 @@
 <script>
 import Vue from "vue";
+import { NumberFormat,DateFormat } from '../../../src/lib/common'
 export default {
     components: {},
     props: {
@@ -37,9 +38,9 @@ export default {
             let dtype = this.col.options.dtype;
             let format = this.col.options.format;
             if (dtype === 'number' && format) {
-                v = Vue.prototype.$comm.NumberFormat(v, format);
+                v = NumberFormat(v, format);
             } else if (dtype === 'date' && format) {
-                v = Vue.prototype.$comm.DateFormat(v, format);
+                v = DateFormat(v, format);
             } else if(dtype === "code" && format){
                 let r = null;
                 if((this.TABLE.bindings || {})[format]){
