@@ -125,6 +125,8 @@
                     furl = "img";
                 }else if(this.definition === "zlm"){
                     furl = "zlm";
+                }else if(this.definition === 'flv'){
+                    furl = 'flv'
                 }
                 return `${host}/${fstatic}/${furl}/index.html?stream=${encodeURIComponent(rtsp)}`;
             }
