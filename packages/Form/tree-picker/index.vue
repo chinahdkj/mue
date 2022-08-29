@@ -182,6 +182,9 @@
                 }
                 this.isVisible = true;
             },
+            GetNode(data){
+                return this.$refs.tree.GetNode(data);
+            },
             GetOptionInfo(code){
                 return this.$refs.tree.GetNode(code);
             },
