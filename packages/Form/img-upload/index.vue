@@ -22,18 +22,16 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <template v-else>
-                        <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
-                                        :limit="limit" :before-read="beforeRead" :after-read="upload">
-                            <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
-                        </android-upload>
-                        <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
-                                      :before-read="beforeRead"
-                                      result-type="dataUrl" :multiple="multiple" accept="image/*">
-                            <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
-                               aria-hidden="true"></i>
-                        </van-uploader>
-                    </template>
+                    <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </android-upload>
+                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                                  :before-read="beforeRead"
+                                  result-type="dataUrl" :multiple="multiple" accept="image/*">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </van-uploader>
                 </div>
             </li>
         </ul>
