@@ -285,6 +285,7 @@ export default {
 
         //调用原生水印相机
         async uploadWatermark() {
+            console.log('mue-img-watermark')
             let base64 = await this.getWatermark();
             if (!base64) {
                 return
