@@ -6,6 +6,7 @@ import Input from './input/index';
 import Select from './select/index';
 import Textarea from './textarea/index';
 import ImgUpload from './img-upload/index'
+import ImgWatermark from './img-watermark/index'
 import Upload from './upload/index'
 import TreePicker from './tree-picker/index'
 import Signature from './signature/index'
@@ -16,7 +17,7 @@ import GisPoint from './gis-point/index'
 import SoundRecord from './sound-record/index'
 import BlueAlarm from './blue-alarm/index'
 
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload,
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, ImgWatermark,
     Upload, GisPoint, TreePicker, SoundRecord, Signature, Watermeter, BlueAlarm, Region];
 
 cmps.forEach((cmp) => {
