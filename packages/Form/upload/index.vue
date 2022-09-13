@@ -235,9 +235,12 @@ export default {
         },
         downloadFile(i) {
             let path = this.previewSource ? this.getPath(this.files[i], false) : this.getPath(this.files[i]);
-            let suffix = path.substring(path.lastIndexOf('.'));
+            let suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
             let previewUrl = ''
-            if(suffix === ".pdf") {
+            const IMG = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+            const VIDEO = ['.mp4', '.rmvb', '.avi', '.mov', '.flv', '.3gp'];
+            const PDF = ['.pdf'];
+            if([...IMG, ...VIDEO, ...PDF].includes(suffix)) {
                 previewUrl = path
             }else{
                 let u = `${this.previewSource || ''}${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
@@ -246,7 +249,6 @@ export default {
             if(!previewUrl.startsWith('http')){
                 previewUrl = decodeURIComponent(sessionStorage.getItem('host') || '') + previewUrl;
             }
-            console.log({host:decodeURIComponent(sessionStorage.getItem('host') || ''), '附件地址':path, '预览服务':this.previewUrl, '预览地址': previewUrl})
             if(this.isFrame){
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl
