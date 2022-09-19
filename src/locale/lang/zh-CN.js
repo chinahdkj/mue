@@ -15,6 +15,7 @@ export default {
             clear: "清空",
             delete: "删除",
             download: "查看",
+            disDownload:'无法查看',
             empty: "暂无数据",
             placeholder: "输入选项关键字"
         },

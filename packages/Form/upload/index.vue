@@ -92,9 +92,16 @@ export default {
     },
     computed: {
         actions() {
+            const VIDEO = ['.mov','.MOV'];
+            const i = this.pop.current
+            let disabledDownload = false
+            if(this.files[i]){
+                let suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
+                disabledDownload = !!VIDEO.includes(suffix)
+            }
             return this.isDownload ?
                 [
-                    {name: t('mue.common.download'), act: 'download'},
+                    {name: disabledDownload ? t('mue.common.disDownload') : t('mue.common.download'), act: 'download', disabled: disabledDownload},
                     {name: t('mue.common.delete'), act: 'delete'}
                 ] :
                 [

@@ -15,6 +15,7 @@ export default {
             search: "Search",
             delete: "Delete",
             download: "Download",
+            disDownload: "Unable to download",
             clear: "Clear",
             empty: "No data",
             placeholder: "Enter option keywords",
