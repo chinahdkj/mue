@@ -55,7 +55,7 @@
 
 <script>
 import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-import {isAndroid, isCCWork} from "../../../src/lib/common";
+import {isAndroid, isCCWork, getHost} from "../../../src/lib/common";
 import androidUpload from "./androidUpload";
 
 import {localeMixin, t} from "../../../src/locale";
@@ -529,8 +529,12 @@ export default {
             } else {
                 // this.videoPop.visible = true;
                 let videoPath = this.dict[this.imgs[this.current]].path;
-                console.log({videoPath})
-                this.$native.showVideo({params: {path: videoPath}});
+                if(videoPath.startsWith('/upload/')){
+                    console.log(getHost() + videoPath)
+                    this.$native.showVideo({params: {path: getHost() + videoPath}});
+                }else{
+                    this.$native.showVideo({params: {path: videoPath}});
+                }
             }
         },
         removeFile() {
