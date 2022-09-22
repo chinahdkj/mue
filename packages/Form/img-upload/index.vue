@@ -529,6 +529,7 @@ export default {
             } else {
                 // this.videoPop.visible = true;
                 let videoPath = this.dict[this.imgs[this.current]].path;
+                console.log({videoPath})
                 this.$native.showVideo({params: {path: videoPath}});
             }
         },
