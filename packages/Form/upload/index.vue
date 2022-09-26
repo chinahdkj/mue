@@ -99,14 +99,20 @@ export default {
                 let suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
                 disabledDownload = !!VIDEO.includes(suffix)
             }
-            return this.isDownload ?
-                [
-                    {name: disabledDownload ? t('mue.common.disDownload') : t('mue.common.download'), act: 'download', disabled: disabledDownload},
-                    {name: t('mue.common.delete'), act: 'delete'}
-                ] :
-                [
+            if(disabledDownload){
+                return [
                     {name: t('mue.common.delete'), act: 'delete'}
                 ]
+            }else{
+                return this.isDownload ?
+                    [
+                        {name: t('mue.common.download'), act: 'download'},
+                        {name: t('mue.common.delete'), act: 'delete'}
+                    ] :
+                    [
+                        {name: t('mue.common.delete'), act: 'delete'}
+                    ]
+            }
         },
         uploadAble() {
             if(!this.multiple){
