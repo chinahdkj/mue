@@ -11,12 +11,20 @@
             <input v-if="readonly" :type="type" class="input__inner" readonly
                    :disabled="disabled" v-model="ipt" :placeholder="placeholder" unselectable="on"
                    onfocus="this.blur()" :maxlength="maxlength"/>
-            <!-- 数字 浮点数，支持负号 -->
-            <input v-else-if="type ==='number' && numberType === 'float'" type="text" inputmode="text" @input="getFLOAT" class="input__inner" :disabled="disabled"
+            <!-- 数字 浮点数，支持负号 非九宫格-->
+            <input v-else-if="type ==='number' && numberType === 'float' && mode !== 'native'" type="text" inputmode="text" @input="getFLOAT" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
-            <!-- 数字 整数，支持负号 -->
-            <input v-else-if="type ==='number' && numberType !== 'float'" type="text" inputmode="text" @input="getINTEGER" class="input__inner" :disabled="disabled"
+            <!-- 数字 整数，支持负号 非九宫格 -->
+            <input v-else-if="type ==='number' && numberType !== 'float' && mode !== 'native'" type="text" inputmode="text" @input="getINTEGER" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+            <!-- 数字 浮点数，支持负号 九宫格-->
+            <input v-else-if="type === 'number' && numberType === 'float' && mode === 'native'" :type="type" inputmode="decimal" oninput="value=value.replace(/[^0-9.]+/,'');" class="input__inner" :disabled="disabled"
+                   v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
+                   @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
+            <!-- 数字 整数，支持负号 九宫格 -->
+            <input v-else-if="type === 'number' && numberType !== 'float' && mode === 'native'" :type="type" inputmode="numeric" oninput="value=value.replace(/[^0-9]+/,'');" class="input__inner" :disabled="disabled"
                    v-model="ipt" :placeholder="placeholder" @focus="$emit('focus')" @change="onChange"
                    @blur="$emit('blur')" :maxlength="maxlength" :max="max" :min="min"/>
 
@@ -70,6 +78,7 @@
             icon: {type: String, default: ""},
             type: {type: String, default: "text"},
             numberType: {type: String, default: ""},
+            mode: {type: String, default: ""},
             templates: {
                 type: Array, default(){
                     return [];
