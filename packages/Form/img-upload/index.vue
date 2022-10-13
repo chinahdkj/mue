@@ -334,7 +334,8 @@ export default {
             if (!whole) {
                 return "";
             }
-            return this.$comm.getUploadPath(whole);
+            let path = this.$comm.getUploadPath(whole)
+            return path + `${path.indexOf('?') > -1 ? '&' : '?'}uniwater_utoken=${sessionStorage.getItem('authortoken')}`;
         },
 
         getWatermark() {

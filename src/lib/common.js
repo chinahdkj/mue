@@ -288,9 +288,9 @@ export const getUploadPath = (path, host = true) => {
         return path;
     }
     if(host){
-        return getAppId() ? `${getHost()}${path}?appid=${getAppId()}&cid=${getCid()}` : `${getHost()}${path}`;
+        return getAppId() ? `${getHost()}${path}${path.indexOf('?') > -1 ? '&' : '?'}appid=${getAppId()}&cid=${getCid()}` : `${getHost()}${path}`;
     }else{
-        return getAppId() ? `${path}?appid=${getAppId()}&cid=${getCid()}` : `${path}`;
+        return getAppId() ? `${path}${path.indexOf('?') > -1 ? '&' : '?'}appid=${getAppId()}&cid=${getCid()}` : `${path}`;
     }
 };
 

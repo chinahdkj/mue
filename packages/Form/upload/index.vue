@@ -227,7 +227,8 @@ export default {
             if (!m) {
                 return "";
             }
-            return this.$comm.getUploadPath(m, host);
+            let path = this.$comm.getUploadPath(m, host)
+            return path + `${path.indexOf('?') > -1 ? '&' : '?'}uniwater_utoken=${sessionStorage.getItem('authortoken')}`;
         },
         showAction(i) {
             this.pop.current = i;
