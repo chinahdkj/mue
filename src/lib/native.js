@@ -1,7 +1,7 @@
 // 原生调用方法
 import {isIos, isDingDing, isCCWork, isDingGov} from "./common";
 import * as NativePc from "./native-pc";
-import * as NativeDingDing from "./native-dingding";
+import NativeDingDing from "./native-dingding";
 import NativeCcwork from "./native-ccwork";
 import NativeDingGov from "./native-dinggov";
 
