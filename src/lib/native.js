@@ -19,7 +19,7 @@ const fns = [
     "download", "sqlite_execsql", "sqlite_query", "multi_file", "v88s_zdsjcx", "v88s_params", "v88s_tc", "logger", "singleDownload", "clearCache",
     "resSave", "sqlite_close", "unzip", "queryCustomer", "get_blan", "rpc_blan", "rfm_getDevices", "rfm_openDoor","fmkz_params","fmkz_sscx","fmkz_tc","analRelated",
     "ocr_watermeter", "eranntex_params", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "openBluetooth",
-    "tlv_params", "tlv_dataQuery", "tlv_tc", "tlv_noiseAudio", "r800c_printer", "qx_rtk", "ycbDatasUpload","ycbDatasDebug", "spon_audio"
+    "tlv_params", "tlv_dataQuery", "tlv_tc", "tlv_noiseAudio", "r800c_printer", "qx_rtk", "ycbDatasUpload","ycbDatasDebug", "spon_audio", "get_local_file"
 ];
 
 // 原生主动调用js的方法
