@@ -239,7 +239,9 @@ export const getHost = () => {
     }
     
     //web端本地测试用
-    // return host;
+    if(localStorage.getItem('mue_host_test') === '1'){
+        return host;
+    }
 
     //匹配云上协同和浙政钉(仅在线模式)
     if(isCCWork() || isDingGov()) {
