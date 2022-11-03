@@ -39,6 +39,7 @@
                 <van-button size="large" type="default" @click="dialog.visible = false">关闭预览</van-button>
             </div>
         </van-popup>
+        <mue-img-preview :visible.sync="dialog.preview" :images="dialog.images" :start-position="dialog.start"/>
     </div>
 </template>
 
@@ -86,6 +87,9 @@ export default {
             pop: {visible: false, current: -1},
             dialog: {
                 visible: false,
+                preview: false,
+                images:[],
+                start:0,
                 path:'',
             },
         };
@@ -264,8 +268,13 @@ export default {
                 previewUrl = decodeURIComponent(sessionStorage.getItem('host') || '') + previewUrl;
             }
             if(this.isFrame){
-                this.dialog.visible = true;
-                this.dialog.url = previewUrl
+                if(IMG.includes(suffix)){
+                    this.dialog.images = [previewUrl]
+                    this.dialog.preview = true;
+                }else{
+                    this.dialog.visible = true;
+                    this.dialog.url = previewUrl;
+                }
             }else{
                 window.open(previewUrl); //下载
             }
