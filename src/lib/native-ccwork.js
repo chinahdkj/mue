@@ -411,18 +411,71 @@ const ccworkApi = {
                 });
                 return
             }
-            const uploadVideo = (url) => {
+            const getVideoBase64 = (url) => {
+                return new Promise(function(resolve, reject) {
+                    let dataURL = '';
+                    let video = document.createElement("video");
+                    video.setAttribute('crossorigin', 'anonymous'); //处理跨域
+                    video.setAttribute('src', url);
+                    video.setAttribute('width', 180);
+                    video.setAttribute('height', 320);
+                    video.setAttribute('controls', 'controls');
+                    video.currentTime = 1  //视频时长，一定要设置，不然大概率白屏
+                    video.addEventListener('loadeddata', function(e) {
+                        let canvas = document.createElement("canvas"),
+                            width = video.width, //canvas的尺寸和图片一样
+                            height = video.height;
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext("2d").drawImage(video, 0, 0, width, height); //绘制canvas
+                        dataURL = canvas.toDataURL('image/jpeg',0.3); //转换为base64
+                        var img = document.createElement("img");
+                        img.src = dataURL
+                        video.setAttribute('poster', dataURL);
+                        resolve(dataURL);
+                    });
+                })
+            }
+            const base64toFile = (dataurl, filename = 'file') => {
+                let arr = dataurl.split(',')
+                let mime = arr[0].match(/:(.*?);/)[1]
+                let suffix = mime.split('/')[1]
+                let bstr = atob(arr[1])
+                let n = bstr.length
+                let u8arr = new Uint8Array(n)
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n)
+                }
+                return new File([u8arr], `${filename}.${suffix}`, {
+                    type: mime
+                })
+            }
+            const uploadVideo = () => {
                 return new Promise((resolve, reject) => {
                     ccworkBridge.ccworkFileUpload({
                         // api: 'http://192.168.100.179:8089/app/v1.0/upload.json',
                         api: uploadApi,
                         headers: getHeaders(),
-                        value: [url],
+                        value: [id],
                         params: {id: params.id}
                     }, (data) => {
                         let res = data.result.url ? JSON.parse(data.result.url) : data.result;
                         if(res.Code === 0) {
-                            resolve(res.Response.url);
+                            // 获取视频封面并上传
+                            const poster = getVideoBase64(getHost() + res.Response.url)
+                            poster.then(_img=>{
+                                let file = base64toFile(_img)
+                                let form = new FormData();
+                                form.append("file", file, file.name);
+                                form.append("id", params.id + '.jpg');
+                                post(uploadApi, form, {
+                                    processData: false, contentType: false
+                                }).then(()=>{
+                                    resolve(res.Response.url);
+                                }).catch(()=>{
+                                    reject(res.Message)
+                                })
+                            })
                         } else {
                             reject(res.Message)
                         }
@@ -431,7 +484,7 @@ const ccworkApi = {
             }
 
             //上传并获取视频地址
-            let videoUrl = await uploadVideo(result.value);
+            let videoUrl = await uploadVideo();
             // console.log("videoUrl", videoUrl);
             window.response({
                 msgid, method, params: {
