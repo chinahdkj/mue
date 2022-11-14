@@ -335,6 +335,9 @@ export default {
                 return "";
             }
             let path = this.$comm.getUploadPath(whole)
+            if(this.base64){
+                return path
+            }
             return path + `${path.indexOf('?') > -1 ? '&' : '?'}uniwater_utoken=${sessionStorage.getItem('authortoken')}`;
         },
 
