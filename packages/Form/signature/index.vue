@@ -380,6 +380,8 @@
     }
 </script>
 
-<style lang="less">
-
+<style lang="less" scoped>
+.signature-btn[disabled='disabled']{
+    opacity: 0.5;
+}
 </style>
