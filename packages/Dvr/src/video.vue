@@ -123,7 +123,7 @@
                 let fstatic = 'fstatic'
                 if (this.definition === "fluent") {
                     furl = "img";
-                }else if(this.definition === "zlm"){
+                }else if(this.definition === "zlm"){ // 和达流
                     furl = "zlm";
                 }else if(this.definition === 'flv'){
                     furl = 'flv'
