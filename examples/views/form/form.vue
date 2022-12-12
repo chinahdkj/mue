@@ -17,6 +17,10 @@
 
                 <mue-form-item-group title="站点信息">
 
+                    <mue-form-item label="位置范围" field="gislayer">
+                        <mue-gis-draw-layer placeholder="" v-model="model.gislayer" :gwt-option="gwtOption"></mue-gis-draw-layer>
+                    </mue-form-item>
+
                     <mue-form-item label="片区名称" field="div">
                         <mue-select placeholder="请选择" v-model="model.div" :data="divData" unit="m³/h"></mue-select>
                     </mue-form-item>
@@ -157,13 +161,21 @@
 
     // import MueTreePicker from "../../../packages/Form/tree-picker/index";
 
+    import MueGisDrawLayer from "../../../packages/Form/gis-draw-layer/index.vue";
+
     export default {
+        components: { MueGisDrawLayer },
         // components: {MueTreePicker},
         data() {
             return {
                 readonly: false,
                 confirming: false,
-
+                gwtOption: {
+                    url:"http://218.75.57.202:17089/arcgis/rest/services/jx/JX_PSPIPE_BS/MapServer",
+                    mode: "esri",
+                    param: "format=png32",
+                    type: "wgsTogd",
+                },
                 users: [
                     {
                         code: "c1", name: "选项1", children: [

@@ -34,8 +34,8 @@
 						@click="onConfirm(false)">{{ t('mue.common.confirm') }}</div>
 				</div>
 				<div class="mue-gis-point-pop--info">
-					<label>{{ t('mue.form.gis.longText')}}</label><span>{{(pos || {}).lng | round}}</span>
-					<label>{{ t('mue.form.gis.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
+					<label>{{ t('mue.form.gis-draw-layer.longText')}}</label><span>{{(pos || {}).lng | round}}</span>
+					<label>{{ t('mue.form.gis-draw-layer.latText')}}</label><span>{{(pos || {}).lat | round}}</span>
 				</div>
 				<div class="mue-gis-point-pop--map">
 					<div v-if="isShot" class="modal-shadow"></div>
@@ -69,7 +69,7 @@
 									v-if="loading" />
 								<i v-else
 									class="iconfont icon-dingwei1"></i>
-								<span class="title">{{ t('mue.form.gis.positionText')}}</span>
+								<span class="title">{{ t('mue.form.gis-draw-layer.positionText')}}</span>
 							</div>
 						</l-control>
 						
@@ -403,10 +403,10 @@ export default {
 			distance: null,
 			exceedArea: false,
 			zoomInIcon: `<i class=\"iconfont icon-tianjia1-copy\"></i><span class=\"title\">${t(
-				"mue.form.gis.zoomInText"
+				"mue.form.gis-draw-layer.zoomInText"
 			)}</span>`,
 			zoomOutIcon: `<i class=\"iconfont icon-jianquminus25-copy\"></i><span class=\"title\">${t(
-				"mue.form.gis.zoomOutText"
+				"mue.form.gis-draw-layer.zoomOutText"
 			)}</span>`,
 			map: null,
 			showlhsw: false,
@@ -677,7 +677,7 @@ export default {
 		},
 		onConfirm(isFirst = false) {
 			if (this.distance && this.exceedArea) {
-				this.$toast.fail(t("mue.form.gis.rangeOutText"));
+				this.$toast.fail(t("mue.form.gis-draw-layer.rangeOutText"));
 				return;
 			}
 			if(this.isShot == 1 && !isFirst) {
