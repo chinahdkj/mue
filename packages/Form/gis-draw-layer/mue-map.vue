@@ -38,7 +38,7 @@
 import proj4 from 'proj4';
 import { setOptions } from 'leaflet';
 import 'proj4leaflet';
-import 'leaflet.chinatmsproviders';
+import './leaflet.ChineseTmsProviders';
 import gwt from './gwtOverlay/gwt'
 import { LMap, LTileLayer, LLayerGroup } from 'vue2-leaflet';
 const transToPromise = origin => {
