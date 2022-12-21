@@ -199,6 +199,8 @@ export default {
 
                 oldIds = ids.filter(f => !f.includes("fileName="));
 
+                if(!oldIds.length) return;
+
                 this.$http.post(this.resInfosUrl,{ids: oldIds}).then((res)=>{
                     oldIds.forEach((p) => {
                         this.$set(this.dict, p, {
