@@ -173,13 +173,34 @@ export default {
                     this.$emit("input", v.length === 0 ? "" : v[0]);
                 }
                 this.dict = {};
-                let ids = Object.values(v);
+                let ids = Object.values(v), oldIds = [], newIds = [];;
                 if(ids.length === 0){
                     this.createThumbs();
                     return;
                 }
-                this.$http.post(this.resInfosUrl,{ids}).then((res)=>{
-                    v.forEach((p) => {
+
+                //从自身地址的name参数中取文件名（cue v1.2.811新增）
+                newIds = ids.filter(f => f.includes("fileName="));
+                if(newIds.length) {
+                    newIds.forEach((id) => {
+                        let name = "fileName"
+                        let urlParamStr = id.split("?")[1];
+                        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                        let r = urlParamStr.match(reg);
+                        if (r != null) {
+                            this.$set(this.dict, id, {
+                                url: id,
+                                name: decodeURIComponent(r[2])
+                            });
+                        }
+                    })
+                    this.createThumbs();
+                }
+
+                oldIds = ids.filter(f => !f.includes("fileName="));
+
+                this.$http.post(this.resInfosUrl,{ids: oldIds}).then((res)=>{
+                    oldIds.forEach((p) => {
                         this.$set(this.dict, p, {
                             url: p,
                             name: res[p].name
@@ -253,12 +274,25 @@ export default {
         },
         downloadFile(i) {
             let path = this.previewSource ? this.getPath(this.files[i], false) : this.getPath(this.files[i]);
-            let suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
+            // let suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
+            let suffix = "";
+            if(path.includes("fileName=")) {
+                let name = "fileName"
+                let urlParamStr = path.split("?")[1];
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                let r = urlParamStr.match(reg);
+                if (r != null) {
+                    let fileName = decodeURIComponent(r[2]);
+                    suffix = fileName.substring(fileName.lastIndexOf('.'));
+                }
+            } else {
+                suffix = this.files[i].substring(this.files[i].lastIndexOf('.'));
+            }
             let previewUrl = ''
             const IMG = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
             const VIDEO = ['.mp4', '.rmvb', '.avi', '.mov', '.flv', '.3gp'];
             const PDF = ['.pdf'];
-            if([...IMG, ...VIDEO, ...PDF].includes(suffix)) {
+            if([...IMG, ...VIDEO, ...PDF].includes(suffix.toLowerCase())) {
                 previewUrl = path
             }else{
                 let u = `${this.previewSource || ''}${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
@@ -268,7 +302,7 @@ export default {
                 previewUrl = decodeURIComponent(sessionStorage.getItem('host') || '') + previewUrl;
             }
             if(this.isFrame){
-                if(IMG.includes(suffix)){
+                if(IMG.includes(suffix.toLowerCase())){
                     this.dialog.images = [previewUrl]
                     this.dialog.preview = true;
                 }else{
