@@ -179,7 +179,7 @@ export default {
                     return;
                 }
 
-                //从自身地址的name参数中取文件名（cue v1.2.811新增）
+                //从自身地址的name参数中取文件名（mue 1.0.458新增）
                 newIds = ids.filter(f => f.includes("fileName="));
                 if(newIds.length) {
                     newIds.forEach((id) => {

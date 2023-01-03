@@ -261,7 +261,19 @@ export default {
             this.uploadPop.visible = false;
         },
         fileType(url) {
-            let suffix = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
+            let suffix = "";
+            if(url.includes("fileName=")) {
+                let name = "fileName"
+                let urlParamStr = url.split("?")[1];
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                let r = urlParamStr.match(reg);
+                if (r != null) {
+                    let fileName = decodeURIComponent(r[2]);
+                    suffix = fileName.substring(fileName.lastIndexOf('.') + 1);
+                }
+            } else {
+                suffix = url.substring(url.lastIndexOf('.') + 1);
+            }
             return IMG.includes(suffix) ? 'image' : 'video'
         },
         createThumbs() {
