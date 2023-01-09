@@ -74,7 +74,7 @@ export default {
         uploadUrl: {type: String, default: ""}, //自定义上传文件地址接口,不包含prefix
         infosUrl: {type: String, default: ""}, //自定义获取文件信息接口地址,不包含prefix
         uploadKey: {type: String, default: ""}, //自定义上传参数名
-        isFrame:{type: Boolean, default: false},//是否用iframe打开预览
+        // isFrame:{type: Boolean, default: false},//是否用iframe打开预览
         isPreview: {type: Boolean, default: false}, //是否开启预览
         previewUrl: {type: String, default: ""}, //自定义文件预览ip+端口
         previewSource: {type: String, default: ""}, //自定义文件预览url的内网地址
@@ -303,16 +303,12 @@ export default {
             if(!previewUrl.startsWith('http')){
                 previewUrl = decodeURIComponent(sessionStorage.getItem('host') || '') + previewUrl;
             }
-            if(this.isFrame){
-                if(IMG.includes(suffix.toLowerCase())){
-                    this.dialog.images = [previewUrl]
-                    this.dialog.preview = true;
-                }else{
-                    this.dialog.visible = true;
-                    this.dialog.url = previewUrl;
-                }
+            if(IMG.includes(suffix.toLowerCase())){
+                this.dialog.images = [previewUrl]
+                this.dialog.preview = true;
             }else{
-                window.open(previewUrl); //下载
+                this.dialog.visible = true;
+                this.dialog.url = previewUrl;
             }
         },
         removeFile() {
