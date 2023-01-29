@@ -10,7 +10,7 @@
                 <slot name="tools"></slot>
             </div>
         </div>
-        <div class="mue-panel-body">
+        <div class="mue-panel-body" ref="panelBody">
             <slot></slot>
         </div>
     </div>
@@ -34,7 +34,34 @@
         data(){
             return {};
         },
-        methods: {},
+        methods: {
+            setPanelBodyScrollTop(top){
+                this.$refs.panelBody.scrollTop = top || 0
+            },
+            handleScroll(){
+                //获取dom滚动距离
+                const scrollTop = this.panelBody.scrollTop;
+                //获取可视区高度
+                const offsetHeight = this.panelBody.offsetHeight;
+                //获取滚动条总高度
+                const scrollHeight = this.panelBody.scrollHeight;
+
+                this.$emit('scroll', {scrollTop, offsetHeight, scrollHeight})
+            },
+        },
         components: {PanelTitle},
+        computed: {
+            panelBody() {
+                return this.$refs.panelBody;
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.panelBody.addEventListener("scroll", this.handleScroll);
+            });
+        },
+        destroyed() {
+            this.panelBody.removeEventListener("scroll", this.handleScroll);
+        }
     }
 </script>
