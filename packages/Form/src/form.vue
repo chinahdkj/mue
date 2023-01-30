@@ -37,7 +37,8 @@
             }},
             confirmText: {type: String, default: () => {
                 return t("mue.common.submit");
-            }}
+            }},
+            hidebuttons: {type: Boolean, default: false},
         },
         provide(){
             return {
