@@ -5,6 +5,7 @@ import {getAppId, getCid, GetQueryString, isIos, isAndroid, getHost, isDingDing}
 import * as dd from "dingtalk-jsapi";
 import axios from "axios";
 import Vue from "vue";
+import ddgov from "gdt-jsapi";
 
 const isWebApi = process.env.VUE_APP_INTERFACE === 'web'
 
@@ -89,7 +90,7 @@ let post = (url, data, failed = false, appid = null, header = null) => {
     });
 }
 
-let dingdingLogin = (info) => {
+const dingdingLogin = (info) => {
     // 通过钉钉code 获得
     this.$http.post('/hd/app/dingding/v1.0/user/login.json', info, false, null, {}).then((result) => {
         sessionStorage.setItem("dingdingCode", info.code);
@@ -100,19 +101,71 @@ let dingdingLogin = (info) => {
     });
 }
 
+// 钉钉鉴权
+const jsApiAuth = (arr = []) =>{
+    return new Promise((resolve,reject)=>{
+        post('/app/v1.0/dingding/config.json', {}, true).then(res => {
+            dd.config({
+                agentId: res.agentId, // 必填，微应用ID
+                corpId: res.corpId,//必填，企业ID
+                timeStamp: res.timeStamp, // 必填，生成签名的时间戳
+                nonceStr: res.nonceStr, // 必填，自定义固定字符串。
+                signature: res.signature, // 必填，签名
+                jsApiList : [
+                    'runtime.info',
+                    'biz.contact.complexPicker',
+                    'biz.contact.departmentsPicker',
+                    'biz.clipboardData.setData',
+                    'biz.telephone.call',
+                    'biz.telephone.showCallMenu',
+                    'biz.cspace.saveFile',
+                    'biz.util.uploadAttachment',
+                    'biz.cspace.preview',
+                    'biz.cspace.chooseSpaceDir',
+                    'biz.util.chooseImage',
+                    'device.geolocation.get',
+                    'device.geolocation.start',
+                    'device.geolocation.stop',
+                    'biz.map.locate',
+                    'biz.map.search',
+                    'biz.map.view',
+                    'device.audio.startRecord',
+                    'device.audio.stopRecord',
+                    'device.audio.onRecordEnd',
+                    'device.audio.download',
+                    'device.audio.play',
+                    'device.audio.pause',
+                    'device.audio.resume',
+                    'device.audio.stop',
+                    'device.audio.onPlayEnd',
+                    'device.audio.translateVoice',
+                ] // 必填，需要使用的jsapi列表，注意：不要带dd。
+            });
+            dd.error(function (err) {
+                console.warn('dd error: ' + JSON.stringify(err));
+            })//该方法必须带上，用来捕获鉴权出现的异常信息，否则不方便排查出现的问题
+            resolve()
+        }).catch(err=>{
+            resolve()
+        })
+    })
+}
+
 if(isDingDing()){
-    dd.ready(()=>{
-        let corpId = this.$comm.GetQueryString("corpid");
-        let self = this;
-        dd.runtime.permission.requestAuthCode({
-            corpId: corpId,
-            onSuccess: result=> {
-                dingdingLogin(result)
-            },
-            onFail: err=> {
-                console.error(err);
-            }
-        });
+    jsApiAuth().then(()=>{
+        dd.ready(()=>{
+            let corpId = this.$comm.GetQueryString("corpid");
+            let self = this;
+            dd.runtime.permission.requestAuthCode({
+                corpId: corpId,
+                onSuccess: result=> {
+                    dingdingLogin(result)
+                },
+                onFail: err=> {
+                    console.error(err);
+                }
+            });
+        })
     })
 }
 
@@ -171,9 +224,48 @@ const dingdingfn = {
     },
     //获取定位 ？需要js鉴权
     getLocation: ({msgid, method, params}) => {
-        // 需要鉴权
-        window.response({
-            msgid, method, params: null
+        dd.device.geolocation.get({
+            targetAccuracy : 200,
+            coordinate : 1,
+            withReGeocode : true,
+            useCache: true, //默认是true，如果需要频繁获取地理位置，请设置false
+            onSuccess : function(result) {
+                console.log({result})
+                window.response({
+                    msgid, method, params: {
+                        lat: result.latitude,
+                        lng: result.longitude,
+                        addr: result.address
+                    }
+                });
+                /* 高德坐标 result 结构
+                {
+                    longitude : Number,
+                    latitude : Number,
+                    accuracy : Number,
+                    address : String,
+                    province : String,
+                    city : String,
+                    district : String,
+                    road : String,
+                    netType : String,
+                    operatorType : String,
+                    locationType：1,
+                    errorMessage : String,
+                    errorCode : Number,
+                    isWifiEnabled : Boolean,
+                    isGpsEnabled : Boolean,
+                    isFromMock : Boolean,
+                    provider : wifi|lbs|gps,
+                    isMobileEnabled : Boolean
+                }
+                */
+            },
+            onFail : function(err) {
+                window.response({
+                    msgid, method, params: null
+                });
+            }
         });
     },
     //获取用户相关信息(是否需要用到浙政钉的用户信息？)

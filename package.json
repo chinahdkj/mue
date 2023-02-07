@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.462",
+  "version": "1.0.463",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": false,
@@ -21,7 +21,7 @@
     "axios": "^0.18.0",
     "better-scroll": "2.4.2",
     "core-js": "^2.6.5",
-    "dingtalk-jsapi": "^2.10.3",
+    "dingtalk-jsapi": "^3.0.12",
     "echarts": "^4.2.0-rc.2",
     "element-china-area-data": "^5.0.2",
     "esri-leaflet": "^3.0.2",
