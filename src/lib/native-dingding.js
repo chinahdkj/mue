@@ -3,9 +3,8 @@
 */
 import {getAppId, getCid, GetQueryString, isIos, isAndroid, getHost, isDingDing} from "./common";
 import * as dd from "dingtalk-jsapi";
-import axios from "axios";
+import http from './http'
 import Vue from "vue";
-import ddgov from "gdt-jsapi";
 
 const isWebApi = process.env.VUE_APP_INTERFACE === 'web'
 
@@ -59,40 +58,10 @@ function getUrl (url){
     }
 }
 
-let post = (url, data, failed = false, appid = null, header = null) => {
-    let setting = {
-        method: "post",
-        baseURL: process.env.NODE_ENV === "production" ? getHost() : "/list",
-        url,
-        data: data,
-        timeout: 30000
-    }
-    if(isWebApi){
-        setting.url = getUrl(url)
-    }else{
-        setting['headers'] = header || getHeaders(appid)
-    }
-    return axios(setting).then(res => res.Response).catch(e => {
-        console.log(e);
-        // 请求接口不存在 或者 APP服务返回第三方接口解析错误（大部分原因是scada系统中不存在接口）
-        // 之后做了版本控制之后，需要放掉这段代码，将错误暴露到前台
-        if((e.response && e.response.status === 404) || (e.Code === 21001 || e.code === 21001) || e.response == undefined){
-            // TODO
-        }
-        else if(e.Message){
-            !failed && Vue.prototype.$toast && Vue.prototype.$toast(e.Message);
-        }
-        else{
-            !failed && Vue.prototype.$toast && Vue.prototype.$toast("请求出错，请稍候再试!");
-        }
-
-        return Promise.reject(e);
-    });
-}
 
 const dingdingLogin = (info) => {
     // 通过钉钉code 获得
-    this.$http.post('/hd/app/dingding/v1.0/user/login.json', info, false, null, {}).then((result) => {
+    http.post('/hd/app/dingding/v1.0/user/login.json', info, false, null, {}).then((result) => {
         sessionStorage.setItem("dingdingCode", info.code);
         sessionStorage.setItem("authortoken", result.access_token);
         sessionStorage.setItem("authorapp", result.app);
@@ -104,7 +73,7 @@ const dingdingLogin = (info) => {
 // 钉钉鉴权
 const jsApiAuth = (arr = []) =>{
     return new Promise((resolve,reject)=>{
-        post('/app/v1.0/dingding/config.json', {}, true).then(res => {
+        http.post('/app/v1.0/dingding/config.json', {}, true).then(res => {
             dd.config({
                 agentId: res.agentId, // 必填，微应用ID
                 corpId: res.corpId,//必填，企业ID
