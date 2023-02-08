@@ -2,7 +2,7 @@
     <form class="mue-form" :class="{'required-at-end': requiredPos === 'end' }">
         <slot></slot>
 
-        <div class="mue-form-buttons" v-if="!readonly">
+        <div class="mue-form-buttons" v-if="!readonly && !hidebuttons">
             <van-button native-type="button" size="large" plain @click="cancel">
                 {{cancelText}}
             </van-button>
