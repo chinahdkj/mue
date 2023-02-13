@@ -16,6 +16,11 @@
                        :search="searchable ? searchValue : null" :panel-unhide="panelUnhide">
                     <template #node="{node}">
                         <slot name="node" :node="node">{{node.name}}</slot>
+                        <slot name="suffix" :node="node">
+                            <div class="suffix" v-if="node.$children.length > 0">
+                                <i class="input__suffix input__suffix_icon iconfont icon-arrows-copy-copy"></i>
+                            </div>
+                        </slot>
                     </template>
                 </panel>
             </div>
@@ -222,3 +227,14 @@
         }
     };
 </script>
+<style lang="less" scoped>
+.suffix{
+    position: absolute;
+    right: 3px;
+    top: 0;
+    .iconfont.icon-arrows-copy-copy{
+        transform: rotate(-90deg);
+        display: block;
+    }
+}
+</style>
