@@ -23,7 +23,7 @@
                            aria-hidden="true"></i>
                     </button>
                     <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
-                                    :limit="limit" :before-read="beforeRead" :after-read="upload">
+                                    :accept="uploadAccept" :limit="limit" :before-read="beforeRead" :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
                     <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
@@ -90,6 +90,7 @@ export default {
             }
         },
         limit: {type: Number, default: 5},
+        uploadAccept: {type: Number, default: 0},
         accept: {
             type: String, default: "image"
         },

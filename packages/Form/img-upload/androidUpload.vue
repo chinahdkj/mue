@@ -13,7 +13,7 @@
         props: {
             disabled: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            accept: {type: Number, default: 0}, //0:图片, 1:文件
+            accept: {type: Number, default: 0}, //0:图片, 1:文件 3:拍照
             limit: {type: Number, default: 5},
             beforeRead: {type: Function, default: null},
             afterRead: {type: Function, default: null}
@@ -36,11 +36,16 @@
                         maxNum: this.limitNum,
                         mType: this.accept
                     },
-                    cb: ({value}) => {
-                        if(value !== null) {
-                            this.values.push(value);
-                            return true;
-                        } else {
+                    cb: (result) => {
+                        let { value } = result
+                        if(this.accept === 3){
+                            value = {
+                                content: `data:${result.file.type};base64,` + result.value,
+                                file: result.file
+                            }
+                            if(result.value){
+                                this.values.push(value);
+                            }
                             if (!this.values.length) {
                                 return;
                             }
@@ -57,6 +62,29 @@
                                 }
                             } else {
                                 this.onAfterRead(this.values);
+                            }
+                        }else{
+                            if(value !== null) {
+                                this.values.push(value);
+                                return true;
+                            } else {
+                                if (!this.values.length) {
+                                    return;
+                                }
+                                if (typeof this.beforeRead === 'function') {
+                                    let res = this.beforeRead(this.values);
+                                    if (res === false) {
+
+                                    } else if (res instanceof Promise) {
+                                        res.then((vals) => {
+                                            this.onAfterRead(vals);
+                                        })
+                                    } else {
+                                        this.onAfterRead(res);
+                                    }
+                                } else {
+                                    this.onAfterRead(this.values);
+                                }
                             }
                         }
                     }
