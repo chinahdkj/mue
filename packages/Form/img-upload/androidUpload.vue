@@ -34,7 +34,8 @@
                 this.$native.multi_file({
                     params: {
                         maxNum: this.limitNum,
-                        mType: this.accept
+                        mType: this.accept,
+                        cameraDevice: 0,
                     },
                     cb: (result) => {
                         let { value } = result
