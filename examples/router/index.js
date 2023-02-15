@@ -139,6 +139,11 @@ const routes = [
         name: 'dinggovdemoo',
         component: () => import("../views/dinggov")
     },
+    {
+        path: '/mue/map',
+        name: 'mue_map',
+        component: () => import("../views/mue/map")
+    },
 ];
 
 const router = new Router({routes});

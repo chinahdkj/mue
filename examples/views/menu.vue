@@ -35,6 +35,7 @@
             <van-cell value="DVR" @click="open('/mue/dvr')"/>
             <van-cell value="SORT-PICKER" @click="open('/mue/sortpicker')"/>
             <van-cell value="ACTIONSHEET" @click="open('/mue/actionsheet')"/>
+            <van-cell value="MAP" @click="open('/mue/map')"/>
         </van-cell-group>
 
         <h3>FORM</h3>

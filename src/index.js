@@ -23,7 +23,7 @@ import Image from "../packages/Image/index.js";
 import popover from "../packages/directives/popover.js";
 import resize from "../packages/directives/resize.js";
 import touch from "../packages/directives/touch.js";
-
+import Map from "../packages/Map/index.js";
 
 import Vant from "vant";
 import axios from "axios";
@@ -50,7 +50,7 @@ window.requestAnimFrame = (() => {
 const components = [
     Chart, Panel, RollData, RollDataGroup, DatePicker, DateRangePicker, Search, Popover, Tabs, Tab,
     Container, Header, Main, Footer, Datatable, ...Object.values(Form), LoadMore, Page,
-    ...Object.values(Dvr), SortPicker, Tree, Empty, ImgPreview, Actionsheet, Image
+    ...Object.values(Dvr), SortPicker, Tree, Empty, ImgPreview, Actionsheet, Image, Map
 ];
 
 const install = function(Vue, opts){
