@@ -49,7 +49,7 @@
 
         <div class="mue-map-search" v-if="search.show">
             <form action="/">
-                <van-search v-model="search.value" placeholder="请输入搜索名称" @search="onSearch" @cancel="onCancel">
+                <van-search v-model="search.value" :placeholder="searchPlaceholder" @search="onSearch" @cancel="onCancel">
                     <template #left-icon><span></span></template>
                 </van-search>
             </form>
@@ -83,7 +83,13 @@
             position="bottom"
             :style="{ maxHeight: '50%' }"
             >
-            <van-cell v-for="s in search.data" :key="s.id" :title="s.name" @click="cellClick(s)"/>
+            <van-cell v-for="s in search.data" :key="s.id" @click="cellClick(s)">
+                <template slot="title">
+                    <slot name="title" :model="s">
+                        {{ s.name }}
+                    </slot>
+                </template>
+            </van-cell>
         </van-popup>
     </div>
 </template>
@@ -145,6 +151,11 @@ export default {
             type: String,
             default: 'name'
         },
+        //搜索placeholder提示内容
+        searchPlaceholder: {
+            type: String,
+            default: '请输入搜索名称'
+        },
         //点击点闪烁
         twinkle: {
             type: Boolean,
@@ -184,7 +195,7 @@ export default {
         }
     },
     watch: {
-        
+
     },
     methods: {
         mapReady() {
@@ -219,7 +230,11 @@ export default {
             }else {
                 this.search.data = this.data.filter(d=> d[this.searchKey].indexOf(this.search.value) > -1)
             }
-            this.search.popup = true
+            if(this.search.data.length > 0){
+                this.search.popup = true
+            }else{
+                this.$toast('未搜索到数据')
+            }
         },
         onCancel(){
             this.search.value = ''
