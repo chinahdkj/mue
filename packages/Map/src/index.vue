@@ -255,6 +255,7 @@ export default {
             this.mClick(s)
             this.map.setView(s.latlng, this.map.getMaxZoom() - 1)
             this.search.popup = false
+            this.search.show = false
         }
     }
 };
