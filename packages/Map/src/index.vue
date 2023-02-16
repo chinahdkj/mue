@@ -243,12 +243,16 @@ export default {
         },
         markerClick(e) {
             let data = e.target.options.data
+            this.mClick(data)
+        },
+        mClick(data) {
             if(this.twinkle) {
                 this.clickMarkerId = data.id
             }
             this.$emit('marker-click', data)
         },
         cellClick(s) {
+            this.mClick(s)
             this.map.setView(s.latlng, this.map.getMaxZoom() - 1)
             this.search.popup = false
         }
