@@ -40,8 +40,9 @@
                     cb: (result) => {
                         let { value } = result
                         if(this.accept === 3){
+                            let content = `data:${result.file.type};base64,`
                             value = {
-                                content: `data:${result.file.type};base64,` + result.value,
+                                content: result.value.startsWith(content) ? result.value : `data:${result.file.type};base64,` + result.value,
                                 file: result.file
                             }
                             if(result.value){

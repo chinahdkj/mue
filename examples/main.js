@@ -2,8 +2,8 @@
 // 开发环境设置tooken
 if(process.env.NODE_ENV === "development"){
     sessionStorage.setItem("authortoken",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM3ODMyMzgsInQiOjE1ODIyNDcyMzgsInVpZCI6ImJkZGRhYjJmLTBmNTgtNDY2My05ODk5LTFlZjNmNzNkYmNiYyJ9.wFR1flJIpiPW02LX_8NGP5hOJhXXekPqBoWF75GfILE");
-    sessionStorage.setItem("authorapp", "5a9912544d4843264cb002fc");
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2MiOiJoY3QiLCJjaWQiOiI2MWE1YjVkY2QzMWY3NjE2YzQxMmRkMDgiLCJleHAiOjE3MDcyOTIyNjgsInVpZCI6IjYzZTFmNmU5ZDMxZjc2MmZkMDQ2MmNlMSJ9.ThhAVOnt2v0H-dpmwrT8eE1SkvMU585QUIODVrDo0Mg");
+    sessionStorage.setItem("authorapp", "61a5b5dcd31f7616c412dd08");
 }
 
 import Vue from "vue";
