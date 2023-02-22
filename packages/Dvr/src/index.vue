@@ -21,7 +21,7 @@
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video ref="video" :width="size.width" :height="size.height" default-url
                                        :name="(videos[i] || {}).name" :rtsp="(videos[i] || {}).rtsp"
-                                       :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
+                                       :name-higher="nameHigher" :show-switch-cn="showSwitchCn" :host="host"
                                        :definition="definition" :defaulturl="defaulturl" @choose="pickCamera(i)"/>
                     </div>
                 </template>
@@ -30,7 +30,7 @@
                     <div v-for="(c, i) in cameras" :key="i" style="float: left"
                          :style="{'margin-top': gutter + 'px', 'margin-right': gutter + 'px'}">
                         <mue-dvr-video :width="size.width" :height="size.height" default-url
-                                       :name-higher="nameHigher" :show-switch-cn="showSwitchCn"
+                                       :name-higher="nameHigher" :show-switch-cn="showSwitchCn" :host="host"
                                        :definition="definition" :defaulturl="defaulturl" :name="c.name" :rtsp="c.rtsp"/>
                     </div>
                 </template>
@@ -64,6 +64,7 @@
                     ]
                 }
             },
+            host: {type: String, default: ''}, //自定义host地址
             panelUnhide: {type: Boolean, default: false}, // 标签是否隐藏
             nameHigher: {type: Boolean, default: false},
             showSwitchCn: {type: Boolean, default: false},
