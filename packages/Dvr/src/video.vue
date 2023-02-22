@@ -58,6 +58,7 @@
         mixins: [localeMixin],
         components: {},
         props: {
+            host: {type: String, default: ""},
             height: {type: Number, default: 0},
             width: {type: Number, default: 0},
             nobar: {type: Boolean, default: false},
@@ -226,6 +227,9 @@
                 });
             },
             getVideoHost() {
+                if(this.host){
+                    return this.host
+                }
                 let location = window.location;
                 let host = this.GetHost("host");
                 if(host){
