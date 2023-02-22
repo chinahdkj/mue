@@ -107,36 +107,39 @@
         },
         methods: {
             getText(){
-                this.$nextTick(() => {
-                    if(this.value == null || this.value === "" || !this.$refs.tree){
-                        this.text = "";
-                        return;
-                    }
-
-                    let getName = (code) => {
-                        let node = this.GetOptionInfo(code);
-                        if(node == null) {
-                            return ""
-                        } else {
-                            return this.wholePath ? node.$nameRoad.join("-") : node.name;
+                return new Promise(resolve=>{
+                    this.$nextTick(() => {
+                        if(this.value == null || this.value === "" || !this.$refs.tree){
+                            this.text = "";
+                            resolve(this.text)
+                            return;
                         }
-                    };
 
-                    if(!this.multiple){
-                        this.text = getName(this.value);
-                    }
-                    else{
-                        let t = [];
-                        (this.value || []).forEach((c) => {
-                            let n = getName(c);
-                            if(n){
-                                t.push(n);
+                        let getName = (code) => {
+                            let node = this.GetOptionInfo(code);
+                            if(node == null) {
+                                return ""
+                            } else {
+                                return this.wholePath ? node.$nameRoad.join("-") : node.name;
                             }
-                        });
-                        this.text = t.join(",");
-                    }
+                        };
 
-                });
+                        if(!this.multiple){
+                            this.text = getName(this.value);
+                        }
+                        else{
+                            let t = [];
+                            (this.value || []).forEach((c) => {
+                                let n = getName(c);
+                                if(n){
+                                    t.push(n);
+                                }
+                            });
+                            this.text = t.join(",");
+                        }
+                        resolve(this.text)
+                    });
+                })
             },
             onConfirm(){
                 if(this.multiple){
