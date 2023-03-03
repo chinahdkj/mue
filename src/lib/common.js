@@ -359,7 +359,7 @@ export function TimeSpan(value) {
 }
 
 export default {
-    GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT,
+    GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, isHdkj,
     newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
     getUploadPath, isDingDing, isDingGov, closePage, isCCWork, DateFormat, NumberFormat, PercentFormat,
     ShortTime, TimeSpan,
