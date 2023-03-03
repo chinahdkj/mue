@@ -62,6 +62,11 @@ export const isCCWork = () => {
     return window.navigator.userAgent.indexOf('ccwork') > 0 || window.navigator.userAgent.indexOf('emmcloud') > 0
 }
 
+export const isHdkj = () => {
+    const u = navigator.userAgent.toLowerCase();
+    return u.indexOf("hdkj") > -1
+}
+
 /*
  * 关闭页面
  */
