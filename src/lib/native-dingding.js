@@ -73,7 +73,7 @@ const dingdingLogin = (info) => {
 // 钉钉鉴权
 const jsApiAuth = (arr = []) =>{
     return new Promise((resolve,reject)=>{
-        http.post('/app/v1.0/dingding/config.json', {}, true).then(res => {
+        http.post('/app/v1.0/dingding/config.json', {}, true, "").then(res => {
             dd.config({
                 agentId: res.agentId, // 必填，微应用ID
                 corpId: res.corpId,//必填，企业ID
