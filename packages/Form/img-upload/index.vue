@@ -22,7 +22,7 @@
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload v-if="!isDingdingEnv" ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                    <android-upload v-if="!isDingdingEnv && !isDing" ref="androidUpload" :disabled="disabled" :multiple="multiple"
                                     :accept="uploadAccept" :limit="limit" :before-read="beforeRead" :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
@@ -55,7 +55,7 @@
 
 <script>
 import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-import {isAndroid, isCCWork, getHost} from "../../../src/lib/common";
+import {isAndroid, isDingTalk, isCCWork, getHost} from "../../../src/lib/common";
 import androidUpload from "./androidUpload";
 
 import {localeMixin, t} from "../../../src/locale";
@@ -170,6 +170,9 @@ export default {
             return (this.uploadUrl || this.$OPTIONS.uploadUrl) ?
                 `${this.prefix}${this.uploadUrl || this.$OPTIONS.uploadUrl}` : `${this.prefix}/app/v1.0/upload.json`
         },
+        isDing(){
+            return isDingTalk()
+        }
     },
     watch: {
         value: {

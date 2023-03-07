@@ -80,7 +80,7 @@ const jsApiAuth = (arr = []) =>{
                 corpId: corpId,//必填，企业ID
                 timeStamp: res.timeStamp, // 必填，生成签名的时间戳
                 nonceStr: res.nonceStr || getAppId(), // 必填，自定义固定字符串。
-                signature: res.ticket, // 必填，签名
+                signature: res.signature, // 必填，签名
                 jsApiList : [
                     'runtime.info',
                     'biz.contact.complexPicker',
@@ -471,7 +471,11 @@ const dingdingfn = {
     },
     //地图导航(百度地图，高德地图，腾讯地图)
     startNavi: ({msgid, method, params}) => {
-
+        dd.biz.map.view({
+            latitude: params.lat, // 纬度
+            longitude: params.lng, // 经度
+            title: params.addr // 地址/POI名称
+        });
     },
     //H5开启/关闭巡检定位
     trace: ({msgid, method, params}) => {

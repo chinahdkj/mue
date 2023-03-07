@@ -53,6 +53,11 @@ export const isMobile = () => {
 export const isDingDing = () => {
     return env.platform !== "notInDingTalk";
 };
+
+export const isDingTalk = () => {
+    return navigator.userAgent.indexOf('DingTalk') > -1
+};
+
 export const isDingGov = () => {
     const u = navigator.userAgent;
     return u.indexOf("TaurusApp") > -1 || u.indexOf("taurusapp") > -1;
@@ -360,7 +365,7 @@ export function TimeSpan(value) {
 
 export default {
     GetQueryString, isIos, isAndroid, setDocumentTitle, getGreatCircleDistance, KGLFORMAT, isHdkj,
-    newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement,
+    newFixed, newFilePath, makeCall, getHost, getAppId, getCid, isMobile, clickElement, isDingTalk,
     getUploadPath, isDingDing, isDingGov, closePage, isCCWork, DateFormat, NumberFormat, PercentFormat,
     ShortTime, TimeSpan,
     isNight(){
