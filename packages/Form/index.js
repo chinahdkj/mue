@@ -15,12 +15,11 @@ import Region from "./region/index"
 
 import GisPoint from './gis-point/index'
 import SoundRecord from './sound-record/index'
-import SoundRecordHolder from './sound-record-holder/index'
 import BlueAlarm from './blue-alarm/index'
 
 import GisDrawLayer from "./gis-draw-layer/index";
 
-let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, ImgWatermark, SoundRecordHolder,
+let cmps = [Form, FormItemGroup, FormItem, Input, Select, Textarea, ImgUpload, ImgWatermark,
     Upload, GisPoint, TreePicker, SoundRecord, Signature, Watermeter, BlueAlarm, Region, GisDrawLayer];
 
 cmps.forEach((cmp) => {

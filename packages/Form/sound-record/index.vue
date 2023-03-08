@@ -10,10 +10,25 @@
             </li>
             <li class="_record-btn" v-if="!isReadonly && recordAble">
                 <i v-if="recording" class="recording"></i>
-                <button v-else class="record-btn" :disabled="disabled" @click="recordAudio()" :class="{'is-disabled': disabled}">
-                </button>
+                <button v-else class="record-btn" :disabled="disabled" type="button" @click="recordAudio" :class="{'is-disabled': disabled}"
+                        @touchstart="recordAudioStart"
+                        @touchmove="recordAudioMove"
+                        @touchend="recordAudioEnd"/>
             </li>
         </ul>
+
+        <van-popup v-model="isHolder" :close-on-click-overlay="true" class="record-popup" lock-scroll get-container>
+            <div class="record-content">
+                <div class="record-title">录制中 {{timeOverInterVal}} 秒</div>
+                <div class="record-msg">{{ holderTarget === 'cancel' ? '取消录制' : '松开确认' }}</div>
+                <div class="record-cancel" data-record="cancel" :class="{cancel: holderTarget === 'cancel'}">
+                    <span data-record="cancel" class="record-cancel-info">
+                        <i data-record="cancel" class="iconfont icon-zuofei1"></i>取消
+                    </span>
+                </div>
+            </div>
+        </van-popup>
+
 
         <van-actionsheet v-model="pop.visible" get-container="body" :cancel-text="t('mue.common.cancel')"
                          @select="onSelect"
@@ -41,7 +56,8 @@
             readonly: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
             local: {type: Boolean, default: false},
-            limit: {type: Number, default: 5}
+            limit: {type: Number, default: 5},
+            holder: {type: Boolean, default: false,}
         },
         data() {
             return {
@@ -49,7 +65,12 @@
                 recording: false,
                 dict: {},
                 pop: {visible: false},
-                current: -1
+                current: -1,
+                timeOutEvent: null,
+                timeOverInterVal: 0, // 长按录制时间上限 100秒上限
+                isHolder: false,
+                holderTarget: '',
+                zIndex: 999999
             };
         },
         computed: {
@@ -208,7 +229,144 @@
                         }
                     },
                 );
+            },
+            recordAudioStart(){
+                if(!this.holder) return
+                this.holderTarget = ''
+                this.timeOutEvent = setTimeout(() => {
+                    this.isHolder = true
+                    this.recordAudioHolder()
+                }, 500);
+                return false;
+            },
+            recordAudioMove(e){
+                if(!this.holder) return
+                const target = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY)
+                if(target && target.dataset && target.dataset.record && target.dataset.record === 'cancel'){
+                    this.holderTarget = 'cancel'
+                }else{
+                    this.holderTarget = ''
+                }
+                clearTimeout(this.timeOutEvent);
+                this.timeOutEvent = 0;
+            },
+            recordAudioEnd(){
+                if(!this.holder) return
+                this.isHolder = false
+                clearTimeout(this.timeOutEvent);
+                if(!this.timeOverInterVal) return
+                window.mue_record_time_interval && clearInterval(window.mue_record_time_interval)
+                setTimeout(()=>{
+                    this.timeOverInterVal = 0
+                },300)
+                if (this.timeOutEvent !== 0) {
+                    if(!this.disabled && !this.holder) {
+                        this.recordAudio()
+                    }
+                }else{
+                    if(this.holderTarget === 'cancel'){
+                        console.log('取消录制')
+                        // todo 取消录制
+                    }else{
+                        console.log('完成录制')
+                        // todo 完成录制
+                    }
+                }
+                return false;
+            },
+            recordAudioHolder(){
+                // todo 开始录制
+                {
+                    this.timeOutEvent = 0;
+                    //执行长按要执行的内容，如弹出菜单
+                    console.log("长按");
+                    window.mue_record_time_interval && clearInterval(window.mue_record_time_interval)
+                    window.mue_record_time_interval = setInterval(()=>{
+                        this.timeOverInterVal++
+                        if(this.timeOverInterVal >= 100){
+                            this.recordAudioEnd()
+                        }
+                    },1000)
+                }
             }
         }
     }
 </script>
+<style lang="less" scoped>
+.record-btn{
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none;
+}
+.record-popup{
+    background: transparent;
+    .record-content{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .record-title{
+            color: #4c4c4c;
+            font-size: 14px;
+            background: #07c160;
+            border-radius: 6px;
+            box-shadow: 0 0 0.61538462em rgb(0 0 0%);
+            width: 154px;
+            height: 44px;
+            transform: translateY(-40px);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:after{
+                content: '';
+                width: 0;
+                height: 0;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 6px solid #07c160;
+                position: absolute;
+                transform: translateY(24px);
+            }
+        }
+        .record-msg{
+            position: absolute;
+            bottom: 106px;
+            color: #eeeeee;
+        }
+        .record-cancel{
+            position: absolute;
+            border-radius: 80px;
+            width:56px;
+            height: 56px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #f3b4b2;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            .record-cancel-info{
+                background: #ed6d69;
+                width: 46px;
+                height: 46px;
+                border-radius: 100%;
+                color: #fbfbfb;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            &.cancel {
+                border-color: #ed6d69;
+                background: #ed6d69;
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+</style>
