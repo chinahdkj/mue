@@ -77,7 +77,7 @@ const jsApiAuth = (arr = []) =>{
         http.post('/app/v1.0/dingding/config.json', {}, true, "").then(res => {
             dd.config({
                 agentId: res.agentId, // 必填，微应用ID
-                corpId: corpId,//必填，企业ID
+                corpId: res.corpId || corpId,//必填，企业ID
                 timeStamp: res.timeStamp, // 必填，生成签名的时间戳
                 nonceStr: res.nonceStr || "", // 必填，自定义固定字符串。
                 signature: res.signature, // 必填，签名
