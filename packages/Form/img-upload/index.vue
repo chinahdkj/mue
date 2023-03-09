@@ -84,6 +84,7 @@ export default {
         readonly: {type: Boolean, default: false},
         multiple: {type: Boolean, default: false},
         base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
+        appid: {type: String, default: null},
         quality: { // 新图片压缩比例
             type: Number, default: 1, validator(v) {
                 return v > 0 && v <= 1;
@@ -326,7 +327,7 @@ export default {
                 let id = this.$comm.newFilePath(ext);
                 return {
                     _id: id,
-                    c6: this.$comm.getAppId(""),
+                    c6: this.appid !== null ? this.appid : this.$comm.getAppId(""),
                     data: JSON.stringify({
                         contextType: type, url: id, name, base64: content
                     })
