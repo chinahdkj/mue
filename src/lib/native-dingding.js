@@ -124,7 +124,7 @@ const jsApiAuth = (arr = []) =>{
 if(isDingDing()){
     jsApiAuth().then(()=>{
         dd.ready(()=>{
-            let corpId = this.$comm.GetQueryString("corpid");
+            let corpId = this.$comm.GetQueryString("corpId");
             let self = this;
             dd.runtime.permission.requestAuthCode({
                 corpId: corpId,
