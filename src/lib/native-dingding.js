@@ -76,10 +76,10 @@ const jsApiAuth = (arr = []) =>{
         const corpId = GetQueryString("corpId")
         http.post('/app/v1.0/dingding/config.json', {}, true, "").then(res => {
             dd.config({
-                agentId: res.agentId, // 必填，微应用ID
+                appId: res.agentId, // 必填，微应用ID
                 corpId: res.corpId || corpId,//必填，企业ID
                 timeStamp: res.timeStamp, // 必填，生成签名的时间戳
-                nonceStr: res.nonceStr || "", // 必填，自定义固定字符串。
+                nonceStr: res.nonceStr || getAppId(), // 必填，自定义固定字符串。
                 signature: res.signature, // 必填，签名
                 jsApiList : [
                     'runtime.info',
