@@ -311,7 +311,7 @@
             font-size: 14px;
             background: #07c160;
             border-radius: 6px;
-            box-shadow: 0 0 0.61538462em rgb(0 0 0%);
+            box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.42);
             width: 154px;
             height: 44px;
             transform: translateY(-40px);
