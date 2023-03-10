@@ -13,7 +13,7 @@
         props: {
             disabled: {type: Boolean, default: false},
             multiple: {type: Boolean, default: false},
-            accept: {type: Number, default: 0}, //0:图片, 1:文件 3:拍照
+            mType: {type: Number, default: 0}, //0:图片, 1:文件 3:拍照
             limit: {type: Number, default: 5},
             beforeRead: {type: Function, default: null},
             afterRead: {type: Function, default: null}
@@ -34,12 +34,12 @@
                 this.$native.multi_file({
                     params: {
                         maxNum: this.limitNum,
-                        mType: this.accept,
+                        mType: this.mType,
                         cameraDevice: 0,
                     },
                     cb: (result) => {
                         let { value } = result
-                        if(this.accept === 3){
+                        if(this.mType === 3){
                             let content = `data:${result.file.type};base64,`
                             value = {
                                 content: result.value.startsWith(content) ? result.value : `data:${result.file.type};base64,` + result.value,

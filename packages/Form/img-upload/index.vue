@@ -12,23 +12,27 @@
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
+                    <!-- 水印相机 -->
                     <button v-if="accept === 'watermark'" class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadWatermark()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
+                    <!-- 视频 或 图片视频 -->
                     <button v-else-if="accept === 'video' || accept === 'all'" class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadhadVideo()">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
-                    <android-upload v-if="!isDingdingEnv && !isDing" ref="androidUpload" :disabled="disabled" :multiple="multiple"
-                                    :accept="uploadAccept" :limit="limit" :before-read="beforeRead" :after-read="upload">
+                    <!-- 和达浪潮等环境... -->
+                    <android-upload v-if="isCCWork || isHdkj" ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                                    :mType="mType" :limit="limit" :before-read="beforeRead" :after-read="upload">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
                     </android-upload>
+                    <!-- 其他情况 -->
                     <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
                                   :before-read="beforeRead"
-                                  result-type="dataUrl" :multiple="multiple" accept="image/*">
+                                  result-type="dataUrl" :multiple="multiple" :accept="uploadAccept">
                         <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </van-uploader>
@@ -46,16 +50,18 @@
 
         <mue-img-preview @upload="save" :is-comment="isComment" :visible.sync="preview.visible" :images="preview.images" :start-position="preview.start"/>
 
-        <!--<van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
-            <video :src="videoPop.src" style="width:100%;height:300px;" controls></video>
-        </van-popup>-->
+        <van-popup v-model="videoPop.visible" class="mue-img-upload-pop">
+            <div style="width: 100vw; height: 300px; display: flex; align-items: center; justify-content: center;background: black;">
+                <video :src="videoPop.src" v-if="videoPop.visible" style="width:100%;height:100%;top: 0;left: 0; background: black" autoplay controls></video>
+            </div>
+        </van-popup>
 
     </div>
 </template>
 
 <script>
 import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-import {isAndroid, isDingTalk, isCCWork, getHost} from "../../../src/lib/common";
+import { isAndroid, isDingTalk, isCCWork, getHost, isHdkj, isDingGov } from "../../../src/lib/common";
 import androidUpload from "./androidUpload";
 
 import {localeMixin, t} from "../../../src/locale";
@@ -84,14 +90,14 @@ export default {
         readonly: {type: Boolean, default: false},
         multiple: {type: Boolean, default: false},
         base64: {type: Boolean, default: false}, // 以base64格式将图片保存手机数据库
-        appid: {type: String, default: null},
+        appid: {type: String, default: null}, // 用于开发平台自定义表单设置了base64离线模式时候，将appid置空上传到统一平台上（其他业务单独使用该组件时，也可以配置appid为空来实现自动上传图片到统一平台）
         quality: { // 新图片压缩比例
             type: Number, default: 1, validator(v) {
                 return v > 0 && v <= 1;
             }
         },
         limit: {type: Number, default: 5},
-        uploadAccept: {type: Number, default: 0},
+        mType: {type: Number, default: 0}, // 原生multi_file 方法支持的mType参数 0:图片, 1:文件 3:拍照
         accept: {
             type: String, default: "image"
         },
@@ -115,10 +121,13 @@ export default {
     data() {
         return {
             isDingdingEnv: sessionStorage.getItem('isDingdingEnv'),
+            isCCWork: isCCWork(),
+            isHdkj: isHdkj(),
             imgs: [], thumbs: [], uploading: false, dict: {},
             pop: {visible: false},
             uploadPop: {visible: false},
-            // videoPop: {visible: false, src: ''},
+            uploadAccept: 'image/*', // 图片 image/* 视频 video/* 用于h5上传附件区分类型
+            videoPop: {visible: false, src: ''},
             current: -1,
             preview: {
                 visible: false,
@@ -206,15 +215,24 @@ export default {
                 v.forEach((p) => {
                     // this.$set(this.dict, p, p);
                     let type = this.fileType(p);
+                    let url = p
+                    if(type === 'video'){
+                        if(p.indexOf('?') > -1){
+                            url = `${p.split('?')[0]}.jpg?${p.split('?')[1]}`
+                        }else{
+                            url = `${p}.jpg`
+                        }
+                    }
                     this.$set(this.dict, p, {
-                        url: type === "video" ? `${p}.jpg` : p, // 图片，缩略图
+                        url: url, // 图片，缩略图
                         type,
                         path: this.getPath(p), //完整路径
                         local: false // 是否本地文件
                     });
                 });
 
-                if ((this.base64 || this.accept === "video" || this.accept === 'all') && !isCCWork()) {
+                // 仅限和达环境支持离线模式和视频的离线存储。其他都是在线
+                if ((this.base64 || this.accept === "video" || this.accept === 'all') && isHdkj()) {
                     let prms = v.filter((p) => {
                         return this.base64 || this.fileType(p) === "video";
                     }).map((p) => {
@@ -250,16 +268,15 @@ export default {
         },
         typeSelect({act}) {
             if (act === "image") {
-                /*this.$nextTick(() => {
-                    this.$refs.androidUpload.Upload();
-                })*/
-                if (!this.isDingdingEnv) {
-                    this.$nextTick(() => {
+                this.uploadAccept = 'image/*'
+                // 和达环境或浪潮或浙政钉环境支持用原生方法获取图片。其他用h5代替
+                this.$nextTick(() => {
+                    if (isHdkj() || isCCWork() || isDingGov()) {
                         this.$refs.androidUpload.Upload();
-                    })
-                } else {
-                    this.$comm.clickElement(this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input"));
-                }
+                    } else {
+                        this.$comm.clickElement(this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input"));
+                    }
+                })
             } else if (act === "video") {
                 this.videoUpload();
             }
@@ -274,7 +291,11 @@ export default {
                 let r = urlParamStr.match(reg);
                 if (r != null) {
                     let fileName = decodeURIComponent(r[2]);
-                    suffix = fileName.substring(fileName.lastIndexOf('.') + 1);
+                    if(fileName.lastIndexOf('.') === fileName.indexOf('.')){
+                        suffix = fileName.substring(fileName.lastIndexOf('.') + 1);
+                    }else{
+                        suffix = fileName.substring(fileName.indexOf('.') + 1);
+                    }
                 }
             } else {
                 suffix = url.substring(url.lastIndexOf('.') + 1);
@@ -352,7 +373,7 @@ export default {
                 return "";
             }
             let path = this.$comm.getUploadPath(whole)
-            if(this.base64){
+            if(path.startsWith('data')){
                 return path
             }
             return path + `${path.indexOf('?') > -1 ? '&' : '?'}uniwater_utoken=${sessionStorage.getItem('authortoken')}`;
@@ -373,6 +394,7 @@ export default {
 
         //调用原生水印相机
         async uploadWatermark() {
+            this.uploadAccept = 'image/*'
             let base64 = await this.getWatermark();
             if (!base64) {
                 return
@@ -396,7 +418,6 @@ export default {
             this.upload(file, index);
         },
         save(data) {
-            console.log(data)
             this.base64ToUpload(data.base64,data.index)
         },
         upload(files, index = '') {
@@ -407,12 +428,16 @@ export default {
 
 
             let datas = files.map(({content, file}) => {
-                return ZipImage(content, file, this.quality);
-
+                if(this.uploadAccept === 'image/*'){
+                    return ZipImage(content, file, this.quality);
+                }else{
+                    return { content, file: {type: file.type, name: file.name} }
+                }
             });
             Promise.all(datas).then((rs) => {
                 // 图片本地保存
-                if (this.base64) {
+                // 原生和达环境才支持离线模式
+                if (this.base64 && isHdkj()) {
                     if (rs.length === 0) {
                         this.uploading = false;
                         return;
@@ -444,13 +469,35 @@ export default {
                         this.saveAlbum(content, file)
                     }*/
 
-                    return this.$http.post(this.resUploadUrl, form, {
-                        processData: false, contentType: false
-                    }, null, this.header);
+                    return new Promise((resolve, reject)=>{
+                        this.$http.post(this.resUploadUrl, form, {
+                            processData: false, contentType: false
+                        }, null, this.header).then(r=>{
+                            // 视频封面上传 不是和达不是浪潮 并且是视频上传的时候
+                            if(!isHdkj() && !isCCWork() && this.uploadAccept === 'video/*'){
+                                // 获取视频封面并上传
+                                let url = r.startsWith('/upload/') ? (getHost() + r) : r
+                                let suffix = url.includes("?") ? url.split('?')[0] : url
+                                const poster = this.getVideoBase64(content)
+                                poster.then(_img=>{
+                                    let { file: formFile, id, filename: formFileName } = this.base64toFile(_img, suffix, file.name)
+                                    let form = new FormData();
+                                    form.append(key, formFile, formFileName);
+                                    form.append("id", id);
+                                    this.$http.post(this.resUploadUrl, form, {
+                                        processData: false, contentType: false
+                                    },null, this.header)
+                                })
+                            }
+                            resolve(r)
+                        }).catch(r=>{
+                            reject(r)
+                        })
+                    })
                 });
 
                 this.$ajax.all(posts).then((rs) => {
-                    if(index === '') {
+                    if(index === '' || typeof index === 'object') {
                         if (this.multiple) {
                             rs.forEach((r) => {
                                 this.imgs.push(r.url || r);
@@ -486,23 +533,31 @@ export default {
         },
 
         videoUpload() {
-            this.uploading = true;
-            let id = this.$comm.newFilePath('mp4');
-            this.$native.video({
-                params: {id: id, local: this.base64},
-                cb: ({code}) => {
-                    if (code === 0) {
-                        this.imgs.push(id);
-                    } else if (code === 1) {
-                    } else {
-                        this.$toast.fail(t('mue.form.imgUpload.errorUpload'));
+            this.uploadAccept = 'video/*'
+            // 仅限和达或浪潮或浙政钉环境支持视频拍摄，其他调用h5方法
+            if (isHdkj() || isCCWork() || isDingGov()) {
+                this.uploading = true;
+                let id = this.$comm.newFilePath('mp4');
+                this.$native.video({
+                    params: {id: id, local: this.base64},
+                    cb: ({code}) => {
+                        if (code === 0) {
+                            this.imgs.push(id);
+                        } else if (code === 1) {
+                        } else {
+                            this.$toast.fail(t('mue.form.imgUpload.errorUpload'));
+                        }
+                        this.uploading = false;
                     }
-                    this.uploading = false;
-                }
-            });
+                });
 
-            //云上协同目前没有“取消录制”回调，强制关闭加载动画
-            if(isCCWork()) this.uploading = false;
+                //云上协同目前没有“取消录制”回调，强制关闭加载动画
+                if(isCCWork()) this.uploading = false;
+            }else{
+                this.$nextTick(()=>{
+                    this.$comm.clickElement(this.$refs.uploadbtn.$el.getElementsByClassName("van-uploader__input"));
+                })
+            }
         },
 
         showAction(i) {
@@ -550,11 +605,21 @@ export default {
             } else {
                 // this.videoPop.visible = true;
                 let videoPath = this.dict[this.imgs[this.current]].path;
-                if(videoPath.startsWith('/upload/')){
-                    console.log(getHost() + videoPath)
-                    this.$native.showVideo({params: {path: getHost() + videoPath}});
+                // 仅限和达和浪潮环境支持视频播放，其他需要h5
+                if(isHdkj() || isCCWork()){
+                    if(videoPath.startsWith('/upload/')){
+                        this.$native.showVideo({params: {path: getHost() + videoPath}});
+                    }else{
+                        this.$native.showVideo({params: {path: videoPath}});
+                    }
                 }else{
-                    this.$native.showVideo({params: {path: videoPath}});
+                    if(videoPath.startsWith('/upload/')){
+                        this.videoPop.src = getHost() + videoPath
+                        this.videoPop.visible = true
+                    }else{
+                        this.videoPop.src = videoPath
+                        this.videoPop.visible = true
+                    }
                 }
             }
         },
@@ -594,6 +659,49 @@ export default {
             } else {
                 this.$toast.fail(t('mue.form.common.uploadLimitErrorPrompt')+this.limit);
                 return false;
+            }
+        },
+        getVideoBase64(url){
+            return new Promise(function(resolve, reject) {
+                let dataURL = '';
+                let video = document.createElement("video");
+                video.setAttribute('crossorigin', 'anonymous'); //处理跨域
+                video.setAttribute('src', url);
+                video.setAttribute('width', 180);
+                video.setAttribute('height', 320);
+                video.setAttribute('controls', 'controls');
+                video.currentTime = 1  //视频时长，一定要设置，不然大概率白屏
+                video.addEventListener('loadeddata', function(e) {
+                    let canvas = document.createElement("canvas"),
+                        width = video.width, //canvas的尺寸和图片一样
+                        height = video.height;
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext("2d").drawImage(video, 0, 0, width, height); //绘制canvas
+                    dataURL = canvas.toDataURL('image/jpeg',0.3); //转换为base64
+                    let img = document.createElement("img");
+                    img.src = dataURL
+                    video.setAttribute('poster', dataURL);
+                    resolve(dataURL);
+                });
+            })
+        },
+        base64toFile(dataurl, name = 'file', file = ''){
+            let arr = dataurl.split(',')
+            let mime = arr[0].match(/:(.*?);/)[1]
+            let suffix = mime.split('/')[1]
+            let bstr = atob(arr[1])
+            let n = bstr.length
+            let u8arr = new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+            }
+            return {
+                file: new File([u8arr], `${name}.${suffix}`, {
+                    type: mime
+                }),
+                id: `${name}.${suffix}`,
+                filename: `${file}.${suffix}`,
             }
         }
     },
