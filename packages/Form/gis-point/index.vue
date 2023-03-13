@@ -465,6 +465,9 @@ export default {
 			if (!pos) {
 				this.pos = null;
 				this.$native.getLocation({
+                    params: {
+                        isOnce: true
+                    },
 					cb: pos => {
 						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					}
@@ -497,6 +500,9 @@ export default {
 		getLocation() {
 			this.loading = true;
 			this.$native.getLocation({
+                params: {
+                    isOnce: true
+                },
 				cb: ({ lat, lng }) => {
 					this.pos = { lat, lng };
 					this.loading = false;
@@ -508,6 +514,9 @@ export default {
 				return;
 			}
 			this.$native.getLocation({
+                params: {
+                    isOnce: true
+                },
 				cb: pos => {
 					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.$nextTick(() => {
@@ -542,6 +551,9 @@ export default {
 			if(this.isShot) {
 				if (this.currentLocation && !this.value) {
 					this.$native.getLocation({
+                        params: {
+                            isOnce: true
+                        },
 						cb: pos => {
 							this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 							// this.$nextTick(() => {
@@ -761,6 +773,9 @@ export default {
 		if(!this.isShot) {
 			if (this.currentLocation && !this.value) {
 				this.$native.getLocation({
+                    params: {
+                        isOnce: true
+                    },
 					cb: pos => {
 						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 						this.$nextTick(() => {

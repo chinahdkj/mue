@@ -206,7 +206,9 @@ export default {
         },
         onLocation() {
             this.$native.getLocation({
-                params: {},
+                params: {
+                    isOnce: true
+                },
                 cb: (result) => {
                     let latlng = [result.lat, result.lng]
                     this.location(latlng)

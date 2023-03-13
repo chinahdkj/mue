@@ -34,7 +34,7 @@ const fns2 = [
 
 const postMessage = ({cb, method, params}) => {
     // console.log("传入参数", params)
-    const msgid = parseInt(Math.random() * Math.pow(10, 17));
+    const msgid = parseInt(Math.random() * Math.pow(10, 17)) + new Date().getTime();
     _cache[msgid] = cb;
     try {
         if (isDingDing()) {
