@@ -66,7 +66,7 @@ import androidUpload from "./androidUpload";
 
 import {localeMixin, t} from "../../../src/locale";
 
-const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
+const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp,image/heic';
 const VIDEO = 'video/mp4,video/rmvb,video/avi,video/mov,video/flv,video/3gp';
 
 export default {
@@ -292,13 +292,13 @@ export default {
                 if (r != null) {
                     let fileName = decodeURIComponent(r[2]);
                     if(fileName.lastIndexOf('.') === fileName.indexOf('.')){
-                        suffix = fileName.substring(fileName.lastIndexOf('.') + 1);
+                        suffix = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
                     }else{
-                        suffix = fileName.substring(fileName.indexOf('.') + 1);
+                        suffix = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
                     }
                 }
             } else {
-                suffix = url.substring(url.lastIndexOf('.') + 1);
+                suffix = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
             }
             return IMG.includes(suffix) ? 'image' : 'video'
         },
