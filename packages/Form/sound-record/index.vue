@@ -12,18 +12,18 @@
                 <i v-if="recording" class="recording"></i>
                 <button v-else class="record-btn" :disabled="disabled" type="button" @click="recordAudio" :class="{'is-disabled': disabled}"
                         @touchstart="recordAudioStart"
-                        @touchmove="recordAudioMove"
+                        @touchmove.prevent="recordAudioMove"
                         @touchend="recordAudioEnd"/>
             </li>
         </ul>
 
-        <van-popup v-model="isHolder" :close-on-click-overlay="true" class="record-popup" lock-scroll get-container>
+        <van-popup v-model="isHolder" :close-on-click-overlay="true" class="record-popup" lock-scroll get-container="body">
             <div class="record-content">
-                <div class="record-title">录制中 {{timeOverInterVal}} 秒</div>
+                <div class="record-title">录制中 {{formatNum(timeOverInterVal)}} 秒</div>
                 <div class="record-msg">{{ holderTarget === 'cancel' ? '取消录制' : '松开确认' }}</div>
                 <div class="record-cancel" data-record="cancel" :class="{cancel: holderTarget === 'cancel'}">
                     <span data-record="cancel" class="record-cancel-info">
-                        <i data-record="cancel" class="iconfont icon-zuofei1"></i>取消
+                        <i data-record="cancel" class="iconfont icon-chushaixuanxiang"></i>取消
                     </span>
                 </div>
             </div>
@@ -38,6 +38,7 @@
 
 <script>
     import {localeMixin, t} from "../../../src/locale";
+    import { formatNum } from "leaflet/src/core/Util";
     export default {
         name: "MueSoundRecord",
         mixins: [localeMixin],
@@ -146,6 +147,9 @@
             }
         },
         methods: {
+            formatNum(num){
+                return num.toFixed(1)
+            },
             showAction(i) {
                 this.current = i;
                 if (this.isReadonly) {
@@ -234,6 +238,7 @@
                 if(!this.holder) return
                 this.holderTarget = ''
                 this.timeOutEvent = setTimeout(() => {
+                    this.$toast.clear()
                     this.isHolder = true
                     this.recordAudioHolder()
                 }, 500);
@@ -266,27 +271,32 @@
                 }else{
                     if(this.holderTarget === 'cancel'){
                         console.log('取消录制')
-                        // todo 取消录制
+                        // todo 执行取消录制原生方法
+
                     }else{
                         console.log('完成录制')
-                        // todo 完成录制
+                        // 需要判断原生录制时长，如果timeOverInterVal少于1秒可以取消上传
+                        if(this.timeOverInterVal < 1){
+                            return this.$toast.fail('录制时长过短')
+                        }
+                        // todo 执行完成录制原生方法
                     }
                 }
                 return false;
             },
             recordAudioHolder(){
-                // todo 开始录制
+                // todo 执行开始录制原生方法
                 {
                     this.timeOutEvent = 0;
                     //执行长按要执行的内容，如弹出菜单
                     console.log("长按");
                     window.mue_record_time_interval && clearInterval(window.mue_record_time_interval)
                     window.mue_record_time_interval = setInterval(()=>{
-                        this.timeOverInterVal++
+                        this.timeOverInterVal = Number((this.timeOverInterVal + 0.1).toFixed(1))
                         if(this.timeOverInterVal >= 100){
                             this.recordAudioEnd()
                         }
-                    },1000)
+                    },100)
                 }
             }
         }
