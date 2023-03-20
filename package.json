@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.485",
+  "version": "1.0.486",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": false,
@@ -28,7 +28,7 @@
     "exif-js": "^2.3.0",
     "fabric": "4.4.0",
     "fastclick": "^1.0.6",
-    "gdt-jsapi": "^1.9.27-beta.1",
+    "gdt-jsapi": "^1.9.41",
     "jquery": "^3.3.1",
     "leaflet-editable": "^1.2.0",
     "leaflet-snap": "^0.0.4",

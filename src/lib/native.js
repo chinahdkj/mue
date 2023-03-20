@@ -37,11 +37,11 @@ const postMessage = ({cb, method, params}) => {
     const msgid = parseInt(Math.random() * Math.pow(10, 17)) + new Date().getTime();
     _cache[msgid] = cb;
     try {
-        if (isDingDing()) {
-            typeof NativeDingDing[method] === "function" && NativeDingDing[method]({msgid, method, params});
-        }
-        else if(isDingGov()){
+        if(isDingGov()){
             typeof NativeDingGov[method] === "function" && NativeDingGov[method]({msgid, method, params});
+        }
+        else if (isDingDing()) {
+            typeof NativeDingDing[method] === "function" && NativeDingDing[method]({msgid, method, params});
         }
         else if (isCCWork()) {
             if(typeof NativeCcwork[method] === "function") {
