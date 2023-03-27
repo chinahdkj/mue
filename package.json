@@ -1,6 +1,6 @@
 {
   "name": "mue",
-  "version": "1.0.486",
+  "version": "1.0.487",
   "description": "HD Vue Components",
   "author": "zhukaidi <zhukaidi@chinahddz.com>",
   "private": false,
@@ -40,6 +40,7 @@
     "uuid": "^3.3.2",
     "vant": "1.6.23",
     "vue": "^2.5.2",
+    "vue-pdf": "^4.3.0",
     "vue-router": "^3.0.1",
     "vue2-leaflet": "2.5.2",
     "coordtransform": "^2.1.2",
