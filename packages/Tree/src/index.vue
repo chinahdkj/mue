@@ -8,7 +8,10 @@
             <slot v-else name="title">
                 <div class="van-ellipsis van-picker__title" v-if="title">{{title}}</div>
             </slot>
-            <div class="van-picker__confirm" @click="onConfirmClick">{{confirmButtonText}}</div>
+            <div class="van-picker__confirm" style="display: flex;">
+                <slot #buttons></slot>
+                <div @click="onConfirmClick">{{confirmButtonText}}</div>
+            </div>
         </div>
         <div class="mue-tree__panels">
             <div class="mue-tree__panels-content">

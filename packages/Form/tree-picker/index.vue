@@ -29,6 +29,7 @@
                 <template #node="{node}">
                     <slot name="node" :node="node">{{node.name}}</slot>
                 </template>
+                <slot name="buttons" #buttons></slot>
             </mue-tree>
         </van-popup>
     </div>
