@@ -25,7 +25,7 @@ const fns = [
 
 // 原生主动调用js的方法
 const fns2 = [
-    "search", "collect", "btDisConnected", "btReceiver", "btGetParams", "manualPostRes", "handPostResp",
+    "search", "collect", "btDisConnected", "btReceiver", "btGetParams", "manualPostRes", "handPostResp", "gpsnPostResp",
     "btSound", "btScan", "handCollectResp", "bluetooth", "onBtState", "interceptBack", "bgNavi", "getLocation", "btUpdate",
     "screenoff", "screenon", "bgNaviClose", "btRawData", "onSingleDownload", "sqlite_close", "unzip", "btNoiseLog",
     "get_blan", "rpc_blan", "onfmkz_sscx", "connectUHFTag", "disconnectUHFTag", "readUHFTag", "nfcData",
