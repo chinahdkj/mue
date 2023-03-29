@@ -2,15 +2,14 @@ var webpack = require("webpack");
 const debug = process.env.NODE_ENV !== "production";
 const less = require("./config/config.less");
 
-let server = 'http://122.225.71.14:40018'; // 9023
+let server = 'http://192.168.100.179:8089'; // 9023
 
 module.exports = {
     lintOnSave: false,
     devServer: {
         proxy: {
             "^/upload": {
-                // target: server,
-                target: "http://192.168.100.179:8081",
+                target: server,
                 changeOrigin: true
             },
             "^/list": {
@@ -19,11 +18,11 @@ module.exports = {
                 changeOrigin: true
             },
             '^/fstatic': {
-                target: "http://192.168.100.179:8081",
+                target: "http://192.168.100.179:8089",
                 changeOrigin: true
             },
             '^/fvideo': {
-                target: "http://192.168.100.179:8081",
+                target: "http://192.168.100.179:8089",
                 changeOrigin: true
             },
         }

@@ -115,6 +115,9 @@
 						</van-radio-group>
 					</div>
 				</div>
+                <div class="mue-gis-point-pop--tools" v-if="needNavi">
+                    <van-button type="primary" block @click="startNavi">导航</van-button>
+                </div>
 			</div>
 		</van-popup>
 	</div>
@@ -393,7 +396,8 @@ export default {
 			}
 		},
 		pipeLineType: {type: String, default: "radio"},//pipeLines管线配置是单选radio，多选checkbox
-		noEllipsis: { type: Boolean, default: false}//坐标不省略显示
+        noEllipsis: { type: Boolean, default: false},//坐标不省略显示
+        needNavi: {type: Boolean, default: false}, //是否需要启用导航
 	},
 	data() {
 		return {
@@ -497,6 +501,18 @@ export default {
 		}
 	},
 	methods: {
+        startNavi(){
+            if(this.pos.lat && this.pos.lng){
+                this.$native.startNavi({
+                    params: {
+                        lat: this.pos.lat,
+                        lng: this.pos.lng
+                    }
+                })
+            }else{
+                this.$toast.fail('请先获取定位')
+            }
+        },
 		getLocation() {
 			this.loading = true;
 			this.$native.getLocation({
