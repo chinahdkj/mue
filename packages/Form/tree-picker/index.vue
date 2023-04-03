@@ -112,6 +112,7 @@
                     this.$nextTick(() => {
                         if(this.value == null || this.value === "" || !this.$refs.tree){
                             this.text = "";
+                            this.$emit('set-text', this.text)
                             resolve(this.text)
                             return;
                         }
@@ -138,6 +139,7 @@
                             });
                             this.text = t.join(",");
                         }
+                        this.$emit('set-text', this.text)
                         resolve(this.text)
                     });
                 })
