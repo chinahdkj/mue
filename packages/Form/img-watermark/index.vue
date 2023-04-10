@@ -12,12 +12,29 @@
             <li class="__upload-btn" v-if="!isReadonly && uploadAble">
                 <van-loading v-if="uploading" color=""/>
                 <div v-else>
-                    <button  class="upload-btn" type="button"
+                    <button class="upload-btn" type="button"
                             :disabled="disabled" @click="uploadWatermark()">
-                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                        <i class="iconfont icon-tuxiang" :class="{'is-disabled': disabled}"
                            aria-hidden="true"></i>
                     </button>
                 </div>
+            </li>
+            <li class="__upload-btn" v-if="isUpload && !isReadonly && uploadAble">
+                <van-loading v-if="uploading" color=""/>
+                <template v-else>
+                    <!-- 和达浪潮等环境... -->
+                    <android-upload v-if="isCCWork || isHdkj" ref="androidUpload" :disabled="disabled" :multiple="multiple"
+                                    :mType="mType" :limit="limit" :before-read="beforeRead" :after-read="upload">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}" aria-hidden="true"></i>
+                    </android-upload>
+                    <!-- 其他情况 -->
+                    <van-uploader v-else ref="uploadbtn" :disabled="disabled" :after-read="upload"
+                                  :before-read="beforeRead"
+                                  result-type="dataUrl" :multiple="multiple" :accept="uploadAccept">
+                        <i class="iconfont icon-tianjia" :class="{'is-disabled': disabled}"
+                           aria-hidden="true"></i>
+                    </van-uploader>
+                </template>
             </li>
         </ul>
 
@@ -32,8 +49,8 @@
 
 <script>
 import {Base64ToFile, ZipImage} from "../../../src/utils/image-utils";
-import {isAndroid, isCCWork} from "../../../src/lib/common";
-
+import {isAndroid, isCCWork, isHdkj} from "../../../src/lib/common";
+import AndroidUpload from "../img-upload/androidUpload.vue";
 import {localeMixin, t} from "../../../src/locale";
 
 const IMG = 'image/jpg,image/jpeg,image/png,image/gif,image/bmp';
@@ -42,6 +59,7 @@ export default {
     mixins: [localeMixin],
     name: "MueImgWatermark",
     components: {
+        AndroidUpload
     },
     inject: {
         FORM_ITEM: {
@@ -64,6 +82,7 @@ export default {
             }
         },
         limit: {type: Number, default: 5},
+        mType: {type: Number, default: 0}, // 原生multi_file 方法支持的mType参数 0:图片, 1:文件 3:拍照
         watermarkParams: {
             type: Object,
             default() {
@@ -79,13 +98,17 @@ export default {
             default: ""
         },
         uploadUrl: {type: String, default: ""}, //自定义上传文件地址接口
-        uploadKey: {type: String, default: ""} //自定义上传参数名
+        uploadKey: {type: String, default: ""}, //自定义上传参数名
+        isUpload: {type: Boolean, default: false}, //是否启用上传图片和拍照
     },
     data() {
         return {
+            isCCWork: isCCWork(),
+            isHdkj: isHdkj(),
             isDingdingEnv: sessionStorage.getItem('isDingdingEnv'),
             imgs: [], thumbs: [], uploading: false, dict: {},
             pop: {visible: false},
+            uploadAccept: 'image/*', // 图片 image/* 视频 video/* 用于h5上传附件区分类型
             current: -1,
             preview: {
                 visible: false,

@@ -60,7 +60,7 @@
 
                     <mue-form-item label="水印相加" field="station.waterpics"
                                     :rules="[{type:'array'}]">
-                        <mue-img-watermark multiple v-model="model.station.waterpics" base64 :quality="0.4" accept="watermark" :watermark-params="watermarkParams"/>
+                        <mue-img-watermark multiple is-upload v-model="model.station.waterpics" base64 :quality="0.4" accept="watermark" :watermark-params="watermarkParams"/>
                     </mue-form-item>
 
                     <mue-form-item label="录制音频" field="audios">
