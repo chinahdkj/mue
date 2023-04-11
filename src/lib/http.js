@@ -143,7 +143,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
 
         return axios(setting).then(res => res.Response).catch(e => {
@@ -175,7 +177,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
         
         return axios(setting).then(res => res).catch(e => {
@@ -194,7 +198,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
 
 
@@ -222,7 +228,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
         
         return axios(setting).then(res => res).catch(e => {
@@ -241,7 +249,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
 
         return axios(setting).then(res => res.Response).catch(e => {
@@ -273,7 +283,9 @@ export default {
         if(isWebApi){
             setting.url = getUrl(url)
         }else{
-            setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            if(header !== false){
+                setting['headers'] = header && JSON.stringify(header) !== "{}" ? header : getHeaders(appid)
+            }
         }
 
         return axios(setting).then(res => res.Response).catch(e => {
