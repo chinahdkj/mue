@@ -2,9 +2,9 @@
 // 开发环境设置tooken
 if(process.env.NODE_ENV === "development"){
     // // 8089 hu1
-    sessionStorage.setItem("authortoken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2MiOiJodTEiLCJhY2NvdW50IjoiaHUxIiwiY2lkIjoiNWM5YzgxZGJmZjVjOTQyZGM4YThhY2Y2IiwiZXhwIjoxNzA4MTY1Mzg3LCJncm91cCI6IjVjOWQ3YmVjZmY1Yzk0MmRjOGE4YWRkMyIsImlwIjoiMTkyLjE2OC4xMDAuMTc5IiwibW9iaWxlIjoiMTM3MzY0NDAzNTgiLCJuYW1lIjoiaHUxIiwicm9sZXMiOlsiNWNiOTg3NjM5ZjFmMDQwMDA5ZTQ2MjNjIiwiNWM5Y2E2OGNmZjVjOTQyZGM4YThhZDQ2Il0sInNuIjoiSEQzMTkiLCJ1aWQiOiI2M2VkYTM1NDM1MGFkNjE4MjdhYTU3MjMifQ.4NSJb1QjXoFiI3AQFoVopbVB_Si5ZuPKzL5JSeJZiO0");
+    sessionStorage.setItem("authortoken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2MiOiJodTEiLCJhY2NvdW50IjoiaHUxIiwiY2lkIjoiNWM5YzgxZGJmZjVjOTQyZGM4YThhY2Y2IiwiZXhwIjoxNzEyMjgxMjI5LCJncm91cCI6IjVjOWQ3YmVjZmY1Yzk0MmRjOGE4YWRkMyIsImlwIjoiMTkyLjE2OC4xMDAuMTc5IiwibW9iaWxlIjoiMTM3MzY0NDAzNTgiLCJuYW1lIjoiaHUxIiwicm9sZXMiOlsiNWM5Y2E2OGNmZjVjOTQyZGM4YThhZDQ2Il0sInNuIjoiSEQzMTkiLCJ1aWQiOiI2M2VkYTM1NDM1MGFkNjE4MjdhYTU3MjMifQ.2TlYv4emZv3RIEQjk8_Bg1TF1z0-J8LDy6lAhWE5oaE");
     sessionStorage.setItem("authorapp",  "5c9c81dbff5c942dc8a8acf6");
-    sessionStorage.setItem("appid",  "5d56489b6a8a0b0009e46763");
+    sessionStorage.setItem("appid",  "634f631e350ad66439c3c894");
 }
 
 import Vue from "vue";
