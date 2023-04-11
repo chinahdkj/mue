@@ -76,8 +76,13 @@
 						<l-control-zoom position="topright"
 							:zoomInText="zoomInIcon"
 							:zoomOutText="zoomOutIcon"></l-control-zoom>
-						<l-tile-layer :options="{subdomains: ['1', '2', '3','4']}"
+
+						<l-tile-layer v-if="!type" :options="{subdomains: ['1', '2', '3','4']}"
 							:url="tileLayerUrl" />
+						<template v-else>
+							<l-tile-layer v-for="(t, index) in tiles" :key="index" :url="t._url" :options="t.options" />	
+						</template>
+						
 						<l-marker v-if="isReadonly"
 							:lat-lng="pos" />
 						<l-circle v-if="limit"
@@ -398,6 +403,7 @@ export default {
 		pipeLineType: {type: String, default: "radio"},//pipeLines管线配置是单选radio，多选checkbox
         noEllipsis: { type: Boolean, default: false},//坐标不省略显示
         needNavi: {type: Boolean, default: false}, //是否需要启用导航
+		type: {type: String, default: null}//地图类型
 	},
 	data() {
 		return {
@@ -458,7 +464,37 @@ export default {
 			}else {
 				return this.pipeLines.filter(pipe=> pipe.id == this.pipeRadio)
 			}
-		}
+		},
+		tiles() {
+            let maxZoom = 18, minZoom = 0, key = '0f5a5eb8a3dfbe883002120a9e0e3640'
+            if(this.type) {
+                if(this.type == 'night') { //夜间
+                    return [L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', { maxZoom, minZoom })]
+                }
+                if(this.type == 'gd') { //高德
+                    return [L.tileLayer.chinaProvider('GaoDe.Normal.Map', { maxZoom, minZoom })]
+                }
+                if(this.type == 'imgm') { //高德影像
+                    return [
+                        L.tileLayer.chinaProvider('GaoDe.Satellite.Map', {maxZoom, minZoom}),
+                        L.tileLayer.chinaProvider('GaoDe.Satellite.Annotion', {maxZoom, minZoom})
+                    ]
+                }
+                if(this.type == 'tdt') { //天地图
+                    return [
+                        L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {key, maxZoom, minZoom}),
+                        L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {key, maxZoom, minZoom})
+                    ]
+                }
+                if(this.type == 'tdtimgm') { //天地图影像
+                    return [
+                        L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {key, maxZoom, minZoom}),
+                        L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', { key, maxZoom, minZoom })
+                    ]
+                }
+            }
+            return []
+        }
 	},
 	watch: {
 		pop(v) {
@@ -473,6 +509,7 @@ export default {
                         isOnce: true
                     },
 					cb: pos => {
+						pos = this.transPos(pos)
 						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					}
 				});
@@ -519,8 +556,9 @@ export default {
                 params: {
                     isOnce: true
                 },
-				cb: ({ lat, lng }) => {
-					this.pos = { lat, lng };
+				cb: pos => {
+					pos = this.transPos(pos)
+					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.loading = false;
 				}
 			});
@@ -534,6 +572,7 @@ export default {
                     isOnce: true
                 },
 				cb: pos => {
+					pos = this.transPos(pos)
 					this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 					this.$nextTick(() => {
 						this.onConfirm(true);
@@ -571,6 +610,7 @@ export default {
                             isOnce: true
                         },
 						cb: pos => {
+							pos = this.transPos(pos)
 							this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 							// this.$nextTick(() => {
 								// this.onConfirm(true);
@@ -775,6 +815,19 @@ export default {
 					console.log(data);
 				}
 			});
+		},
+		transPos(pos) {
+			if(pos) {
+				if(this.type == 'tdt' || this.type == 'tdtimgm') {
+					let lnglat = coordtransform.gcj02towgs84(pos.lng, pos.lat)
+					pos = {
+						lng: lnglat[0],
+						lat: lnglat[1]
+					}
+				}
+				return pos
+			}
+			return pos
 		}
 	},
 	created() {
@@ -793,6 +846,7 @@ export default {
                         isOnce: true
                     },
 					cb: pos => {
+						pos = this.transPos(pos)
 						this.pos = pos ? { lat: pos.lat, lng: pos.lng } : { lat: 30, lng: 120 };
 						this.$nextTick(() => {
 							this.onConfirm(true);
