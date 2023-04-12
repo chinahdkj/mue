@@ -84,10 +84,10 @@
         },
         computed: {
             version() {
-                if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.rtsp.endsWith("iframe")) {
+                if (this.rtsp && (this.rtsp.indexOf("open.ys7.com") > -1 || this.rtsp.indexOf("open.hikyun.com") > -1) && this.rtsp.endsWith("iframe")) {
                     return "hik-ys-iframe";
                 }
-                if (this.rtsp && this.rtsp.indexOf("open.ys7.com") > -1 && this.$comm.isIos()) {
+                if (this.rtsp && (this.rtsp.indexOf("open.ys7.com") > -1 || this.rtsp.indexOf("open.hikyun.com") > -1) && this.$comm.isIos()) {
                     return "hik-ys";
                 }
                 if (this.rtsp && this.rtsp.endsWith(".m3u8")) {
