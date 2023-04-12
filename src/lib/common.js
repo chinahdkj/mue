@@ -269,6 +269,11 @@ export const getHost = () => {
     if(regex.test(location.href)){
         return host;
     }
+
+    //匹配在线http模式
+    if(location.href.startsWith('http') && !location.href.startsWith(`${location.origin}/packages/${code}/`)){
+        return host
+    }
     
     return "";
 };
