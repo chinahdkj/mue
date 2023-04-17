@@ -39,21 +39,6 @@
                 <van-button size="large" type="default" @click="dialog.visible = false">关闭预览</van-button>
             </div>
         </van-popup>
-        <van-popup v-model="dialog.pdfVisible" get-container="body" :close-on-click-overlay="true"
-                   class="form-input-dialog"
-                   position="bottom" style="width:100%;height:85%;">
-            <div class="form-input-dialog-header">附件预览
-                <i class="iconfont icon-chushaixuanxiang" @click="dialog.pdfVisible = false"></i>
-            </div>
-            <div class="form-input-dialog-container" v-if="dialog.pdfVisible">
-                <div class="pdf-container">
-                    <pdf v-for="item in pageCount" :key="item" :src="dialog.url" :page="item"/>
-                </div>
-            </div>
-            <div class="form-input-dialog-footer">
-                <van-button size="large" type="default" @click="dialog.pdfVisible = false">关闭预览</van-button>
-            </div>
-        </van-popup>
         <mue-img-preview :visible.sync="dialog.preview" :images="dialog.images" :start-position="dialog.start"/>
     </div>
 </template>
@@ -63,14 +48,12 @@ import {localeMixin, t} from "../../../src/locale";
 import {isCCWork, getHost, isIos} from '../../../src/lib/common';
 import {getHeaders} from "../../../src/lib/http";
 import CcworkUpload from "./ccworkUpload";
-import Pdf from 'vue-pdf';
-import CMapReaderFactory from 'vue-pdf/src/CMapReaderFactory.js'
 // import ccworkBridge from 'ccwork-jsbridge';
 
 export default {
     mixins: [localeMixin],
     name: "MueUpload",
-    components: {CcworkUpload, Pdf,},
+    components: {CcworkUpload,},
     inject: {
         FORM_ITEM: {
             from: "FORM_ITEM",
@@ -104,12 +87,10 @@ export default {
             pop: {visible: false, current: -1},
             dialog: {
                 visible: false,
-                pdfVisible: false,
                 preview: false,
                 images:[],
                 start:0,
                 path:'',
-                pageCount:0,
             },
         };
     },
@@ -312,12 +293,10 @@ export default {
             let previewUrl = ''
             const IMG = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
             const VIDEO = ['.mp4', '.rmvb', '.avi', '.mov', '.flv', '.3gp'];
-            const PDF = ['.pdf'];
             if([...IMG, ...VIDEO].includes(suffix.toLowerCase())) {
                 previewUrl = path
             }else{
                 let u = `${this.previewSource || ''}${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
-                console.log({u})
                 previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
             }
             if(!previewUrl.startsWith('http')){
@@ -327,22 +306,6 @@ export default {
                 this.dialog.images = [previewUrl]
                 this.dialog.preview = true;
             }
-            // else if(PDF.includes(suffix.toLowerCase())){
-            //     // if(isIos()){
-            //     //     this.dialog.visible = true;
-            //     //     this.dialog.url = previewUrl;
-            //     // }else{
-            //     this.$toast.loading('加载中')
-            //     this.dialog.url = Pdf.createLoadingTask({ url: previewUrl, CMapReaderFactory });//解决中文乱码问题
-            //     this.dialog.url.promise.then((pdf) => {
-            //         this.$toast.clear()
-            //         this.pageCount = pdf.numPages;
-            //         this.dialog.pdfVisible = true
-            //     }).catch(()=>{
-            //
-            //     })
-            //     // }
-            // }
             else{
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl;
@@ -509,10 +472,6 @@ export default {
     }
     .form-input-dialog-container{
         height: calc(100% - 88px);
-        .pdf-container{
-            height: 100%;
-            overflow: auto;
-        }
     }
     .form-input-dialog-footer{
         height: 44px;

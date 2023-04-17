@@ -246,7 +246,7 @@ export const getHost = () => {
     else{
         host = sessionStorage.getItem("host") || "";
     }
-    
+    host = decodeURIComponent(host)
     //web端本地测试用
     if(localStorage.getItem('mue_host_test') === '1'){
         return host;
