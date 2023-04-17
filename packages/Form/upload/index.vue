@@ -313,10 +313,11 @@ export default {
             const IMG = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
             const VIDEO = ['.mp4', '.rmvb', '.avi', '.mov', '.flv', '.3gp'];
             const PDF = ['.pdf'];
-            if([...IMG, ...VIDEO, ...PDF].includes(suffix.toLowerCase())) {
+            if([...IMG, ...VIDEO].includes(suffix.toLowerCase())) {
                 previewUrl = path
             }else{
                 let u = `${this.previewSource || ''}${path}${path.indexOf("?") > -1 ? "&" : "?"}download=true&origname=1`
+                console.log({u})
                 previewUrl = `${this.previewUrl || ""}/onlinePreview?url=${encodeURIComponent(window.HD.base64Encode(u))}`
             }
             if(!previewUrl.startsWith('http')){
@@ -326,22 +327,22 @@ export default {
                 this.dialog.images = [previewUrl]
                 this.dialog.preview = true;
             }
-            else if(PDF.includes(suffix.toLowerCase())){
-                // if(isIos()){
-                //     this.dialog.visible = true;
-                //     this.dialog.url = previewUrl;
-                // }else{
-                this.$toast.loading('加载中')
-                this.dialog.url = Pdf.createLoadingTask({ url: previewUrl, CMapReaderFactory });//解决中文乱码问题
-                this.dialog.url.promise.then((pdf) => {
-                    this.$toast.clear()
-                    this.pageCount = pdf.numPages;
-                    this.dialog.pdfVisible = true
-                }).catch(()=>{
-
-                })
-                // }
-            }
+            // else if(PDF.includes(suffix.toLowerCase())){
+            //     // if(isIos()){
+            //     //     this.dialog.visible = true;
+            //     //     this.dialog.url = previewUrl;
+            //     // }else{
+            //     this.$toast.loading('加载中')
+            //     this.dialog.url = Pdf.createLoadingTask({ url: previewUrl, CMapReaderFactory });//解决中文乱码问题
+            //     this.dialog.url.promise.then((pdf) => {
+            //         this.$toast.clear()
+            //         this.pageCount = pdf.numPages;
+            //         this.dialog.pdfVisible = true
+            //     }).catch(()=>{
+            //
+            //     })
+            //     // }
+            // }
             else{
                 this.dialog.visible = true;
                 this.dialog.url = previewUrl;
